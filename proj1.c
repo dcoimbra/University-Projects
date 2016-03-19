@@ -7,6 +7,8 @@
 
 #define IDLEN 4             /* Tamanho das strings na qual se representam os codigos de identificacao */
 #define MAXAERO 1000        /* Numero maximo de aeroportos a criar e de voos em cada aeroporto.       */
+#define ABERTO  1
+#define FECHADO 0
 
 /* Estruturas */
 
@@ -127,6 +129,8 @@ void adicionaAeroporto (aeroporto vet_aeroportos[])
 	aeroporto aero;
 
 	scanf("%s %d", aero.id, &aero.capacidade); /* operacoes de leitura do comando A: codigo de identificacao e capacidade maxima */
+
+	aero.estado = ABERTO                       /* o aeroporto, quando criado, é automaticamente aberto */
 
 	vet_aeroportos[i++] = aero;                /* o indice e' incrementado para que o proximo aeroporto seja associado a essa    */
 }											   /*  posicao na proxima chamada da funcao  */
