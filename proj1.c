@@ -255,6 +255,5 @@ int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_
 		}
 	}
 
-	return -1;    /* se chegou aqui o aeroporto nao existe */
-	}
+	return -1;    /* se chegou aqui o aeroporto nao existe */	
 }
