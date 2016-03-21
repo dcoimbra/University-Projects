@@ -245,20 +245,16 @@ void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_id[])
 {
-	int i, aeroportoExiste = 0;
+	int i;
 
 	for (i = 0; i < numeroAeroportos; i++)
 	{
 		if (strcmp(aero_id, vet_aeroportos[i].id) == 0)
 		{
-			aeroportoExiste = 1;
-			
 			return i;
 		}
 	}
 
-	if (aeroportoExiste == 0)
-	{
-		return -1;        /* se chegou aqui o aeroporto nao existe */
+	return -1;    /* se chegou aqui o aeroporto nao existe */
 	}
 }
