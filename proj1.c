@@ -18,7 +18,7 @@ typedef struct
 	int capacidade, estado;   /* Aeroporto caraterizado por um um codigo de identificacao de 4 letras, */
 } aeroporto;			      /* capacidade maxima de voos e um estado 0 (encerrado) ou 1 (aberto)     */
 
-/* Prototipo */
+/* Prototipo - programa principal */
 
 void adicionaAeroporto(aeroporto vet_aeroportos[]);
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos);
@@ -33,6 +33,10 @@ void vooMaisPopular();
 void encerraAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos);
 void reabreAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos);
 void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos);
+
+/* Prototipo - funcoes auxiliares */
+
+int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_id[]);
 
 /* Programa principal */
 
@@ -173,23 +177,21 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 void encerraAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
 {
-	int i, aeroportoExiste = 0;
+	int i;
 	char aero_id[IDLEN];
 
 	scanf("%s", aero_id);
 
-	for (i = 0; i < numeroAeroportos; i++)
-	{
-		if (strcmp(aero_id, vet_aeroportos[i].id) == 0)
-		{
-			aeroportoExiste = 1;
-			vet_aeroportos[i].estado = ENCERRADO;
-		}
-	}
+	i = indiceAeroporto(vet_aeroportos, numeroAeroportos, aero_id);
 
-	if (aeroportoExiste == 0)
+	if (i == -1)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id);
+	}
+
+	else
+	{
+		vet_aeroportos[i].estado = ENCERRADO;
 	}
 }
 
@@ -197,23 +199,21 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 void reabreAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
 {
-	int i, aeroportoExiste = 0;
+	int i;
 	char aero_id[IDLEN];
 
 	scanf("%s", aero_id);
 
-	for (i = 0; i < numeroAeroportos; i++)
-	{
-		if (strcmp(aero_id, vet_aeroportos[i].id) == 0)
-		{
-			aeroportoExiste = 1;
-			vet_aeroportos[i].estado = ABERTO;
-		}
-	}
+	i = indiceAeroporto(vet_aeroportos, numeroAeroportos, aero_id);
 
-	if (aeroportoExiste == 0)
+	if (i == -1)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id);
+	}
+
+	else
+	{
+		vet_aeroportos[i].estado = ABERTO;
 	}
 }
 
@@ -232,9 +232,33 @@ void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 			for (i = 0; i < numeroAeroportos; i++)
 			{
-				printf("%s:%d\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade);
+				printf("%s:%d:\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade);
 			}
 
 			break;
+	}
+}
+
+/* Funcoes auxiliares */
+
+/* indiceAeroporto - verifica se o aeroporto existe e retorna ou seu indice, ou -1 se nao existir */
+
+int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_id[])
+{
+	int i, aeroportoExiste = 0;
+
+	for (i = 0; i < numeroAeroportos; i++)
+	{
+		if (strcmp(aero_id, vet_aeroportos[i].id) == 0)
+		{
+			aeroportoExiste = 1;
+			
+			return i;
+		}
+	}
+
+	if (aeroportoExiste == 0)
+	{
+		return -1;        /* se chegou aqui o aeroporto nao existe */
 	}
 }
