@@ -7,15 +7,15 @@
 
 #define IDLEN 4             /* Tamanho das strings na qual se representam os codigos de identificacao */
 #define MAXAERO 1000        /* Numero maximo de aeroportos a criar e de voos em cada aeroporto.       */
-#define ABERTO  1
-#define FECHADO 0
+#define ABERTO 1
+#define ENCERRADO 0
 
 /* Estruturas */
 
 typedef struct
 {
 	char id[IDLEN];
-	int capacidade, estado;       /* Aeroporto caraterizado por um um codigo de identificacao de 4 letras, */
+	int capacidade, estado;   /* Aeroporto caraterizado por um um codigo de identificacao de 4 letras, */
 } aeroporto;			      /* capacidade maxima de voos e um estado 0 (encerrado) ou 1 (aberto)     */
 
 /* Prototipo */
@@ -30,8 +30,8 @@ void numeroVoos();
 void aeroportoComMaisVoos();
 void aeroportoMaisConectado();
 void vooMaisPopular();
-void encerraAeroporto();
-void reabreAeroporto();
+void encerraAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos);
+void reabreAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos);
 void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos);
 
 /* Programa principal */
@@ -94,18 +94,23 @@ int main()
 
 			case 'V':
 				vooMaisPopular();
-				break;
+				break; */
 
 			case 'C':
-				encerraAeroporto();
+				encerraAeroporto(vet_aeroportos, numeroAeroportos);
+
 				break;
 
 			case 'O':
-				reabreAeroporto();
-				break; */
+
+				reabreAeroporto(vet_aeroportos, numeroAeroportos);
+
+				break;
 
 			case 'L':
+
 				emiteListagem (vet_aeroportos, numeroAeroportos);
+
 				break;
 
 			case 'X':
@@ -121,18 +126,18 @@ int main()
 	return -1; /* se chegou aqui algo correu mal */
 }
 
-/* Comando A - Adicionamento de aeroportos. Junta o aeroporto correspondente ao
+/* Comando A - Adicao de aeroportos. Junta o aeroporto correspondente ao
 	       codigo de identificacao introduzido com a capacidade escolhida
                ao conjunto de aeroportos. */
 
 void adicionaAeroporto(aeroporto vet_aeroportos[])
 {
-	static int i = 0;    /* indice do aeroporto adicionado no vetor de aeroportos */
+	static int i = 0;
 	aeroporto aero;
 
 	scanf("%s %d", aero.id, &aero.capacidade); /* operacoes de leitura do comando A: codigo de identificacao e capacidade maxima */
 
-	aero.estado = ABERTO;                       /* o aeroporto, quando criado, é automaticamente aberto */
+	aero.estado = ABERTO;                       /* o aeroporto, quando criado, e' automaticamente aberto */
 
 	vet_aeroportos[i++] = aero;                /* o indice e' incrementado para que o proximo aeroporto seja associado a essa    */
 }											   /*  posicao na proxima chamada da funcao  */
@@ -141,26 +146,75 @@ void adicionaAeroporto(aeroporto vet_aeroportos[])
 
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
 {
-	int i, aumento_capacidade, id_compare;
+	int i, aumento_capacidade, possivelAlterarCapacidade = 0;
 	char aero_id[IDLEN];
 
 	scanf("%s %d", aero_id, &aumento_capacidade);
 
 	for (i = 0; i < numeroAeroportos; i++)
 	{
-		id_compare = strcmp(aero_id, vet_aeroportos[i].id);
-
-		if (id_compare == 0)
+		if ((strcmp(aero_id, vet_aeroportos[i].id) == 0) && (vet_aeroportos[i].estado == ABERTO)) /* A capacidade so e alterada caso o aeroporto exista e esteja aberto */ 
 		{
+			possivelAlterarCapacidade = 1;
 			vet_aeroportos[i].capacidade += aumento_capacidade;
-
-			printf("%d\n", vet_aeroportos[i].capacidade);
 		}
+	}
+
+	if (possivelAlterarCapacidade == 0)
+	{
+		printf("*Capacidade de %s inalterada\n", aero_id);
 	}
 }
 
+/* Comando C - muda o estado do aeroporto para ENCERRADO. */
 
-/* Comando L - Listagem de aeroportos (ordem de criação, alfabética, numero de voos) */
+void encerraAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
+{
+	int i, aeroportoExiste = 0;
+	char aero_id[IDLEN];
+
+	scanf("%s", aero_id);
+
+	for (i = 0; i < numeroAeroportos; i++)
+	{
+		if (strcmp(aero_id, vet_aeroportos[i].id) == 0)
+		{
+			aeroportoExiste = 1;
+			vet_aeroportos[i].estado = ENCERRADO;
+		}
+	}
+
+	if (aeroportoExiste == 0)
+	{
+		printf("*Aeroporto %s inexistente\n", aero_id);
+	}
+}
+
+/* Comando O - muda o estado do aeroporto para ABERTO. */
+
+void reabreAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
+{
+	int i, aeroportoExiste = 0;
+	char aero_id[IDLEN];
+
+	scanf("%s", aero_id);
+
+	for (i = 0; i < numeroAeroportos; i++)
+	{
+		if (strcmp(aero_id, vet_aeroportos[i].id) == 0)
+		{
+			aeroportoExiste = 1;
+			vet_aeroportos[i].estado = ABERTO;
+		}
+	}
+
+	if (aeroportoExiste == 0)
+	{
+		printf("*Aeroporto %s inexistente\n", aero_id);
+	}
+}
+
+/* Comando L - Listagem de aeroportos (ordem de criacao, alfabetica, numero de voos) */
 
 void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 {
