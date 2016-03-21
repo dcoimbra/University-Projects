@@ -21,7 +21,7 @@ typedef struct
 /* Prototipo */
 
 void adicionaAeroporto(aeroporto vet_aeroportos[]);
-void alteraCapacidadeMaxima();
+void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos);
 void adicionaVooIdaVolta();
 void adicionaRota();
 void removeVooIda();
@@ -58,11 +58,13 @@ int main()
 
 				break;
 
-		 /*	case 'I':
-				alteraCapacidadeMaxima();
+		 	case 'I':
+
+				alteraCapacidadeMaxima(vet_aeroportos, numeroAeroportos);
+
 				break;
 
-			case 'F':
+		/*	case 'F':
 				adicionaVooIdaVolta();
 				break;
 
@@ -100,17 +102,17 @@ int main()
 
 			case 'O':
 				reabreAeroporto();
-				break;  */
+				break; */
 
 			case 'L':
-				emiteListagem(vet_aeroportos, numeroAeroportos);
+				emiteListagem (vet_aeroportos, numeroAeroportos);
 				break;
 
 			case 'X':
 				return 0; /* Programa terminado com sucesso */
 
 			default:
-				printf("ERRO: Comando desconhecido\n");
+				printf ("ERRO: Comando desconhecido\n");
 		}
 
 		getchar(); /* le o '\n' introduzido pelo utilizador */
@@ -123,28 +125,50 @@ int main()
 	       codigo de identificacao introduzido com a capacidade escolhida
                ao conjunto de aeroportos. */
 
-void adicionaAeroporto (aeroporto vet_aeroportos[])
+void adicionaAeroporto(aeroporto vet_aeroportos[])
 {
 	static int i = 0;    /* indice do aeroporto adicionado no vetor de aeroportos */
 	aeroporto aero;
 
 	scanf("%s %d", aero.id, &aero.capacidade); /* operacoes de leitura do comando A: codigo de identificacao e capacidade maxima */
 
-	aero.estado = ABERTO                       /* o aeroporto, quando criado, é automaticamente aberto */
+	aero.estado = ABERTO;                       /* o aeroporto, quando criado, é automaticamente aberto */
 
 	vet_aeroportos[i++] = aero;                /* o indice e' incrementado para que o proximo aeroporto seja associado a essa    */
 }											   /*  posicao na proxima chamada da funcao  */
 
+/* Comando I - Altera a capacidade maxima do aeroporto correspondente ao ID introduzido */
+
+void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
+{
+	int i, aumento_capacidade, id_compare;
+	char aero_id[IDLEN];
+
+	scanf("%s %d", aero_id, &aumento_capacidade);
+
+	for (i = 0; i < numeroAeroportos; i++)
+	{
+		id_compare = strcmp(aero_id, vet_aeroportos[i].id);
+
+		if (id_compare == 0)
+		{
+			vet_aeroportos[i].capacidade += aumento_capacidade;
+
+			printf("%d\n", vet_aeroportos[i].capacidade);
+		}
+	}
+}
+
 
 /* Comando L - Listagem de aeroportos (ordem de criação, alfabética, numero de voos) */
 
-void emiteListagem (aeroporto vet_aeroportos[], int numeroAeroportos)
+void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 {
 	int i, tipo;
 
 	scanf("%d", &tipo);
 
-	switch(tipo)
+	switch (tipo)
 	{
 		/* Ordenacao por ordem de criacao */
 		case 0:
