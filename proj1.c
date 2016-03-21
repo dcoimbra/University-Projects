@@ -114,6 +114,9 @@ int main()
 				break;
 
 			case 'X':
+
+				printf(":%d\n", numeroAeroportos);
+				
 				return 0; /* Programa terminado com sucesso */
 
 			default:
