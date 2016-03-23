@@ -21,7 +21,7 @@ typedef struct
 	} aeroporto;			  /* o n. de voos total que sai e chega a um aeroporto tambem esta associado ao mesmo. */
 
 
-/* Prototipo - programa principal */
+/* Prototipo - funcoes principais */
 
 void adicionaAeroporto(aeroporto vet_aeroportos[]);
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos);
@@ -123,7 +123,7 @@ int main()
 
 			case 'X':
 
-				printf(":%d\n", numeroAeroportos);
+				printf("%d:%d\n", totalVoos(vet_aeroportos, numero_aeroportos), numeroAeroportos);
 				
 				return 0; /* Programa terminado com sucesso */
 		}
@@ -166,10 +166,10 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
 	
 	if (i != -1) 
 	{
-		int total_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
+		int voos_aeroporto = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
 		int nova_capacidade = vet_aeroportos[i].capacidade + aumento_capacidade;
 		
-		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= total_voos))
+		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= voos_aeroporto))
 		{
 			vet_aeroportos[i].capacidade = nova_capacidade; /* A capacidade so e alterada caso o aeroporto exista, esteja aberto */ 
 		}												/* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
@@ -273,4 +273,18 @@ void printAeroportos (aeroporto vet_aeroportos[], int numeroAeroportos)
 	{
 		printf("%s:%d:\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade);
 	}
+}
+
+/* totalVoos - devolve o numero total de voos existente na rede de aeroportos */
+
+int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos)
+{
+	int i, total_voos = 0;
+	
+	for (i=0; i < numero_aeroportos; i++)
+	{
+		total_voos += vet_aeroportos[i].outgoing;
+	}
+	
+	return total_voos
 }
