@@ -61,23 +61,18 @@ int main()
 		switch (comando)
 		{
 			case 'A':
-
 				adicionaAeroporto(vet_aeroportos);
-
 				numero_aeroportos++;
-
 				break;
 
 		 	case 'I':
-
 				alteraCapacidadeMaxima(vet_aeroportos, numero_aeroportos);
-
 				break;
-
-		/*	case 'F':
-				adicionaVooIdaVolta();
+		
+			case 'F':
+				adicionaVooIdaVolta(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
-
+		/*
 			case 'G':
 				adicionaRota();
 				break;
@@ -108,25 +103,18 @@ int main()
 
 			case 'C':
 				encerraAeroporto(vet_aeroportos, numero_aeroportos);
-
 				break;
 
 			case 'O':
-
 				reabreAeroporto(vet_aeroportos, numero_aeroportos);
-
 				break;
 
 			case 'L':
-
 				emiteListagem (vet_aeroportos, numero_aeroportos);
-
 				break;
 
 			case 'X':
-
 				printf("%d:%d\n", totalVoos(vet_aeroportos, numero_aeroportos), numero_aeroportos);
-				
 				return 0; /* Programa terminado com sucesso */
 		}
 
@@ -171,17 +159,51 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 		int voos_aeroporto = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
 		int nova_capacidade = vet_aeroportos[i].capacidade + aumento_capacidade;
 		
-		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= voos_aeroporto))
+		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= voos_aeroporto)  && (nova_capacidade > 0))
 		{
 			vet_aeroportos[i].capacidade = nova_capacidade; /* A capacidade so e alterada caso o aeroporto exista, esteja aberto */ 
-		}												/* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
+			return;												/* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
+		}
 	}
-	
-	else
-	{
-		printf("*Capacidade de %s inalterada\n", aero_id);
-	}
+	printf("*Capacidade de %s inalterada\n", aero_id);
 }
+
+/* Comando F - cria viagem de ida e volta entre os dois aeroportos especificados */
+ 																											
+void adicionaVooIdaVolta(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
+{
+	int i, j, voos_aero1, voos_aero2;
+	char aero_id1[IDLEN], aero_id2[IDLEN];
+	
+	scanf("%s %s", aero_id1, aero_id2);
+	
+	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
+	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
+	
+	if (i != -1 && j != -1 )
+	{
+		voos_aero1 = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
+		voos_aero2 = vet_aeroportos[j].incoming + vet_aeroportos[j].outgoing;
+		
+		if (vet_aeroportos[i].estado == ABERTO && vet_aeroportos[j].estado == ABERTO)
+		{
+			if ((voos_aero1 + 2 <= vet_aeroportos[i].capacidade) && (voos_aero2 + 2 <= vet_aeroportos[j].capacidade))
+			{
+				matriz_voos[i][j] += 1;
+				matriz_voos[j][i] += 1;
+				
+				vet_aeroportos[i].outgoing += 1;
+				vet_aeroportos[j].outgoing += 1;
+				
+				vet_aeroportos[i].incoming += 1;
+				vet_aeroportos[j].incoming += 1;
+				return;
+			}
+		}
+	}
+	printf("*Impossivel adicionar voo RT %s %s\n", aero_id1, aero_id2);
+} 
+
 
 /* Comando C - muda o estado do aeroporto para ENCERRADO. */
 
