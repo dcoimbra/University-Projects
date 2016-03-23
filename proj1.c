@@ -9,6 +9,7 @@
 #define MAXAERO 1000        /* Numero maximo de aeroportos a criar e de voos em cada aeroporto.       */
 #define ABERTO 1
 #define ENCERRADO 0
+#define TRUE 1
 
 /* Estruturas */
 
@@ -37,6 +38,7 @@ void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos);
 /* Prototipo - funcoes auxiliares */
 
 int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_id[]);
+void printAeroportos (aeroporto vet_aeroportos[], int numeroAeroportos);
 
 /* Programa principal */
 
@@ -48,7 +50,7 @@ int main()
 	                                       ordenados da esquerda para a direita pela
 	                                       ordem que foram adicionados. */
 
-	while (1)                          /* O programa pedira' sempre um comando, */
+	while (TRUE)                          /* O programa pedira' sempre um comando, */
 	{                                  /* exceto se algo correr mal ou o        */
 	    comando = getchar();           /* utilizador terminar o programa.       */
 
@@ -216,7 +218,7 @@ void reabreAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 {
-	int i, tipo;
+	int tipo;
 
 	scanf("%d", &tipo);
 
@@ -225,10 +227,7 @@ void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 		/* Ordenacao por ordem de criacao */
 		case 0:
 
-			for (i = 0; i < numeroAeroportos; i++)
-			{
-				printf("%s:%d:\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade);
-			}
+			printAeroportos(vet_aeroportos, numeroAeroportos);
 
 			break;
 	}
@@ -251,4 +250,16 @@ int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_
 	}
 
 	return -1;    /* se chegou aqui o aeroporto nao existe */	
+}
+
+/* printAeroportos - percorre um conjuto de aeroportos e coloca no ecrã os seus códigos de identificação e atual capacidade. */
+
+void printAeroportos (aeroporto vet_aeroportos[], int numeroAeroportos)
+{
+	int i;
+
+	for (i = 0; i < numeroAeroportos; i++)
+	{
+		printf("%s:%d:\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade);
+	}
 }
