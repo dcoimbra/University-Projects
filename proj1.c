@@ -122,9 +122,6 @@ int main()
 				printf(":%d\n", numeroAeroportos);
 				
 				return 0; /* Programa terminado com sucesso */
-
-			default:
-				printf ("ERRO: Comando desconhecido\n");
 		}
 
 		getchar(); /* le o '\n' introduzido pelo utilizador */
@@ -153,21 +150,19 @@ void adicionaAeroporto(aeroporto vet_aeroportos[])
 
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
 {
-	int i, aumento_capacidade, possivelAlterarCapacidade = 0;
+	int i, aumento_capacidade;
 	char aero_id[IDLEN];
 
 	scanf("%s %d", aero_id, &aumento_capacidade);
 
-	for (i = 0; i < numeroAeroportos; i++)
+	i = indiceAeroporto(vet_aeroportos, numeroAeroportos, aero_id);
+
+	if ((i != -1) && (vet_aeroportos[i].estado == ABERTO))
 	{
-		if ((strcmp(aero_id, vet_aeroportos[i].id) == 0) && (vet_aeroportos[i].estado == ABERTO)) /* A capacidade so e alterada caso o aeroporto exista e esteja aberto */ 
-		{
-			possivelAlterarCapacidade = 1;
-			vet_aeroportos[i].capacidade += aumento_capacidade;
-		}
+		vet_aeroportos[i].capacidade += aumento_capacidade; /* A capacidade so e alterada caso o aeroporto exista e esteja aberto */ 
 	}
 
-	if (possivelAlterarCapacidade == 0)
+	else
 	{
 		printf("*Capacidade de %s inalterada\n", aero_id);
 	}
@@ -241,7 +236,7 @@ void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 /* Funcoes auxiliares */
 
-/* indiceAeroporto - verifica se o aeroporto existe e retorna ou seu indice, ou -1 se nao existir */
+/* indiceAeroporto - verifica se o aeroporto existe e retorna o seu indice, ou -1 se nao existir */
 
 int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_id[])
 {
