@@ -10,6 +10,7 @@
 #define ABERTO 1
 #define ENCERRADO 0
 #define TRUE 1
+#define FALSE 0
 
 /* Estruturas */
 
@@ -42,6 +43,7 @@ void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos);
 int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero_id[]);
 void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos);
 int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos);
+void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta);
 
 /* Programa principal */
 
@@ -72,11 +74,11 @@ int main()
 			case 'F':
 				adicionaVooIdaVolta(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
-		/*
+		
 			case 'G':
-				adicionaRota();
+				adicionaRota(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
-
+		/*
 			case 'R':
 				removeVooIda();
 				break;
@@ -124,9 +126,7 @@ int main()
 	return -1; /* se chegou aqui algo correu mal */
 }
 
-/* Comando A - Adicao de aeroportos. Junta o aeroporto correspondente ao
-	       codigo de identificacao introduzido com a capacidade escolhida
-               ao conjunto de aeroportos. */
+/* Comando A - Cria o aeroporto correspondente ao codigo de identificacao introduzido e capacidade escolhida ao conjunto de aeroportos. */
 
 void adicionaAeroporto(aeroporto vet_aeroportos[])
 {
@@ -169,41 +169,17 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 }
 
 /* Comando F - cria viagem de ida e volta entre os dois aeroportos especificados */
- 																											
+
 void adicionaVooIdaVolta(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
 {
-	int i, j, voos_aero1, voos_aero2;
-	char aero_id1[IDLEN], aero_id2[IDLEN];
-	
-	scanf("%s %s", aero_id1, aero_id2);
-	
-	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
-	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
-	
-	if (i != -1 && j != -1 )
-	{
-		voos_aero1 = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
-		voos_aero2 = vet_aeroportos[j].incoming + vet_aeroportos[j].outgoing;
-		
-		if (vet_aeroportos[i].estado == ABERTO && vet_aeroportos[j].estado == ABERTO)
-		{
-			if ((voos_aero1 + 2 <= vet_aeroportos[i].capacidade) && (voos_aero2 + 2 <= vet_aeroportos[j].capacidade))
-			{
-				matriz_voos[i][j] += 1;
-				matriz_voos[j][i] += 1;
-				
-				vet_aeroportos[i].outgoing += 1;
-				vet_aeroportos[j].outgoing += 1;
-				
-				vet_aeroportos[i].incoming += 1;
-				vet_aeroportos[j].incoming += 1;
-				return;
-			}
-		}
-	}
-	printf("*Impossivel adicionar voo RT %s %s\n", aero_id1, aero_id2);
-} 
+	adicionaVoos(vet_aeroportos, numero_aeroportos, matriz_voos, TRUE);
+}
+/* Comando G - cria viagem de ida entre os dois aeroportos especificados (do primeiro para o segundo) */
 
+void adicionaRota(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
+{
+	adicionaVoos(vet_aeroportos, numero_aeroportos, matriz_voos, FALSE);
+}
 
 /* Comando C - muda o estado do aeroporto para ENCERRADO. */
 
@@ -312,3 +288,44 @@ int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos)
 	
 	return total_voos;
 }
+
+/* adicionaVoos - cria uma viagem de ida ou de ida e volta entre dois aeroportos, dependendo do valor do inteiro "ida_volta" */
+
+void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta)
+{
+	int i, j, voos_aero1, voos_aero2;
+	char aero_id1[IDLEN], aero_id2[IDLEN];
+	
+	scanf("%s %s", aero_id1, aero_id2);
+	
+	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
+	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
+	
+	if (i != -1 && j != -1 )
+	{
+		voos_aero1 = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
+		voos_aero2 = vet_aeroportos[j].incoming + vet_aeroportos[j].outgoing;
+		
+		if (vet_aeroportos[i].estado == ABERTO && vet_aeroportos[j].estado == ABERTO)
+		{
+			int num_voos = ida_volta ? 2 : 1;
+			
+			if ((voos_aero1 + num_voos <= vet_aeroportos[i].capacidade) && (voos_aero2 + num_voos <= vet_aeroportos[j].capacidade))
+			{
+				matriz_voos[i][j] += 1;				
+				vet_aeroportos[i].outgoing += 1;
+				vet_aeroportos[j].incoming += 1;
+				
+				if(ida_volta)
+				{
+					matriz_voos[j][i] += 1;
+					vet_aeroportos[j].outgoing += 1;
+					vet_aeroportos[i].incoming += 1;					
+				}
+				
+				return;
+			}
+		}
+	}
+	printf("*Impossivel adicionar voo %s%s %s\n", (ida_volta ? "RT " : ""), aero_id1, aero_id2);
+} 
