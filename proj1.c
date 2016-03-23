@@ -24,7 +24,7 @@ typedef struct
 /* Prototipo - funcoes principais */
 
 void adicionaAeroporto(aeroporto vet_aeroportos[]);
-void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos);
+void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos);
 void adicionaVooIdaVolta();
 void adicionaRota();
 void removeVooIda();
@@ -33,20 +33,21 @@ void numeroVoos();
 void aeroportoComMaisVoos();
 void aeroportoMaisConectado();
 void vooMaisPopular();
-void encerraAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos);
-void reabreAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos);
-void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos);
+void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos);
+void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos);
+void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos);
 
 /* Prototipo - funcoes auxiliares */
 
-int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_id[]);
-void printAeroportos (aeroporto vet_aeroportos[], int numeroAeroportos);
+int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero_id[]);
+void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos);
+int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos);
 
 /* Programa principal */
 
 int main()
 {
-	int numeroAeroportos = 0;
+	int numero_aeroportos = 0;
 	char comando;
 	aeroporto vet_aeroportos[MAXAERO];  /* Vetor que representa os aeroportos criados,
 	                                       ordenados da esquerda para a direita pela
@@ -62,13 +63,13 @@ int main()
 
 				adicionaAeroporto(vet_aeroportos);
 
-				numeroAeroportos++;
+				numero_aeroportos++;
 
 				break;
 
 		 	case 'I':
 
-				alteraCapacidadeMaxima(vet_aeroportos, numeroAeroportos);
+				alteraCapacidadeMaxima(vet_aeroportos, numero_aeroportos);
 
 				break;
 
@@ -105,25 +106,25 @@ int main()
 				break; */
 
 			case 'C':
-				encerraAeroporto(vet_aeroportos, numeroAeroportos);
+				encerraAeroporto(vet_aeroportos, numero_aeroportos);
 
 				break;
 
 			case 'O':
 
-				reabreAeroporto(vet_aeroportos, numeroAeroportos);
+				reabreAeroporto(vet_aeroportos, numero_aeroportos);
 
 				break;
 
 			case 'L':
 
-				emiteListagem (vet_aeroportos, numeroAeroportos);
+				emiteListagem (vet_aeroportos, numero_aeroportos);
 
 				break;
 
 			case 'X':
 
-				printf("%d:%d\n", totalVoos(vet_aeroportos, numero_aeroportos), numeroAeroportos);
+				printf("%d:%d\n", totalVoos(vet_aeroportos, numero_aeroportos), numero_aeroportos);
 				
 				return 0; /* Programa terminado com sucesso */
 		}
@@ -155,14 +156,14 @@ void adicionaAeroporto(aeroporto vet_aeroportos[])
 
 /* Comando I - Altera a capacidade maxima do aeroporto correspondente ao ID introduzido */
 
-void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
+void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i, aumento_capacidade;
 	char aero_id[IDLEN];
 
 	scanf("%s %d", aero_id, &aumento_capacidade);
 
-	i = indiceAeroporto(vet_aeroportos, numeroAeroportos, aero_id);
+	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id);
 	
 	if (i != -1) 
 	{
@@ -183,14 +184,14 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 /* Comando C - muda o estado do aeroporto para ENCERRADO. */
 
-void encerraAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
+void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
 	char aero_id[IDLEN];
 
 	scanf("%s", aero_id);
 
-	i = indiceAeroporto(vet_aeroportos, numeroAeroportos, aero_id);
+	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id);
 
 	if (i == -1)
 	{
@@ -205,14 +206,14 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 /* Comando O - muda o estado do aeroporto para ABERTO. */
 
-void reabreAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
+void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
 	char aero_id[IDLEN];
 
 	scanf("%s", aero_id);
 
-	i = indiceAeroporto(vet_aeroportos, numeroAeroportos, aero_id);
+	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id);
 
 	if (i == -1)
 	{
@@ -227,7 +228,7 @@ void reabreAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 /* Comando L - Listagem de aeroportos (ordem de criacao, alfabetica, numero de voos) */
 
-void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
+void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int tipo;
 
@@ -238,7 +239,7 @@ void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 		/* Ordenacao por ordem de criacao */
 		case 0:
 
-			printAeroportos(vet_aeroportos, numeroAeroportos);
+			printAeroportos(vet_aeroportos, numero_aeroportos);
 
 			break;
 	}
@@ -248,11 +249,11 @@ void emiteListagem(aeroporto vet_aeroportos[], int numeroAeroportos)
 
 /* indiceAeroporto - verifica se o aeroporto existe e retorna o seu indice, ou -1 se nao existir */
 
-int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_id[])
+int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero_id[])
 {
 	int i;
 
-	for (i = 0; i < numeroAeroportos; i++)
+	for (i = 0; i < numero_aeroportos; i++)
 	{
 		if (strcmp(aero_id, vet_aeroportos[i].id) == 0)
 		{
@@ -265,11 +266,11 @@ int indiceAeroporto(aeroporto vet_aeroportos[], int numeroAeroportos, char aero_
 
 /* printAeroportos - percorre um conjuto de aeroportos e coloca no ecrã os seus códigos de identificação e atual capacidade. */
 
-void printAeroportos (aeroporto vet_aeroportos[], int numeroAeroportos)
+void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
 
-	for (i = 0; i < numeroAeroportos; i++)
+	for (i = 0; i < numero_aeroportos; i++)
 	{
 		printf("%s:%d:\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade);
 	}
@@ -286,5 +287,5 @@ int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos)
 		total_voos += vet_aeroportos[i].outgoing;
 	}
 	
-	return total_voos
+	return total_voos;
 }
