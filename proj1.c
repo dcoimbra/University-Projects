@@ -48,6 +48,7 @@ int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos);
 int main()
 {
 	int numero_aeroportos = 0;
+	int matriz_voos[MAXAERO][MAXAERO];  /* Matriz de voos entre um aeroporto i para um aeroporto j */
 	char comando;
 	aeroporto vet_aeroportos[MAXAERO];  /* Vetor que representa os aeroportos criados,
 	                                       ordenados da esquerda para a direita pela
