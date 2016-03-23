@@ -16,9 +16,8 @@
 typedef struct
 {
 	char id[IDLEN];
-	int capacidade, estado;   /* Aeroporto caraterizado por um codigo de identificacao de 3 letras, */
-	int incoming, outgoing;   /* capacidade maxima de voos e um estado: 0 (encerrado) ou 1 (aberto).*/
-	} aeroporto;			  /* o n. de voos total que sai e chega a um aeroporto tambem esta associado ao mesmo. */
+	int capacidade, estado;   /* Aeroporto caraterizado por um um codigo de identificacao de 4 letras, */
+} aeroporto;			      /* capacidade maxima de voos e um estado 0 (encerrado) ou 1 (aberto)     */
 
 /* Prototipo - programa principal */
 
@@ -51,23 +50,24 @@ int main()
 	                                       ordenados da esquerda para a direita pela
 	                                       ordem que foram adicionados. */
 
-<<<<<<< HEAD
 	while (TRUE)                          /* O programa pedira' sempre um comando, */
-=======
-	while (TRUE)                       /* O programa pedira' sempre um comando, */
->>>>>>> 3a68dd33d09c05aac00fe3929de252115932244c
-	{                                  /* exceto se algo correr mal ou o        */
-	    comando = getchar();           /* utilizador terminar o programa.       */
+	{                                     /* exceto se algo correr mal ou o        */
+	    comando = getchar();              /* utilizador terminar o programa.       */
 
 		switch (comando)
 		{
 			case 'A':
+
 				adicionaAeroporto(vet_aeroportos);
+
 				numeroAeroportos++;
+
 				break;
 
 		 	case 'I':
+
 				alteraCapacidadeMaxima(vet_aeroportos, numeroAeroportos);
+
 				break;
 
 		/*	case 'F':
@@ -104,18 +104,25 @@ int main()
 
 			case 'C':
 				encerraAeroporto(vet_aeroportos, numeroAeroportos);
+
 				break;
 
 			case 'O':
+
 				reabreAeroporto(vet_aeroportos, numeroAeroportos);
+
 				break;
 
 			case 'L':
+
 				emiteListagem (vet_aeroportos, numeroAeroportos);
+
 				break;
 
 			case 'X':
+
 				printf(":%d\n", numeroAeroportos);
+				
 				return 0; /* Programa terminado com sucesso */
 		}
 
@@ -137,9 +144,6 @@ void adicionaAeroporto(aeroporto vet_aeroportos[])
 	scanf("%s %d", aero.id, &aero.capacidade); /* operacoes de leitura do comando A: codigo de identificacao e capacidade maxima */
 
 	aero.estado = ABERTO;                       /* o aeroporto, quando criado, e' automaticamente aberto */
-	
-	aero.incoming = 0;
-	aero.outgoing = 0;
 
 	vet_aeroportos[i++] = aero;                /* o indice e' incrementado para que o proximo aeroporto seja associado a essa    */
 }											   /*  posicao na proxima chamada da funcao  */
@@ -154,18 +158,12 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
 	scanf("%s %d", aero_id, &aumento_capacidade);
 
 	i = indiceAeroporto(vet_aeroportos, numeroAeroportos, aero_id);
-	
-	if (i != -1) 
+
+	if ((i != -1) && (vet_aeroportos[i].estado == ABERTO))
 	{
-		int total_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
-		int nova_capacidade = vet_aeroportos[i].capacidade + aumento_capacidade;
-		
-		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= total_voos))
-			{
-			vet_aeroportos[i].capacidade = nova_capacidade; /* A capacidade so e alterada caso o aeroporto exista, esteja aberto */ 
-			}												/* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
+		vet_aeroportos[i].capacidade += aumento_capacidade; /* A capacidade so e alterada caso o aeroporto exista e esteja aberto */ 
 	}
-	
+
 	else
 	{
 		printf("*Capacidade de %s inalterada\n", aero_id);
