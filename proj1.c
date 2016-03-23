@@ -143,20 +143,23 @@ void adicionaAeroporto(aeroporto vet_aeroportos[])
 
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numeroAeroportos)
 {
-	int i, aumento_capacidade, total_voos, nova_capacidade;
+	int i, aumento_capacidade;
 	char aero_id[IDLEN];
 
 	scanf("%s %d", aero_id, &aumento_capacidade);
 
 	i = indiceAeroporto(vet_aeroportos, numeroAeroportos, aero_id);
 	
-	total_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
-	nova_capacidade = vet_aeroportos[i].capacidade + aumento_capacidade;
-
-	if ((i != -1) && (vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= total_voos)
+	if (i != -1) 
 	{
-		vet_aeroportos[i].capacidade = nova_capacidade; /* A capacidade so e alterada caso o aeroporto exista, esteja aberto */ 
-	}														  /* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
+		int total_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
+		int nova_capacidade = vet_aeroportos[i].capacidade + aumento_capacidade;
+		
+		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= total_voos))
+			{
+			vet_aeroportos[i].capacidade = nova_capacidade; /* A capacidade so e alterada caso o aeroporto exista, esteja aberto */ 
+			}												/* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
+	}
 	
 	else
 	{
