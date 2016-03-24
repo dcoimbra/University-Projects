@@ -27,7 +27,7 @@ typedef struct
 void adicionaAeroporto(aeroporto vet_aeroportos[]);
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos);
 void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
-void aeroportoComMaisVoos();
+void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos);
 void aeroportoMaisConectado();
 void vooMaisPopular();
 void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
@@ -92,10 +92,10 @@ int main()
 				numeroVoos(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
 
-		/*	case 'P':
-				aeroportoComMaisVoos();
+			case 'P':
+				aeroportoComMaisVoos(vet_aeroportos,  numero_aeroportos);
 				break;
-
+		/*
 			case 'Q':
 				aeroportoMaisConectado();
 				break;
@@ -270,6 +270,25 @@ void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos)
 
 			break;
 	}
+}
+
+
+/* Comando P - devolve o aeroporto com o maior numero de voos */
+void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos)
+{
+	int i, maior_num_voos = 0, m_indice = 0;
+	
+	for (i = 0, i < numero_aeroportos, i++)
+	{
+		int num_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
+		
+		if ( num_voos > maior_num_voos)
+		{
+			maior_num_voos = num_voos;
+			m_indice = i;
+		}
+	}
+	printf("Aeroporto com mais rotas %s:%d:%d\n", vet_aeroportos[m_indice].id, vet_aeroportos[m_indice].outgoing, vet_aeroportos[m_indice].incoming);
 }
 
 /* Funcoes auxiliares */
