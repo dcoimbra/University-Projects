@@ -222,10 +222,10 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int mat
 		
 		for(j = 0; j < numero_aeroportos; j++)
 		{
-			vet.aeroportos[j].incoming -= matriz_voos[i][j];
+			vet_aeroportos[j].incoming -= matriz_voos[i][j];
 			matriz_voos[i][j] = 0;
 
-			vet.aeroportos[j].outgoing -= matriz_voos[j][i]:
+			vet_aeroportos[j].outgoing -= matriz_voos[j][i];
 			matriz_voos[j][i] = 0;
 		}
 	}
@@ -278,7 +278,7 @@ void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i, maior_num_voos = 0, m_indice = 0;
 	
-	for (i = 0, i < numero_aeroportos, i++)
+	for (i = 0; i < numero_aeroportos; i++)
 	{
 		int num_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
 		
