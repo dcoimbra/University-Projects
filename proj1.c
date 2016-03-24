@@ -295,7 +295,7 @@ void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 
 	for (i = 0; i < numero_aeroportos; i++)
 	{
-		printf("%s:%d:\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade);
+		printf("%s:%d:%d:%d\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade, vet_aeroportos[i].outgoing, vet_aeroportos[i].incoming);
 	}
 }
 
