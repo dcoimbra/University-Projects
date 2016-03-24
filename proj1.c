@@ -28,7 +28,7 @@ void adicionaAeroporto(aeroporto vet_aeroportos[]);
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos);
 void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos);
-void aeroportoMaisConectado();
+void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void vooMaisPopular();
 void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos);
@@ -93,14 +93,14 @@ int main()
 				break;
 
 			case 'P':
-				aeroportoComMaisVoos(vet_aeroportos,  numero_aeroportos);
+				aeroportoComMaisVoos(vet_aeroportos, numero_aeroportos);
 				break;
-		/*
+		
 			case 'Q':
-				aeroportoMaisConectado();
+				aeroportoMaisConectado(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
 
-			case 'V':
+		/*	case 'V':
 				vooMaisPopular();
 				break; */
 
@@ -163,7 +163,7 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= voos_aeroporto)  && (nova_capacidade > 0))
 		{
 			vet_aeroportos[i].capacidade = nova_capacidade; /* A capacidade so e alterada caso o aeroporto exista, esteja aberto */ 
-			return;												/* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
+			return;											/* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
 		}
 	}
 	printf("*Capacidade de %s inalterada\n", aero_id);
@@ -282,13 +282,38 @@ void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos)
 	{
 		int num_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
 		
-		if ( num_voos > maior_num_voos)
+		if (num_voos > maior_num_voos)
 		{
 			maior_num_voos = num_voos;
 			m_indice = i;
 		}
 	}
 	printf("Aeroporto com mais rotas %s:%d:%d\n", vet_aeroportos[m_indice].id, vet_aeroportos[m_indice].outgoing, vet_aeroportos[m_indice].incoming);
+}
+
+/* Comando Q - devolve o aeroporto com mais aeroportos conectados */
+void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
+{
+	int i, j, celulas_nao_vazias = 0, max_celulas_nao_vazias = 0, indice = 0;
+
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		for (j = 0; j < numero_aeroportos; j++)
+		{
+			if (matriz_voos[i][j] != 0)
+			{
+				celulas_nao_vazias += 1;
+			}
+		}
+
+		if (celulas_nao_vazias > max_celulas_nao_vazias)
+		{
+			max_celulas_nao_vazias = celulas_nao_vazias;
+			indice = i;
+		} 
+	}
+
+	printf("Aeroporto com mais ligacoes %s:%d\n", vet_aeroportos[indice].id, max_celulas_nao_vazias);
 }
 
 /* Funcoes auxiliares */
@@ -416,4 +441,4 @@ void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 		}
 	}
 	printf("*Impossivel remover voo %s%s %s\n", (ida_volta ? "RT " : ""), aero_id1, aero_id2);
-} 
+}
