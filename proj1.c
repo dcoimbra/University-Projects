@@ -294,7 +294,7 @@ void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos)
 /* Comando Q - devolve o aeroporto com mais aeroportos conectados */
 void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
 {
-	int i, j, celulas_nao_vazias = 0, max_celulas_nao_vazias = 0, indice = 0;
+	int i, j, celulas_nao_vazias = 0, cels_n_vazias_ida = 0, cels_n_vazias_volta = 0, max_celulas_nao_vazias = 0, indice = 0;
 
 	for (i = 0; i < numero_aeroportos; i++)
 	{
@@ -302,18 +302,25 @@ void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, i
 		{
 			if (matriz_voos[i][j] != 0)
 			{
-				celulas_nao_vazias += 1;
+				cels_n_vazias_ida += 1;
+			}
+			if (matriz_voos[j][1] != 0)
+			{
+				cels_n_vazias_volta += 1;
 			}
 		}
-
+		celulas_nao_vazias = cels_n_vazias_ida + cels_n_vazias_volta;
+		
 		if (celulas_nao_vazias > max_celulas_nao_vazias)
 		{
 			max_celulas_nao_vazias = celulas_nao_vazias;
 			indice = i;
 		} 
 	}
-
-	printf("Aeroporto com mais ligacoes %s:%d\n", vet_aeroportos[indice].id, max_celulas_nao_vazias);
+	int calc_n_aeros = cels_n_vazias_ida - cels_n_vazias_volta;
+	calc_n_aeros = calc_n_aeros < 0 ? calc_n_aeros*(-1) : calc_n_aeros;
+	
+	printf("Aeroporto com mais ligacoes %s:%d\n", vet_aeroportos[indice].id, (cels_n_vazias_ida + calc_n_aeros));
 }
 
 /* Funcoes auxiliares */
