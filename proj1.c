@@ -75,7 +75,7 @@ int main()
 				
 			/* Comando G - cria viagem de ida entre os dois aeroportos especificados (do primeiro para o segundo) */
 			case 'G':
-				adicionaRota(vet_aeroportos, numero_aeroportos, matriz_voos);
+				adicionaVoos(vet_aeroportos, numero_aeroportos, matriz_voos, FALSE);
 				break;
 				
 			/* Comando R - remove viagem de ida entre os dois aeroportos especificados (do primeiro para o segundo) */		
