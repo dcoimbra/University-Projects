@@ -30,7 +30,7 @@ void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 void aeroportoComMaisVoos();
 void aeroportoMaisConectado();
 void vooMaisPopular();
-void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos);
+void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos);
 void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos);
 
@@ -105,7 +105,7 @@ int main()
 				break; */
 
 			case 'C':
-				encerraAeroporto(vet_aeroportos, numero_aeroportos);
+				encerraAeroporto(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
 
 			case 'O':
@@ -181,27 +181,28 @@ void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
 	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
 
+	if ((i != -1) && (j != -1))
+	{
+		printf("Voos entre cidades %s:%s:%d:%d\n", aero_id1, aero_id2, matriz_voos[i][j], matriz_voos[j][i]);
+		return;
+	}
+
 	if (i == -1)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id1);
 	}
 
-	else if (j == -1)
+	if (j == -1)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id2);
-	}
-
-	else
-	{
-		printf("Voos entre cidades %s:%s:%d:%d\n", aero_id1, aero_id2, matriz_voos[i][j], matriz_voos[j][i]);
 	}
 }
 
 
 /* Comando C - muda o estado do aeroporto para ENCERRADO. */
-void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
+void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
 {
-	int i;
+	int i, j;
 	char aero_id[IDLEN];
 
 	scanf("%s", aero_id);
@@ -219,7 +220,7 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 		vet_aeroportos[i].incoming = 0;
 		vet_aeroportos[i].outgoing = 0;
 		
-		for(j=0, j < numero_aeroportos, j++)
+		for(j = 0; j < numero_aeroportos; j++)
 		{
 			matriz_voos[i][j] = 0;
 			matriz_voos[j][i] = 0; 
@@ -304,7 +305,7 @@ int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i, total_voos = 0;
 	
-	for (i=0; i < numero_aeroportos; i++)
+	for (i = 0; i < numero_aeroportos; i++)
 	{
 		total_voos += vet_aeroportos[i].outgoing;
 	}
