@@ -26,10 +26,6 @@ typedef struct
 
 void adicionaAeroporto(aeroporto vet_aeroportos[]);
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos);
-void adicionaVooIdaVolta(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
-void adicionaRota(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
-void removeVooIda();
-void removeVooIdaVolta();
 void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void aeroportoComMaisVoos();
 void aeroportoMaisConectado();
@@ -44,6 +40,7 @@ int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero
 void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos);
 int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos);
 void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta);
+void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta);
 
 /* Programa principal */
 
@@ -70,22 +67,26 @@ int main()
 		 	case 'I':
 				alteraCapacidadeMaxima(vet_aeroportos, numero_aeroportos);
 				break;
-		
+				
+			/* Comando F - cria viagem de ida e volta entre os dois aeroportos especificados */		
 			case 'F':
-				adicionaVooIdaVolta(vet_aeroportos, numero_aeroportos, matriz_voos);
+				adicionaVoos(vet_aeroportos, numero_aeroportos, matriz_voos, TRUE);
 				break;
-		
+				
+			/* Comando G - cria viagem de ida entre os dois aeroportos especificados (do primeiro para o segundo) */
 			case 'G':
 				adicionaRota(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
-		/*
+				
+			/* Comando R - remove viagem de ida entre os dois aeroportos especificados (do primeiro para o segundo) */		
 			case 'R':
-				removeVooIda();
+				removeVoos(vet_aeroportos, numero_aeroportos, matriz_voos, FALSE);
 				break;
-
+				
+			/* Comando S - remove viagem de ida e volta entre os dois aeroportos especificados */		
 			case 'S':
-				removeVooIdaVolta();
-				break;  */
+				removeVoos(vet_aeroportos, numero_aeroportos, matriz_voos, TRUE);
+				break;
 
 			case 'N':
 				numeroVoos(vet_aeroportos, numero_aeroportos, matriz_voos);
@@ -357,4 +358,45 @@ void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_
 	}
 	
 	printf("*Impossivel adicionar voo %s%s %s\n", (ida_volta ? "RT " : ""), aero_id1, aero_id2);
+} 
+
+
+/* removeVoos - remove uma viagem de ida ou de ida e volta entre dois aeroportos, dependendo do valor do inteiro "ida_volta" */
+void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta)
+{
+	int i, j, aero1_aero2, aero2_aero1;
+	char aero_id1[IDLEN], aero_id2[IDLEN];
+	
+	scanf("%s %s", aero_id1, aero_id2);
+	
+	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
+	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
+	
+	if (i != -1 && j != -1 )
+	{
+		if (vet_aeroportos[i].estado == ABERTO && vet_aeroportos[j].estado == ABERTO)
+		{
+			aero1_aero2 = matriz_voos[i][j];
+			aero2_aero1 = matriz_voos[j][i];
+		
+			int verifica_volta = ida_volta ? aero2_aero1 : 1;
+			
+			if (verifica_volta > 0 && aero1_aero2 > 0)
+			{
+				matriz_voos[i][j] -= 1;				
+				vet_aeroportos[i].outgoing -= 1;
+				vet_aeroportos[j].incoming -= 1;
+			
+				if (ida_volta)
+				{
+					matriz_voos[j][i] -= 1;
+					vet_aeroportos[j].outgoing -= 1;
+					vet_aeroportos[i].incoming -= 1;
+				}
+				
+				return;	
+			}			
+		}
+	}
+	printf("*Impossivel remover voo %s%s %s\n", (ida_volta ? "RT " : ""), aero_id1, aero_id2);
 } 
