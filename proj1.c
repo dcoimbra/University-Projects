@@ -127,8 +127,8 @@ int main()
 	return -1; /* se chegou aqui algo correu mal */
 }
 
-/* Comando A - Cria o aeroporto correspondente ao codigo de identificacao introduzido e capacidade escolhida ao conjunto de aeroportos. */
 
+/* Comando A - Cria o aeroporto correspondente ao codigo de identificacao introduzido e capacidade escolhida ao conjunto de aeroportos. */
 void adicionaAeroporto(aeroporto vet_aeroportos[])
 {
 	static int i = 0;
@@ -144,8 +144,8 @@ void adicionaAeroporto(aeroporto vet_aeroportos[])
 	vet_aeroportos[i++] = aero;                /* o indice e' incrementado para que o proximo aeroporto seja associado a essa    */
 }											   /*  posicao na proxima chamada da funcao  */
 
-/* Comando I - Altera a capacidade maxima do aeroporto correspondente ao ID introduzido */
 
+/* Comando I - Altera a capacidade maxima do aeroporto correspondente ao ID introduzido */
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i, aumento_capacidade;
@@ -169,21 +169,8 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 	printf("*Capacidade de %s inalterada\n", aero_id);
 }
 
-/* Comando F - cria viagem de ida e volta entre os dois aeroportos especificados */
-
-void adicionaVooIdaVolta(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
-{
-	adicionaVoos(vet_aeroportos, numero_aeroportos, matriz_voos, TRUE);
-}
-/* Comando G - cria viagem de ida entre os dois aeroportos especificados (do primeiro para o segundo) */
-
-void adicionaRota(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
-{
-	adicionaVoos(vet_aeroportos, numero_aeroportos, matriz_voos, FALSE);
-}
 
 /* Comando N - indica o numero de voos entre dois aeroportos. */
-
 void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
 {
 	int i, j;
@@ -210,8 +197,8 @@ void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 	}
 }
 
-/* Comando C - muda o estado do aeroporto para ENCERRADO. */
 
+/* Comando C - muda o estado do aeroporto para ENCERRADO. */
 void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
@@ -229,11 +216,19 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 	else
 	{
 		vet_aeroportos[i].estado = ENCERRADO;
+		vet_aeroportos[i].incoming = 0;
+		vet_aeroportos[i].outgoing = 0;
+		
+		for(j=0, j < numero_aeroportos, j++)
+		{
+			matriz_voos[i][j] = 0;
+			matriz_voos[j][i] = 0; 
+		}
 	}
 }
 
-/* Comando O - muda o estado do aeroporto para ABERTO. */
 
+/* Comando O - muda o estado do aeroporto para ABERTO. */
 void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
@@ -254,8 +249,8 @@ void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 	}
 }
 
-/* Comando L - Listagem de aeroportos (ordem de criacao, alfabetica, numero de voos) */
 
+/* Comando L - Listagem de aeroportos (ordem de criacao, alfabetica, numero de voos) */
 void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int tipo;
@@ -276,7 +271,6 @@ void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos)
 /* Funcoes auxiliares */
 
 /* indiceAeroporto - verifica se o aeroporto existe e retorna o seu indice, ou -1 se nao existir */
-
 int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero_id[])
 {
 	int i;
@@ -292,8 +286,8 @@ int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero
 	return -1;    /* se chegou aqui o aeroporto nao existe */	
 }
 
-/* printAeroportos - percorre um conjuto de aeroportos e coloca no ecrã os seus códigos de identificação e atual capacidade. */
 
+/* printAeroportos - percorre um conjuto de aeroportos e coloca no ecrã os seus códigos de identificação e atual capacidade. */
 void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
@@ -304,8 +298,8 @@ void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 	}
 }
 
-/* totalVoos - devolve o numero total de voos existente na rede de aeroportos */
 
+/* totalVoos - devolve o numero total de voos existente na rede de aeroportos */
 int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i, total_voos = 0;
@@ -318,8 +312,8 @@ int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos)
 	return total_voos;
 }
 
-/* adicionaVoos - cria uma viagem de ida ou de ida e volta entre dois aeroportos, dependendo do valor do inteiro "ida_volta" */
 
+/* adicionaVoos - cria uma viagem de ida ou de ida e volta entre dois aeroportos, dependendo do valor do inteiro "ida_volta" */
 void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta)
 {
 	int i, j, voos_aero1, voos_aero2;
