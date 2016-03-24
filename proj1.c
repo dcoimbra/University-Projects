@@ -26,11 +26,11 @@ typedef struct
 
 void adicionaAeroporto(aeroporto vet_aeroportos[]);
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos);
-void adicionaVooIdaVolta();
-void adicionaRota();
+void adicionaVooIdaVolta(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
+void adicionaRota(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void removeVooIda();
 void removeVooIdaVolta();
-void numeroVoos();
+void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void aeroportoComMaisVoos();
 void aeroportoMaisConectado();
 void vooMaisPopular();
@@ -85,13 +85,13 @@ int main()
 
 			case 'S':
 				removeVooIdaVolta();
-				break;
+				break;  */
 
 			case 'N':
-				numeroVoos();
+				numeroVoos(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
 
-			case 'P':
+		/*	case 'P':
 				aeroportoComMaisVoos();
 				break;
 
@@ -179,6 +179,34 @@ void adicionaVooIdaVolta(aeroporto vet_aeroportos[], int numero_aeroportos, int 
 void adicionaRota(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
 {
 	adicionaVoos(vet_aeroportos, numero_aeroportos, matriz_voos, FALSE);
+}
+
+/* Comando N - indica o numero de voos entre dois aeroportos. */
+
+void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
+{
+	int i, j;
+	char aero_id1[IDLEN], aero_id2[IDLEN];
+
+	scanf("%s %s", aero_id1, aero_id2);
+
+	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
+	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
+
+	if (i == -1)
+	{
+		printf("*Aeroporto %s inexistente\n", aero_id1);
+	}
+
+	else if (j == -1)
+	{
+		printf("*Aeroporto %s inexistente\n", aero_id2);
+	}
+
+	else
+	{
+		printf("Voos entre cidades %s:%s:%d:%d\n", aero_id1, aero_id2, matriz_voos[i][j], matriz_voos[j][i]);
+	}
 }
 
 /* Comando C - muda o estado do aeroporto para ENCERRADO. */
@@ -327,5 +355,6 @@ void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_
 			}
 		}
 	}
+	
 	printf("*Impossivel adicionar voo %s%s %s\n", (ida_volta ? "RT " : ""), aero_id1, aero_id2);
 } 
