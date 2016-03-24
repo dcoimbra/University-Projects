@@ -376,7 +376,7 @@ int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero
 }
 
 
-/* printAeroportos - percorre um conjuto de aeroportos e coloca no ecrã os seus códigos de identificação e atual capacidade. */
+/* printAeroportos - percorre um conjuto de aeroportos e coloca no ecra os seus codigos de identificacao e atual capacidade. */
 void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
