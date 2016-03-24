@@ -29,7 +29,7 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos);
 void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos);
 void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
-void vooMaisPopular();
+void vooMaisPopular(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos);
 void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos);
@@ -103,9 +103,9 @@ int main()
 				aeroportoMaisConectado(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
 
-		/*	case 'V':
-				vooMaisPopular();
-				break; */
+			case 'V':
+				vooMaisPopular(vet_aeroportos, numero_aeroportos, matriz_voos);
+				break; 
 
 			case 'C':
 				encerraAeroporto(vet_aeroportos, numero_aeroportos, matriz_voos);
@@ -316,7 +316,6 @@ void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, i
 		celulas_nao_vazias = cels_ida + cels_volta;
 		if (celulas_nao_vazias > max_celulas_nao_vazias)
 		{
-			printf("cels nao vazias: %d; maximo: %d; id:%s\n", celulas_nao_vazias, max_celulas_nao_vazias, vet_aeroportos[i].id);
 			max_celulas_nao_vazias = celulas_nao_vazias;
 			indice = i;
 			
@@ -326,6 +325,27 @@ void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, i
 	}
 	
 	printf("Aeroporto com mais ligacoes %s:%d\n", vet_aeroportos[indice].id, quantos_aeros);
+}
+
+
+/* Comando V - imprime para o ecra quais os dois aeroportos com o maior numero de voos */
+void vooMaisPopular(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
+{
+	int i, j, indice1 = 0, indice2 = 0, max_voos = 0;
+	
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		for (j = 0; j < numero_aeroportos; j++)
+		{
+			if (matriz_voos[i][j] > max_voos)
+			{
+				max_voos = matriz_voos[i][j];
+				indice1 = i;
+				indice2 = j;
+			}
+		}
+	}
+	printf("Voo mais popular %s:%s:%d\n", vet_aeroportos[indice1].id, vet_aeroportos[indice2].id, max_voos);
 }
 
 /* Funcoes auxiliares */
