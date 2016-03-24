@@ -222,8 +222,11 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int mat
 		
 		for(j = 0; j < numero_aeroportos; j++)
 		{
+			vet.aeroportos[j].incoming -= matriz_voos[i][j];
 			matriz_voos[i][j] = 0;
-			matriz_voos[j][i] = 0; 
+
+			vet.aeroportos[j].outgoing -= matriz_voos[j][i]:
+			matriz_voos[j][i] = 0;
 		}
 	}
 }
