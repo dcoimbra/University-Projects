@@ -304,7 +304,7 @@ void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, i
 			{
 				cels_n_vazias_ida += 1;
 			}
-			if (matriz_voos[j][1] != 0)
+			if (matriz_voos[j][i] != 0)
 			{
 				cels_n_vazias_volta += 1;
 			}
