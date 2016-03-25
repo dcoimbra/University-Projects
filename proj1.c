@@ -52,12 +52,11 @@ int main()
 {
 	int numero_aeroportos = 0;
 	int matriz_voos[MAXAERO][MAXAERO];  /* Matriz de voos entre um aeroporto i para um aeroporto j */
-	inicializaMatriz(matriz_voos);
-	
 	char comando;
 	aeroporto vet_aeroportos[MAXAERO];  /* Vetor que representa os aeroportos criados,
-	                                       ordenados da esquerda para a direita pela
-	                                       ordem que foram adicionados. */
+									   ordenados da esquerda para a direita pela
+									   ordem que foram adicionados. */
+	inicializaMatriz(matriz_voos);
 
 	while (TRUE)                          /* O programa pedira' sempre um comando, */
 	{                                     /* exceto se algo correr mal ou o        */
@@ -474,7 +473,7 @@ int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos)
 /* adicionaVoos - cria uma viagem de ida ou de ida e volta entre dois aeroportos, dependendo do valor do inteiro "ida_volta" */
 void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta)
 {
-	int i, j, voos_aero1, voos_aero2;
+	int i, j, num_voos, voos_aero1, voos_aero2;
 	char aero_id1[IDLEN], aero_id2[IDLEN];
 	
 	scanf("%s %s", aero_id1, aero_id2);
@@ -489,7 +488,7 @@ void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_
 		
 		if (vet_aeroportos[i].estado == ABERTO && vet_aeroportos[j].estado == ABERTO)
 		{
-			int num_voos = ida_volta ? 2 : 1;
+			num_voos = ida_volta ? 2 : 1;
 			
 			if ((voos_aero1 + num_voos <= vet_aeroportos[i].capacidade) && (voos_aero2 + num_voos <= vet_aeroportos[j].capacidade))
 			{
@@ -516,7 +515,7 @@ void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_
 /* removeVoos - remove uma viagem de ida ou de ida e volta entre dois aeroportos, dependendo do valor do inteiro "ida_volta" */
 void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta)
 {
-	int i, j, aero1_aero2, aero2_aero1;
+	int i, j, verifica_volta, aero1_aero2, aero2_aero1;
 	char aero_id1[IDLEN], aero_id2[IDLEN];
 	
 	scanf("%s %s", aero_id1, aero_id2);
@@ -531,7 +530,7 @@ void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 			aero1_aero2 = matriz_voos[i][j];
 			aero2_aero1 = matriz_voos[j][i];
 		
-			int verifica_volta = ida_volta ? aero2_aero1 : 1;
+			verifica_volta = ida_volta ? aero2_aero1 : 1;
 			
 			if (verifica_volta > 0 && aero1_aero2 > 0)
 			{
