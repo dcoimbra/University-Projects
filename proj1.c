@@ -43,6 +43,7 @@ int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos);
 void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta);
 void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta);
 void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos);
+void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos);
 
 /* Programa principal */
 
@@ -274,6 +275,10 @@ void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos)
 		
 		case 1:
 			printAeroportoSorted(vet_aeroportos, numero_aeroportos);
+			break;
+			
+		case 2:
+			printDistrVoosAeroportos(vet_aeroportos, numero_aeroportos);
 			break;
 	}
 }
@@ -514,5 +519,30 @@ void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos)
 	for (i = 0; i < numero_aeroportos; i++)
 	{
 		printf("%s:%d:%d:%d\n", vet_aeroportos[vet_index_ids[i]].id, vet_aeroportos[vet_index_ids[i]].capacidade, vet_aeroportos[vet_index_ids[i]].outgoing, vet_aeroportos[vet_index_ids[i]].incoming);
+	}
+}
+
+void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
+{
+	int res_vet[MAXAERO], vet_voos[MAXAERO], i;
+	
+	for (i = 0; i <= MAXAERO; i++)
+	{
+		res_vet[i] = 0;
+	}
+	
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		vet_voos[i] = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
+		
+		res_vet[ vet_voos[i] ] += 1;
+	}
+	
+	for (i = 0; i <= MAXAERO; i++)
+	{
+		if (res_vet[i] != 0)
+		{
+			printf("%d:%d\n", i, res_vet[i]);
+		}
 	}
 }
