@@ -308,31 +308,31 @@ void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos)
 /* Comando Q - devolve o aeroporto com mais aeroportos conectados */
 void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
 {
-	int i, j, max_celulas_nao_vazias = 0, indice = 0;
+	int i, j, max_ligacoes_aeroportos = 0, indice = 0;
 
 	for (i = 0; i < numero_aeroportos; i++)
 	{
-		int celulas_nao_vazias = 0;
+		int ligacoes_aeroportos = 0;
 		for (j = 0; j < numero_aeroportos; j++)
 		{
 			if (matriz_voos[i][j] != 0)
 			{
-				celulas_nao_vazias += 1;
+				ligacoes_aeroportos += 1;
 			}
 			else if (matriz_voos[j][i] != 0)
 			{
-				celulas_nao_vazias += 1;
+				ligacoes_aeroportos += 1;
 			}
 		}
 		
-		if (celulas_nao_vazias > max_celulas_nao_vazias)
+		if (ligacoes_aeroportos > max_ligacoes_aeroportos)
 		{
-			max_celulas_nao_vazias = celulas_nao_vazias;
+			max_ligacoes_aeroportos = ligacoes_aeroportos;
 			indice = i;
 		} 
 	}
 	
-	printf("Aeroporto com mais ligacoes %s:%d\n", vet_aeroportos[indice].id, max_celulas_nao_vazias);
+	printf("Aeroporto com mais ligacoes %s:%d\n", vet_aeroportos[indice].id, max_ligacoes_aeroportos);
 }
 
 
