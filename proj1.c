@@ -39,11 +39,12 @@ void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos);
 void inicializaMatriz(int matriz_voos[MAXAERO][MAXAERO]);
 int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero_id[]);
 void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos);
+void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos);
+void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos);
 int totalVoos (aeroporto vet_aeroportos[], int numero_aeroportos);
 void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta);
 void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO], int ida_volta);
-void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos);
-void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos);
+
 
 /* Programa principal */
 
@@ -191,7 +192,7 @@ void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 		printf("Voos entre cidades %s:%s:%d:%d\n", aero_id1, aero_id2, matriz_voos[i][j], matriz_voos[j][i]);
 		return;
 	}
-
+	
 	if (i == -1)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id1);
@@ -273,10 +274,12 @@ void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos)
 			printAeroportos(vet_aeroportos, numero_aeroportos);
 			break;
 		
+		/* Ordenacao por ordem alfabetica */
 		case 1:
 			printAeroportoSorted(vet_aeroportos, numero_aeroportos);
 			break;
-			
+		
+		/* n:aeroportos com n voos - por ordem crescente de n (numero de voos) */
 		case 2:
 			printDistrVoosAeroportos(vet_aeroportos, numero_aeroportos);
 			break;
@@ -357,6 +360,8 @@ void vooMaisPopular(aeroporto vet_aeroportos[], int numero_aeroportos, int matri
 }
 
 /* Funcoes auxiliares */
+
+/* inicializaMatriz - inicializa todos os valores da matriz de voos a 0 */
 void inicializaMatriz(int matriz_voos[MAXAERO][MAXAERO])
 {
 	int x, y;
@@ -384,7 +389,7 @@ int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero
 }
 
 
-/* printAeroportos - percorre um conjuto de aeroportos e coloca no ecra os seus codigos de identificacao e atual capacidade. */
+/* printAeroportos - coloca no ecra o numero de voos de ida e de volta, mais a capacidade e id de todos os aeroportos na rede. */
 void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
@@ -392,6 +397,65 @@ void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 	for (i = 0; i < numero_aeroportos; i++)
 	{
 		printf("%s:%d:%d:%d\n", vet_aeroportos[i].id, vet_aeroportos[i].capacidade, vet_aeroportos[i].outgoing, vet_aeroportos[i].incoming);
+	}
+}
+
+
+/* printAeroportoSorted - coloca no ecra o numero de voos de ida e de volta, mais a capacidade e id de todos os aeroportos na rede, por ordem alfabetica */
+void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos)
+{
+	int i, j;
+	int vet_index_ids[MAXAERO];
+	
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		vet_index_ids[i] = i;
+	}
+	
+	for (i = 0; i < numero_aeroportos - 2; i++)
+	{
+		int aux,min = i;
+		
+		for (j = i+1; j <= numero_aeroportos - 1; j++)
+		{
+			if (strcmp(vet_aeroportos[vet_index_ids[j]].id, vet_aeroportos[vet_index_ids[min]].id) < 0)
+				min = j;
+		}
+		
+		aux = vet_index_ids[i]; 
+		vet_index_ids[i] = vet_index_ids[min]; 
+		vet_index_ids[min] = aux;
+	}
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		printf("%s:%d:%d:%d\n", vet_aeroportos[vet_index_ids[i]].id, vet_aeroportos[vet_index_ids[i]].capacidade, vet_aeroportos[vet_index_ids[i]].outgoing, vet_aeroportos[vet_index_ids[i]].incoming);
+	}
+}
+
+
+/* printDistrVoosAeroportos - coloca no ecra quantos aeroportos tem n voos, por ordem de n crescente. */
+void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
+{
+	int vet_resultados[MAXAERO], vet_voos[MAXAERO], i;
+	
+	for (i = 0; i <= MAXAERO; i++)
+	{
+		vet_resultados[i] = 0;
+	}
+	
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		vet_voos[i] = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
+		
+		vet_resultados[ vet_voos[i] ] += 1;
+	}
+	
+	for (i = 0; i <= MAXAERO; i++)
+	{
+		if (vet_resultados[i] != 0)
+		{
+			printf("%d:%d\n", i, vet_resultados[i]);
+		}
 	}
 }
 
@@ -490,59 +554,4 @@ void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 		}
 	}
 	printf("*Impossivel remover voo %s%s %s\n", (ida_volta ? "RT " : ""), aero_id1, aero_id2);
-}
-
-void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos)
-{
-	int i, j;
-	int vet_index_ids[MAXAERO];
-	
-	for (i = 0; i < numero_aeroportos; i++)
-	{
-		vet_index_ids[i] = i;
-	}
-	
-	for (i = 0; i < numero_aeroportos - 2; i++)
-	{
-		int aux,min = i;
-		
-		for (j = i+1; j <= numero_aeroportos - 1; j++)
-		{
-			if (strcmp(vet_aeroportos[vet_index_ids[j]].id, vet_aeroportos[vet_index_ids[min]].id) < 0)
-				min = j;
-		}
-		
-		aux = vet_index_ids[i]; 
-		vet_index_ids[i] = vet_index_ids[min]; 
-		vet_index_ids[min] = aux;
-	}
-	for (i = 0; i < numero_aeroportos; i++)
-	{
-		printf("%s:%d:%d:%d\n", vet_aeroportos[vet_index_ids[i]].id, vet_aeroportos[vet_index_ids[i]].capacidade, vet_aeroportos[vet_index_ids[i]].outgoing, vet_aeroportos[vet_index_ids[i]].incoming);
-	}
-}
-
-void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
-{
-	int res_vet[MAXAERO], vet_voos[MAXAERO], i;
-	
-	for (i = 0; i <= MAXAERO; i++)
-	{
-		res_vet[i] = 0;
-	}
-	
-	for (i = 0; i < numero_aeroportos; i++)
-	{
-		vet_voos[i] = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
-		
-		res_vet[ vet_voos[i] ] += 1;
-	}
-	
-	for (i = 0; i <= MAXAERO; i++)
-	{
-		if (res_vet[i] != 0)
-		{
-			printf("%d:%d\n", i, res_vet[i]);
-		}
-	}
 }
