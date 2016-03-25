@@ -434,7 +434,7 @@ void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int vet_resultados[MAXAERO], vet_voos[MAXAERO], i;
 	
-	for (i = 0; i <= MAXAERO; i++)
+	for (i = 0; i < MAXAERO; i++)
 	{
 		vet_resultados[i] = 0;
 	}
@@ -446,7 +446,7 @@ void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
 		vet_resultados[ vet_voos[i] ] += 1;
 	}
 	
-	for (i = 0; i <= MAXAERO; i++)
+	for (i = 0; i < MAXAERO; i++)
 	{
 		if (vet_resultados[i] != 0)
 		{
