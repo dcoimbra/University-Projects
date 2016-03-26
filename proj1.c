@@ -6,7 +6,7 @@
 /* Definicoes de constantes */
 
 #define IDLEN 4             /* Tamanho das strings na qual se representam os codigos de identificacao */
-#define MAXAERO 1000        /* Numero maximo de aeroportos a criar e de voos em cada aeroporto.       */
+#define MAXAERO 1001        /* Numero maximo de aeroportos a criar e de voos em cada aeroporto.       */
 #define ABERTO 1
 #define ENCERRADO 0
 #define TRUE 1
@@ -124,9 +124,6 @@ int main()
 			case 'X':
 				printf("%d:%d\n", totalVoos(vet_aeroportos, numero_aeroportos), numero_aeroportos);
 				return 0; /* Programa terminado com sucesso */
-			
-			default:
-				printf("ERRO: Comandodesconhecido\n"); 
 		}
 
 		getchar(); /* le o '\n' introduzido pelo utilizador */
