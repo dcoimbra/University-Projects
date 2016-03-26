@@ -124,6 +124,9 @@ int main()
 			case 'X':
 				printf("%d:%d\n", totalVoos(vet_aeroportos, numero_aeroportos), numero_aeroportos);
 				return 0; /* Programa terminado com sucesso */
+			
+			default:
+				printf("ERRO: Comandodesconhecido\n"); 
 		}
 
 		getchar(); /* le o '\n' introduzido pelo utilizador */
