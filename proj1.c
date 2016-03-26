@@ -314,11 +314,7 @@ void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, i
 		int ligacoes_aeroportos = 0;
 		for (j = 0; j < numero_aeroportos; j++)
 		{
-			if (matriz_voos[i][j] != 0)
-			{
-				ligacoes_aeroportos += 1;
-			}
-			else if (matriz_voos[j][i] != 0)
+			if (matriz_voos[i][j] != 0 || matriz_voos[j][i] != 0)
 			{
 				ligacoes_aeroportos += 1;
 			}
