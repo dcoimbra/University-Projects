@@ -432,7 +432,7 @@ void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos)
 /* printDistrVoosAeroportos - coloca no ecra quantos aeroportos tem n voos, por ordem de n crescente. */
 void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
-	int vet_resultados[MAXAERO], vet_voos[MAXAERO], i;
+	int vet_resultados[MAXAERO], voos, i;
 	
 	for (i = 0; i < MAXAERO; i++)
 	{
@@ -441,9 +441,9 @@ void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
 	
 	for (i = 0; i < numero_aeroportos; i++)
 	{
-		vet_voos[i] = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
+		voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
 		
-		vet_resultados[ vet_voos[i] ] += 1;
+		vet_resultados[voos] += 1;
 	}
 	
 	for (i = 0; i < MAXAERO; i++)
