@@ -1,3 +1,6 @@
+/* tg025 - Filipa Marques n.57842 e David Coimbra n.84708 */
+
+
 /* Bibliotecas de funcoes */
 
 #include <stdio.h>
@@ -5,9 +8,9 @@
 
 /* Definicoes de constantes */
 
-#define IDLEN 4             /* Tamanho das strings na qual se representam os codigos de identificacao */
-#define MAXAERO 1000        /* Numero maximo de aeroportos a criar e de voos em cada aeroporto.       */
-#define MAXVOOS 1001
+#define IDLEN 4             /* Tamanho das strings na qual se representam os codigos de identificacao. */
+#define MAXAERO 1000        /* Numero maximo de aeroportos a criar. */
+#define MAXVOOS 1001		/* Length do vector que define o numero possivel de voos por aeroporto (entre 0 e 1000 voos). */
 #define ABERTO 1
 #define ENCERRADO 0
 #define TRUE 1
