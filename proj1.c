@@ -6,7 +6,8 @@
 /* Definicoes de constantes */
 
 #define IDLEN 4             /* Tamanho das strings na qual se representam os codigos de identificacao */
-#define MAXAERO 1001        /* Numero maximo de aeroportos a criar e de voos em cada aeroporto.       */
+#define MAXAERO 1000        /* Numero maximo de aeroportos a criar e de voos em cada aeroporto.       */
+#define MAXVOOS 1001
 #define ABERTO 1
 #define ENCERRADO 0
 #define TRUE 1
@@ -16,15 +17,15 @@
 
 typedef struct
 {
-	char id[IDLEN];
-	int capacidade, estado;   /* Aeroporto caraterizado por um codigo de identificacao de 3 letras, */
-	int incoming, outgoing;   /* capacidade maxima de voos e um estado: 0 (encerrado) ou 1 (aberto).*/
-	} aeroporto;			  /* o n. de voos total que sai e chega a um aeroporto tambem esta associado ao mesmo. */
+	char id[IDLEN];			  /* Aeroporto caraterizado por um codigo de identificacao de 3 letras, */
+	int capacidade, estado;   /* capacidade maxima de voos e um estado: 0 (encerrado) ou 1 (aberto).*/
+	int incoming, outgoing;   /* o n. de voos total que sai e chega a um aeroporto tambem esta associado ao mesmo. */
+	} aeroporto;			
 
 
 /* Prototipo - funcoes principais */
 
-void adicionaAeroporto(aeroporto vet_aeroportos[]);
+void adicionaAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos);
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos);
 void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO]);
 void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos);
@@ -65,7 +66,7 @@ int main()
 		switch (comando)
 		{
 			case 'A':
-				adicionaAeroporto(vet_aeroportos);
+				adicionaAeroporto(vet_aeroportos, numero_aeroportos);
 				numero_aeroportos++;
 				break;
 
@@ -134,9 +135,8 @@ int main()
 
 
 /* Comando A - Cria o aeroporto correspondente ao codigo de identificacao introduzido e capacidade escolhida ao conjunto de aeroportos. */
-void adicionaAeroporto(aeroporto vet_aeroportos[])
+void adicionaAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
-	static int i = 0;
 	aeroporto aero;
 
 	scanf("%s %d", aero.id, &aero.capacidade); /* operacoes de leitura do comando A: codigo de identificacao e capacidade maxima */
@@ -146,7 +146,7 @@ void adicionaAeroporto(aeroporto vet_aeroportos[])
 	aero.incoming = 0;
 	aero.outgoing = 0;
 
-	vet_aeroportos[i++] = aero;                /* o indice e' incrementado para que o proximo aeroporto seja associado a essa    */
+	vet_aeroportos[numero_aeroportos] = aero;                /* o indice e' incrementado para que o proximo aeroporto seja associado a essa    */
 }											   /*  posicao na proxima chamada da funcao  */
 
 
@@ -428,9 +428,9 @@ void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos)
 /* printDistrVoosAeroportos - coloca no ecra quantos aeroportos tem n voos, por ordem de n crescente. */
 void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
-	int vet_resultados[MAXAERO], voos, i;
+	int vet_resultados[MAXVOOS], voos, i;
 	
-	for (i = 0; i < MAXAERO; i++)
+	for (i = 0; i < MAXVOOS; i++)
 	{
 		vet_resultados[i] = 0;
 	}
@@ -442,7 +442,7 @@ void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
 		vet_resultados[voos] += 1;
 	}
 	
-	for (i = 0; i < MAXAERO; i++)
+	for (i = 0; i < MAXVOOS; i++)
 	{
 		if (vet_resultados[i] != 0)
 		{
