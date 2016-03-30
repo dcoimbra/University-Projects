@@ -10,11 +10,12 @@
 
 #define IDLEN 4             /* Tamanho das strings na qual se representam os codigos de identificacao. */
 #define MAXAERO 1000        /* Numero maximo de aeroportos a criar. */
-#define MAXVOOS 1001		/* Length do vector que define o numero possivel de voos por aeroporto (entre 0 e 1000 voos). */
+#define MAXVOOS 1001		/* Tamanho do vector que define o numero possivel de voos por aeroporto (entre 0 e 1000 voos). */
 #define ABERTO 1
 #define ENCERRADO 0
 #define TRUE 1
 #define FALSE 0
+#define INEXISTENTE -1
 
 /* Estruturas */
 
@@ -68,11 +69,13 @@ int main()
 
 		switch (comando)
 		{
+			/* Comando A - Cria o aeroporto correspondente ao codigo de identificacao introduzido e capacidade escolhida ao conjunto de aeroportos. */
 			case 'A':
 				adicionaAeroporto(vet_aeroportos, numero_aeroportos);
 				numero_aeroportos++;
 				break;
 
+			/* Comando I - Altera a capacidade maxima do aeroporto correspondente ao ID introduzido */
 		 	case 'I':
 				alteraCapacidadeMaxima(vet_aeroportos, numero_aeroportos);
 				break;
@@ -97,34 +100,42 @@ int main()
 				removeVoos(vet_aeroportos, numero_aeroportos, matriz_voos, TRUE);
 				break;
 
+			/* Comando N - indica o numero de voos entre dois aeroportos. */
 			case 'N':
 				numeroVoos(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
 
+			/* Comando P - devolve o aeroporto com o maior numero de voos */
 			case 'P':
 				aeroportoComMaisVoos(vet_aeroportos, numero_aeroportos);
 				break;
-		
+
+			/* Comando Q - devolve o aeroporto com mais aeroportos conectados */
 			case 'Q':
 				aeroportoMaisConectado(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
 
+			/* Comando V - imprime para o ecra quais os dois aeroportos com o maior numero de voos */
 			case 'V':
 				vooMaisPopular(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break; 
 
+			/* Comando C - muda o estado do aeroporto para ENCERRADO. */
 			case 'C':
 				encerraAeroporto(vet_aeroportos, numero_aeroportos, matriz_voos);
 				break;
 
+			/* Comando O - muda o estado do aeroporto para ABERTO. */
 			case 'O':
 				reabreAeroporto(vet_aeroportos, numero_aeroportos);
 				break;
 
+			/* Comando L - Listagem de aeroportos (ordem de criacao, alfabetica, numero de voos) */
 			case 'L':
 				emiteListagem (vet_aeroportos, numero_aeroportos);
 				break;
 
+			/* Comando X - termina o programa. */
 			case 'X':
 				printf("%d:%d\n", totalVoos(vet_aeroportos, numero_aeroportos), numero_aeroportos);
 				return 0; /* Programa terminado com sucesso */
@@ -136,24 +147,22 @@ int main()
 	return -1; /* se chegou aqui algo correu mal */
 }
 
-
-/* Comando A - Cria o aeroporto correspondente ao codigo de identificacao introduzido e capacidade escolhida ao conjunto de aeroportos. */
+/* adicionaAeroporto - pede ao utilizador um ID e uma capacidade e cria um aeroporto com esses valores. */
 void adicionaAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	aeroporto aero;
 
-	scanf("%s %d", aero.id, &aero.capacidade); /* operacoes de leitura do comando A: codigo de identificacao e capacidade maxima */
+	scanf("%s %d", aero.id, &aero.capacidade);  /* operacoes de leitura do comando A: codigo de identificacao e capacidade maxima */
 
 	aero.estado = ABERTO;                       /* o aeroporto, quando criado, e' automaticamente aberto */
 	
 	aero.incoming = 0;
 	aero.outgoing = 0;
 
-	vet_aeroportos[numero_aeroportos] = aero;                /* o indice e' incrementado para que o proximo aeroporto seja associado a essa    */
-}											   /*  posicao na proxima chamada da funcao  */
+	vet_aeroportos[numero_aeroportos] = aero;
+}
 
-
-/* Comando I - Altera a capacidade maxima do aeroporto correspondente ao ID introduzido */
+/* alteraCapacidadeMaxima - pede ao utilizador um ID e um valor correspondente ao aumento ou diminuicao da capacidade do aeroporto correspondente. */
 void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i, aumento_capacidade;
@@ -163,12 +172,12 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 
 	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id);
 	
-	if (i != -1) 
+	if (i != INEXISTENTE) 
 	{
 		int voos_aeroporto = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
 		int nova_capacidade = vet_aeroportos[i].capacidade + aumento_capacidade;
 		
-		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= voos_aeroporto)  && (nova_capacidade > 0))
+		if ((vet_aeroportos[i].estado == ABERTO) && (nova_capacidade >= voos_aeroporto) && (nova_capacidade > 0))
 		{
 			vet_aeroportos[i].capacidade = nova_capacidade; /* A capacidade so e alterada caso o aeroporto exista, esteja aberto */ 
 			return;											/* e caso a nova capacidade seja maior ou igual ao numero de voos do mesmo */
@@ -178,7 +187,7 @@ void alteraCapacidadeMaxima(aeroporto vet_aeroportos[], int numero_aeroportos)
 }
 
 
-/* Comando N - indica o numero de voos entre dois aeroportos. */
+/* numeroVoos - pede ao utilizador dois IDs e coloca no ecra o numero de voos entre os dois aeroportos correspondentes. */
 void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
 {
 	int i, j;
@@ -189,25 +198,89 @@ void numeroVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
 	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
 
-	if ((i != -1) && (j != -1))
+	if ((i != INEXISTENTE) && (j != INEXISTENTE))
 	{
 		printf("Voos entre cidades %s:%s:%d:%d\n", aero_id1, aero_id2, matriz_voos[i][j], matriz_voos[j][i]);
 		return;
 	}
 	
-	if (i == -1)
+	if (i == INEXISTENTE)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id1);
 	}
 
-	if (j == -1)
+	if (j == INEXISTENTE)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id2);
 	}
 }
 
+/* aeroportoComMaisVoos - percorre o vetor de aeroportos e coloca no ecra o aeroporto com maior numero de voos (idas e voltas) */
+void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos)
+{
+	int i, maior_num_voos = 0, m_indice = 0;
+	
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		int num_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;  /* soma os voos de ida e volta do aeroporto i */
+		
+		if (num_voos > maior_num_voos)
+		{
+			maior_num_voos = num_voos;
+			m_indice = i;
+		}
+	}
+	printf("Aeroporto com mais rotas %s:%d:%d\n", vet_aeroportos[m_indice].id, vet_aeroportos[m_indice].outgoing, vet_aeroportos[m_indice].incoming);
+}
 
-/* Comando C - muda o estado do aeroporto para ENCERRADO. */
+/* aeroportoMaisConectado - coloca no ecra o aeroporto com mais ligacoes a outros aeroportos */
+void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
+{
+	int i, j, max_ligacoes_aeroportos = 0, indice = 0;
+
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		int ligacoes_aeroportos = 0;
+		for (j = 0; j < numero_aeroportos; j++)
+		{
+			if (matriz_voos[i][j] != 0 || matriz_voos[j][i] != 0) /* se as entradas (i, j) e (j, i) forem 0, nao existe ligacao entre os aeroportos i e j */
+			{
+				ligacoes_aeroportos += 1;
+			}
+		}
+		
+		if (ligacoes_aeroportos > max_ligacoes_aeroportos)  
+		{
+			max_ligacoes_aeroportos = ligacoes_aeroportos;
+			indice = i;
+		} 
+	}
+	
+	printf("Aeroporto com mais ligacoes %s:%d\n", vet_aeroportos[indice].id, max_ligacoes_aeroportos);
+}
+
+
+/* vooMaisPopular - coloca no ecra o valor maximo da matriz de voos, correspondente ao voo mais popular */
+void vooMaisPopular(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
+{
+	int i, j, indice1 = 0, indice2 = 0, max_voos = 0;
+	
+	for (i = 0; i < numero_aeroportos; i++)
+	{
+		for (j = 0; j < numero_aeroportos; j++)
+		{
+			if (matriz_voos[i][j] > max_voos)
+			{
+				max_voos = matriz_voos[i][j];
+				indice1 = i;
+				indice2 = j;
+			}
+		}
+	}
+	printf("Voo mais popular %s:%s:%d\n", vet_aeroportos[indice1].id, vet_aeroportos[indice2].id, max_voos);
+}
+
+/* encerraAeroporto - pede ao utilizador um ID e, caso exista, encerra o aeroporto correspondente */
 void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
 {
 	int i, j;
@@ -217,7 +290,7 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int mat
 
 	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id);
 
-	if (i == -1)
+	if (i == INEXISTENTE)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id);
 	}
@@ -228,9 +301,9 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int mat
 		vet_aeroportos[i].incoming = 0;
 		vet_aeroportos[i].outgoing = 0;
 		
-		for(j = 0; j < numero_aeroportos; j++)
+		for(j = 0; j < numero_aeroportos; j++)               /* retira as ligacoes entre o aeroporto encerrado e os restantes */
 		{
-			vet_aeroportos[j].incoming -= matriz_voos[i][j];
+			vet_aeroportos[j].incoming -= matriz_voos[i][j];   
 			matriz_voos[i][j] = 0;
 
 			vet_aeroportos[j].outgoing -= matriz_voos[j][i];
@@ -239,8 +312,7 @@ void encerraAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, int mat
 	}
 }
 
-
-/* Comando O - muda o estado do aeroporto para ABERTO. */
+/* reabreAeroporto - pede ao utilizador um ID e, caso exista, reabre o aeroporto correspondente. */
 void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
@@ -250,7 +322,7 @@ void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 
 	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id);
 
-	if (i == -1)
+	if (i == INEXISTENTE)
 	{
 		printf("*Aeroporto %s inexistente\n", aero_id);
 	}
@@ -261,8 +333,7 @@ void reabreAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos)
 	}
 }
 
-
-/* Comando L - Listagem de aeroportos (ordem de criacao, alfabetica, numero de voos) */
+/* emiteListagem - emite uma listagem dos aeroportos existentes, de acordo com o comando introduzido (0, 1 ou 2). */
 void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int tipo;
@@ -289,71 +360,6 @@ void emiteListagem(aeroporto vet_aeroportos[], int numero_aeroportos)
 }
 
 
-/* Comando P - devolve o aeroporto com o maior numero de voos */
-void aeroportoComMaisVoos(aeroporto vet_aeroportos[], int numero_aeroportos)
-{
-	int i, maior_num_voos = 0, m_indice = 0;
-	
-	for (i = 0; i < numero_aeroportos; i++)
-	{
-		int num_voos = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
-		
-		if (num_voos > maior_num_voos)
-		{
-			maior_num_voos = num_voos;
-			m_indice = i;
-		}
-	}
-	printf("Aeroporto com mais rotas %s:%d:%d\n", vet_aeroportos[m_indice].id, vet_aeroportos[m_indice].outgoing, vet_aeroportos[m_indice].incoming);
-}
-
-/* Comando Q - devolve o aeroporto com mais aeroportos conectados */
-void aeroportoMaisConectado(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
-{
-	int i, j, max_ligacoes_aeroportos = 0, indice = 0;
-
-	for (i = 0; i < numero_aeroportos; i++)
-	{
-		int ligacoes_aeroportos = 0;
-		for (j = 0; j < numero_aeroportos; j++)
-		{
-			if (matriz_voos[i][j] != 0 || matriz_voos[j][i] != 0)
-			{
-				ligacoes_aeroportos += 1;
-			}
-		}
-		
-		if (ligacoes_aeroportos > max_ligacoes_aeroportos)
-		{
-			max_ligacoes_aeroportos = ligacoes_aeroportos;
-			indice = i;
-		} 
-	}
-	
-	printf("Aeroporto com mais ligacoes %s:%d\n", vet_aeroportos[indice].id, max_ligacoes_aeroportos);
-}
-
-
-/* Comando V - imprime para o ecra quais os dois aeroportos com o maior numero de voos */
-void vooMaisPopular(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_voos[][MAXAERO])
-{
-	int i, j, indice1 = 0, indice2 = 0, max_voos = 0;
-	
-	for (i = 0; i < numero_aeroportos; i++)
-	{
-		for (j = 0; j < numero_aeroportos; j++)
-		{
-			if (matriz_voos[i][j] > max_voos)
-			{
-				max_voos = matriz_voos[i][j];
-				indice1 = i;
-				indice2 = j;
-			}
-		}
-	}
-	printf("Voo mais popular %s:%s:%d\n", vet_aeroportos[indice1].id, vet_aeroportos[indice2].id, max_voos);
-}
-
 /* Funcoes auxiliares */
 
 /* inicializaMatriz - inicializa todos os valores da matriz de voos a 0 */
@@ -367,7 +373,7 @@ void inicializaMatriz(int matriz_voos[MAXAERO][MAXAERO])
 	}
 }
 
-/* indiceAeroporto - verifica se o aeroporto existe e retorna o seu indice, ou -1 se nao existir */
+/* indiceAeroporto - verifica se o aeroporto existe e retorna o seu indice, ou INEXISTENTE se nao existir */
 int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero_id[])
 {
 	int i;
@@ -380,11 +386,11 @@ int indiceAeroporto(aeroporto vet_aeroportos[], int numero_aeroportos, char aero
 		}
 	}
 
-	return -1;    /* se chegou aqui o aeroporto nao existe */	
+	return INEXISTENTE;    /* se chegou aqui o aeroporto nao existe */	
 }
 
 
-/* printAeroportos - coloca no ecra o numero de voos de ida e de volta, mais a capacidade e id de todos os aeroportos na rede. */
+/* printAeroportos - L 0: coloca no ecra o numero de voos de ida e de volta, mais a capacidade e id de todos os aeroportos na rede. */
 void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int i;
@@ -396,8 +402,8 @@ void printAeroportos (aeroporto vet_aeroportos[], int numero_aeroportos)
 }
 
 
-/* printAeroportoSorted - coloca no ecra o numero de voos de ida e de volta, mais a capacidade e id de todos os aeroportos na rede, por ordem alfabetica */
-void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos)
+/* printAeroportoSorted - L 1: coloca no ecra o numero de voos de ida e de volta, mais a capacidade e id de todos os aeroportos na rede, por ordem alfabetica */
+void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos)  /* utiliza o algoritmo selection sort */
 {
 	int i, j;
 	int vet_index_ids[MAXAERO];
@@ -428,7 +434,7 @@ void printAeroportoSorted(aeroporto vet_aeroportos[], int numero_aeroportos)
 }
 
 
-/* printDistrVoosAeroportos - coloca no ecra quantos aeroportos tem n voos, por ordem de n crescente. */
+/* printDistrVoosAeroportos - L 2: coloca no ecra quantos aeroportos tem n voos, por ordem crescente de n (numero de voos). */
 void printDistrVoosAeroportos(aeroporto vet_aeroportos[], int numero_aeroportos)
 {
 	int vet_resultados[MAXVOOS], voos, i;
@@ -480,7 +486,7 @@ void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_
 	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
 	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
 	
-	if (i != -1 && j != -1 )
+	if (i != INEXISTENTE && j != INEXISTENTE)
 	{
 		voos_aero1 = vet_aeroportos[i].incoming + vet_aeroportos[i].outgoing;
 		voos_aero2 = vet_aeroportos[j].incoming + vet_aeroportos[j].outgoing;
@@ -495,7 +501,7 @@ void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_
 				vet_aeroportos[i].outgoing += 1;
 				vet_aeroportos[j].incoming += 1;
 				
-				if(ida_volta)
+				if (ida_volta)
 				{
 					matriz_voos[j][i] += 1;
 					vet_aeroportos[j].outgoing += 1;
@@ -522,7 +528,7 @@ void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 	i = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id1);
 	j = indiceAeroporto(vet_aeroportos, numero_aeroportos, aero_id2);
 	
-	if (i != -1 && j != -1 )
+	if (i != INEXISTENTE && j != INEXISTENTE)
 	{
 		if (vet_aeroportos[i].estado == ABERTO && vet_aeroportos[j].estado == ABERTO)
 		{
