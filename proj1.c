@@ -493,8 +493,8 @@ void adicionaVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_
 		
 		if (vet_aeroportos[i].estado == ABERTO && vet_aeroportos[j].estado == ABERTO)
 		{
-			num_voos = ida_volta ? 2 : 1;
-			
+			num_voos = ida_volta ? 2 : 1;		/*Caso o voo seja de ida e volta, vai verificar se os aeroportos tem capacidade para mais 2 voos*/
+												/*(num_voos = 2). Verifica se tem capacidade para mais um voo caso contrario (num_voos=1)*/
 			if ((voos_aero1 + num_voos <= vet_aeroportos[i].capacidade) && (voos_aero2 + num_voos <= vet_aeroportos[j].capacidade))
 			{
 				matriz_voos[i][j] += 1;				
@@ -535,8 +535,8 @@ void removeVoos(aeroporto vet_aeroportos[], int numero_aeroportos, int matriz_vo
 			aero1_aero2 = matriz_voos[i][j];
 			aero2_aero1 = matriz_voos[j][i];
 		
-			verifica_volta = ida_volta ? aero2_aero1 : 1;
-			
+			verifica_volta = ida_volta ? aero2_aero1 : 1; /*Se for para remover voo de ida e volta, vai verificar tambem se existem viagens do */
+														/*aeroporto j para o aeroporto i. Verifica apenas do aeroporto i para j caso contrario.*/
 			if (verifica_volta > 0 && aero1_aero2 > 0)
 			{
 				matriz_voos[i][j] -= 1;				
