@@ -1,6 +1,7 @@
 /* tg025 - Filipa Marques n.57842 e David Coimbra n.84708 */
 
 
+
 /* Bibliotecas de funcoes */
 
 #include <stdio.h>
