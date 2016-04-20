@@ -35,9 +35,9 @@ adjacentes((L, C), [AdjH|AdjT]) :- Lcima is L-1, Lbaixo is L+1, Cesq is C-1, Cdi
 
 % nao_pertence/2: verdadeiro se um certo movimento nao pertencer a lista de movimentos dada
 nao_pertence(_, []). % caso de paragem 
-nao_pertence((_, L, C), [(_, Linha, Coluna)|MovsT]) :- (not(L == Linha) ; not(C == Coluna) ),
+nao_pertence((_, L, C), [(_, Linha, Coluna)|MovsT]) :- ((L \= Linha) ; (C \= Coluna) ),
 													  nao_pertence((_, L, C), MovsT).
-
+													  
 %seleciona_se_nao_pertence/3: verdadeiro se Res corresponder a todos os movimentos de Adj cujas posicoes nao pertencem a Movs
 seleciona_se_nao_pertence([AdjH|AdjT], Movs, Res) :- seleciona_se_nao_pertence([AdjH|AdjT], Movs, Res, []).
 seleciona_se_nao_pertence([],_, Acc, Acc).
@@ -60,9 +60,9 @@ celula_labirinto(Lab, (L, C), Celula) :- pos_i(Lab, L, Linha), pos_i(Linha, C, C
 
 % sem_paredes/2: verdadeiro se não existir uma parede na direção do movimento dado.
 sem_paredes(_, []).
-sem_paredes((D,_,_), [CelH|CelT]) :- CelH \= D,
-								     sem_paredes((D,_,_), CelT).
+sem_paredes((D,_,_), [CelH|CelT]) :- CelH \= D, sem_paredes((D,_,_), CelT).
 
+%seleciona_se_sem_paredes/3: verdadeiro se Res corresponder a todos os movimentos de MovsPoss cuja direcao nao esta bloqueada por paredes.
 seleciona_se_sem_paredes(Paredes, MovsPoss, Res) :- seleciona_se_sem_paredes(Paredes, MovsPoss, Res, []).
 seleciona_se_sem_paredes(_, [], Acc, Acc).
 seleciona_se_sem_paredes(Paredes, [MovsPossH|MovsPossT], Res, Acc) :- sem_paredes(MovsPossH, Paredes),
