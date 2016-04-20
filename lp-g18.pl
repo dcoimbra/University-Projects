@@ -3,7 +3,9 @@
 
 /* Programa principal */
 
-% movs_possiveis([LabH|LabT], (L, C), [MovsH|MovsT], [PossH|PossT]) :- adjacentes((L, C), Adj).
+movs_possiveis(Lab, Pos_actual, Movs, Poss) :- adjacentes(Pos_actual, Adj), celula_labirinto(Lab, Pos_actual, Paredes), 
+											   seleciona_se_sem_paredes(Paredes, Adj, PossAux),
+											   seleciona_se_nao_pertence(PossAux, Movs, Poss).
 
 % distancia/3: calcula Dist como a distancia entre (L1, C1) e (L2, C2).
 distancia((L1, C1), (L2, C2), Dist) :- Dist is (abs(L1 - L2) + abs(C1 - C2)).
@@ -27,13 +29,13 @@ pos_i([Cabeca|Cauda], I, Elemento) :- length([Cabeca|Cauda], Comp), I =< Comp,
 									  pos_i(Cauda, IAux, Elemento).
 
 % adjacentes/2: verdadeiro se a lista Adj for uma lista de pontos adjacentes ao ponto (L, C)
-adjacentes((L, C), [AdjH|AdjT]) :- Lup is L-1, Ldown is L+1, Cleft is C-1, Cright is C+1,
-							       AdjH = (c, Lup, C),
-							       AdjT = [(b, Ldown, C), (e, L, Cleft), (d, L, Cright)].
+adjacentes((L, C), [AdjH|AdjT]) :- Lcima is L-1, Lbaixo is L+1, Cesq is C-1, Cdir is C+1,
+							       AdjH = (c, Lcima, C),
+							       AdjT = [(b, Lbaixo, C), (e, L, Cesq), (d, L, Cdir)].
 
 % nao_pertence/2: verdadeiro se um certo movimento nao pertencer a lista de movimentos dada
 nao_pertence(_, []). % caso de paragem 
-nao_pertence((_, L, C), [(_, Linha, Coluna)|MovsT]) :- L =\= Linha; C =\= Coluna,
+nao_pertence((_, L, C), [(_, Linha, Coluna)|MovsT]) :- (not(L == Linha) ; not(C == Coluna) ),
 													  nao_pertence((_, L, C), MovsT).
 
 %seleciona_se_nao_pertence/3: verdadeiro se Res corresponder a todos os movimentos de Adj cujas posicoes nao pertencem a Movs
