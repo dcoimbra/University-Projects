@@ -22,11 +22,12 @@ ordena_poss([PossH|PossT], Poss_ord, Pos_inicial, Pos_final):-
 	
 % resolve1(Lab, Pos_inicial, Pos_final, Movs).
 resolve1(Lab, (Xi, Yi), P_final, Movs) :- 
-	movs_possiveis(Lab, (Xi,Yi), [(i,Xi,Yi)], Poss),
-	resolve1(Lab, Poss, P_final, [(i,Xi,Yi)], Movs).
-
+	movs_possiveis(Lab, (Xi,Yi), [(i,Xi,Yi)], Poss), /* Vai primeiro buscar os movimentos possiveis*/
+	resolve1(Lab, Poss, P_final, [(i,Xi,Yi)], Movs). /* da pos inicial e verifica atraves desses. */
+	
+	/*caso de paragem: quando a posicao atual for igual a Pos_final. */
 resolve1(_, [(D,Xf,Yf)|_], (Xf,Yf), Movs_atuais, Movs) :-
-	append(Movs_atuais, [(D,Xf,Xf)], Movs).
+	append(Movs_atuais, [(D,Xf,Yf)], Movs). 
 
 resolve1(Lab, [(D_prox_pos, X_prox_pos, Y_prox_pos)|Outras_poss], P_final, Movs_atuais, Movs):-
 	(
