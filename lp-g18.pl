@@ -21,6 +21,21 @@ ordena_poss([PossH|PossT], Poss_ord, Pos_inicial, Pos_final):-
 	insere_em_lista_ordenada(Poss_ordAux, PossH, Poss_ord, Pos_inicial, Pos_final).
 	
 % resolve1(Lab, Pos_inicial, Pos_final, Movs).
+resolve1(Lab, (Xi, Yi), P_final, Movs) :- 
+	movs_possiveis(Lab, (Xi,Yi), [(i,Xi,Yi)], Poss),
+	resolve1(Lab, Poss, P_final, [(i,Xi,Yi)], Movs).
+
+resolve1(_, [(D,Xf,Yf)|_], (Xf,Yf), Movs_atuais, Movs) :-
+	append(Movs_atuais, [(D,Xf,Xf)], Movs).
+
+resolve1(Lab, [(D_prox_pos, X_prox_pos, Y_prox_pos)|Outras_poss], P_final, Movs_atuais, Movs):-
+	(
+		append(Movs_atuais, [(D_prox_pos, X_prox_pos, Y_prox_pos)], Movs_mais_actuais),
+		movs_possiveis(Lab, (X_prox_pos, Y_prox_pos), Movs_mais_actuais, Movs1),
+		resolve1(Lab, Movs1, P_final, Movs_mais_actuais, Movs_res),
+			Movs = Movs_res
+	);
+	resolve1(Lab, Outras_poss, P_final, Movs_atuais, Movs).
 
 % resolve2(Lab, Pos_inicial, Pos_final, Movs).
 
