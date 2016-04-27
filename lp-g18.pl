@@ -27,15 +27,17 @@ resolve1(Lab, (Xi, Yi), P_final, Movs) :-
 	
 	/*caso de paragem: quando a posicao atual for igual a Pos_final. */
 resolve1(_, [(D,Xf,Yf)|_], (Xf,Yf), Movs_atuais, Movs) :-
-	append(Movs_atuais, [(D,Xf,Yf)], Movs). 
+	append(Movs_atuais, [(D,Xf,Yf)], Movs). /*Nesse caso, os Movs serao todos ate ao momento mais o final.*/
 
 resolve1(Lab, [(D_prox_pos, X_prox_pos, Y_prox_pos)|Outras_poss], P_final, Movs_atuais, Movs):-
-	(
+	(	/*Vai "pegar" na primeira jogada possivel, adiciona-a aos movs e tenta resolver o resto
+		do labirinto atraves dessa primeira jogada.*/
 		append(Movs_atuais, [(D_prox_pos, X_prox_pos, Y_prox_pos)], Movs_mais_actuais),
 		movs_possiveis(Lab, (X_prox_pos, Y_prox_pos), Movs_mais_actuais, Movs1),
 		resolve1(Lab, Movs1, P_final, Movs_mais_actuais, Movs_res),
 			Movs = Movs_res
 	);
+		/*caso a primeira jogada nao der, entao vai testar as jogadas possiveis seguintes.*/
 	resolve1(Lab, Outras_poss, P_final, Movs_atuais, Movs).
 
 % resolve2(Lab, Pos_inicial, Pos_final, Movs).
@@ -55,27 +57,18 @@ adjacentes((L, C), Adj) :-
 	Lcima is L-1, Lbaixo is L+1, Cesq is C-1, Cdir is C+1,
 	Adj = [(c, Lcima, C), (b, Lbaixo, C), (e, L, Cesq), (d, L, Cdir)].
 
-% nao_pertence/2: verdadeiro se um certo movimento nao pertencer a lista de movimentos dada.
-nao_pertence(_, []). 
-
-nao_pertence((_, L, C), [(_, Linha, Coluna)|MovsT]) :- 
-	(L \== Linha ; C \== Coluna),
-	nao_pertence((_, L, C), MovsT).
-
 %seleciona_se_nao_pertence/3: verdadeiro se Res corresponder a todos os 
 %movimentos de Adj cujas posicoes nao pertencem a Movs.
 seleciona_se_nao_pertence([AdjH|AdjT], Movs, Res) :- 
 	seleciona_se_nao_pertence([AdjH|AdjT], Movs, Res, []).
 
-seleciona_se_nao_pertence([],_, Acc, Acc).
+seleciona_se_nao_pertence([],_, Acc, Acc):- !.
 
-seleciona_se_nao_pertence([AdjH|AdjT], Movs, Res, Acc) :- 
-	(nao_pertence(AdjH, Movs),
-	concatena(Acc, [AdjH], Acc1),
-	seleciona_se_nao_pertence(AdjT, Movs, Res, Acc1));
+seleciona_se_nao_pertence([(AdjD, AdjX, AdjY)|AdjT], Movs, Res, Acc) :- 
+  ( \+memberchk((_, AdjX, AdjY), Movs), append(Acc, [(AdjD, AdjX, AdjY)], Acc1),
+	seleciona_se_nao_pertence(AdjT, Movs, Res, Acc1), ! );
   % ou:
-	(\+(nao_pertence(AdjH, Movs)),
-	seleciona_se_nao_pertence(AdjT, Movs, Res, Acc)).
+	seleciona_se_nao_pertence(AdjT, Movs, Res, Acc).
 
 % concatena/3: corresponde a concatenacao das Listas 1 e 2.
 concatena([], NovaCauda, NovaCauda).
