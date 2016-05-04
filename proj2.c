@@ -10,13 +10,15 @@
 #define FALSE 0
 
 /* Prototipo auxiliar */
-void inicializaMensagem(char* message);
+
 void leMensagem(char* message);
+void printMensagem(char* message);
 
 /* Programa principal */
 
 int main()
 {
+	int Ntotal = 0;
 	char comando;
 
 	while (TRUE)                 /* O programa pedira sempre um comando, */
@@ -33,6 +35,7 @@ int main()
 			/* Comando s - coloca no ecra o numero de hashtags distintas e o total de hashtags. */
 			case 's':
 				/* funcao relativa ao comando s */
+				printf("%d\n", Ntotal);
 				break;
 
 			/* Comando l - lista todas as hashtags por ordem decrescente de ocorrencias, ou alfabeticamente em caso de igualdade. */
@@ -50,11 +53,6 @@ int main()
 	return -1; /* programa terminado com erro - se chegou aqui algo correu mal */
 }
 
-void inicializaMensagem(char *message)
-{
-	message = (char*) malloc(sizeof(char)*(MAX+1));
-}
-
 void leMensagem(char *message) 
 {
     int c, i = 0;
@@ -66,3 +64,10 @@ void leMensagem(char *message)
     
     message[i] = '\0';
 }
+
+void printMensagem(char *message)
+{
+	printf("%s\n", message);
+}
+
+// message = (char*) malloc(sizeof(char)*(MAX+1));
