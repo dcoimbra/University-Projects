@@ -140,12 +140,12 @@ sem_paredes((D,_,_), [CelH|CelT]) :-
 seleciona_se_sem_paredes(Paredes, MovsPoss, Res) :- 
 	seleciona_se_sem_paredes(Paredes, MovsPoss, Res, []).
 
-seleciona_se_sem_paredes(_, [], Acc, Acc).
+seleciona_se_sem_paredes(_, [], Acc, Acc):- !.
 
 seleciona_se_sem_paredes(Paredes, [MovsPossH|MovsPossT], Res, Acc) :- 
 	(sem_paredes(MovsPossH, Paredes),
 	append(Acc, [MovsPossH], Acc1),
-	seleciona_se_sem_paredes(Paredes, MovsPossT, Res, Acc1));
+	seleciona_se_sem_paredes(Paredes, MovsPossT, Res, Acc1), !);
   % ou:
 	(\+(sem_paredes(MovsPossH, Paredes)),
 	seleciona_se_sem_paredes(Paredes, MovsPossT, Res, Acc)).
