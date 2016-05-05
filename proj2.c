@@ -3,33 +3,51 @@
 // Bibliotecas standard
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 // Definicoes de constantes
 #define MAX 140
+#define NUMSEP 11
 #define TRUE 1
 #define FALSE 0
 
+/* Estruturas */
+
+//hashtag
+typedef struct {
+	int ocur;
+	char name[MAX];
+} hashtag;
+
+/* Prototipo principal */
+
+void processMessage();
+
 /* Prototipo auxiliar */
 
-void leMensagem(char* message);
-void printMensagem(char* message);
+void readMessage(char *message);
+void split(char *line);
 
 /* Programa principal */
 
+static int Ntotal = 0;
+
 int main()
 {
-	int Ntotal = 0;
-	char comando;
+	char comm;
 
 	while (TRUE)                 /* O programa pedira sempre um comando, */
 	{                            /* exceto se algo correr mal ou o       */
-		comando = getchar();     /* utilizador terminar o programa       */
+		comm = getchar();        /* utilizador terminar o programa       */
 
-		switch(comando)
+		getchar(); /* le o ' ' introduzido pelo utilizador */
+		
+		switch(comm)
 		{
 			/* Comando a - determina o numero de hashtags numa mensagem. */
 			case 'a':
-				/* funcao relativa ao comando a */
+				processMessage();
 				break;
 
 			/* Comando s - coloca no ecra o numero de hashtags distintas e o total de hashtags. */
@@ -45,15 +63,25 @@ int main()
 
 			case 'x':
 				return 0; /* programa terminado com sucesso */
-		}
 
-		getchar(); /* le o '\n' introduzido pelo utilizador */
+			default:
+				printf("Comando invalido\n");
+		}
 	}
 
 	return -1; /* programa terminado com erro - se chegou aqui algo correu mal */
 }
 
-void leMensagem(char *message) 
+void processMessage()
+{
+	char* message = (char*) malloc(sizeof(char)*(MAX+1));
+	
+	readMessage(message);
+	split(message);
+	free(message);
+}
+
+void readMessage(char *message) 
 {
     int c, i = 0;
  
@@ -61,13 +89,29 @@ void leMensagem(char *message)
     {
         message[i++] = c;
     }
-    
+
     message[i] = '\0';
 }
 
-void printMensagem(char *message)
+void split(char *line)
 {
-	printf("%s\n", message);
-}
+    char separators[] = {' ','\t',',',';','.','?','!','"','\n',':','\0'};
+    char *token = strtok(line, separators);
+    
+    while (token!=NULL)
+    { 
+    	int i, l = strlen(token);
 
-// message = (char*) malloc(sizeof(char)*(MAX+1));
+    	for (i = 0; i != l; i++)
+    	{
+    		token[i] = tolower(token[i]);
+    	}
+
+    	if (token[0] == '#')
+    	{
+    		Ntotal++;
+    	}
+
+    	token = strtok(NULL, separators); 
+    } 
+} 
