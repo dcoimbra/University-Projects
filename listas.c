@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "operacoes_base.h"
+#include "listas.h"
 
 typedef item;
 
