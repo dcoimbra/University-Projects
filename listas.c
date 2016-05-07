@@ -62,7 +62,7 @@ void insert(Item item)
 	{
 		head = tail = t;
 		num_diff_items = total_num_items = 1;
-		
+		free(t);
 		return;
 	}
 	
@@ -73,7 +73,7 @@ void insert(Item item)
 		update_item(&(l->item)); /*endereco de memoria do item dentro da lista*/
 		
 		total_num_items++;
-		
+		free(t);
 		return;
 	}
 	
@@ -81,6 +81,7 @@ void insert(Item item)
 	tail = tail->next;
 	num_diff_items++;
 	total_num_items++;
+	free(t);
 }
 
 /* faz print da lista criada.*/
