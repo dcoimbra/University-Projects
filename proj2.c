@@ -109,15 +109,7 @@ void split(char *line)
     	{
     		hashtag new_hashtag = create_item(token);
 			
-			if find(new_hashtag)
-			{
-    			update(new_hashtag);
-			}
-			
-			else
-			{
-   				insert(new_hashtag);
-			}
+			insert(new_hashtag);
     	}
 
     	token = strtok(NULL, separators); 
