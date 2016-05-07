@@ -45,8 +45,7 @@ int main()
 
 			/* Comando s - coloca no ecra o numero de hashtags distintas e o total de hashtags. */
 			case 's':
-				/* funcao relativa ao comando s */
-				printf("%d\n", Ntotal);
+				count();
 				break;
 
 			/* Comando m - coloca no ecra a hashtag mais popular e o seu numero de ocorrencias. */

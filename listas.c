@@ -40,7 +40,7 @@ int main()
 	write();
 	link great = greatest();
 	write_item(great->item);
-	printf("%d %d\n", num_diff_items, total_num_items);
+	count();
 
 	return 0;
 }
@@ -81,8 +81,6 @@ void insert(Item item)
 	tail = tail->next;
 	num_diff_items++;
 	total_num_items++;
-
-	free(t);
 }
 
 /* faz print da lista criada.*/
