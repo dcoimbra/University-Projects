@@ -96,17 +96,18 @@ void readMessage(char *message)
 void split(char *line)
 {
     char separators[] = {' ','\t',',',';','.','?','!','"','\n',':','\0'};
+    
+    int i, l = strlen(line);
+
+    for (i = 0; i != l; i++)
+    {
+    	line[i] = tolower(line[i]);
+    }
+
     char *token = strtok(line, separators);
     
     while (token!=NULL)
     { 
-    	int i, l = strlen(token);
-
-    	for (i = 0; i != l; i++)
-    	{
-    		token[i] = tolower(token[i]);
-    	}
-
     	if (token[0] == '#')
     	{
     		Ntotal++;
