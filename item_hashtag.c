@@ -30,7 +30,7 @@ int compare_items(hashtag h1, hashtag h2)
 	int comp_occur = h2.occur-h1.occur;
 	int comp_name = strcmp(h1.name, h2.name);
 	
-	return comp_occur==0 ? comp_name : comp_occur;
+	return comp_occur == 0 ? comp_name : comp_occur;
 }
 
 int equal_items(hashtag h1, hashtag h2)

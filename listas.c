@@ -17,6 +17,7 @@ typedef node* link;
 void create();
 void insert();
 void write();
+void count();
 link find();
 link greatest();
 
@@ -57,7 +58,7 @@ void insert(Item item)
 	t->item = item;
 	t->next = NULL;
 
-	if(head == NULL)
+	if (head == NULL)
 	{
 		head = tail = t;
 		num_diff_items = total_num_items = 1;
@@ -67,7 +68,7 @@ void insert(Item item)
 	
 	link l = find(item);
 	
-	if(l)
+	if (l)
 	{
 		update_item(&(l->item)); /*endereco de memoria do item dentro da lista*/
 		
@@ -80,6 +81,8 @@ void insert(Item item)
 	tail = tail->next;
 	num_diff_items++;
 	total_num_items++;
+
+	free(t);
 }
 
 /* faz print da lista criada.*/
@@ -96,13 +99,18 @@ void write()
 	
 	link t = head;
 	
-	for(i = 1; t != NULL; t = t->next, i++)
+	for (i = 1; t != NULL; t = t->next, i++)
 	{
 		printf("elemento %d:\n", i);
 		write_item(t->item);
 	}
 	
 	printf("\n");
+}
+
+void count()
+{
+	printf("%d %d\n", num_diff_items, total_num_items);
 }
 
 /*devolve 1 se o elemento n existir na lista, 0 c.c.*/
@@ -113,7 +121,7 @@ link find(Item item)
 
 	link t;
 
-	for(t = head; t != NULL; t = t->next)
+	for (t = head; t != NULL; t = t->next)
 	{
 		if (equal_items(t->item, item))
 			return t;
@@ -130,7 +138,7 @@ link greatest()
 
 	link t, max = head;
 	
-	for(t = head->next; t != NULL;t = t->next)
+	for (t = head->next; t != NULL;t = t->next)
 	{
 		if (compare_items(t->item, max->item) < 0)
 			max = t;

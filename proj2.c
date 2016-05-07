@@ -12,17 +12,10 @@
 #define TRUE 1
 #define FALSE 0
 
-/* Estruturas */
-
-//hashtag
-typedef struct {
-	int ocur;
-	char name[MAX];
-} hashtag;
-
 /* Prototipo principal */
 
 void processMessage();
+void printGreatest();
 
 /* Prototipo auxiliar */
 
@@ -31,18 +24,18 @@ void split(char *line);
 
 /* Programa principal */
 
-static int Ntotal = 0;
-
 int main()
 {
 	char comm;
 
 	while (TRUE)                 /* O programa pedira sempre um comando, */
-	{                            /* exceto se algo correr mal ou o       */
-		comm = getchar();        /* utilizador terminar o programa       */
+	{   						 /* exceto se algo correr mal ou o       */
+		create();				 /* utilizador terminar o programa       */
+	                             
+		comm = getchar();        
 
-		getchar(); /* le o ' ' introduzido pelo utilizador */
-		
+		getchar(); /* le o espaco introduzido pelo utilizador */
+
 		switch(comm)
 		{
 			/* Comando a - determina o numero de hashtags numa mensagem. */
@@ -54,6 +47,11 @@ int main()
 			case 's':
 				/* funcao relativa ao comando s */
 				printf("%d\n", Ntotal);
+				break;
+
+			/* Comando m - coloca no ecra a hashtag mais popular e o seu numero de ocorrencias. */
+			case 'm':
+				printGreatest();
 				break;
 
 			/* Comando l - lista todas as hashtags por ordem decrescente de ocorrencias, ou alfabeticamente em caso de igualdade. */
@@ -110,9 +108,26 @@ void split(char *line)
     { 
     	if (token[0] == '#')
     	{
-    		Ntotal++;
+    		hashtag new_hashtag = create_item(token);
+			
+			if find(new_hashtag)
+			{
+    			update(new_hashtag);
+			}
+			
+			else
+			{
+   				insert(new_hashtag);
+			}
     	}
 
     	token = strtok(NULL, separators); 
     } 
-} 
+}
+
+void printGreatest()
+{
+	link max = greatest();
+
+	write_item(max->item);
+}
