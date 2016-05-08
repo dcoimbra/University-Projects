@@ -1,60 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "listas.h"
+#include "listas.h"
 #include "item_hashtag.h"
 
-typedef hashtag Item;
 
-//estruturas para as listas
-typedef struct node{
-	Item item;
-	struct node*next;
-} node;
-
-typedef node* link;
-
-void create();
-void insert();
-void write();
-void count();
-link find();
-link greatest();
 
 //criar uma head e uma tail para a lista
 static link head, tail;
+
 static int num_diff_items = 0, total_num_items = 0;
 
-int main()
-{
-	create();
-	hashtag hash_ola = create_item("#ola");
-	insert(hash_ola); 
-	insert(create_item("#teste"));
-	hashtag hash_adeus = create_item("#adeus");
-	insert(hash_adeus);
-	write();
-	printf("\n");
-	hashtag hash_mentiroso = create_item("#ola");
-	insert(hash_mentiroso);
-	write();
-	link great = greatest();
-	write_item(great->item);
-	count();
-
-	return 0;
-}
 
 /* cria uma nova lista */
 void create()
 {
-	head = NULL;
+	head = tail = NULL;
 }
 
 /* insere um novo elemento no fim da lista*/
 void insert(Item item)
 {
-	link t = (link) malloc(sizeof(node));
+	link t = (link) malloc(sizeof(NODE));
 	t->item = item;
 	t->next = NULL;
 
@@ -62,7 +29,7 @@ void insert(Item item)
 	{
 		head = tail = t;
 		num_diff_items = total_num_items = 1;
-		free(t);
+		//free(t);
 		return;
 	}
 	
@@ -73,7 +40,7 @@ void insert(Item item)
 		update_item(&(l->item)); /*endereco de memoria do item dentro da lista*/
 		
 		total_num_items++;
-		free(t);
+		//free(t);
 		return;
 	}
 	
@@ -81,7 +48,7 @@ void insert(Item item)
 	tail = tail->next;
 	num_diff_items++;
 	total_num_items++;
-	free(t);
+	//free(t);
 }
 
 /* faz print da lista criada.*/
@@ -89,7 +56,7 @@ void write()
 {
 	if (head == NULL)
 	{
-		printf("nao existe nenhuma lista.");
+		printf("nao existe nenhuma lista.\n");
 		
 		return;
 	}
@@ -132,8 +99,7 @@ link find(Item item)
 link greatest()
 {
 	if (head == NULL)
-	
-	return NULL;
+		return NULL;
 
 	link t, max = head;
 	

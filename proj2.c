@@ -6,6 +6,10 @@
 #include <string.h>
 #include <ctype.h>
 
+// Outras Bibliotecas
+#include "listas.h"
+#include "item_hashtag.h"
+
 // Definicoes de constantes
 #define MAX 140
 #define NUMSEP 11
@@ -27,10 +31,11 @@ void split(char *line);
 int main()
 {
 	char comm;
+	create();
 
 	while (TRUE)                 /* O programa pedira sempre um comando, */
 	{   						 /* exceto se algo correr mal ou o       */
-		create();				 /* utilizador terminar o programa       */
+								 /* utilizador terminar o programa       */
 	                             
 		comm = getchar();        
 
@@ -56,6 +61,7 @@ int main()
 			/* Comando l - lista todas as hashtags por ordem decrescente de ocorrencias, ou alfabeticamente em caso de igualdade. */
 			case 'l':
 				/* funcao relativa ao comando l */
+				write();
 				break;
 
 			case 'x':
@@ -120,5 +126,8 @@ void printGreatest()
 {
 	link max = greatest();
 
-	write_item(max->item);
+	if (max != NULL)
+		write_item(max->item);
+	else
+		printf("printGreatest: lista vazia.\n");
 }
