@@ -55,7 +55,7 @@ int main()
 
 			/* Comando m - coloca no ecra a hashtag mais popular e o seu numero de ocorrencias. */
 			case 'm':
-				printGreatest();
+				greatest();
 				break;
 
 			/* Comando l - lista todas as hashtags por ordem decrescente de ocorrencias, ou alfabeticamente em caso de igualdade. */
@@ -120,14 +120,4 @@ void split(char *line)
 
     	token = strtok(NULL, separators); 
     } 
-}
-
-void printGreatest()
-{
-	link max = greatest();
-
-	if (max != NULL)
-		write_item(max->item);
-	else
-		printf("printGreatest: lista vazia.\n");
 }

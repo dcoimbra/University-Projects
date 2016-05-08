@@ -4,19 +4,44 @@
 #include "adt.h"
 #include "item.h"
 
+/*------------------------------*/
+//estruturas para as listas
+
+typedef hashtag Item;
 
 
+typedef struct node{
+	Item item;
+	struct node*next;
+} NODE;
+
+typedef NODE* link;
+
+/*------------------------------*/
+/*----------PROTOTIPO-----------*/
+/*------(funcoes internas)------*/
+/*------------------------------*/
+link find();
+
+
+/*------------------------------*/
+/*-------VARIAVEIS GLOBAIS------*/
+/*------------------------------*/
 //criar uma head e uma tail para a lista
 static link head, tail;
 
 static int num_diff_items = 0, total_num_items = 0;
 
+/*------------------------------*/
+/*------FUNCOES DE LISTAS-------*/
+/*------------------------------*/
 
 /* cria uma nova lista */
 void create()
 {
 	head = tail = NULL;
 }
+
 
 /* insere um novo elemento no fim da lista*/
 void insert(Item item)
@@ -51,6 +76,7 @@ void insert(Item item)
 	//free(t);
 }
 
+
 /* faz print da lista criada.*/
 void write()
 {
@@ -70,14 +96,15 @@ void write()
 		printf("elemento %d:\n", i);
 		write_item(t->item);
 	}
-	
-	printf("\n");
 }
 
+
+/* faz print do numero total de items diferentes e do numero total de items.*/
 void count()
 {
 	printf("%d %d\n", num_diff_items, total_num_items);
 }
+
 
 /*devolve 1 se o elemento n existir na lista, 0 c.c.*/
 link find(Item item)
@@ -96,10 +123,12 @@ link find(Item item)
 	return NULL;
 }
 
-link greatest()
+
+/* faz print do maior item na lista. Caso a lista esteja vazia nao faz nada.*/
+void greatest()
 {
 	if (head == NULL)
-		return NULL;
+		return;
 
 	link t, max = head;
 	
@@ -108,6 +137,6 @@ link greatest()
 		if (compare_items(t->item, max->item) < 0)
 			max = t;
 	}
-	
-	return max;
+
+	write_item(max->item);
 }
