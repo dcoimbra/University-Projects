@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "listas.h"
-#include "item_hashtag.h"
+#include "adt.h"
+#include "item.h"
 
 
 

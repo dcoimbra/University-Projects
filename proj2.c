@@ -7,8 +7,8 @@
 #include <ctype.h>
 
 // Outras Bibliotecas
-#include "listas.h"
-#include "item_hashtag.h"
+#include "adt.h"
+#include "item.h"
 
 // Definicoes de constantes
 #define MAX 140

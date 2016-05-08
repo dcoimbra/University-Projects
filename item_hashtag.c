@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "item_hashtag.h"
+#include "item.h"
 
 //cria um novo item do tipo hashtag
 hashtag create_item(char nome[])

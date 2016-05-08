@@ -1,5 +1,5 @@
-#ifndef ITEM_HASHTAG_H
-#define ITEM_HASHTAG_H
+#ifndef ITEM_H
+#define ITEM_H
 
 
 #define MAXIMO 141
