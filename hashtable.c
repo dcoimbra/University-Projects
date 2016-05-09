@@ -20,6 +20,7 @@ link searchList(link head_list, Item* item);
 void writeList(int i, link head_list);
 link greatestInList(link head_list);
 void destroyList(link head_list);
+link append_lists(link head1, link head2);
 
 static int total_num_items = 0, num_diff_items = 0;
 static link *heads;
@@ -122,6 +123,10 @@ void count()
 	printf("%d %d\n", num_diff_items, total_num_items);
 }
 
+int totalDiffItems()
+{
+	return num_diff_items;
+}
 
 void greatest()
 {
@@ -197,4 +202,52 @@ void destroyList(link head_list)
 		free_item(tfree->item);
 		free(tfree);
 	}
+}
+
+link append_lists(link head1, link head2)
+{	
+	if (head1 == NULL)
+		return head2;
+    
+    if (head2 == NULL)
+    	return head1;
+               
+    link t;
+    
+    t = head1;           
+    while (t->next != NULL)
+    {
+    	printf("duvido, mas cheguei aqui\n");
+    	t = t->next;
+    }
+    
+    t->next = head2;
+    
+    return head1;
+}
+
+void append_all_lists()
+{
+	int i;
+	link all = NULL;
+	
+	for (i = 0; i < M; i++)
+	{
+		if (heads[i] != NULL)
+		{
+			printf("print aqui\n");
+			write();
+			all = append_lists(all, heads[i]);
+			printf("-------%d-------\n", i);
+			write();
+		}
+	}
+
+	for (i = 0; i < num_diff_items; i++)
+	{
+		printf("%d\n", num_diff_items);
+		write_item(all[i].item);
+	}
+
+	printf("\n");
 }

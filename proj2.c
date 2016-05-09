@@ -24,7 +24,6 @@ void processMessage();
 
 void readMessage(char *message);
 void split(char *line);
-link append_lists(link head1, link head2);
 
 /* Programa principal */
 
@@ -61,7 +60,8 @@ int main()
 			/* Comando l - lista todas as hashtags por ordem decrescente de ocorrencias, ou alfabeticamente em caso de igualdade. */
 			case 'l':
 				/* funcao relativa ao comando l */
-				write();
+				//write();
+				append_all_lists();
 				break;
 
 			case 'x':
@@ -123,28 +123,9 @@ void split(char *line)
     } 
 }
 
-link append_lists(link head1, link head2)
-{	
-	if (head1 == NULL)
-		return head2;
-    
-    if (head2 == NULL)
-    	return head1;
-               
-    link t;
-    
-    t = head1;           
-    while (t->next != NULL)
-    {
-    	t = t->next;
-    }
-    
-    t->next = head2;
-    
-    return head1;
-}
 
-void mergesort(l, r)  
+
+/*void mergesort(l, r)  
 {  
   int m = (r+l)/2; 
   if (r <= l) return; 
@@ -180,4 +161,4 @@ void merge(l, m, r)
 			
 		}
 	}
-}
+}*/
