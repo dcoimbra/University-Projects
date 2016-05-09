@@ -122,6 +122,7 @@ void count()
 	printf("%d %d\n", num_diff_items, total_num_items);
 }
 
+
 void greatest()
 {
 	link max = NULL, max_in_list;
