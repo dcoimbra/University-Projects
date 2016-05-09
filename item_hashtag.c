@@ -54,7 +54,6 @@ int hash_item(hashtag* h, int M)
 	return hash(h->name, M);
 }
 
-
 void free_item(hashtag* h)
 {
 	free(h->name);

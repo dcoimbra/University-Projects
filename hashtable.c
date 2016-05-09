@@ -11,7 +11,7 @@ typedef hashtag Item;
 typedef struct node{
 	Item* item;
 	struct node*next;
-}NODE;
+} NODE;
 
 typedef NODE *link;
 

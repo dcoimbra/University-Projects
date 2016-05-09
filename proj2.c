@@ -24,6 +24,7 @@ void processMessage();
 
 void readMessage(char *message);
 void split(char *line);
+link append_lists(link head1, link head2);
 
 /* Programa principal */
 
@@ -109,7 +110,7 @@ void split(char *line)
 
     char *token = strtok(line, separators);
     
-    while (token!=NULL)
+    while (token != NULL)
     { 
     	if (token[0] == '#')
     	{
@@ -120,4 +121,63 @@ void split(char *line)
 
     	token = strtok(NULL, separators); 
     } 
+}
+
+link append_lists(link head1, link head2)
+{	
+	if (head1 == NULL)
+		return head2;
+    
+    if (head2 == NULL)
+    	return head1;
+               
+    link t;
+    
+    t = head1;           
+    while (t->next != NULL)
+    {
+    	t = t->next;
+    }
+    
+    t->next = head2;
+    
+    return head1;
+}
+
+void mergesort(l, r)  
+{  
+  int m = (r+l)/2; 
+  if (r <= l) return; 
+  mergesort(l, m); 
+  mergesort(m+1, r); 
+  merge(l, m, r); 
+}
+
+void merge(l, m, r)
+{
+	int i, j, k;
+	link t;
+
+	for (i = m+1; i > l; i--)
+	{
+		headsaux[i-1]->item = heads[0]->item;
+	}
+
+	for (j = m; j < r; j++)
+	{
+		headsaux
+	}
+
+	for (k = 1; k <= r; k++)
+	{
+		if ((compare_items() < 0))
+		{
+
+		}
+
+		else
+		{
+			
+		}
+	}
 }
