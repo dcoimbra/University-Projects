@@ -11,7 +11,7 @@ typedef hashtag Item;
 
 
 typedef struct node{
-	Item item;
+	Item* item;
 	struct node*next;
 } NODE;
 
@@ -44,8 +44,19 @@ void create()
 
 
 /* insere um novo elemento no fim da lista*/
-void insert(Item item)
+void insert(Item* item)
 {
+	link l = find(item);
+	
+	if (l)
+	{
+		update_item(l->item); /*endereco de memoria do item dentro da lista*/
+		free_item(item);
+		total_num_items++;
+		return;
+	}
+
+
 	link t = (link) malloc(sizeof(NODE));
 	t->item = item;
 	t->next = NULL;
@@ -54,18 +65,7 @@ void insert(Item item)
 	{
 		head = tail = t;
 		num_diff_items = total_num_items = 1;
-		//free(t);
-		return;
-	}
-	
-	link l = find(item);
-	
-	if (l)
-	{
-		update_item(&(l->item)); /*endereco de memoria do item dentro da lista*/
 		
-		total_num_items++;
-		//free(t);
 		return;
 	}
 	
@@ -73,7 +73,7 @@ void insert(Item item)
 	tail = tail->next;
 	num_diff_items++;
 	total_num_items++;
-	//free(t);
+	
 }
 
 
@@ -107,7 +107,7 @@ void count()
 
 
 /*devolve 1 se o elemento n existir na lista, 0 c.c.*/
-link find(Item item)
+link find(Item* item)
 {
 	if (head == NULL)
 		return NULL;
@@ -139,4 +139,24 @@ void greatest()
 	}
 
 	write_item(max->item);
+}
+
+void destroy()
+{
+	if (head == NULL)
+	{
+		return;
+	}
+
+	link t, tfree;
+	
+	for (t = head; t != NULL;)
+	{
+		tfree = t;
+		t = t->next;
+
+		free_item(tfree->item);
+		free(tfree);
+	}
+
 }

@@ -65,7 +65,8 @@ int main()
 				break;
 
 			case 'x':
-				return 0; /* programa terminado com sucesso */
+				destroy();
+				return 0; /* programa terminado com sucesso e libertada toda a memoria alocada. */
 
 			default:
 				printf("Comando invalido\n");
@@ -113,7 +114,7 @@ void split(char *line)
     { 
     	if (token[0] == '#')
     	{
-    		hashtag new_hashtag = create_item(token);
+    		hashtag* new_hashtag = create_item(token);
 			
 			insert(new_hashtag);
     	}
