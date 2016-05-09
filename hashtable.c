@@ -15,27 +15,23 @@ typedef struct node{
 
 typedef NODE *link;
 
-
 link insertBeginList(link head_list, Item* item);
 link searchList(link head_list, Item* item);
 void writeList(int i, link head_list);
 link greatestInList(link head_list);
 void destroyList(link head_list);
 
-
 static int total_num_items = 0, num_diff_items = 0;
 static link *heads;
-
 
 void create()
 {
 	int i;
-	heads = (link*)malloc(M*sizeof(link));
+	heads = (link*) malloc(sizeof(link)*M);
 
 	for (i = 0; i < M; i++)
 		heads[i] = NULL;
 } 
-
 
 void insert(Item* item) 
 {
@@ -66,6 +62,12 @@ link insertBeginList(link head_list, Item* item)
 	return t;	
 }
 
+/*link find(Item* item)
+{
+	int i = hash_item(item, M);
+	return searchList(heads[i], item);
+}*/
+
 link searchList(link head_list, Item* item)
 {
 	if (head_list == NULL)
@@ -82,14 +84,12 @@ link searchList(link head_list, Item* item)
 	return NULL;
 }
 
-
-
 void write()
 {
 	int i;
-	for(i=0; i<M; i++)
+	
+	for (i = 0; i < M; i++)
 	{
-		
 		writeList(i, heads[i]);
 	}
 }
@@ -106,6 +106,7 @@ void writeList(int i, link head_list)
 	link t = head_list;
 	
 	printf("lista %d:\n", i);
+	
 	for (j = 1; t != NULL; t = t->next, j++)
 	{
 		printf("el %d: ", j);
@@ -121,32 +122,33 @@ void count()
 	printf("%d %d\n", num_diff_items, total_num_items);
 }
 
-/*link find(Item* item)
-{
-	int i = hash_item(item, M);
-	return searchList(heads[i], item);
-
-}*/
 
 void greatest()
 {
-	link max, max_list;
+	link max = NULL, max_in_list;
 	int i;
-	for(i=0; i<M; i++)
+	
+	for(i = 0; i < M; i++)
 	{
-		max_list= greatestInList(heads[i]);
-		if (max_list != NULL)
+		max_in_list = greatestInList(heads[i]);
+		
+		if (max_in_list != NULL)
 		{	
-			if ( max == NULL || compare_items(max_list->item, max->item) < 0)
-				max = max_list;
+			if ((max == NULL) || (compare_items(max_in_list->item, max->item) < 0))
+			{
+				max = max_in_list;
+			}
 		}
 	}
+	
 	if (max != NULL)
+	{
 		write_item(max->item);
-	else
-		printf("greatest: hashtable vazia.\n");
+		return;
+	}
+	
+	printf("greatest: hashtable vazia.\n");
 }
-
 
 /* faz print do maior item na lista. Caso a lista esteja vazia nao faz nada.*/
 link greatestInList(link head_list)
@@ -159,19 +161,22 @@ link greatestInList(link head_list)
 	for (t = head_list->next; t != NULL;t = t->next)
 	{
 		if (compare_items(t->item, max->item) < 0)
+		{
 			max = t;
+		}
 	}
-
+	
 	return max;
 }
 
 void destroy()
 {
 	int i;
-	for(i=0; i<M; i++)
+	for(i = 0; i < M; i++)
 	{
 		destroyList(heads[i]);
 	}
+	
 	free(heads);
 }
 
@@ -192,6 +197,4 @@ void destroyList(link head_list)
 		free_item(tfree->item);
 		free(tfree);
 	}
-
 }
-

@@ -1,13 +1,11 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-
 //hashtag
 typedef struct {
 	char* name;
 	int occur;
 } hashtag;
-
 
 hashtag* create_item(char* nome);
 void update_item(hashtag* hash);

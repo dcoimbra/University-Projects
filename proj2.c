@@ -19,7 +19,6 @@
 /* Prototipo principal */
 
 void processMessage();
-void printGreatest();
 
 /* Prototipo auxiliar */
 
@@ -103,7 +102,7 @@ void split(char *line)
     
     int i, l = strlen(line);
 
-    for (i = 0; i != l; i++)
+    for (i = 0; i < l; i++)
     {
     	line[i] = tolower(line[i]);
     }
