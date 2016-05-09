@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "adt.h"
+#include "adt.h"
 #include "item.h"
 
 #define M 10007
@@ -125,6 +125,7 @@ void count()
 {
 	int i = hash_item(item, M);
 	return searchList(heads[i], item);
+
 }*/
 
 void greatest()
