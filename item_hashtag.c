@@ -14,12 +14,7 @@ hashtag* create_item(char* nome)
 	strcpy(new->name, nome);
 	new->occur = 1;
 
-	if(greatest == NULL)
-	{
-		greatest = new;
-	}
-
-	if(compare_items(new, greatest) < 0)
+	if( greatest == NULL || (compare_items(new, greatest) < 0)
 	{
 		greatest = new;
 	}
