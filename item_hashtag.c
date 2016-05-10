@@ -19,6 +19,11 @@ hashtag* create_item(char* nome)
 		greatest = new;
 	}
 
+	if(compare_items(new, greatest) < 0)
+	{
+		greatest = new;
+	}
+
 	return new;
 }
 
