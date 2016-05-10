@@ -26,8 +26,6 @@ void writeArray(link* array);
 void quicksort(link* array, int l, int r);
 int partition(link* array, int l, int r);
 
-
-
 static int total_num_items = 0, num_diff_items = 0;
 static link* heads;
 
@@ -69,12 +67,6 @@ link insertBeginList(link head_list, Item* item)
 
 	return t;	
 }
-
-/*link find(Item* item)
-{
-	int i = hash_item(item, M);
-	return searchList(heads[i], item);
-}*/
 
 link searchList(link head_list, Item* item)
 {
@@ -270,8 +262,8 @@ int partition(link* array, int l, int r)
 	
 	while (i < j) 
 	{
-		while (compare_items(array[++i]->item, v->item) > 0);
-		while (compare_items(v->item, array[--j]->item) > 0)
+		while (compare_items(array[++i]->item, v->item) < 0);
+		while (compare_items(v->item, array[--j]->item) < 0)
 			if (j == l)
 				break;
 			if (i < j)
@@ -281,9 +273,10 @@ int partition(link* array, int l, int r)
 				array[j] = aux;
 			}
 	}
+	
 	aux = array[i];
-	array[i] = array[j];
-	array[j] = aux;
+	array[i] = array[r];
+	array[r] = aux;
 
 	return i;
 }
