@@ -54,7 +54,7 @@ int main()
 
 			/* Comando m - coloca no ecra a hashtag mais popular e o seu numero de ocorrencias. */
 			case 'm':
-				greatest();
+				greatest_item();
 				break;
 
 			/* Comando l - lista todas as hashtags por ordem decrescente de ocorrencias, ou alfabeticamente em caso de igualdade. */

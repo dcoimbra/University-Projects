@@ -3,6 +3,8 @@
 #include <string.h>
 #include "item.h"
 
+static hashtag* greatest = NULL;
+
 //cria um novo item do tipo hashtag
 hashtag* create_item(char* nome)
 {
@@ -12,6 +14,11 @@ hashtag* create_item(char* nome)
 	strcpy(new->name, nome);
 	new->occur = 1;
 
+	if(greatest == NULL)
+	{
+		greatest = new;
+	}
+
 	return new;
 }
 
@@ -19,6 +26,11 @@ hashtag* create_item(char* nome)
 void update_item(hashtag* hash)
 {
 	hash->occur++;
+
+	if(compare_items(hash, greatest) < 0)
+	{
+		greatest = hash;
+	}
 }
 
 //devolve o #nome.
@@ -30,13 +42,19 @@ void write_item(hashtag* hash)
 int compare_items(hashtag* h1, hashtag* h2)
 {
 	int comp_occur = (h2->occur)-(h1->occur);
-			
+
 	return comp_occur == 0 ? strcmp(h1->name, h2->name) : comp_occur;
 }
 
 int equal_items(hashtag* h1, hashtag* h2)
 {
 	return strcmp(h1->name, h2->name) == 0;
+}
+
+void greatest_item()
+{
+	if (greatest != NULL)
+		write_item(greatest);
 }
 
 int hash(char *v, int M)

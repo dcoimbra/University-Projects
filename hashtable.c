@@ -4,7 +4,7 @@
 #include "adt.h"
 #include "item.h"
 
-#define M 10007
+#define M 13337 //10007
 
 typedef hashtag Item;
 
@@ -83,38 +83,7 @@ link searchList(link head_list, Item* item)
 
 	return NULL;
 }
-/*
-void write()
-{
-	int i;
-	
-	for (i = 0; i < M; i++)
-	{
-		writeList(i, heads[i]);
-	}
-}
-void writeList(int i, link head_list)
-{
-	if (head_list == NULL)
-	{
-		return;
-	}
 
-	int j;
-	
-	link t = head_list;
-	
-	//printf("lista %d:\n", i);
-	
-	for (j = 1; t != NULL; t = t->next, j++)
-	{
-		//printf("%do: ", j);
-		write_item(t->item);
-	}
-
-	//printf("\n");
-}
-*/
 
 /* faz print do numero total de items diferentes e do numero total de items.*/
 void count()
@@ -146,8 +115,6 @@ void greatest()
 		write_item(max->item);
 		return;
 	}
-	
-	//printf("greatest: hashtable vazia.\n");
 }
 
 /* faz print do maior item na lista. Caso a lista esteja vazia nao faz nada.*/

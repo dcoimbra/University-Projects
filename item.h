@@ -12,6 +12,7 @@ void update_item(hashtag* hash);
 void write_item(hashtag* hash);
 int compare_items(hashtag* h1, hashtag* h2);
 int equal_items(hashtag* h1, hashtag* h2);
+void greatest_item();
 void free_item(hashtag* h);
 int hash_item(hashtag* h, int M);
 
