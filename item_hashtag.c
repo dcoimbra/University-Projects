@@ -30,7 +30,7 @@ void write_item(hashtag* hash)
 int compare_items(hashtag* h1, hashtag* h2)
 {
 	int comp_occur = (h2->occur)-(h1->occur);
-		
+			
 	return comp_occur == 0 ? strcmp(h1->name, h2->name) : comp_occur;
 }
 

@@ -61,7 +61,7 @@ int main()
 			case 'l':
 				/* funcao relativa ao comando l */
 				//write();
-				append_all_lists();
+				writeSorted();
 				break;
 
 			case 'x':

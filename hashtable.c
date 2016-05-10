@@ -20,10 +20,17 @@ link searchList(link head_list, Item* item);
 void writeList(int i, link head_list);
 link greatestInList(link head_list);
 void destroyList(link head_list);
-link append_lists(link head1, link head2);
+
+link* createArrayFromHashtable();
+void writeArray(link* array);
+void quicksort(link* array, int l, int r);
+int partition(link* array, int l, int r);
+
+
 
 static int total_num_items = 0, num_diff_items = 0;
-static link *heads;
+static link* heads;
+
 
 void create()
 {
@@ -84,7 +91,7 @@ link searchList(link head_list, Item* item)
 
 	return NULL;
 }
-
+/*
 void write()
 {
 	int i;
@@ -94,7 +101,6 @@ void write()
 		writeList(i, heads[i]);
 	}
 }
-
 void writeList(int i, link head_list)
 {
 	if (head_list == NULL)
@@ -106,16 +112,17 @@ void writeList(int i, link head_list)
 	
 	link t = head_list;
 	
-	printf("lista %d:\n", i);
+	//printf("lista %d:\n", i);
 	
 	for (j = 1; t != NULL; t = t->next, j++)
 	{
-		printf("el %d: ", j);
+		//printf("%do: ", j);
 		write_item(t->item);
 	}
 
-	printf("\n");
+	//printf("\n");
 }
+*/
 
 /* faz print do numero total de items diferentes e do numero total de items.*/
 void count()
@@ -123,10 +130,6 @@ void count()
 	printf("%d %d\n", num_diff_items, total_num_items);
 }
 
-int totalDiffItems()
-{
-	return num_diff_items;
-}
 
 void greatest()
 {
@@ -152,7 +155,7 @@ void greatest()
 		return;
 	}
 	
-	printf("greatest: hashtable vazia.\n");
+	//printf("greatest: hashtable vazia.\n");
 }
 
 /* faz print do maior item na lista. Caso a lista esteja vazia nao faz nada.*/
@@ -204,50 +207,85 @@ void destroyList(link head_list)
 	}
 }
 
-link append_lists(link head1, link head2)
-{	
-	if (head1 == NULL)
-		return head2;
-    
-    if (head2 == NULL)
-    	return head1;
-               
-    link t;
-    
-    t = head1;           
-    while (t->next != NULL)
-    {
-    	printf("duvido, mas cheguei aqui\n");
-    	t = t->next;
-    }
-    
-    t->next = head2;
-    
-    return head1;
+void writeSorted()
+{
+	link* array = createArrayFromHashtable();
+	quicksort(array, 0, num_diff_items-1);
+	writeArray(array);
+	free(array);
 }
 
-void append_all_lists()
+link* createArrayFromHashtable()
 {
-	int i;
-	link all = NULL;
-	
+	int i, j = 0;
+	link* array = (link*)malloc(sizeof(link*)*num_diff_items);
+
+	for(i=0; i < num_diff_items; i++)
+		array[i] = NULL;
+
 	for (i = 0; i < M; i++)
 	{
 		if (heads[i] != NULL)
 		{
-			printf("print aqui\n");
-			write();
-			all = append_lists(all, heads[i]);
-			printf("-------%d-------\n", i);
-			write();
+			link t = heads[i];
+			for (; t != NULL; t = t->next, j++)
+			{
+				array[j] = t;
+			}
 		}
 	}
-
-	for (i = 0; i < num_diff_items; i++)
-	{
-		printf("%d\n", num_diff_items);
-		write_item(all[i].item);
-	}
-
-	printf("\n");
+	return array;
 }
+
+void writeArray(link* array)
+{
+	int j = 0;
+
+	for (j = 0; j < num_diff_items; j++)
+	{
+		//printf("%d:\n", j);
+		write_item(array[j]->item);
+				
+	}
+	//printf("\n");
+}
+
+void quicksort(link* a, int l, int r)
+{
+	int i;
+	if (r <= l)
+		return;
+
+	i = partition(a, l, r);
+	quicksort(a, l, (i-1));
+	quicksort(a, (i+1), r);
+}
+
+int partition(link* array, int l, int r) 
+{
+	int i = l-1;
+	int j = r;
+	link aux;
+	link v = array[r];
+	
+	while (i < j) 
+	{
+		while (compare_items(array[++i]->item, v->item) > 0);
+		while (compare_items(v->item, array[--j]->item) > 0)
+			if (j == l)
+				break;
+			if (i < j)
+			{
+				aux = array[i];
+				array[i] = array[j];
+				array[j] = aux;
+			}
+	}
+	aux = array[i];
+	array[i] = array[j];
+	array[j] = aux;
+
+	return i;
+}
+
+

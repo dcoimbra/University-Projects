@@ -4,6 +4,6 @@ void create();
 void insert(); /* recebe ponteiro para Item */
 void write();
 void count();
-void append_all_lists();
+void writeSorted();
 void greatest();
 void destroy();
