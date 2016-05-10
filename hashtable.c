@@ -1,36 +1,52 @@
+/*                  Grupo 18                   */
+/* 57842 Filipa Marques - 84708 David Coimbra  */
+
+/* Operacoes base para tabela de dispersao */
+
+/* Diretivas de pre-compilador */
+
+// Bibliotecas standard
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+// Outras bibliotecas
 #include "adt.h"
 #include "item.h"
 
-#define M 13337 //10007
+// Definicoes de constantes
+#define M 13337 //numero de listas ligadas numa tabela de dispersao
 
+//Estruturas
 typedef hashtag Item;
 
-typedef struct node{
+//NODE
+typedef struct node {
 	Item* item;
-	struct node*next;
+	struct node* next;
 } NODE;
 
 typedef NODE *link;
 
+/* Variaveis globais */
+static int total_num_items = 0, num_diff_items = 0;
+static link* heads; /* tabela de dispersao */
+
+/* Prototipo */
+void create();
+void insert(Item* item);
 link insertBeginList(link head_list, Item* item);
 link searchList(link head_list, Item* item);
-void writeList(int i, link head_list);
-link greatestInList(link head_list);
+void count();
+void destroy();
 void destroyList(link head_list);
-
+void writeSorted();
 link* createArrayFromHashtable();
 void writeArray(link* array);
 void quicksort(link* array, int l, int r);
 int partition(link* array, int l, int r);
 
-static int total_num_items = 0, num_diff_items = 0;
-static link* heads;
-
-
-
+/* create: inicializa uma tabela de dispersao. */
 void create()
 {
 	int i;
@@ -40,19 +56,20 @@ void create()
 		heads[i] = NULL;
 } 
 
-
-
+/* insert: insere na tabela de dispersao um item apontado pelo ponteiro recebido */
 void insert(Item* item) 
 {
 	int i = hash_item(item, M);
 	link l = searchList(heads[i], item);
 
+	/* se o item existir na lista, incrementa o respetivo numero de ocorrencias. */
 	if (l)
 	{
 		update_item(l->item); 
 		free_item(item);
 	}
 
+	/* caso contrario, insere-o no inicio de uma lista. */
 	else
 	{
 		heads[i] = insertBeginList(heads[i], item);
@@ -62,7 +79,8 @@ void insert(Item* item)
 	total_num_items++;
 }
 
-
+/* insertBeginList: insere um item no inicio de uma lista da tabela de dispersão. 
+	devolve o novo elemento, pois e' a nova cabeca da lista. */
 link insertBeginList(link head_list, Item* item)
 {
 	link t = (link) malloc(sizeof(NODE));
@@ -72,7 +90,7 @@ link insertBeginList(link head_list, Item* item)
 	return t;	
 }
 
-
+/* searchList: procura um item numa lista e devolve o elemento que contem esse item. */
 link searchList(link head_list, Item* item)
 {
 	if (head_list == NULL)
@@ -89,15 +107,13 @@ link searchList(link head_list, Item* item)
 	return NULL;
 }
 
-
-/* faz print do numero total de items diferentes e do numero total de items.*/
+/* count - coloca no ecra o numero total de items diferentes e do numero total de items.*/
 void count()
 {
 	printf("%d %d\n", num_diff_items, total_num_items);
 }
 
-
-
+/* destroy - liberta toda a memoria alocada para a tabela de dispersao */
 void destroy()
 {
 	int i;
@@ -109,8 +125,7 @@ void destroy()
 	free(heads);
 }
 
-
-
+/* liberta a memoria alocada para uma lista */
 void destroyList(link head_list)
 {
 	if (head_list == NULL)
@@ -130,8 +145,8 @@ void destroyList(link head_list)
 	}
 }
 
-
-
+/* writeSorted() - escreve no ecra os elementos de um vetor ordenado,
+				   criado a partir de uma tabela de dispersao. */
 void writeSorted()
 {
 	link* array = createArrayFromHashtable();
@@ -140,13 +155,13 @@ void writeSorted()
 	free(array);
 }
 
-
+/* createArrayFromHashtable - coloca os elementos de uma tabela de dispersao num vetor e devolve-o. */
 link* createArrayFromHashtable()
 {
 	int i, j = 0;
 	link* array = (link*)malloc(sizeof(link*)*num_diff_items);
 
-	for(i=0; i < num_diff_items; i++)
+	for(i = 0; i < num_diff_items; i++)
 		array[i] = NULL;
 
 	for (i = 0; i < M; i++)
@@ -163,6 +178,7 @@ link* createArrayFromHashtable()
 	return array;
 }
 
+/* writeArray - escreve no ecra os elementos de um vetor */
 void writeArray(link* array)
 {
 	int j = 0;
@@ -173,8 +189,7 @@ void writeArray(link* array)
 	}
 }
 
-
-
+/* quicksort - ordena um vetor segundo o algoritmo quicksort. */
 void quicksort(link* a, int l, int r)
 {
 	int i;
@@ -186,6 +201,8 @@ void quicksort(link* a, int l, int r)
 	quicksort(a, (i+1), r);
 }
 
+/* partition - como parte do algoritmo quicksort, divide um vetor em duas partes
+			   segundo um pivot. */ 
 int partition(link* array, int l, int r) 
 {
 	int i = l-1;

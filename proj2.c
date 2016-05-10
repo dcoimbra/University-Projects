@@ -1,3 +1,6 @@
+/*                  Grupo 25                  */
+/* 57842 Filipa Marques - 84708 David Coimbra */
+                                            
 /* Diretivas de pre-compilador */
 
 // Bibliotecas standard
@@ -11,8 +14,8 @@
 #include "item.h"
 
 // Definicoes de constantes
-#define MAX 140
-#define NUMSEP 11
+#define MAX 140   /* Tamanho maximo de uma mensagem */
+#define NUMSEP 11 
 #define TRUE 1
 #define FALSE 0
 
@@ -34,15 +37,13 @@ int main()
 
 	while (TRUE)                 /* O programa pedira sempre um comando, */
 	{   						 /* exceto se algo correr mal ou o       */
-								 /* utilizador terminar o programa       */
-	                             
-		comm = getchar();        
+		comm = getchar();        /* utilizador terminar o programa       */                                
 
 		getchar(); /* le o espaco introduzido pelo utilizador */
 
 		switch(comm)
 		{
-			/* Comando a - determina o numero de hashtags numa mensagem. */
+			/* Comando a - processa uma mensagem, extraindo as hashtags nela. */
 			case 'a':
 				processMessage();
 				break;
@@ -60,10 +61,10 @@ int main()
 			/* Comando l - lista todas as hashtags por ordem decrescente de ocorrencias, ou alfabeticamente em caso de igualdade. */
 			case 'l':
 				/* funcao relativa ao comando l */
-				//write();
 				writeSorted();
 				break;
 
+			/* Comando x - termina o programa. */
 			case 'x':
 				destroy();
 				return 0; /* programa terminado com sucesso e libertada toda a memoria alocada. */
@@ -76,6 +77,7 @@ int main()
 	return -1; /* programa terminado com erro - se chegou aqui algo correu mal */
 }
 
+/* processMessage - le uma mensagem e processa-a. */
 void processMessage()
 {
 	char* message = (char*) malloc(sizeof(char)*(MAX+1));
@@ -85,6 +87,8 @@ void processMessage()
 	free(message);
 }
 
+/* readMessage -  le texto do terminal, colocando-o
+				  na memoria alocada indicada pelo */
 void readMessage(char *message) 
 {
     int c, i = 0;
@@ -97,6 +101,8 @@ void readMessage(char *message)
     message[i] = '\0';
 }
 
+/* split - recebe uma mensagem e divide-a em tokens. 
+		   Os tokens que forem hashtags são inseridos na tabela de dispersao. */
 void split(char *line)
 {
     char separators[] = {' ','\t',',',';','.','?','!','"','\n',':','\0'};
@@ -122,43 +128,3 @@ void split(char *line)
     	token = strtok(NULL, separators); 
     } 
 }
-
-
-
-/*void mergesort(l, r)  
-{  
-  int m = (r+l)/2; 
-  if (r <= l) return; 
-  mergesort(l, m); 
-  mergesort(m+1, r); 
-  merge(l, m, r); 
-}
-
-void merge(l, m, r)
-{
-	int i, j, k;
-	link t;
-
-	for (i = m+1; i > l; i--)
-	{
-		headsaux[i-1]->item = heads[0]->item;
-	}
-
-	for (j = m; j < r; j++)
-	{
-		headsaux
-	}
-
-	for (k = 1; k <= r; k++)
-	{
-		if ((compare_items() < 0))
-		{
-
-		}
-
-		else
-		{
-			
-		}
-	}
-}*/

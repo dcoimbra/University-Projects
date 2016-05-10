@@ -1,7 +1,12 @@
+/*                  Grupo 18                   */
+/* 57842 Filipa Marques - 84708 David Coimbra  */
+
+/* Operacoes base para ADT hashtag */
+
 #ifndef ITEM_H
 #define ITEM_H
 
-//hashtag
+/* Estrutura hashtag */ 
 typedef struct {
 	char* name;
 	int occur;
