@@ -30,6 +30,7 @@ static int total_num_items = 0, num_diff_items = 0;
 static link* heads;
 
 
+
 void create()
 {
 	int i;
@@ -38,6 +39,8 @@ void create()
 	for (i = 0; i < M; i++)
 		heads[i] = NULL;
 } 
+
+
 
 void insert(Item* item) 
 {
@@ -59,6 +62,7 @@ void insert(Item* item)
 	total_num_items++;
 }
 
+
 link insertBeginList(link head_list, Item* item)
 {
 	link t = (link) malloc(sizeof(NODE));
@@ -67,6 +71,7 @@ link insertBeginList(link head_list, Item* item)
 
 	return t;	
 }
+
 
 link searchList(link head_list, Item* item)
 {
@@ -92,49 +97,6 @@ void count()
 }
 
 
-void greatest()
-{
-	link max = NULL, max_in_list;
-	int i;
-	
-	for(i = 0; i < M; i++)
-	{
-		max_in_list = greatestInList(heads[i]);
-		
-		if (max_in_list != NULL)
-		{	
-			if ((max == NULL) || (compare_items(max_in_list->item, max->item) < 0))
-			{
-				max = max_in_list;
-			}
-		}
-	}
-	
-	if (max != NULL)
-	{
-		write_item(max->item);
-		return;
-	}
-}
-
-/* faz print do maior item na lista. Caso a lista esteja vazia nao faz nada.*/
-link greatestInList(link head_list)
-{
-	if (head_list == NULL)
-		return NULL;
-
-	link t, max = head_list;
-	
-	for (t = head_list->next; t != NULL;t = t->next)
-	{
-		if (compare_items(t->item, max->item) < 0)
-		{
-			max = t;
-		}
-	}
-	
-	return max;
-}
 
 void destroy()
 {
@@ -146,6 +108,8 @@ void destroy()
 	
 	free(heads);
 }
+
+
 
 void destroyList(link head_list)
 {
@@ -166,6 +130,8 @@ void destroyList(link head_list)
 	}
 }
 
+
+
 void writeSorted()
 {
 	link* array = createArrayFromHashtable();
@@ -173,6 +139,7 @@ void writeSorted()
 	writeArray(array);
 	free(array);
 }
+
 
 link* createArrayFromHashtable()
 {
@@ -202,12 +169,11 @@ void writeArray(link* array)
 
 	for (j = 0; j < num_diff_items; j++)
 	{
-		//printf("%d:\n", j);
 		write_item(array[j]->item);
-				
 	}
-	//printf("\n");
 }
+
+
 
 void quicksort(link* a, int l, int r)
 {
@@ -233,6 +199,7 @@ int partition(link* array, int l, int r)
 		while (compare_items(v->item, array[--j]->item) < 0)
 			if (j == l)
 				break;
+			
 			if (i < j)
 			{
 				aux = array[i];
@@ -247,5 +214,3 @@ int partition(link* array, int l, int r)
 
 	return i;
 }
-
-

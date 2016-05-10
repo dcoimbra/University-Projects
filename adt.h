@@ -2,7 +2,6 @@
 
 void create();
 void insert(); /* recebe ponteiro para Item */
-void write();
 void count();
 void writeSorted();
 void greatest();
