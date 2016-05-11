@@ -56,7 +56,7 @@ void create()
 		heads[i] = NULL;
 } 
 
-/* insert: insere na tabela de dispersao um item apontado pelo ponteiro recebido */
+/* insert: insere na tabela de dispersao o ponteiro para item recebido. */
 void insert(Item* item) 
 {
 	int i = hash_item(item, M);
@@ -72,6 +72,7 @@ void insert(Item* item)
 	/* caso contrario, insere-o no inicio de uma lista. */
 	else
 	{
+		
 		heads[i] = insertBeginList(heads[i], item);
 		num_diff_items++;
 	}
@@ -80,7 +81,7 @@ void insert(Item* item)
 }
 
 /* insertBeginList: insere um item no inicio de uma lista da tabela de dispersão. 
-	devolve o novo elemento, pois e' a nova cabeca da lista. */
+	devolve o novo elemento correspondente 'a nova cabeca da lista. */
 link insertBeginList(link head_list, Item* item)
 {
 	link t = (link) malloc(sizeof(NODE));
@@ -125,7 +126,7 @@ void destroy()
 	free(heads);
 }
 
-/* liberta a memoria alocada para uma lista */
+/* destroyList - liberta a memoria alocada para uma lista */
 void destroyList(link head_list)
 {
 	if (head_list == NULL)
@@ -155,7 +156,7 @@ void writeSorted()
 	free(array);
 }
 
-/* createArrayFromHashtable - coloca os elementos de uma tabela de dispersao num vetor e devolve-o. */
+/* createArrayFromHashtable - devolve um array de ponteiros, que apontam para cada um dos elementos da hashtable. */
 link* createArrayFromHashtable()
 {
 	int i, j = 0;
@@ -178,7 +179,7 @@ link* createArrayFromHashtable()
 	return array;
 }
 
-/* writeArray - escreve no ecra os elementos de um vetor */
+/* writeArray - escreve no ecra os items para os quais os ponteiros de um vetor estao a apontar. */
 void writeArray(link* array)
 {
 	int j = 0;

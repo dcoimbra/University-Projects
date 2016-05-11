@@ -50,10 +50,11 @@ void update_item(hashtag* hash)
 	if (compare_items(hash, greatest) < 0)
 	{
 		greatest = hash;
+
 	}
 }
 
-/* write_item: devolve o nome do hashtag dado. */
+/* write_item: devolve o nome e o numero de ocorrencias do hashtag dado. */
 void write_item(hashtag* hash)
 {
 	printf("%s %d\n", hash->name, hash->occur);
@@ -61,8 +62,9 @@ void write_item(hashtag* hash)
 
 /* compare_items: retorna o resultado de comparar o numero
 				  de ocorrencias de 2 items: maior que 0
-				  se h2 > h1 e menor caso contrario. Devolve 0
-				  se forem iguais. */
+				  se h2 > h1 e menor caso contrario. Devolve o 
+				  resultado da comparacao dos nomes se o numero 
+				  de ocorrencias forem iguais. */
 int compare_items(hashtag* h1, hashtag* h2)
 {
 	int comp_occur = (h2->occur)-(h1->occur);
@@ -70,8 +72,8 @@ int compare_items(hashtag* h1, hashtag* h2)
 	return comp_occur == 0 ? strcmp(h1->name, h2->name) : comp_occur;
 }
 
-/* equal_items: retorna 0 se os dois items tiverem nomes diferentes e um valor
-                diferente de 0 caso contrario. */
+/* equal_items: retorna 0 (falso) se os dois items tiverem nomes diferentes e um valor
+                diferente de 0 (true) caso contrario. */
 int equal_items(hashtag* h1, hashtag* h2)
 {
 	return strcmp(h1->name, h2->name) == 0;
@@ -84,7 +86,7 @@ void greatest_item()
 		write_item(greatest);
 }
 
-/* hash: associa um hash a um item e devolve esse hash */
+/* hash: devolve o hash associado ao nome de um item. */
 int hash(char *v, int M)
 {
 	int h, a = 31415, b = 27183;
@@ -95,7 +97,7 @@ int hash(char *v, int M)
 	return h;
 }
 
-/* hash_item: retorna o hash associado ao nome do item dado. */
+/* hash_item: retorna o hash associado ao item dado. */
 int hash_item(hashtag* h, int M)
 {
 	return hash(h->name, M);
