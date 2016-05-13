@@ -118,7 +118,7 @@ void split(char *line)
     
     while (token != NULL)
     { 
-    	if (token[0] == '#')
+    	if (token[0] == '#' && strlen(token) > 1)
     	{
     		hashtag* new_hashtag = create_item(token);
 			
