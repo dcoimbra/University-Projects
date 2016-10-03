@@ -100,12 +100,20 @@ int main (int argc, char** argv) {
 
     /* Simular */
     else if (strcmp(args[0], COMANDO_SIMULAR) == 0) {
+        int numAnos;
 
-      /* POR COMPLETAR */
-
-      printf("Comando nao implementado\n");
-      
+        if (numargs < 2) {
+            printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_LER_SALDO);
+            continue;
+        }
+        numAnos = atoi(args[1]);
+        if (numAnos < 0)
+            printf("%s(%d): Erro.\n\n", COMANDO_SIMULAR, numAnos);
+        else {
+            simular(numAnos);
+        }
     }
+
 
     else {
       printf("Comando desconhecido. Tente de novo.\n");
