@@ -46,13 +46,12 @@ int lerSaldo(int idConta) {
 
 
 void simular(int numAnos) {
-
 	int ano, i, aux, simulSaldo;
-  int auxContasSaldos[NUM_CONTAS];
-	
-  for (i = 0; i < NUM_CONTAS; i++) {
-    auxContasSaldos[i] = contasSaldos[i];
-  }
+	int auxContasSaldos[NUM_CONTAS];
+
+	for (i = 0; i < NUM_CONTAS; i++) {
+		auxContasSaldos[i] = contasSaldos[i];
+	}
 
 	for(ano = 0; ano <= numAnos; ano++) {
 
@@ -60,16 +59,19 @@ void simular(int numAnos) {
 		printf("=================\n");
 
 		for(i = 0; i < NUM_CONTAS; i++) {
-      if(ano == 0)
-			  simulSaldo = auxContasSaldos[i];
-		
-		  else {
+
+			if(ano == 0)
+				simulSaldo = auxContasSaldos[i];
+
+			else {
 				aux = (auxContasSaldos[i]*(1 + TAXAJURO) - CUSTOMANUTENCAO);
 				simulSaldo = (aux > 0 ? aux : 0);
-        auxContasSaldos[i] = simulSaldo;
-		  }
+				auxContasSaldos[i] = simulSaldo;
+			}
+			
 			printf("Conta %d, Saldo %d\n", (i+1), simulSaldo );
-  	}
+		}
+		
 		printf("\n");
 	}
 }
