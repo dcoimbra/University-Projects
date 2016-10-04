@@ -1,5 +1,0 @@
-creditar 1 100
-creditar 2 1000
-creditar 3 500
-simular 3
-sair
