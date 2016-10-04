@@ -1,4 +1,13 @@
 CFLAGS = -g -Wall -pedantic
 
-i-banco: contas.c contas.h i-banco.c commandlinereader.c commandlinereader.h
-	gcc -o i-banco $(CFLAGS) contas.c commandlinereader.c i-banco.c
+i-banco: i-banco.o contas.o commandlinereader.o
+	gcc -o i-banco $(CFLAGS) contas.o commandlinereader.o i-banco.o
+
+i-banco.o: i-banco.c
+	gcc -c $(CFLAGS) i-banco.c
+
+contas.o: contas.c contas.h
+	gcc -c $(CFLAGS) contas.c contas.h
+
+commandlinereader.o:
+	gcc -c $(CFLAGS) commandlinereader.c commandlinereader.h
