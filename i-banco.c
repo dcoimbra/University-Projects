@@ -114,7 +114,6 @@ int main (int argc, char** argv) {
         }
     }
 
-
     else {
       printf("Comando desconhecido. Tente de novo.\n");
     }

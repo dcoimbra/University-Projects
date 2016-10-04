@@ -4,5 +4,6 @@ lerSaldo 1
 lerSaldo 2
 simular 5
 debitar 2 50
+simular 3
 lerSaldo 2
 sair

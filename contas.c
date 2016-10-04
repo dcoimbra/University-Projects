@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define atrasar() sleep(ATRASO)
 		     
@@ -46,32 +48,49 @@ int lerSaldo(int idConta) {
 
 
 void simular(int numAnos) {
-  int ano, i, aux, simulSaldo;ghghg
-  int auxContasSaldos[NUM_CONTAS];
+  int pid, estado;
 
-  for (i = 0; i < NUM_CONTAS; i++) {
-    auxContasSaldos[i] = contasSaldos[i];
-  }
+  pid = fork();
 
-  for(ano = 0; ano <= numAnos; ano++) {
+  if (pid == 0) { 
+    int ano, i, aux, simulSaldo;
+    int auxContasSaldos[NUM_CONTAS];
 
-    printf("SIMULACAO: Ano %d\n", ano);
-    printf("=================\n");
+    printf("--------------Estou num processo filho---------------------\n");
 
-    for(i = 0; i < NUM_CONTAS; i++) {
-
-      if(ano == 0)
-        simulSaldo = auxContasSaldos[i];
-
-      else {
-        aux = (auxContasSaldos[i]*(1 + TAXAJURO) - CUSTOMANUTENCAO);
-        simulSaldo = (aux > 0 ? aux : 0);
-        auxContasSaldos[i] = simulSaldo;
-      }
-
-      printf("Conta %d, Saldo %d\n", (i+1), simulSaldo );
+    for (i = 0; i < NUM_CONTAS; i++) {
+      auxContasSaldos[i] = contasSaldos[i];
     }
 
-    printf("\n");
+    for(ano = 0; ano <= numAnos; ano++) {
+
+      atrasar();
+
+      printf("SIMULACAO: Ano %d\n", ano);
+      printf("=================\n");
+
+      for(i = 0; i < NUM_CONTAS; i++) {
+
+        if(ano == 0)
+          simulSaldo = auxContasSaldos[i];
+
+        else {
+          aux = (auxContasSaldos[i]*(1 + TAXAJURO) - CUSTOMANUTENCAO);
+          simulSaldo = (aux > 0 ? aux : 0);
+          auxContasSaldos[i] = simulSaldo;
+        }
+
+        printf("Conta %d, Saldo %d\n", (i+1), simulSaldo);
+      }
+
+      printf("\n");
+    }
+
+    printf("--------------Estou num processo pai~NOVO---------------------\n");
+    exit(0);
   }
+
+  else
+    printf("--------------Estou num processo pai---------------------\n");
+    pid = wait(&estado);
 }
