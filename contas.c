@@ -47,7 +47,7 @@ int lerSaldo(int idConta) {
 void simular(int numAnos) {
   int pid;
 
-  pid = fork();
+  pid = fork();  /* cada simulacao e' efetuada num processo filho */
 
   if (pid == 0) { 
     int ano, i, aux, simulSaldo;
@@ -69,7 +69,7 @@ void simular(int numAnos) {
 
         else {
           aux = (auxContasSaldos[i]*(1 + TAXAJURO) - CUSTOMANUTENCAO);
-          simulSaldo = (aux > 0 ? aux : 0);
+          simulSaldo = (aux > 0 ? aux : 0);  /* se a simulacao resultar num valor negativo, e' apresentado o valor 0. */
           auxContasSaldos[i] = simulSaldo;
         }
 
@@ -79,7 +79,6 @@ void simular(int numAnos) {
       printf("\n");
     }
 
-    atrasar();
-    exit(0);
+    exit(EXIT_SUCCESS); /* retorna ao processo pai */
   }
 } 

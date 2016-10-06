@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -17,7 +18,7 @@
 #define COMANDO_LER_SALDO "lerSaldo"
 #define COMANDO_SIMULAR "simular"
 #define COMANDO_SAIR "sair"
-#define COMANDO_SAIR_AGORA "sair agora"
+#define COMANDO_SAIR_AGORA "agora"
 
 #define atrasar() sleep(ATRASO)
 
@@ -46,53 +47,56 @@ int main (int argc, char** argv) {
         /* EOF (end of file) do stdin ou comando "sair" */
         if (numargs < 0 ||
 	        (numargs > 0 && (strcmp(args[0], COMANDO_SAIR) == 0))) {
+
+            if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0) {
+                printf("works\n");
+            }
             
-            int i = 0, j = 0, pid, estado;
- 
+            else {
+                int i = 0, j = 0, pid, estado; 
 
-            int pids_sucess[MAX_CHILDREN];
-            int pids_failure[MAX_CHILDREN];
+                int pids_sucess[MAX_CHILDREN];
+                int pids_failure[MAX_CHILDREN];
 
-            printf("i-banco vai terminar.\n");
-            printf("--\n");
+                printf("i-banco vai terminar.\n");
+                printf("--\n");
 
-            while ((i+j) < nFilhos) {
-                
-                /* espera pelo fim de cada processo filho */
-                pid = wait(&estado);
+                while ((i+j) < nFilhos) {
 
-                /* Os PID's dos processos filhos 
-                   são guardados no vetor correspondente
-                   ao sucesso desse processo na terminação */
-                
-                if (WIFEXITED(estado)) {
-                    pids_sucess[i] = pid;
-                    i++;
+                    /* espera pelo fim de cada processo filho */
+                    pid = wait(&estado);
+
+                    /* Os PID's dos processos filhos 
+                       são guardados no vetor correspondente
+                       ao sucesso desse processo na terminação */
+                    
+                    if (WIFEXITED(estado)) {
+                        pids_sucess[i] = pid;
+                        i++;
+                    }
+                    
+                    else {
+                        pids_failure[j] = pid;
+                        j++;
+                    }
                 }
-                
-                else {
-                    pids_failure[j] = pid;
-                    j++;
+            
+                while (i != 0) {
+                    printf("FILHO TERMINADO (PID=%d; terminou normalmente)\n", pids_sucess[i]);
+                    i--;
                 }
-            }
 
-            while (i) {
-                printf("FILHO TERMINADO (PID=%d; terminou normalmente)\n", pids_sucess[i]);
-                i--;
-            }
+                while (j != 0) {
+                    printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[j]);
+                    j--;
+                }
 
-            while (j) {
-                printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[j]);
-                j--;
+                printf("--\n");
+                printf("i-banco terminou.\n");
             }
-
-            printf("--\n");
-            printf("i-banco terminou.\n");
 
             exit(EXIT_SUCCESS);
         }
-
-        /*sair agora*/
     
         else if (numargs == 0)
             /* Nenhum argumento; ignora e volta a pedir */
