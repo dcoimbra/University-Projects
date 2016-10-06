@@ -9,5 +9,5 @@ i-banco.o: i-banco.c
 contas.o: contas.c contas.h
 	gcc -c $(CFLAGS) contas.c contas.h
 
-commandlinereader.o:
+commandlinereader.o: commandlinereader.c commandlinereader.h
 	gcc -c $(CFLAGS) commandlinereader.c commandlinereader.h

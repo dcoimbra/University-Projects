@@ -2,8 +2,6 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 
 #define atrasar() sleep(ATRASO)
 		     
@@ -46,9 +44,8 @@ int lerSaldo(int idConta) {
   return contasSaldos[idConta - 1];
 }
 
-
 void simular(int numAnos) {
-  int pid, estado;
+  int pid;
 
   pid = fork();
 
@@ -56,15 +53,11 @@ void simular(int numAnos) {
     int ano, i, aux, simulSaldo;
     int auxContasSaldos[NUM_CONTAS];
 
-    printf("--------------Estou num processo filho---------------------\n");
-
     for (i = 0; i < NUM_CONTAS; i++) {
-      auxContasSaldos[i] = contasSaldos[i];
+      auxContasSaldos[i] = lerSaldo(i + 1);
     }
 
-    for(ano = 0; ano <= numAnos; ano++) {
-
-      atrasar();
+    for (ano = 0; ano <= numAnos; ano++) {
 
       printf("SIMULACAO: Ano %d\n", ano);
       printf("=================\n");
@@ -80,17 +73,13 @@ void simular(int numAnos) {
           auxContasSaldos[i] = simulSaldo;
         }
 
-        printf("Conta %d, Saldo %d\n", (i+1), simulSaldo);
+        printf("Conta %d, Saldo %d\n", (i + 1), simulSaldo);
       }
-
+      
       printf("\n");
     }
 
-    printf("--------------Estou num processo pai~NOVO---------------------\n");
+    atrasar();
     exit(0);
   }
-
-  else
-    printf("--------------Estou num processo pai---------------------\n");
-    pid = wait(&estado);
-}
+} 

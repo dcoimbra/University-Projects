@@ -8,21 +8,31 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define COMANDO_DEBITAR "debitar"
 #define COMANDO_CREDITAR "creditar"
 #define COMANDO_LER_SALDO "lerSaldo"
 #define COMANDO_SIMULAR "simular"
 #define COMANDO_SAIR "sair"
+#define COMANDO_SAIR_AGORA "sair agora"
+
+#define atrasar() sleep(ATRASO)
 
 #define MAXARGS 3
 #define BUFFER_SIZE 100
+
+#define MAX_CHILDREN 20
 
 
 int main (int argc, char** argv) {
 
     char *args[MAXARGS + 1];
     char buffer[BUFFER_SIZE];
+
+    int nFilhos = 0; /* numero de processos filho criados */
 
     inicializarContas();
 
@@ -37,12 +47,52 @@ int main (int argc, char** argv) {
         if (numargs < 0 ||
 	        (numargs > 0 && (strcmp(args[0], COMANDO_SAIR) == 0))) {
             
-            /* POR COMPLETAR */
+            int i = 0, j = 0, pid, estado;
+ 
 
-            printf("Comando nao implementado\n");            
-            
+            int pids_sucess[MAX_CHILDREN];
+            int pids_failure[MAX_CHILDREN];
+
+            printf("i-banco vai terminar.\n");
+            printf("--\n");
+
+            while ((i+j) < nFilhos) {
+                
+                /* espera pelo fim de cada processo filho */
+                pid = wait(&estado);
+
+                /* Os PID's dos processos filhos 
+                   são guardados no vetor correspondente
+                   ao sucesso desse processo na terminação */
+                
+                if (WIFEXITED(estado)) {
+                    pids_sucess[i] = pid;
+                    i++;
+                }
+                
+                else {
+                    pids_failure[j] = pid;
+                    j++;
+                }
+            }
+
+            while (i) {
+                printf("FILHO TERMINADO (PID=%d; terminou normalmente)\n", pids_sucess[i]);
+                i--;
+            }
+
+            while (j) {
+                printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[i]);
+                j--;
+            }
+
+            printf("--\n");
+            printf("i-banco terminou.\n");
+
             exit(EXIT_SUCCESS);
         }
+
+        /*sair agora*/
     
         else if (numargs == 0)
             /* Nenhum argumento; ignora e volta a pedir */
@@ -111,6 +161,7 @@ int main (int argc, char** argv) {
             printf("%s(%d): Erro.\n\n", COMANDO_SIMULAR, numAnos);
         else {
             simular(numAnos);
+            nFilhos++;
         }
     }
 
