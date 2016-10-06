@@ -82,7 +82,7 @@ int main (int argc, char** argv) {
             }
 
             while (j) {
-                printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[i]);
+                printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[j]);
                 j--;
             }
 
