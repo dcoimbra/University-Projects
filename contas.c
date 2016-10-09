@@ -2,11 +2,12 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #define atrasar() sleep(ATRASO)
 		     
 int contasSaldos[NUM_CONTAS];
-
+int recebeuSignal = 0;
 
 int contaExiste(int idConta) {
   return (idConta > 0 && idConta <= NUM_CONTAS);
@@ -53,6 +54,8 @@ void simular(int numAnos) {
     int ano, i, aux, simulSaldo;
     int auxContasSaldos[NUM_CONTAS];
 
+    signal(SIGUSR1, tratarSignal);
+
     for (i = 0; i < NUM_CONTAS; i++) {
       auxContasSaldos[i] = lerSaldo(i + 1);
     }
@@ -64,7 +67,7 @@ void simular(int numAnos) {
 
       for(i = 0; i < NUM_CONTAS; i++) {
 
-        if(ano == 0)
+        if (ano == 0)
           simulSaldo = auxContasSaldos[i];
 
         else {
@@ -77,8 +80,18 @@ void simular(int numAnos) {
       }
       
       printf("\n");
+
+      if (recebeuSignal) {
+      	printf("Processo terminado por signal\n");
+      	exit(EXIT_FAILURE);
+      }
     }
 
     exit(EXIT_SUCCESS); /* retorna ao processo pai */
   }
+}
+
+void tratarSignal(int signum)
+{
+	recebeuSignal = 1;
 } 

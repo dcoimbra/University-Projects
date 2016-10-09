@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -19,8 +18,6 @@
 #define COMANDO_SIMULAR "simular"
 #define COMANDO_SAIR "sair"
 #define COMANDO_SAIR_AGORA "agora"
-
-#define atrasar() sleep(ATRASO)
 
 #define MAXARGS 3
 #define BUFFER_SIZE 100
@@ -61,7 +58,7 @@ int main (int argc, char** argv) {
                 printf("i-banco vai terminar.\n");
                 printf("--\n");
 
-                while ((i+j) < nFilhos) {
+                while ((i+j) < (nFilhos)) {
 
                     /* espera pelo fim de cada processo filho */
                     pid = wait(&estado);
@@ -157,7 +154,7 @@ int main (int argc, char** argv) {
         int numAnos;
 
         if (numargs < 2) {
-            printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_LER_SALDO);
+            printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_SIMULAR);
             continue;
         }
         numAnos = atoi(args[1]);
