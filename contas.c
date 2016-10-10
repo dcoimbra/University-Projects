@@ -60,6 +60,7 @@ void simular(int numAnos) {
 
 
   for (ano = 0; ano <= numAnos; ano++) {
+    atrasar();
     printf("SIMULACAO: Ano %d\n", ano);
     printf("=================\n");
 
@@ -76,12 +77,12 @@ void simular(int numAnos) {
       printf("Conta %d, Saldo %d\n", (i + 1), simulSaldo);
     }
     
-    printf("\n");
-
     if (recebeuSignal) {
-    	printf(" --- Simulacao terminada por signal --- \n");
+    	printf(" --- Simulacao terminada por signal em ano %d --- \n\n", ano);
     	exit(EXIT_FAILURE);
     }
+
+    printf("\n");
   }
 
 
