@@ -164,7 +164,7 @@ void funcaoSaida() {
          são guardados no vetor correspondente
          ao sucesso desse processo na terminação */
       
-      if (!WEXITSTATUS(estado)) {
+      if (WIFEXITED(estado)) {
           pids_sucess[i] = pid;
           i++;
       }

@@ -78,7 +78,7 @@ void simular(int numAnos) {
     
     if (recebeuSignal) {
     	printf("Simulacao terminada por signal\n\n");
-    	exit(EXIT_FAILURE);
+    	exit(EXIT_SUCCESS);
     }
 
     printf("\n");
