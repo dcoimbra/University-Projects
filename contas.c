@@ -5,7 +5,7 @@
 #include <signal.h>
 
 #define atrasar() sleep(ATRASO)
-		     
+         
 int contasSaldos[NUM_CONTAS];
 int recebeuSignal = 0;
 
@@ -58,12 +58,13 @@ void simular(int numAnos) {
     auxContasSaldos[i] = lerSaldo(i + 1);
   }
 
+
   for (ano = 0; ano <= numAnos; ano++) {
     printf("SIMULACAO: Ano %d\n", ano);
     printf("=================\n");
 
     for(i = 0; i < NUM_CONTAS; i++) {
-
+      atrasar();
       if (ano == 0)
         simulSaldo = auxContasSaldos[i];
 
@@ -75,20 +76,21 @@ void simular(int numAnos) {
 
       printf("Conta %d, Saldo %d\n", (i + 1), simulSaldo);
     }
-
+    
     printf("\n");
 
     if (recebeuSignal) {
-    	printf(" --- Simulacao terminada por signal --- \n");
-	  	exit(EXIT_FAILURE);
-	}
+      printf(" --- Simulacao terminada por signal --- \n");
+      exit(EXIT_FAILURE);
+    }
   }
-  
-  exit(EXIT_SUCCESS);
+
+
+  exit(EXIT_SUCCESS); /* retorna ao processo pai */
 }
 
-void tratarSignal(int signum)
-{
-	recebeuSignal = 1;
-} 
 
+void tratarSignal(int signum) {
+
+  recebeuSignal = 1;
+}
