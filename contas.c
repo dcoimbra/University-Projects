@@ -58,7 +58,6 @@ void simular(int numAnos) {
     auxContasSaldos[i] = lerSaldo(i + 1);
   }
 
-
   for (ano = 0; ano <= numAnos; ano++) {
     printf("SIMULACAO: Ano %d\n", ano);
     printf("=================\n");
@@ -75,18 +74,18 @@ void simular(int numAnos) {
       }
 
       printf("Conta %d, Saldo %d\n", (i + 1), simulSaldo);
-      printf("\n");
+    }
+
+    printf("\n");
 
     if (recebeuSignal) {
     	printf(" --- Simulacao terminada por signal --- \n");
-    	exit(EXIT_FAILURE);
-    }
+	  	exit(EXIT_FAILURE);
+	}
   }
-
-  exit(EXIT_SUCCESS); /* retorna ao processo pai */
+  
+  exit(EXIT_SUCCESS);
 }
-
-
 
 void tratarSignal(int signum)
 {

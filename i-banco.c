@@ -139,19 +139,13 @@ int main (int argc, char** argv) {
                 else {
                     pidFilhos[nFilhos++] = pid;
                 }
-
             }
-
-        if (numargs < 2) {
-            printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_SIMULAR);
-            continue;
         }
 
         else {
           printf("Comando desconhecido. Tente de novo.\n");
         }
-
-    } 
+    }
 }
 
 
