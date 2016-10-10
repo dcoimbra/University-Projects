@@ -5,4 +5,6 @@ lerSaldo 2
 simular 5
 debitar 2 50
 lerSaldo 2
-sair
+simular 1
+sair agora
+
