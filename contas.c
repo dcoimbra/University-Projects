@@ -50,21 +50,20 @@ void simular(int numAnos) {
   int ano, i, aux, simulSaldo;
   int auxContasSaldos[NUM_CONTAS];
 
-  if (signal(SIGUSR1, tratarSignal) == SIG_ERR) { /* Faz o handle do signal e previne */
-    perror ("Erro.");                  /* caso haja algum problema nessa "instalacao" */
-  }
+  if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e previne */
+    perror ("Erro.");                  /* caso haja erro */
 
-  for (i = 0; i < NUM_CONTAS; i++) {
+  for (i = 0; i < NUM_CONTAS; i++) 
     auxContasSaldos[i] = lerSaldo(i + 1);
-  }
-
 
   for (ano = 0; ano <= numAnos; ano++) {
+    
     atrasar();
     printf("SIMULACAO: Ano %d\n", ano);
     printf("=================\n");
 
     for(i = 0; i < NUM_CONTAS; i++) {
+      
       if (ano == 0)
         simulSaldo = auxContasSaldos[i];
 
@@ -78,19 +77,17 @@ void simular(int numAnos) {
     }
     
     if (recebeuSignal) {
-    	printf("Simulacao terminada por signal no ano %d\n\n", ano);
+    	printf("Simulacao terminada por signal\n\n");
     	exit(EXIT_FAILURE);
     }
 
     printf("\n");
   }
 
-
   exit(EXIT_SUCCESS); /* retorna ao processo pai */
 }
 
-
 void tratarSignal(int signum) {
-
+  
   recebeuSignal = 1;
 }

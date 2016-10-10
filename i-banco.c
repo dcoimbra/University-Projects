@@ -52,9 +52,8 @@ int main (int argc, char** argv) {
 	        (numargs > 0 && (strcmp(args[0], COMANDO_SAIR) == 0))) {
 
         /* Sair Agora */
-            if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0) {
+            if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
                 enviarSignal();
-            }
             
             funcaoSaida();
             exit(EXIT_SUCCESS);
@@ -131,25 +130,20 @@ int main (int argc, char** argv) {
                 pid = fork();
 
             /* Processo Filho */
-                if (pid == 0) {
+                if (pid == 0) 
                     simular(numAnos);
-                }
 
             /* Processo Pai */
-                else {
+                else 
                     pidFilhos[nFilhos++] = pid;
-                }
-
             }
         }
 
-        else {
+        else 
           printf("Comando desconhecido. Tente de novo.\n");
-        }
-
+        
     } 
 }
-
 
 void funcaoSaida() {
 
@@ -198,7 +192,6 @@ void funcaoSaida() {
 void enviarSignal() {
     int i;
 
-    for (i = 0; i < nFilhos; i++) {
+    for (i = 0; i < nFilhos; i++) 
         kill(pidFilhos[i], SIGUSR1);
-    }
 }
