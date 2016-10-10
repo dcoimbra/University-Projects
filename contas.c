@@ -78,7 +78,7 @@ void simular(int numAnos) {
     }
     
     if (recebeuSignal) {
-    	printf(" --- Simulacao terminada por signal em ano %d --- \n\n", ano);
+    	printf("Simulacao terminada por signal no ano %d\n\n", ano);
     	exit(EXIT_FAILURE);
     }
 
