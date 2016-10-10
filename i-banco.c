@@ -22,7 +22,6 @@
 
 
 #define MAX_CHILDREN 20
-
 #define MAXARGS 3
 #define BUFFER_SIZE 100
 
@@ -50,6 +49,7 @@ int main (int argc, char** argv) {
         /* EOF (end of file) do stdin ou comando "sair" */
         if (numargs < 0 ||
 	        (numargs > 0 && (strcmp(args[0], COMANDO_SAIR) == 0))) {
+
 
         /* Sair Agora */
             if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0) {
@@ -141,6 +141,10 @@ int main (int argc, char** argv) {
                 }
 
             }
+
+        if (numargs < 2) {
+            printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_SIMULAR);
+            continue;
         }
 
         else {
