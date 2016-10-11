@@ -7,7 +7,7 @@
 #define atrasar() sleep(ATRASO)
 		     
 int contasSaldos[NUM_CONTAS];
-int recebeuSignal = 0;
+int recebeuSignal = 0; /* Flag. Indica se o processo recebeu um signal. */
 
 int contaExiste(int idConta) {
   return (idConta > 0 && idConta <= NUM_CONTAS);
@@ -87,6 +87,8 @@ void simular(int numAnos) {
   exit(EXIT_SUCCESS); /* retorna ao processo pai */
 }
 
+/* Quando o processo recebe um signal, 
+   o valor da flag é alterado para o refletir. */
 void tratarSignal(int signum) {
   
   recebeuSignal = 1;

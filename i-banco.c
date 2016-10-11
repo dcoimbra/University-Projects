@@ -145,6 +145,13 @@ int main (int argc, char** argv) {
     } 
 }
 
+/* Resposta às duas variantes do comando 'sair' 
+   
+   Para o comando 'sair' standard, espera que todos os 
+   processos filho tenham terminado antes de terminar o programa principal. 
+   
+   Para o comando 'sair agora', envia um signal a todos os processos filho 
+   e termina o programa mais cedo. */
 void funcaoSaida() {
 
   int i = 0, j = 0, pid, estado; 
@@ -189,6 +196,7 @@ void funcaoSaida() {
   printf("i-banco terminou.\n");
 }
 
+/* Envia um signal a todos os processos criados */
 void enviarSignal() {
     int i;
 
