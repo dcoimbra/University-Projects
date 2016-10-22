@@ -1,5 +1,5 @@
 /*
-// Projeto SO - exercicio 1, version 1
+// Projeto SO - exercicio 2, version 1
 // Sistemas Operativos, DEI/IST/ULisboa 2016-17
 */
 
@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <pthread.h>
 
 #define COMANDO_DEBITAR "debitar"
 #define COMANDO_CREDITAR "creditar"
@@ -24,8 +25,13 @@
 
 #define MAX_CHILDREN 20
 
+#define NUM_TRABALHADORAS 3
+
 void funcaoSaida(int nFilhos);
 void enviarSignal(int pidFilhos[], int nFilhos);
+void criaPoolTarefas(pthread_t tids[]);
+
+void* tarefaSimples();
 
 int main (int argc, char** argv) {
 
@@ -34,6 +40,10 @@ int main (int argc, char** argv) {
 
     int pidFilhos[MAX_CHILDREN];
 	int nFilhos = 0; /* numero de processos filho criados */
+
+	pthread_t tids[NUM_TRABALHADORAS];
+
+	criaPoolTarefas(tids);
 
     inicializarContas();
 
@@ -199,4 +209,35 @@ void enviarSignal(int pidFilhos[], int nFilhos) {
 
     for (i = 0; i < nFilhos; i++) 
         kill(pidFilhos[i], SIGUSR1);
+}
+
+void criaPoolTarefas(pthread_t tids[])
+{
+	int i;
+
+	for (i = 0; i < NUM_TRABALHADORAS; i++)
+	{
+		if (pthread_create(&tids[i], NULL, tarefaSimples, NULL) == 0)
+			printf("Criada a tarefa %d\n\n", (i+1));
+	
+		else 
+		{
+			printf("Erro.\n");
+			exit(EXIT_FAILURE);
+		}
+
+		pthread_join(tids[i], NULL);
+	}
+}
+
+void* tarefaSimples()
+{
+	printf("Estou numa tarefa.\n\n");
+	
+	printf("Vou dormir um pouco.\n\n");
+	sleep(2);
+
+	printf("Vou sair da tarefa.\n\n");
+
+	return NULL;
 }
