@@ -50,8 +50,8 @@ void simular(int numAnos) {
   int ano, i, aux, simulSaldo;
   int auxContasSaldos[NUM_CONTAS];
 
-  if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e previne */
-    perror ("Erro.");                  /* caso haja erro */
+  if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
+    perror ("Erro.");                           /* caso haja erro */
 
   for (i = 0; i < NUM_CONTAS; i++) 
     auxContasSaldos[i] = lerSaldo(i + 1);

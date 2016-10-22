@@ -1,5 +1,5 @@
 /*
-// Projeto SO - exercicio 1, version 1
+// Projeto SO - exercicio 2, version 1
 // Sistemas Operativos, DEI/IST/ULisboa 2016-17
 */
 
@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
+#include <pthread.h>
 
 #define COMANDO_DEBITAR "debitar"
 #define COMANDO_CREDITAR "creditar"
@@ -20,23 +20,30 @@
 #define COMANDO_SAIR "sair"
 #define COMANDO_SAIR_AGORA "agora"
 
-
-#define MAX_CHILDREN 20
-
 #define MAXARGS 3
 #define BUFFER_SIZE 100
 
-void funcaoSaida();
-void enviarSignal();
+#define MAX_CHILDREN 20
 
-int pidFilhos[MAX_CHILDREN];
-int nFilhos = 0; /* numero de processos filho criados */
+#define NUM_TRABALHADORAS 3
+
+void funcaoSaida(int nFilhos);
+void enviarSignal(int pidFilhos[], int nFilhos);
+void criaPoolTarefas(pthread_t tids[]);
+
+void* tarefaSimples();
 
 int main (int argc, char** argv) {
 
     char *args[MAXARGS + 1];
     char buffer[BUFFER_SIZE];
-    
+
+    int pidFilhos[MAX_CHILDREN];
+	int nFilhos = 0; /* numero de processos filho criados */
+
+	pthread_t tids[NUM_TRABALHADORAS];
+
+	criaPoolTarefas(tids);
 
     inicializarContas();
 
@@ -53,9 +60,9 @@ int main (int argc, char** argv) {
 
         /* Sair Agora */
             if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
-                enviarSignal();
+                enviarSignal(pidFilhos, nFilhos);
             
-            funcaoSaida();
+            funcaoSaida(nFilhos);
             exit(EXIT_SUCCESS);
         }
     
@@ -105,14 +112,15 @@ int main (int argc, char** argv) {
                 printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_LER_SALDO);
                 continue;
             }
+
             idConta = atoi(args[1]);
             saldo = lerSaldo (idConta);
             if (saldo < 0)
-                printf("%s(%d): Erro.\n\n", COMANDO_LER_SALDO, idConta);
-            else
-                printf("%s(%d): O saldo da conta é %d.\n\n", COMANDO_LER_SALDO, idConta, saldo);
+            	printf("%s(%d): Erro.\n\n", COMANDO_LER_SALDO, idConta);
+            else 
+            	printf("%s(%d): O saldo da conta é %d.\n\n", COMANDO_LER_SALDO, idConta, saldo);
         }
-
+        	
         /* Simular */
         else if (strcmp(args[0], COMANDO_SIMULAR) == 0) {
             int numAnos, pid;
@@ -141,7 +149,6 @@ int main (int argc, char** argv) {
 
         else 
           printf("Comando desconhecido. Tente de novo.\n");
-        
     } 
 }
 
@@ -152,7 +159,7 @@ int main (int argc, char** argv) {
    
    Para o comando 'sair agora', envia um signal a todos os processos filho 
    e termina o programa mais cedo. */
-void funcaoSaida() {
+void funcaoSaida(int nFilhos) {
 
   int i = 0, j = 0, pid, estado; 
 
@@ -197,9 +204,40 @@ void funcaoSaida() {
 }
 
 /* Envia um signal a todos os processos criados */
-void enviarSignal() {
+void enviarSignal(int pidFilhos[], int nFilhos) {
     int i;
 
     for (i = 0; i < nFilhos; i++) 
         kill(pidFilhos[i], SIGUSR1);
+}
+
+void criaPoolTarefas(pthread_t tids[])
+{
+	int i;
+
+	for (i = 0; i < NUM_TRABALHADORAS; i++)
+	{
+		if (pthread_create(&tids[i], NULL, tarefaSimples, NULL) == 0)
+			printf("Criada a tarefa %d\n\n", (i+1));
+	
+		else 
+		{
+			printf("Erro.\n");
+			exit(EXIT_FAILURE);
+		}
+
+		pthread_join(tids[i], NULL);
+	}
+}
+
+void* tarefaSimples()
+{
+	printf("Estou numa tarefa.\n\n");
+	
+	printf("Vou dormir um pouco.\n\n");
+	sleep(2);
+
+	printf("Vou sair da tarefa.\n\n");
+
+	return NULL;
 }
