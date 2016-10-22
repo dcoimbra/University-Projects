@@ -2,8 +2,6 @@ creditar 1 1000
 creditar 2 2000
 lerSaldo 1
 lerSaldo 2
-simular 5
 debitar 2 50
-simular 1
 lerSaldo 2
-sair agora
+sair
