@@ -83,8 +83,6 @@ void simular(int numAnos) {
 
     printf("\n");
   }
-
-  exit(EXIT_SUCCESS); /* retorna ao processo pai */
 }
 
 /* Quando o processo recebe um signal, 
