@@ -26,7 +26,6 @@
 #define OP_LERSALDO 3
 #define OP_SAIR 0
 
-
 #define MAXARGS 3
 #define BUFFER_SIZE 100
 
@@ -36,28 +35,25 @@
 #define CMD_BUFFER_DIM (NUM_TRABALHADORAS * 2)
 
 typedef struct {
-    int operacao;
-    int idConta;
-    int valor;
+		int operacao;
+		int idConta;
+		int valor;
 } comando_t;
-
 
 void funcaoSaida(int nFilhos);
 void enviarSignal(int pidFilhos[], int nFilhos);
 void criaPoolTarefas();
 
-void* tarefaSimples();
-
 void cria_trabalho(int oper, int accountID, int moneyValue);
 void* tarefa_trabalhadora(void *dummy);
 void realiza_trabalho(comando_t trabalho);
-
 
 pthread_mutex_t trinco_write;
 pthread_mutex_t trinco_read;
 pthread_mutex_t trincos_contas[NUM_CONTAS];
 
 int buff_write_idx = 0, buff_read_idx = 0;
+
 sem_t sem_write;
 sem_t sem_read;
 
@@ -65,25 +61,16 @@ comando_t cmd_buffer[CMD_BUFFER_DIM];
 
 pthread_t tid[NUM_TRABALHADORAS];
 
-/* 
-
-	A cada instrucao recebida pelo stdin, e' criado um trabalho (cria_trabalho) com a respectiva operacao. 
-	A criacao do trabalho e', basicamente, "empurrar" a operacao para dentro do buffer (cmd_buffer).
-	As tarefas que foram inicializadas logo no inicio da main, juntamente com todos os mutexes e semaforos, 
-funcionam como o produtor-consumidor, exactamente como nos slides das aulas (funcoes cria_trabalho e tarefa_trabalhadora).
-	O consumo das operacoes e' feito na tarefa_trabalhadora e a execucao das operacoes e' feita atravez da 
-funcao realiza_trabalho, invocada no final da tarefa_trabalhadora.
-*/
-
 int main (int argc, char** argv) {
 
-    char *args[MAXARGS + 1];
-    char buffer[BUFFER_SIZE];
+	char *args[MAXARGS + 1];
+	char buffer[BUFFER_SIZE];
 
-    int pidFilhos[MAX_CHILDREN];
-	int nFilhos = 0; /* numero de processos filho criados */
+	int pidFilhos[MAX_CHILDREN];
+	int nFilhos = 0;  /* numero de processos filho criados */
 
 	int i;
+
 /* --- inicializacao dos mutexes e dos semaforos --- */
 	pthread_mutex_init(&(trinco_write), NULL);
 	pthread_mutex_init(&(trinco_read), NULL);
@@ -92,180 +79,190 @@ int main (int argc, char** argv) {
 	sem_init(&sem_read, 0, 0);
 
 	for (i = 0; i < NUM_CONTAS; ++i) {
+		
 		pthread_mutex_init(&(trincos_contas[i]), NULL);
 	}
-/* --- --- */	
+	
 	criaPoolTarefas();
 
-    inicializarContas();
+	inicializarContas();
 
-    printf("Bem-vinda/o ao i-banco\n\n");
-      
-    while (1) {
-        int numargs;
-    
-        numargs = readLineArguments(args, MAXARGS+1, buffer, BUFFER_SIZE);
+	printf("Bem-vinda/o ao i-banco\n\n");
+			
+	while (1) {
+		
+		int numargs;
+		
+		numargs = readLineArguments(args, MAXARGS+1, buffer, BUFFER_SIZE);
 
+		/* EOF (end of file) do stdin ou comando "sair" */
+		if (numargs < 0 ||
+		   (numargs > 0 && (strcmp(args[0], COMANDO_SAIR) == 0))) {
 
-        /* EOF (end of file) do stdin ou comando "sair" */
-        if (numargs < 0 ||
-	        (numargs > 0 && (strcmp(args[0], COMANDO_SAIR) == 0))) {
+			printf("i-banco vai terminar.\n--\n");
 
-        	printf("i-banco vai terminar.\n--\n");
-
-        /* Sair Agora */
-            if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
-                enviarSignal(pidFilhos, nFilhos);
-            
+			/* Sair Agora */
+			if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
+				enviarSignal(pidFilhos, nFilhos);			
 	
-			for (i = 0; i < NUM_TRABALHADORAS; i++) {
-				cria_trabalho(OP_SAIR, 0, 0);		  /* no comando sair e' mandado o comando de saida a cada thread,      		*/
-			}						/* 				  enviando para o buffer tantos comandos de saida quantas threads existem   */
+			for (i = 0; i < NUM_TRABALHADORAS; i++) 
+				cria_trabalho(OP_SAIR, 0, 0);	/* no comando sair e' mandado o comando de saida a cada thread,			   */
+												/* enviando para o buffer tantos comandos de saida quantas threads existem */
+			
+			for (i = 0; i < NUM_TRABALHADORAS; i++)
+				pthread_join((tid[i]), NULL);   /* de seguida fica 'a espera que todas as threads terminem antes de sair do programa. */
+			
+			funcaoSaida(nFilhos);
+			exit(EXIT_SUCCESS);
+		}
+		
+		else if (numargs == 0)			
+			/* Nenhum argumento; ignora e volta a pedir */
+			continue;
+						
+		/* Debitar */
+		else if (strcmp(args[0], COMANDO_DEBITAR) == 0) {
+			
+			int idConta, valor;
 
-			printf("A esperar pelas threads...\n\n");
-			for (i = 0; i < NUM_TRABALHADORAS; i++) {
-				pthread_join((tid[i]), NULL); /* de seguida fica 'a espera que todas as threads terminem antes de sair do programa. */
+			if (numargs < 3) {
+				
+				printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_DEBITAR);
+				continue;
 			}
 
-            funcaoSaida(nFilhos);
-            exit(EXIT_SUCCESS);
-        }
-    
-        else if (numargs == 0)
-            /* Nenhum argumento; ignora e volta a pedir */
-            continue;
-            
-        /* Debitar */
-        else if (strcmp(args[0], COMANDO_DEBITAR) == 0) {
-            int idConta, valor;
-            if (numargs < 3) {
-                printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_DEBITAR);
-               continue;
-            }
+			idConta = atoi(args[1]);
+			valor = atoi(args[2]);
 
-            idConta = atoi(args[1]);
-            valor = atoi(args[2]);
+			cria_trabalho(OP_DEBITAR, idConta, valor);
+		}
 
-            cria_trabalho(OP_DEBITAR, idConta, valor);
+		/* Creditar */
+		else if (strcmp(args[0], COMANDO_CREDITAR) == 0) {
+				
+			int idConta, valor;
+				
+			if (numargs < 3) {
+					
+				printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_CREDITAR);
+				continue;
+			}
 
-        }
+			idConta = atoi(args[1]);
+			valor = atoi(args[2]);
 
-        /* Creditar */
-        else if (strcmp(args[0], COMANDO_CREDITAR) == 0) {
-            int idConta, valor;
-            if (numargs < 3) {
-                printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_CREDITAR);
-                continue;
-            }
+			cria_trabalho(OP_CREDITAR, idConta, valor);
+		}
 
-            idConta = atoi(args[1]);
-            valor = atoi(args[2]);
+		/* Ler Saldo */
+		else if (strcmp(args[0], COMANDO_LER_SALDO) == 0) {
+			
+			int idConta;
 
-            cria_trabalho(OP_CREDITAR, idConta, valor);
+			if (numargs < 2) {
+				
+				printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_LER_SALDO);
+				continue;
+			}
 
-        }
+			idConta = atoi(args[1]);
 
-        /* Ler Saldo */
-        else if (strcmp(args[0], COMANDO_LER_SALDO) == 0) {
-            int idConta;
+			cria_trabalho(OP_LERSALDO, idConta, 0);
+		}
+					
+		/* Simular */
+		else if (strcmp(args[0], COMANDO_SIMULAR) == 0) {
 
-            if (numargs < 2) {
-                printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_LER_SALDO);
-                continue;
-            }
+			int numAnos, pid;
 
-            idConta = atoi(args[1]);
+			if (numargs < 2) {
 
-            cria_trabalho(OP_LERSALDO, idConta, 0);
+				printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_SIMULAR);
+				continue;
+			}
+			
+			numAnos = atoi(args[1]);
 
-        }
-        	
-        /* Simular */
-        else if (strcmp(args[0], COMANDO_SIMULAR) == 0) {
-            int numAnos, pid;
+			if (numAnos < 0)
+				printf("%s(%d): Erro.\n\n", COMANDO_SIMULAR, numAnos);
 
-            if (numargs < 2) {
-                printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_SIMULAR);
-                continue;
-            }
-            numAnos = atoi(args[1]);
+			else {
+				
+				pid = fork();
 
-            if (numAnos < 0)
-                printf("%s(%d): Erro.\n\n", COMANDO_SIMULAR, numAnos);
+				if (pid == 0) {
+					
+					simular(numAnos);
+					exit(EXIT_SUCCESS); /* retorna ao processo pai */
+				}
 
-            else {
-                pid = fork();
+				else 
+					pidFilhos[nFilhos++] = pid;
+			}
+		}
 
-                if (pid == 0) {
-                    simular(numAnos);
-                    exit(EXIT_SUCCESS); /* retorna ao processo pai */
-                }
-
-                else 
-                    pidFilhos[nFilhos++] = pid;
-            }
-        }
-
-        else 
-          printf("Comando desconhecido. Tente de novo.\n");
-    } 
+		else 
+			printf("Comando desconhecido. Tente de novo.\n");
+	} 
 }
-
-
 
 void funcaoSaida(int nFilhos) {
 
-  int i = 0, j = 0, pid, estado; 
+	int i = 0, j = 0, pid, estado; 
 
-  int pids_sucess[MAX_CHILDREN];
-  int pids_failure[MAX_CHILDREN];
+	int pids_sucess[MAX_CHILDREN];
+	int pids_failure[MAX_CHILDREN];
 
+	while ((i+j) < (nFilhos)) { 
+			
+		/* espera pelo fim de cada processo filho */
+		pid = wait(&estado);
+			
+		/* Os PID's dos processos filhos são guardados num vetor correspondente ao sucesso desse processo na terminação */			
+		if (WIFEXITED(estado)) {
+			
+			pids_sucess[i] = pid;
+			i++;
+		}
+			
+		else {
+			
+			pids_failure[j] = pid;
+			j++;
+		}
+	}
 
-  while ((i+j) < (nFilhos)) { 
-      /* espera pelo fim de cada processo filho */
-      pid = wait(&estado);
-      /* Os PID's dos processos filhos são guardados num vetor correspondente ao sucesso desse processo na terminação */
-      if (WIFEXITED(estado)) {
-          pids_sucess[i] = pid;
-          i++;
-      }
-      else {
-          pids_failure[j] = pid;
-          j++;
-      }
-  }
+	while (i != 0) {
+		
+		i--;
+		printf("FILHO TERMINADO (PID=%d; terminou normalmente)\n", pids_sucess[i]);
+	}
+	
+	while (j != 0) {
+		
+		j--;
+		printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[j]);
+	}
 
-  while (i != 0) {
-    i--;
-    printf("FILHO TERMINADO (PID=%d; terminou normalmente)\n", pids_sucess[i]);
-  }
-  while (j != 0) {
-    j--;
-    printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[j]);
-  }
-
-  printf("--\n");
-  printf("i-banco terminou.\n");
+	printf("--\n");
+	printf("i-banco terminou.\n");
 }
 
 /* Envia um signal a todos os processos criados */
 void enviarSignal(int pidFilhos[], int nFilhos) {
-    int i;
+		int i;
 
-    for (i = 0; i < nFilhos; i++) 
-        kill(pidFilhos[i], SIGUSR1);
+		for (i = 0; i < nFilhos; i++) 
+				kill(pidFilhos[i], SIGUSR1);
 }
 
-
+/* Cria uma pool de NUM_TRABALHADORAS tarefas e associa-as 'a tarefa_trabalhadora */
 void criaPoolTarefas() {
 	int i;
 
 	for (i = 0; i < NUM_TRABALHADORAS; i++)
 	{
-		if (pthread_create(&tid[i], NULL, tarefa_trabalhadora, NULL) == 0)
-			printf("Criada a tarefa %d\n\n", (i+1));
-	
-		else 
+		if (pthread_create(&tid[i], NULL, tarefa_trabalhadora, NULL) != 0)
 		{
 			printf("Erro.\n");
 			exit(EXIT_FAILURE);
@@ -273,44 +270,54 @@ void criaPoolTarefas() {
 	}
 }
 
-
-
+/* 	A cada instrucao recebida pelo stdin, e' criado um trabalho com a respectiva operacao. 
+	A criacao do trabalho consiste em colocar a operacao no buffer (cmd_buffer) na forma de comando_t, de modo 
+	a ser posteriormente executada. 
+	Funciona como um produtor. */
 void cria_trabalho(int oper, int accountID, int moneyValue) {
 
 	comando_t trabalho;
 	trabalho.operacao = oper;
 	trabalho.idConta = accountID;
 	trabalho.valor = moneyValue;
-	
+
+	/* Consome uma vaga para a escrita no buffer. Se nao houver vagas, bloqueia-se e espera que haja. */
 	sem_wait(&sem_write);
 
-	/* ----- Porta trancada ----- */
+	/* ----- A operacao e' colocada no buffer em exclusao mutua. ----- */
 	pthread_mutex_lock(&trinco_write);
 
 	cmd_buffer[buff_write_idx] = trabalho;
-	buff_write_idx = (buff_write_idx + 1)%CMD_BUFFER_DIM;
+	buff_write_idx = (buff_write_idx + 1) % CMD_BUFFER_DIM;
 
 	pthread_mutex_unlock(&trinco_write); 
-	/* ----- Porta aberta ----- */
+	/* --------------------- Fim de exclusao mutua ------------------- */
+	
+	/* Assinala aos consumidores que ha operacoes para serem executadas. */
 	sem_post(&sem_read);
 }
 
+/*Le os comandos colocados no buffer e realiza as operacoes associadas (via realiza_trabalho).
+	Funciona como um consumidor.  */
 void* tarefa_trabalhadora(void *dummy) {
 
 	while(1) {
 
 		comando_t trabalho;
+		
+		/* Consome uma vaga para leitura do buffer. Se nao houver vagas, bloqueia-se e espera que haja. */
 		sem_wait(&sem_read);
 
-	/* ----- Porta trancada ----- */
+	/* ----- Leitura dos comandos a partir do buffer feita em exclusao mutua -----*/
 		pthread_mutex_lock(&trinco_read);
 
 		trabalho = cmd_buffer[buff_read_idx];
-		buff_read_idx = (buff_read_idx + 1)%CMD_BUFFER_DIM;
+		buff_read_idx = (buff_read_idx + 1) % CMD_BUFFER_DIM;
 
 		pthread_mutex_unlock(&trinco_read); 
-	/* ----- Porta aberta ----- */
+	/* ---------------------- Fim de exclusao mutua ----------------------------- */
 
+		/* Assinala aos produtores que e' possivel escrever uma operacao no buffer */
 		sem_post(&sem_write);
 
 		realiza_trabalho(trabalho);
@@ -319,7 +326,9 @@ void* tarefa_trabalhadora(void *dummy) {
 	return NULL;
 }
 
-
+/* Funcao auxiliar a tarefa_trabalhadora. 
+	Realiza a operacao propriamente dita associada ao comando lido. 
+	Cada operacao e' realizada em exclusao mutua. */
 void realiza_trabalho(comando_t trabalho) {
 
 	int oper = trabalho.operacao;
@@ -330,24 +339,25 @@ void realiza_trabalho(comando_t trabalho) {
 	switch(oper) {
 
 		case OP_CREDITAR:
+
 			pthread_mutex_lock(&(trincos_contas[idConta-1]));
 
 			if (creditar (idConta, valor) < 0)
-
-                printf("%s(%d, %d): Erro\n\n", COMANDO_CREDITAR, idConta, valor);
-            else
-                printf("%s(%d, %d): OK\n\n", COMANDO_CREDITAR, idConta, valor);
+				printf("%s(%d, %d): Erro\n\n", COMANDO_CREDITAR, idConta, valor);
+			else
+				printf("%s(%d, %d): OK\n\n", COMANDO_CREDITAR, idConta, valor);
 
 			pthread_mutex_unlock(&(trincos_contas[idConta-1]));
 			break;
 
 		case OP_DEBITAR:
+			
 			pthread_mutex_lock(&(trincos_contas[idConta-1]));
 
 			if (debitar (idConta, valor) < 0)
-               printf("%s(%d, %d): Erro\n\n", COMANDO_DEBITAR, idConta, valor);
-            else
-                printf("%s(%d, %d): OK\n\n", COMANDO_DEBITAR, idConta, valor);
+				printf("%s(%d, %d): Erro\n\n", COMANDO_DEBITAR, idConta, valor);
+			else
+				printf("%s(%d, %d): OK\n\n", COMANDO_DEBITAR, idConta, valor);
 
 			pthread_mutex_unlock(&(trincos_contas[idConta-1]));
 			break;
@@ -357,16 +367,16 @@ void realiza_trabalho(comando_t trabalho) {
 			pthread_mutex_lock(&(trincos_contas[idConta-1]));
 
 			saldo = lerSaldo (idConta);
-            if (saldo < 0)
-            	printf("%s(%d): Erro.\n\n", COMANDO_LER_SALDO, idConta);
-            else 
-            	printf("%s(%d): O saldo da conta é %d.\n\n", COMANDO_LER_SALDO, idConta, saldo);
+			if (saldo < 0)
+				printf("%s(%d): Erro.\n\n", COMANDO_LER_SALDO, idConta);
+			else 
+				printf("%s(%d): O saldo da conta é %d.\n\n", COMANDO_LER_SALDO, idConta, saldo);
 
 			pthread_mutex_unlock(&(trincos_contas[idConta-1]));
 			break;
 
 		case OP_SAIR:
-			printf("A terminar thread.\n");
+			
 			pthread_exit(NULL);
 			break;
 
@@ -374,4 +384,3 @@ void realiza_trabalho(comando_t trabalho) {
 			printf("Erro: valor %d desconhecido.\n", oper);
 	}
 }
-

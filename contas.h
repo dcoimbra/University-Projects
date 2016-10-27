@@ -11,7 +11,7 @@
 #define CUSTOMANUTENCAO 1
 
 
-#define ATRASO 5
+#define ATRASO 1
 
 void inicializarContas();
 int contaExiste(int idConta);
