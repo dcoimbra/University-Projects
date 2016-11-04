@@ -19,6 +19,7 @@ int debitar(int idConta, int valor);
 int creditar(int idConta, int valor);
 int lerSaldo(int idConta);
 void simular(int numAnos);
+void transferir(int idConta1, int idConta2, int valor);
 void tratarSignal(int signum);
 
 #endif
