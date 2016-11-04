@@ -18,15 +18,17 @@
 #define COMANDO_CREDITAR "creditar"
 #define COMANDO_LER_SALDO "lerSaldo"
 #define COMANDO_SIMULAR "simular"
+#define COMANDO_TRANSFERIR "transferir"
 #define COMANDO_SAIR "sair"
 #define COMANDO_SAIR_AGORA "agora"
 
 #define OP_DEBITAR 1
 #define OP_CREDITAR 2
 #define OP_LERSALDO 3
+#define OP_TRANSFERIR 4
 #define OP_SAIR 0
 
-#define MAXARGS 3
+#define MAXARGS 4
 #define BUFFER_SIZE 100
 
 #define MAX_CHILDREN 20
@@ -36,7 +38,8 @@
 
 typedef struct {
 		int operacao;
-		int idConta;
+		int idConta1;
+		int idConta2;
 		int valor;
 } comando_t;
 
@@ -44,7 +47,7 @@ void funcaoSaida(int nFilhos);
 void enviarSignal(int pidFilhos[], int nFilhos);
 void criaPoolTarefas();
 
-void cria_trabalho(int oper, int accountID, int moneyValue);
+void cria_trabalho(int oper, int accountID1, int accountID2, int moneyValue);
 void* tarefa_trabalhadora(void *dummy);
 void realiza_trabalho(comando_t trabalho);
 
@@ -106,7 +109,7 @@ int main (int argc, char** argv) {
 				enviarSignal(pidFilhos, nFilhos);			
 	
 			for (i = 0; i < NUM_TRABALHADORAS; i++) 
-				cria_trabalho(OP_SAIR, 0, 0);	/* no comando sair e' mandado o comando de saida a cada thread,			   */
+				cria_trabalho(OP_SAIR, 0, 0, 0);	/* no comando sair e' mandado o comando de saida a cada thread,			   */
 												/* enviando para o buffer tantos comandos de saida quantas threads existem */
 			
 			for (i = 0; i < NUM_TRABALHADORAS; i++)
@@ -134,7 +137,7 @@ int main (int argc, char** argv) {
 			idConta = atoi(args[1]);
 			valor = atoi(args[2]);
 
-			cria_trabalho(OP_DEBITAR, idConta, valor);
+			cria_trabalho(OP_DEBITAR, idConta, 0, valor);
 		}
 
 		/* Creditar */
@@ -151,7 +154,7 @@ int main (int argc, char** argv) {
 			idConta = atoi(args[1]);
 			valor = atoi(args[2]);
 
-			cria_trabalho(OP_CREDITAR, idConta, valor);
+			cria_trabalho(OP_CREDITAR, idConta, 0, valor);
 		}
 
 		/* Ler Saldo */
@@ -167,7 +170,24 @@ int main (int argc, char** argv) {
 
 			idConta = atoi(args[1]);
 
-			cria_trabalho(OP_LERSALDO, idConta, 0);
+			cria_trabalho(OP_LERSALDO, idConta, 0, 0);
+		}
+
+		else if (strcmp(args[0], COMANDO_TRANSFERIR) == 0) {
+
+			int idConta1, idConta2, valor;
+
+			if (numargs < 4) {
+				
+				printf("%s: Sintaxe inválida, tente de novo.\n", COMANDO_TRANSFERIR);
+				continue;
+			}
+
+			idConta1 = atoi(args[1]);
+			idConta2 = atoi(args[2]);
+			valor = atoi(args[3]);
+
+			cria_trabalho(OP_TRANSFERIR, idConta1, idConta2, valor);
 		}
 					
 		/* Simular */
@@ -274,11 +294,12 @@ void criaPoolTarefas() {
 	A criacao do trabalho consiste em colocar a operacao no buffer (cmd_buffer) na forma de comando_t, de modo 
 	a ser posteriormente executada. 
 	Funciona como um produtor. */
-void cria_trabalho(int oper, int accountID, int moneyValue) {
+void cria_trabalho(int oper, int accountID1, int accountID2, int moneyValue) {
 
 	comando_t trabalho;
 	trabalho.operacao = oper;
-	trabalho.idConta = accountID;
+	trabalho.idConta1 = accountID1;
+	trabalho.idConta2 = accountID2;
 	trabalho.valor = moneyValue;
 
 	/* Consome uma vaga para a escrita no buffer. Se nao houver vagas, bloqueia-se e espera que haja. */
@@ -332,7 +353,8 @@ void* tarefa_trabalhadora(void *dummy) {
 void realiza_trabalho(comando_t trabalho) {
 
 	int oper = trabalho.operacao;
-	int idConta = trabalho.idConta;
+	int idConta = trabalho.idConta1;
+	int idConta2 = trabalho.idConta2;
 	int valor = trabalho.valor;
 	int saldo;
 
@@ -340,31 +362,31 @@ void realiza_trabalho(comando_t trabalho) {
 
 		case OP_CREDITAR:
 
-			pthread_mutex_lock(&(trincos_contas[idConta-1]));
+			pthread_mutex_lock(&(trincos_contas[idConta - 1]));
 
 			if (creditar (idConta, valor) < 0)
 				printf("%s(%d, %d): Erro\n\n", COMANDO_CREDITAR, idConta, valor);
 			else
 				printf("%s(%d, %d): OK\n\n", COMANDO_CREDITAR, idConta, valor);
 
-			pthread_mutex_unlock(&(trincos_contas[idConta-1]));
+			pthread_mutex_unlock(&(trincos_contas[idConta - 1]));
 			break;
 
 		case OP_DEBITAR:
 			
-			pthread_mutex_lock(&(trincos_contas[idConta-1]));
+			pthread_mutex_lock(&(trincos_contas[idConta - 1]));
 
 			if (debitar (idConta, valor) < 0)
 				printf("%s(%d, %d): Erro\n\n", COMANDO_DEBITAR, idConta, valor);
 			else
 				printf("%s(%d, %d): OK\n\n", COMANDO_DEBITAR, idConta, valor);
 
-			pthread_mutex_unlock(&(trincos_contas[idConta-1]));
+			pthread_mutex_unlock(&(trincos_contas[idConta - 1]));
 			break;
 
 		case OP_LERSALDO:
 			
-			pthread_mutex_lock(&(trincos_contas[idConta-1]));
+			pthread_mutex_lock(&(trincos_contas[idConta - 1]));
 
 			saldo = lerSaldo (idConta);
 			if (saldo < 0)
@@ -374,6 +396,21 @@ void realiza_trabalho(comando_t trabalho) {
 
 			pthread_mutex_unlock(&(trincos_contas[idConta-1]));
 			break;
+
+		case OP_TRANSFERIR:
+			
+			pthread_mutex_lock((idConta < idConta2 ? &(trincos_contas[idConta - 1]) : &(trincos_contas[idConta2 - 1])));
+			pthread_mutex_lock((idConta > idConta2 ? &(trincos_contas[idConta - 1]) : &(trincos_contas[idConta2 - 1])));
+
+			if (transferir (idConta, idConta2, valor) < 0)
+				printf("Erro ao %s valor da conta %d para a conta %d.\n\n", COMANDO_TRANSFERIR, idConta, idConta2);
+			else
+				printf("%s(%d, %d, %d): OK\n\n", COMANDO_TRANSFERIR, idConta, idConta2, valor);
+
+			pthread_mutex_unlock((idConta > idConta2 ? &(trincos_contas[idConta - 1]) : &(trincos_contas[idConta2 - 1])));
+			pthread_mutex_unlock((idConta < idConta2 ? &(trincos_contas[idConta - 1]) : &(trincos_contas[idConta2 - 1])));
+			break;
+
 
 		case OP_SAIR:
 			

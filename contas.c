@@ -45,6 +45,15 @@ int lerSaldo(int idConta) {
   return contasSaldos[idConta - 1];
 }
 
+int transferir(int idConta1, int idConta2, int valor) {
+	atrasar();
+	if (!contaExiste(idConta1) || !contaExiste(idConta2))
+		return -1;
+	contasSaldos[idConta1 - 1] -= valor;
+	contasSaldos[idConta2 - 1] += valor;
+	return 0;
+}
+
 void simular(int numAnos) {
 
   int ano, i, aux, simulSaldo;
