@@ -1,5 +1,8 @@
 creditar 1 1000
 creditar 2 2000
-debitar 1 300
+transferir 1 2 300
+transferir 2 3 500
 lerSaldo 1
+lerSaldo 2
+lerSaldo 3
 sair
