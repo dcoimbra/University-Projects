@@ -55,21 +55,27 @@ pthread_mutex_t trinco_write;
 pthread_mutex_t trinco_read;
 pthread_mutex_t trincos_contas[NUM_CONTAS];
 
-int buff_write_idx = 0, buff_read_idx = 0;
-
 sem_t sem_write;
 sem_t sem_read;
+
+pthread_cond_t cond_simular;
+pthread_mutex_t trinco_cond_simular;
+
+int buff_write_idx = 0, buff_read_idx = 0;
 
 comando_t cmd_buffer[CMD_BUFFER_DIM];
 
 pthread_t tid[NUM_TRABALHADORAS];
+
+int podeSimular = 1; /* se todos os comandos foram
+						consumidos antes de fazer uma simulacao */ 
 
 int main (int argc, char** argv) {
 
 	char *args[MAXARGS + 1];
 	char buffer[BUFFER_SIZE];
 
-	int pidFilhos[MAX_CHILDREN];
+	pid_t pidFilhos[MAX_CHILDREN];
 	int nFilhos = 0;  /* numero de processos filho criados */
 
 	int i;
@@ -85,6 +91,8 @@ int main (int argc, char** argv) {
 		
 		pthread_mutex_init(&(trincos_contas[i]), NULL);
 	}
+
+	pthread_cond_init(&(cond_simular), NULL);
 	
 	criaPoolTarefas();
 
@@ -193,7 +201,8 @@ int main (int argc, char** argv) {
 		/* Simular */
 		else if (strcmp(args[0], COMANDO_SIMULAR) == 0) {
 
-			int numAnos, pid;
+			int numAnos;
+			pid_t pid;
 
 			if (numargs < 2) {
 
@@ -208,6 +217,23 @@ int main (int argc, char** argv) {
 
 			else {
 				
+				/* fecha-se o trinco para aceder 'a condicao partilhada em exclusao mutua */
+				pthread_mutex_lock(&(trinco_cond_simular));
+
+				/* como referido nas man pages e nos slides, e' possivel que ocorram wakeups espurios ou 
+				   que sejam desbloqueadas tarefas pela ordem errada.
+				   seccao crítica. Isto e' resolvido fazendo a espera dentro de um ciclo. */
+				while (!podeSimular) {
+
+					/* a chamada a wait bloqueia a tarefa e abre o trinco atomicamente.
+					   a tarefa fica bloqueada ate ser emitido um pthread_cond_signal. */
+					pthread_cond_wait(&(cond_simular), &(trinco_cond_simular));
+				}
+				
+				pthread_mutex_unlock(&(trinco_cond_simular)); /* garantir que o trinco fica 
+																 aberto para não comprometer paralelismo */
+
+				/* como a tarefa foi desbloqueada, podemos simular */ 
 				pid = fork();
 
 				if (pid == 0) {
@@ -230,8 +256,8 @@ void funcaoSaida(int nFilhos) {
 
 	int i = 0, j = 0, pid, estado; 
 
-	int pids_sucess[MAX_CHILDREN];
-	int pids_failure[MAX_CHILDREN];
+	pid_t pids_sucess[MAX_CHILDREN];
+	pid_t pids_failure[MAX_CHILDREN];
 
 	while ((i+j) < (nFilhos)) { 
 			
@@ -269,7 +295,7 @@ void funcaoSaida(int nFilhos) {
 }
 
 /* Envia um signal a todos os processos criados */
-void enviarSignal(int pidFilhos[], int nFilhos) {
+void enviarSignal(pid_t pidFilhos[], int nFilhos) {
 		int i;
 
 		for (i = 0; i < nFilhos; i++) 

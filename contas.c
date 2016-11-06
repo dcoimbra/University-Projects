@@ -56,35 +56,32 @@ int transferir(int idConta1, int idConta2, int valor) {
 
 void simular(int numAnos) {
 
-  int ano, i, aux, simulSaldo;
-  int auxContasSaldos[NUM_CONTAS];
+  int ano, i, saldo;
 
   if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
     perror ("Erro.");                           /* caso haja erro */
 
-  for (i = 0; i < NUM_CONTAS; i++) 
-    auxContasSaldos[i] = lerSaldo(i + 1);
-
   for (ano = 0; ano <= numAnos; ano++) {
     
-    atrasar();
     printf("SIMULACAO: Ano %d\n", ano);
     printf("=================\n");
 
     for(i = 0; i < NUM_CONTAS; i++) {
-      
-      if (ano == 0)
-        simulSaldo = auxContasSaldos[i];
 
-      else {
-        aux = (auxContasSaldos[i]*(1 + TAXAJURO) - CUSTOMANUTENCAO);
-        simulSaldo = (aux > 0 ? aux : 0);  /* se a simulacao resultar num valor negativo, e' apresentado o valor 0. */
-        auxContasSaldos[i] = simulSaldo;
+      if (ano > 0) {
+
+      	saldo = lerSaldo(i + 1);
+        creditar((i + 1), saldo * TAXAJURO);
+        
+        saldo = lerSaldo(i + 1);
+        debitar((i + 1), (CUSTOMANUTENCAO > saldo) ? saldo : CUSTOMANUTENCAO);
       }
 
-      printf("Conta %d, Saldo %d\n", (i + 1), simulSaldo);
+      saldo = lerSaldo(i + 1);
+      
+      printf("Conta %d, Saldo %d\n", (i + 1), saldo);
     }
-    
+
     if (recebeuSignal) {
     	printf("Simulacao terminada por signal\n\n");
     	exit(EXIT_SUCCESS);
