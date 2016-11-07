@@ -58,11 +58,9 @@ pthread_mutex_t trincos_contas[NUM_CONTAS];
 sem_t sem_write;
 sem_t sem_read;
 
-/* --- */
 pthread_mutex_t count_mutex;
 pthread_cond_t  count_cond;
 int count = 0;  /* conta o numero de tarefas no buffer ao longo do tempo*/
-/* --- */
 
 int buff_write_idx = 0, buff_read_idx = 0;
 
@@ -95,6 +93,9 @@ int main (int argc, char** argv) {
 
 	pthread_mutex_init(&count_mutex, NULL);
 	pthread_cond_init(&count_cond, NULL);
+
+	if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
+    	perror ("Erro.");                           /* caso haja erro */
 
 	criaPoolTarefas();
 
@@ -221,11 +222,10 @@ int main (int argc, char** argv) {
 				pthread_mutex_lock(&count_mutex);
 
 				while(count != 0) {
-					printf("[MAIN] waiting - count = %d\n", count);
+					
 					pthread_cond_wait(&count_cond, &count_mutex);
 				}
 
-					printf("[MAIN] simulacao pedida. count = %d\n", count);
 					pid = fork();
 
 					if (pid == 0) {
@@ -237,7 +237,6 @@ int main (int argc, char** argv) {
 						pidFilhos[nFilhos++] = pid;
 					}
 				
-				printf("[MAIN] vou continuar (simulacao a processar...)\n");
 				pthread_mutex_unlock(&count_mutex);
 			}
 		}

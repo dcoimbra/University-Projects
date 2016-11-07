@@ -7,4 +7,4 @@ lerSaldo 1
 lerSaldo 2
 simular 1
 lerSaldo 3
-sair
+sair agora
