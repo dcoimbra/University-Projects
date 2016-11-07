@@ -58,8 +58,11 @@ pthread_mutex_t trincos_contas[NUM_CONTAS];
 sem_t sem_write;
 sem_t sem_read;
 
-pthread_cond_t cond_simular;
-pthread_mutex_t trinco_cond_simular;
+/* --- */
+pthread_mutex_t count_mutex;
+pthread_cond_t  count_cond;
+int count = 0;  /* conta o numero de tarefas no buffer ao longo do tempo*/
+/* --- */
 
 int buff_write_idx = 0, buff_read_idx = 0;
 
@@ -67,8 +70,6 @@ comando_t cmd_buffer[CMD_BUFFER_DIM];
 
 pthread_t tid[NUM_TRABALHADORAS];
 
-int podeSimular = 1; /* se todos os comandos foram
-						consumidos antes de fazer uma simulacao */ 
 
 int main (int argc, char** argv) {
 
@@ -92,8 +93,9 @@ int main (int argc, char** argv) {
 		pthread_mutex_init(&(trincos_contas[i]), NULL);
 	}
 
-	pthread_cond_init(&(cond_simular), NULL);
-	
+	pthread_mutex_init(&count_mutex, NULL);
+	pthread_cond_init(&count_cond, NULL);
+
 	criaPoolTarefas();
 
 	inicializarContas();
@@ -216,34 +218,27 @@ int main (int argc, char** argv) {
 				printf("%s(%d): Erro.\n\n", COMANDO_SIMULAR, numAnos);
 
 			else {
-				
-				/* fecha-se o trinco para aceder 'a condicao partilhada em exclusao mutua */
-				pthread_mutex_lock(&(trinco_cond_simular));
+				pthread_mutex_lock(&count_mutex);
 
-				/* como referido nas man pages e nos slides, e' possivel que ocorram wakeups espurios ou 
-				   que sejam desbloqueadas tarefas pela ordem errada.
-				   seccao crítica. Isto e' resolvido fazendo a espera dentro de um ciclo. */
-				while (!podeSimular) {
-
-					/* a chamada a wait bloqueia a tarefa e abre o trinco atomicamente.
-					   a tarefa fica bloqueada ate ser emitido um pthread_cond_signal. */
-					pthread_cond_wait(&(cond_simular), &(trinco_cond_simular));
-				}
-				
-				pthread_mutex_unlock(&(trinco_cond_simular)); /* garantir que o trinco fica 
-																 aberto para não comprometer paralelismo */
-
-				/* como a tarefa foi desbloqueada, podemos simular */ 
-				pid = fork();
-
-				if (pid == 0) {
-					
-					simular(numAnos);
-					exit(EXIT_SUCCESS); /* retorna ao processo pai */
+				while(count != 0) {
+					printf("[MAIN] waiting - count = %d\n", count);
+					pthread_cond_wait(&count_cond, &count_mutex);
 				}
 
-				else 
-					pidFilhos[nFilhos++] = pid;
+					printf("[MAIN] simulacao pedida. count = %d\n", count);
+					pid = fork();
+
+					if (pid == 0) {
+						simular(numAnos);
+						exit(EXIT_SUCCESS); /* retorna ao processo pai */
+					}
+
+					else {
+						pidFilhos[nFilhos++] = pid;
+					}
+				
+				printf("[MAIN] vou continuar (simulacao a processar...)\n");
+				pthread_mutex_unlock(&count_mutex);
 			}
 		}
 
@@ -337,6 +332,12 @@ void cria_trabalho(int oper, int accountID1, int accountID2, int moneyValue) {
 	cmd_buffer[buff_write_idx] = trabalho;
 	buff_write_idx = (buff_write_idx + 1) % CMD_BUFFER_DIM;
 
+
+	pthread_mutex_lock(&count_mutex);
+	count++;
+	pthread_mutex_unlock(&count_mutex);
+
+
 	pthread_mutex_unlock(&trinco_write); 
 	/* --------------------- Fim de exclusao mutua ------------------- */
 	
@@ -368,6 +369,11 @@ void* tarefa_trabalhadora(void *dummy) {
 		sem_post(&sem_write);
 
 		realiza_trabalho(trabalho);
+
+		pthread_mutex_lock(&count_mutex);
+		count--;
+		pthread_cond_signal(&count_cond);
+		pthread_mutex_unlock(&count_mutex);
 	}
 
 	return NULL;

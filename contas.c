@@ -21,7 +21,7 @@ void inicializarContas() {
 
 int debitar(int idConta, int valor) {
   atrasar();
-  if (!contaExiste(idConta))
+  if (!contaExiste(idConta) || valor < 1)
     return -1;
   if (contasSaldos[idConta - 1] < valor)
     return -1;
@@ -32,7 +32,7 @@ int debitar(int idConta, int valor) {
 
 int creditar(int idConta, int valor) {
   atrasar();
-  if (!contaExiste(idConta))
+  if (!contaExiste(idConta) || valor < 1)
     return -1;
   contasSaldos[idConta - 1] += valor;
   return 0;
@@ -46,11 +46,15 @@ int lerSaldo(int idConta) {
 }
 
 int transferir(int idConta1, int idConta2, int valor) {
-	atrasar();
-	if (!contaExiste(idConta1) || !contaExiste(idConta2))
+
+	if (!contaExiste(idConta1) || !contaExiste(idConta2) || (idConta1 == idConta2))
 		return -1;
-	contasSaldos[idConta1 - 1] -= valor;
-	contasSaldos[idConta2 - 1] += valor;
+
+  if(debitar(idConta1, valor) == 0)
+    creditar(idConta2, valor);
+  else
+    return -1;
+
 	return 0;
 }
 
