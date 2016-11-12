@@ -18,8 +18,8 @@ public class AddExpression extends ProgramCommand {
     /**
      * @param receiver
      */
-    public AddExpression(Program receiver) {
-        super(Label.ADD_EXPRESSION, receiver);
+    public AddExpression(Program program) {
+        super(Label.ADD_EXPRESSION, program);
     }
     
     /** @see pt.utl.ist.po.ui.Command#execute() */

@@ -8,18 +8,27 @@ import pt.utl.ist.po.ui.InputString;
 /**
  * Create new program.
  */
-public class NewProgram extends Command</*FIXME Receiver class*/> {
+public class NewProgram extends Command<App> 
+{
 
     /**
-     * @param receiver
+     * @param app
      */
-    public NewProgram(/*FIXME core class*/ receiver) {
-        super(Label.NEW_PROGRAM, receiver);
+    public NewProgram(App app) 
+    {
+        super(Label.NEW_PROGRAM, app);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
-    public final void execute() {
+    public final void execute() 
+    {
         //FIXME implement
+
+        String programID = entity().readString(Message.requestProgramId());
+        
+        Program program = new Program(programID);
+
+        entity().addProgramAux(program);
     }
 }

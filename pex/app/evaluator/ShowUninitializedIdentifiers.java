@@ -13,8 +13,8 @@ public class ShowUninitializedIdentifiers extends ProgramCommand {
     /**
      * @param receiver
      */
-    public ShowUninitializedIdentifiers(Program receiver) {
-        super(Label.SHOW_UNINITIALIZED_IDENTIFIERS, receiver);
+    public ShowUninitializedIdentifiers(Program program) {
+        super(Label.SHOW_UNINITIALIZED_IDENTIFIERS, program);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */

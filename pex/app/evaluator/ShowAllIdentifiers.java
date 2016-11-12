@@ -13,8 +13,8 @@ public class ShowAllIdentifiers extends ProgramCommand {
     /**
      * @param receiver
      */
-    public ShowAllIdentifiers(Program receiver) {
-        super(Label.SHOW_ALL_IDENTIFIERS, receiver);
+    public ShowAllIdentifiers(Program program) {
+        super(Label.SHOW_ALL_IDENTIFIERS, program);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */

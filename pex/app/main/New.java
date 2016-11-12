@@ -9,17 +9,24 @@ import pt.utl.ist.po.ui.InputBoolean;
 /**
  * Command for creating a new interpreter.
  */
-public class New extends Command</*FIXME Receiver class*/> {
+public class New extends Command<App> 
+{
     /**
-     * @param receiver
+     * @param app
      */
-    public New(/*FIXME core class*/ receiver) {
-        super(Label.NEW, receiver);
+    public New(App app) 
+    {
+        super(Label.NEW, app);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
-    public final void execute() {
-        //FIXME implement
+    public final void execute() 
+    {
+        Interpreter interpreter = new Interpreter(entity());
+        
+        interpreter.setFileAssociation(null);
+
+        entity().setInterpreter(interpreter);
     }
 }

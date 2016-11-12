@@ -1,6 +1,6 @@
 package pex.app.main;
 
-//FIXME import receiver(s) class(es)
+import pex.app.App;
 
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.Menu;
@@ -13,18 +13,19 @@ import pt.utl.ist.po.ui.Menu;
 public class MainMenu extends Menu {
 
     /**
-     * @param receiver
+     * @param app
      */
-    public MainMenu(/*FIXME Receiver class*/ receiver) {
+    public MainMenu(App app) {
+
         super(Label.TITLE,
-              new Command<?>[] { //
-                  new New(receiver), //
-                  new Open(receiver), //
-                  new Save(receiver), //
-                  new NewProgram(receiver), //
-                  new ReadProgram(receiver), //
-                  new WriteProgram(receiver), //
-                  new EditProgram(receiver), //
+              new Command<?>[] { 
+                  new New(app), 
+                  new Open(app), 
+                  new Save(app), 
+                  new NewProgram(app), 
+                  new ReadProgram(app), 
+                  new WriteProgram(app), 
+                  new EditProgram(app), 
                 });
     }
 }

@@ -18,8 +18,8 @@ public class ReplaceExpression extends ProgramCommand {
     /**
      * @param receiver
      */
-    public ReplaceExpression(Program receiver) {
-        super(Label.REPLACE_EXPRESSION, receiver);
+    public ReplaceExpression(Program program) {
+        super(Label.REPLACE_EXPRESSION, program);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */

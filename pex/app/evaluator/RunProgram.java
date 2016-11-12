@@ -11,8 +11,8 @@ public class RunProgram extends ProgramCommand {
     /**
      * @param receiver
      */
-    public RunProgram(Program receiver) {
-        super(Label.RUN_PROGRAM, receiver);
+    public RunProgram(Program program) {
+        super(Label.RUN_PROGRAM, program);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */

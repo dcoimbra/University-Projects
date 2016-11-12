@@ -14,13 +14,19 @@ public class ShowProgram extends ProgramCommand {
     /**
      * @param receiver
      */
-    public ShowProgram(Program receiver) {
-        super(Label.SHOW_PROGRAM, receiver);
+    public ShowProgram(Program program) {
+        super(Label.SHOW_PROGRAM, program);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
     public final void execute() {
-        //FIXME implement
+        String programCode = entity().getAsText();
+
+        Display display = new Display();
+
+        display.add(programCode);
+
+        display.display();
     }
 }

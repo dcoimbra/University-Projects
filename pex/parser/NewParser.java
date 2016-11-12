@@ -26,9 +26,9 @@ public class NewParser {
         _tokenizer.eolIsSignificant(false);
     }
 
-    public Program parseFile(String fileName, String programName /* may need aditional parameters */) throws BadSourceException, BadNumberException, InvalidExpressionException, 
+    public Program parseFile(String fileName, String programName) throws BadSourceException, BadNumberException, InvalidExpressionException, 
                                                                                                   MissingClosingParenthesisException, UnknownOperationException, EndOfInputException  {
-        _program = new Program(programName /* may need additional parameters */);
+        _program = new Program(programName);
 
         try (FileReader reader = new FileReader(fileName)) {
             initTokenizer(reader);

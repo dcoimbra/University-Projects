@@ -13,17 +13,17 @@ import pt.utl.ist.po.ui.Menu;
 public class EvaluatorMenu extends Menu {
 
     /**
-     * @param receiver
+     * @param program
      */
-    public EvaluatorMenu(Program receiver) {
+    public EvaluatorMenu(Program program) {
         super(Label.TITLE,
-              new Command<?>[] { //
-                  new ShowProgram(receiver), //
-                      new RunProgram(receiver), //
-                      new AddExpression(receiver), //
-                      new ReplaceExpression(receiver), //
-                      new ShowAllIdentifiers(receiver), //
-                      new ShowUninitializedIdentifiers(receiver), //
+              new Command<?>[] { 
+                      new ShowProgram(program), 
+                      new RunProgram(program), 
+                      new AddExpression(program),
+                      new ReplaceExpression(program),
+                      new ShowAllIdentifiers(program),
+                      new ShowUninitializedIdentifiers(program),
                       });
     }
 

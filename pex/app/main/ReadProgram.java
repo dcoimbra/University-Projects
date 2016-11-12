@@ -9,17 +9,28 @@ import pt.utl.ist.po.ui.InputString;
 /**
  * Read existing program.
  */
-public class ReadProgram extends Command</*FIXME Receiver class*/> {
+public class ReadProgram extends Command<App> 
+{
     /**
-     * @param receiver
+     * @param app
      */
-    public ReadProgram(/*FIXME core class*/ receiver) {
-        super(Label.READ_PROGRAM, receiver);
+    public ReadProgram(App app) 
+    {
+        super(Label.READ_PROGRAM, app);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
-    public final void execute() {
+    public final void execute()
+    {
         //FIXME implement
+
+        String filename = entity().readString(Message.programFileName());
+
+        NewParser parser = new NewParser();
+                 
+        Program program = parser.parseFile(filename, filename);
+
+        entity().addProgramAux(program);
     }
 }
