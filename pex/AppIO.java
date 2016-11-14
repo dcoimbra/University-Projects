@@ -6,7 +6,7 @@ package pex;
  * that the application uses.
  **/
 
-interface AppIO {
+public interface AppIO {
 
     /**
      * Writes a string to be presented to the user.
@@ -20,12 +20,12 @@ interface AppIO {
      *
      * @return the string written by the user.
      **/
-    String readString();
+    String readString(String msg);
 
     /**
      * Reads an integer inputed by the user.
      *
      * @return the number written by the user.
      **/
-    int readInteger();
+    int readInteger(String msg);
 }

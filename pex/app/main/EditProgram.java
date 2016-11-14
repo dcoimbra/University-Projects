@@ -1,7 +1,12 @@
 package pex.app.main;
 
-//FIXME import used core classes
+import pex.app.App;
+
 import pex.app.evaluator.EvaluatorMenu;
+import pex.app.evaluator.ShowProgram;
+import pex.core.Interpreter;
+import pex.core.Program;
+import pex.core.ProgramNotFoundException;
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.InputString;
 import pt.utl.ist.po.ui.Menu;
@@ -17,19 +22,23 @@ public class EditProgram extends Command<App> {
     /**
      * @param receiver
      */
-    public EditProgram(App app) {
-        super(Label.MANAGE_PROGRAM, app);
+    public EditProgram(App receiver) {
+        super(Label.MANAGE_PROGRAM, receiver);
     }
 
-    /** @see pt.utl.ist.po.ui.Command#execute() */
+    /** @throws ProgramNotFoundException 
+     * @see pt.utl.ist.po.ui.Command#execute() */
     @Override
-    public final void execute() {
-        //FIXME implement
-
-        Interpreter interpreter = entity().getInterpreter();
+    public final void execute() throws ProgramNotFoundException {
+       
+        Interpreter interpreter = entity().getCurrentInterpreter();
         String programID = entity().readString(Message.requestProgramId());
         Program program = interpreter.getProgram(programID);
 
+        if (program == null){
+        	throw new ProgramNotFoundException(Message.noSuchProgram(programID));
+        }
+        
         EvaluatorMenu menu = new EvaluatorMenu(program);
         menu.open();
     }

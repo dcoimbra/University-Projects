@@ -1,11 +1,13 @@
 package pex.app.main;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
-import pex.app.main.Message;
+import pex.app.App;
+import pex.core.Interpreter;
 
-//FIXME import used core classes
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.Display;
 import pt.utl.ist.po.ui.Form;
@@ -17,17 +19,16 @@ import pt.utl.ist.po.ui.InvalidOperation;
  */
 public class Open extends Command<App> {
     /**
+     * @param receiver 
      * @param receiver
      */
-    public Open(App app) {
-        super(Label.OPEN, app);
+    public Open(App receiver) {
+        super(Label.OPEN, receiver);
     }
 
     /** @see pt.tecnico.po.ui.Command#execute() */
     @Override
-    public final void execute() throws InvalidOperation, FileNotFoundException {
-        //FIXME implement
-
+    public final void execute() throws InvalidOperation {
         String filename = entity().readString(Message.openFile());
 
         try
@@ -35,15 +36,28 @@ public class Open extends Command<App> {
             FileInputStream fpIn = new FileInputStream(filename);
             ObjectInputStream inInterp = new ObjectInputStream(fpIn);
 
-            Interpreter interpreter = (Interpreter)inInterp.readObject();
+            Interpreter loadedInterpreter = (Interpreter)inInterp.readObject();
 
-            interpreter.setFileAssociation(filename);
-            entity().setInterpreter(interpreter);
+            loadedInterpreter.setFileAssociation(filename);
+            entity().setCurrentInterpreter(loadedInterpreter);
+            
+	        inInterp.close();
         }
-
+//TODO tirar os println's e implementer as respectivas excepcoes (no pex.core )
         catch(FileNotFoundException e)
         {
-            entity().println(Message.fileNotFound());
+            throw new InvalidOperation(Message.fileNotFound());
+        }
+        
+        catch(IOException e)
+        {
+        	throw new InvalidOperation(Message.fileNotFound());
+        }
+        
+        catch(ClassNotFoundException e)
+        {
+        	throw new InvalidOperation(Message.fileNotFound());
         }
     }
+
 }

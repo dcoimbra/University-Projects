@@ -1,36 +1,46 @@
 package pex.app.main;
 
-//FIXME import used core classes
+import pex.app.App;
+import pex.core.Program;
+import pex.parser.NewParser;
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.Display;
 import pt.utl.ist.po.ui.Form;
 import pt.utl.ist.po.ui.InputString;
+import pt.utl.ist.po.ui.InvalidOperation;
 
 /**
  * Read existing program.
  */
-public class ReadProgram extends Command<App> 
-{
+public class ReadProgram extends Command<App> {
     /**
-     * @param app
+     * @param receiver 
+     * @param receiver
      */
-    public ReadProgram(App app) 
-    {
-        super(Label.READ_PROGRAM, app);
+    public ReadProgram(App receiver) {
+        super(Label.READ_PROGRAM, receiver);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
-    public final void execute()
-    {
-        //FIXME implement
-
-        String filename = entity().readString(Message.programFileName());
-
-        NewParser parser = new NewParser();
-                 
-        Program program = parser.parseFile(filename, filename);
-
-        entity().addProgramAux(program);
+    public final void execute() throws InvalidOperation {
+    	
+    	String filename = entity().readString(Message.programFileName());
+    	try{        
+	
+	        NewParser parser = new NewParser();
+	                 
+	        Program program = parser.parseFile(filename, filename);
+	
+	        entity().getCurrentInterpreter().addProgram(program);
+    	} 
+    	
+    	catch(pex.parser.BadSourceException bse){
+    		throw new InvalidOperation(Message.fileNotFound(filename));
+    	}
+    	
+    	catch(Exception e) {
+    		throw new InvalidOperation(e.getMessage());
+    	}
     }
 }

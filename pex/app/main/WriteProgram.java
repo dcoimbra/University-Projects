@@ -1,8 +1,15 @@
 package pex.app.main;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
-//FIXME import used core classes
+import pex.app.App;
+import pex.core.Interpreter;
+import pex.core.Program;
+import pex.core.ProgramNotFoundException;
+
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.Display;
 import pt.utl.ist.po.ui.Form;
@@ -12,36 +19,44 @@ import pt.utl.ist.po.ui.InvalidOperation;
 /**
  * Write (save) program to file.
  */
-public class WriteProgram extends Command<App> 
-{
+public class WriteProgram extends Command<App> {
     /**
-     * @param app
+     * @param receiver
      */
-    public WriteProgram(App app) 
-    {
-        super(Label.WRITE_PROGRAM, app);
+    public WriteProgram(App receiver) {
+        super(Label.WRITE_PROGRAM, receiver);
     }
 
-   /** 
-    * @see pt.utl.ist.po.ui.Command#execute() 
-    */
+    /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
-    public final void execute() throws InvalidOperation 
+    public final void execute() throws InvalidOperation
     {
-        //FIXME implement
-
-        String programID = entity().readString(Message.requestProgramId());
-        
-        Interpreter interpreter = entity().getInterpreter();
-        Program program = interpreter.getProgram(programID);
-        String programCode = program.getAsText();
-
-        String filename = entity().readString(Message.programFileName());
-
-        FileWriter out = new FileWriter(filename);
-        BufferedWriter buffer = new BufferedWriter(out);
-        PrintWriter printer = new PrintWriter(buffer);
-
-        printer.write(programCode);
+    	try {
+	        String programID = entity().readString(Message.requestProgramId());
+	
+	        Interpreter interpreter = entity().getCurrentInterpreter();
+	        Program program = interpreter.getProgram(programID);
+	        
+	        if (program == null){
+	        	throw new ProgramNotFoundException(Message.noSuchProgram(programID));
+	        }
+	        
+	        String programCode = program.getAsText();
+	
+	        String filename = entity().readString(Message.programFileName());
+	
+	        FileWriter out = new FileWriter(filename);
+			
+	        BufferedWriter buffer = new BufferedWriter(out);
+	        PrintWriter printer = new PrintWriter(buffer);
+	
+	        printer.write(programCode);
+	        
+	        printer.close();
+    	} 
+    	
+        catch (IOException e) { //TODO como lidar com estas excepcoes?
+			throw new InvalidOperation(e.getMessage());
+		}
     }
 }

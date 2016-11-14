@@ -1,6 +1,7 @@
 package pex.app.main;
 
-//FIXME import used core classes
+import pex.app.App;
+import pex.core.Program;
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.Form;
 import pt.utl.ist.po.ui.InputString;
@@ -8,27 +9,24 @@ import pt.utl.ist.po.ui.InputString;
 /**
  * Create new program.
  */
-public class NewProgram extends Command<App> 
-{
+public class NewProgram extends Command<App> {
 
     /**
-     * @param app
+     * @param receiver 
+     * @param receiver
      */
-    public NewProgram(App app) 
-    {
-        super(Label.NEW_PROGRAM, app);
+    public NewProgram(App receiver) {
+        super(Label.NEW_PROGRAM, receiver);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
-    public final void execute() 
-    {
-        //FIXME implement
-
+    public final void execute() {
+    	
         String programID = entity().readString(Message.requestProgramId());
         
         Program program = new Program(programID);
 
-        entity().addProgramAux(program);
+        (entity().getCurrentInterpreter()).addProgram(program);
     }
 }
