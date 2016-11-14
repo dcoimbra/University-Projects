@@ -1,13 +1,16 @@
 package pex.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Program {
 	private String _name;
+	private ArrayList<Expression> _expressions;
 	
 	
 	public Program(String programName) {
 		_name = programName;
+		_expressions = new ArrayList<>();
 	}
 
 	public String getProgramName(){
@@ -15,12 +18,11 @@ public class Program {
 	}
 	
 	public void add(int idx, Expression expression) {
-		// TODO 
-		
+		_expressions.add(idx, expression);
 	}
 	
 	public void replace(int idx, Expression expression) {
-		// TODO 
+		_expressions.set(idx, expression);
 		
 	}
 	
@@ -34,15 +36,21 @@ public class Program {
 	}
 	
 	
-	public void set(Collection<Expression> expressions) { //está no newParser...
-		// TODO
+	public void set(Collection<Expression> expressions) {
+		_expressions = new ArrayList<>(expressions);
 		
 	}
 	
 	
 	public String getAsText() {
-		// TODO
-		return "";
+		
+		String allExpressions = "";
+		
+		for(Expression expression : _expressions){
+			allExpressions += expression.getAsText();
+		}
+		
+		return allExpressions;
 	}
 	
 	
