@@ -29,7 +29,12 @@ public class Open extends Command<App> {
     /** @see pt.tecnico.po.ui.Command#execute() */
     @Override
     public final void execute() throws InvalidOperation {
-        String filename = entity().readString(Message.openFile());
+        
+        Display prompt = new Display();
+        prompt.add(Message.openFile());
+        prompt.display();
+
+        String filename = entity().readString();
 
         try
         {

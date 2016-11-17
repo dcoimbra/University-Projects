@@ -1,9 +1,11 @@
 package pex.core;
 
+import java.io.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Program {
+public class Program implements java.io.Serializable {
 	private String _name;
 	private ArrayList<Expression> _expressions;
 	

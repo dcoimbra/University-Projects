@@ -1,12 +1,13 @@
 package pex.core;
 
+import java.io.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import pex.AppIO;
 
-public class Interpreter {
+public class Interpreter implements java.io.Serializable {
 	
 	private Map<String, Program> _programs;
 	private AppIO _app;

@@ -12,6 +12,7 @@ import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.Form;
 import pt.utl.ist.po.ui.InputString;
 import pt.utl.ist.po.ui.InvalidOperation;
+import pt.utl.ist.po.ui.Display;
 
 /**
  * Save to file under current name (if unnamed, query for name).
@@ -28,13 +29,18 @@ public class Save extends Command<App> {
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
     public final void execute() throws InvalidOperation {
+
         Interpreter interpreter = entity().getCurrentInterpreter();
         String fileAssociation = interpreter.getFileAssociation();
         try {
         	
 	        if (fileAssociation == null)
 	        {
-	            fileAssociation = entity().readString(Message.newSaveAs());
+	        	Display prompt = new Display();
+        		prompt.add(Message.newSaveAs());
+        		prompt.display();
+
+	            fileAssociation = entity().readString();
 	            interpreter.setFileAssociation(fileAssociation);
 	        }
 	
@@ -49,7 +55,7 @@ public class Save extends Command<App> {
 	        out.close();
 	        
 		} catch (IOException e) { //TODO criar excepcao para aqui
-			throw new InvalidOperation(Message.fileNotFound()); 
+			throw new InvalidOperation(e.getMessage()); 
 		}
     }
 }

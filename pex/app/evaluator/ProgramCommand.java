@@ -13,6 +13,6 @@ public abstract class ProgramCommand extends Command<Program> {
      * @param receiver
      */
     public ProgramCommand(String label, Program program) {
-        super(label, receiver);
+        super(label, program);
     }
 }

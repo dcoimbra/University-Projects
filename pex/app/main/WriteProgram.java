@@ -32,7 +32,12 @@ public class WriteProgram extends Command<App> {
     public final void execute() throws InvalidOperation
     {
     	try {
-	        String programID = entity().readString(Message.requestProgramId());
+
+    		Display promptPID = new Display();
+        	promptPID.add(Message.requestProgramId());
+        	promptPID.display();
+
+	        String programID = entity().readString();
 	
 	        Interpreter interpreter = entity().getCurrentInterpreter();
 	        Program program = interpreter.getProgram(programID);
@@ -43,7 +48,11 @@ public class WriteProgram extends Command<App> {
 	        
 	        String programCode = program.getAsText();
 	
-	        String filename = entity().readString(Message.programFileName());
+	        Display promptFile = new Display();
+        	promptFile.add(Message.programFileName());
+        	promptFile.display();
+
+	        String filename = entity().readString();
 	
 	        FileWriter out = new FileWriter(filename);
 			

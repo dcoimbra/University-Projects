@@ -17,7 +17,7 @@ public abstract class VariadicExpression extends CompositeExpression {
 	@Override
 	public String getAsText() {
 		
-		String asText = "( " + getOperator();
+		String asText = "(" + getOperator();
 		
 		for(Expression argument : _args) {
 			asText += " " + argument.getAsText();

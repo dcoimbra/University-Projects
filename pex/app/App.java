@@ -8,6 +8,8 @@ import pex.app.main.MainMenu;
 import pex.core.Interpreter;
 import pex.core.Program;
 
+import java.io.*;
+
 import pt.utl.ist.po.ui.Form;
 import pt.utl.ist.po.ui.InputString;
 import pt.utl.ist.po.ui.InputInteger;
@@ -19,7 +21,7 @@ import pt.utl.ist.po.ui.UserInteraction;
  * This is a sample client for the expression evaluator.
  * It uses a text-based user interface.
  */
-public class App implements AppIO 
+public class App implements AppIO, java.io.Serializable
 {
     private Interpreter _currentInterpreter = null;
 
@@ -45,10 +47,10 @@ public class App implements AppIO
      *
      * @return the string written by the user.
      **/
-    public String readString(String message) {
+    public String readString() {
     	
         Form f = new Form();
-        InputString inS = new InputString(f, message);
+        InputString inS = new InputString(f, "");
         f.parse();
 
         return inS.toString();
@@ -59,10 +61,10 @@ public class App implements AppIO
      *
      * @return the number written by the user.
      **/
-    public int readInteger(String message) {
+    public int readInteger() {
     	
         Form f = new Form();
-        InputInteger inI = new InputInteger(f, message);
+        InputInteger inI = new InputInteger(f, "");
         f.parse();
 
         return inI.value();

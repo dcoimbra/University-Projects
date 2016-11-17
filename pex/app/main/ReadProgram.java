@@ -25,8 +25,13 @@ public class ReadProgram extends Command<App> {
     @Override
     public final void execute() throws InvalidOperation {
     	
-    	String filename = entity().readString(Message.programFileName());
-    	try{        
+    	Display prompt = new Display();
+        prompt.add(Message.programFileName());
+        prompt.display();
+
+        String filename = entity().readString();
+    	
+        try{        
 	
 	        NewParser parser = new NewParser();
 	                 

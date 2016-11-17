@@ -1,12 +1,13 @@
 package pex.app.main;
 
 import pex.app.App;
-
 import pex.app.evaluator.EvaluatorMenu;
 import pex.app.evaluator.ShowProgram;
+
 import pex.core.Interpreter;
 import pex.core.Program;
 import pex.core.ProgramNotFoundException;
+
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.InputString;
 import pt.utl.ist.po.ui.Menu;
@@ -32,7 +33,12 @@ public class EditProgram extends Command<App> {
     public final void execute() throws ProgramNotFoundException {
        
         Interpreter interpreter = entity().getCurrentInterpreter();
-        String programID = entity().readString(Message.requestProgramId());
+
+        Display prompt = new Display();
+        prompt.add(Message.requestProgramId());
+        prompt.display();
+
+        String programID = entity().readString();
         Program program = interpreter.getProgram(programID);
 
         if (program == null){
