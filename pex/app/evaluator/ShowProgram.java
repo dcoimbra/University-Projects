@@ -14,19 +14,19 @@ public class ShowProgram extends ProgramCommand {
     /**
      * @param receiver
      */
-    public ShowProgram(Program program) {
-        super(Label.SHOW_PROGRAM, program);
+    public ShowProgram(Program receiver) {
+        
+        super(Label.SHOW_PROGRAM, receiver);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
     public final void execute() {
-        String programCode = entity().getAsText();
-
+        
+        String programCode = entity().getAsText();        
+        
         Display display = new Display();
-
         display.add(programCode);
-
         display.display();
     }
 }

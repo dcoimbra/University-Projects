@@ -16,6 +16,7 @@ public class MissingClosingParenthesisException extends ParserException {
      * @param expression invalid expression
      */
     public MissingClosingParenthesisException(String expression) {
+        
         super("Missing closing parenthesis in expression: " + expression);
         _expression = expression;
     }

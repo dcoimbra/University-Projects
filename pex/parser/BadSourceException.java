@@ -16,6 +16,7 @@ public class BadSourceException extends ParserException {
      * @param cause 
      */
     public BadSourceException(String source, Exception cause) {
+        
         super("Error while processing " + source, cause);
         _source = source;
     }
@@ -24,6 +25,7 @@ public class BadSourceException extends ParserException {
      * @return the source
      */
     public String getSource() {
+        
         return _source;
     }
 }

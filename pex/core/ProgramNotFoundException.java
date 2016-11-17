@@ -6,6 +6,7 @@ import pt.utl.ist.po.ui.InvalidOperation;
 public class ProgramNotFoundException extends InvalidOperation {
 
 	public ProgramNotFoundException(String msg) {
+		
 		super(msg);
 	}	
 }

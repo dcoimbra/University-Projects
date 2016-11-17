@@ -16,6 +16,7 @@ public class BadNumberException extends ParserException {
    * @param description
    */
   public BadNumberException(String number) {
+    
     super("Invalid integer literal: " + number);
     _number = number;
   }

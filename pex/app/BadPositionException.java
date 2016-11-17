@@ -18,6 +18,7 @@ public class BadPositionException extends InvalidOperation {
    * @param position
    */
   public BadPositionException(int position) {
+    
     _position = position;
   }
   
@@ -25,12 +26,14 @@ public class BadPositionException extends InvalidOperation {
    * @return the position
    */
   public int getPosition() {
+    
     return _position;
   }
 
   /** @see pt.tecnico.po.ui.DialogException#getMessage() */
   @Override
   public String getMessage() {
+    
     return "Posição inválida: " + _position;
   }
   

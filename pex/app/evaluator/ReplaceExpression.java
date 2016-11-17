@@ -15,16 +15,19 @@ import pt.utl.ist.po.ui.InputInteger;
  * Replace expression in program.
  */
 public class ReplaceExpression extends ProgramCommand {
+    
     /**
      * @param receiver
      */
-    public ReplaceExpression(Program program) {
-        super(Label.REPLACE_EXPRESSION, program);
+    public ReplaceExpression(Program receiver) {
+        
+        super(Label.REPLACE_EXPRESSION, receiver);
     }
 
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
     public final void execute() throws BadExpressionException, BadPositionException {
+        
         //FIXME implement
     }
 }

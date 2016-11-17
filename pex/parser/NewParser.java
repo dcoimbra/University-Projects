@@ -22,6 +22,7 @@ public class NewParser {
     }
 
     private void initTokenizer(Reader reader) {
+
         _tokenizer = new StreamTokenizer(reader);
         _tokenizer.eolIsSignificant(false);
     }
@@ -31,18 +32,22 @@ public class NewParser {
         _program = new Program(programName);
 
         try (FileReader reader = new FileReader(fileName)) {
+
             initTokenizer(reader);
 
             Collection<Expression> expressions = new ArrayList<>();
             Expression exp;
 
-            while ((exp = parseExpression()) != null)
+            while ((exp = parseExpression()) != null) {
+                
                 expressions.add(exp);
+            }
 
             _program.set(expressions);
         } 
 
         catch (IOException ioe) {
+
             throw new BadSourceException(fileName, ioe);
         }
 
@@ -54,12 +59,14 @@ public class NewParser {
         _program = program;
 
         try (StringReader reader = new StringReader(expression)) {
+            
             initTokenizer(reader);
-
+            
             return parseExpression();
         } 
 
         catch (IOException ioe) {
+            
             throw new BadSourceException(expression, ioe);
         }
     }
@@ -69,12 +76,16 @@ public class NewParser {
         int token = _tokenizer.nextToken();
 
         switch (token) {
+            
             case StreamTokenizer.TT_EOF:
                 return null;
                 
             case StreamTokenizer.TT_NUMBER: // Literal inteiro
-                if (_tokenizer.nval < 0 || _tokenizer.nval - (int)_tokenizer.nval != 0)
+                
+                if (_tokenizer.nval < 0 || _tokenizer.nval - (int)_tokenizer.nval != 0) {
+                    
                     throw new BadNumberException("" + _tokenizer.nval);
+                }
 
                 return new IntegerLiteral((int)_tokenizer.nval);
 
@@ -86,15 +97,17 @@ public class NewParser {
 
             case '(':
                 Expression exp = parseCompositeExpression();
+                
                 // process closing parenthesis
-                if (_tokenizer.nextToken() != ')')
+                if (_tokenizer.nextToken() != ')') {
+                    
                     throw new MissingClosingParenthesisException(exp.toString());
+                }
 
                 return exp;
 
             default:
                 throw new InvalidExpressionException(_tokenizer.lineno());
-
         }
     }
     
@@ -102,8 +115,11 @@ public class NewParser {
     private Expression parseArgument() throws IOException, BadNumberException, UnknownOperationException,
                                               MissingClosingParenthesisException, EndOfInputException, InvalidExpressionException {
         Expression exp = parseExpression();
-        if (exp == null)
+        
+        if (exp == null) {
+            
             throw new EndOfInputException();
+        }
 
         return exp;
     }
@@ -113,8 +129,10 @@ public class NewParser {
                                                                   EndOfInputException, InvalidExpressionException {
         int token = _tokenizer.nextToken();
 
-        if (token != StreamTokenizer.TT_WORD)
+        if (token != StreamTokenizer.TT_WORD) {
+            
             throw new InvalidExpressionException(_tokenizer.lineno());
+        }
 
         String operatorName = _tokenizer.sval;
 
@@ -139,10 +157,12 @@ public class NewParser {
                 
             case "call":
                 try {
+                    
                     return new Call((StringLiteral)parseArgument() /* may need additional parameter */);
                 } 
 
                 catch(ClassCastException cce) { // it is not a StringLiteral
+                    
                     throw new InvalidExpressionException(_tokenizer.lineno());
                 }
 
@@ -199,16 +219,21 @@ public class NewParser {
              // processing variadic expressions
              case "seq":
              case "print":
+                 
                  // process args
                  ArrayList<Expression> args = new ArrayList<>();
 
                  while (true) {
+                     
                      try {
+                     
                          args.add(parseArgument());
                      } 
 
                      catch (InvalidExpressionException iee) { // reaching the closing parenthisis of current composite expression
+                         
                          if (_tokenizer.ttype == ')') { // no more arguments
+                             
                              _tokenizer.pushBack();
                              break;
                          }
@@ -217,10 +242,15 @@ public class NewParser {
                      }
                  }
 
-                 if (operatorName.equals("seq"))
+                 if (operatorName.equals("seq")) {
+                     
                      return new Seq(args);
-                 else
+                 }
+                 
+                 else {
+                     
                      return new Print(args /* may need additional parameters */);
+                 }
         
              default:
                  throw new UnknownOperationException(_tokenizer.sval);

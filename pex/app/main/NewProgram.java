@@ -16,9 +16,9 @@ public class NewProgram extends Command<App> {
 
     /**
      * @param receiver 
-     * @param receiver
      */
     public NewProgram(App receiver) {
+        
         super(Label.NEW_PROGRAM, receiver);
     }
 
@@ -26,14 +26,10 @@ public class NewProgram extends Command<App> {
     @Override
     public final void execute() {
     	
-        Display prompt = new Display();
-        prompt.add(Message.requestProgramId());
-        prompt.display();
-
+        entity().println(Message.requestProgramId());
         String programID = entity().readString();
         
         Program program = new Program(programID);
-
         (entity().getCurrentInterpreter()).addProgram(program);
     }
 }

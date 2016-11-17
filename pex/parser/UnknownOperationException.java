@@ -15,6 +15,7 @@ public class UnknownOperationException extends ParserException {
      * @param operation invalid operation
      */
     public UnknownOperationException(String operation) {
+        
         super("Unknown operation: " + operation);
         _operation = operation;
     }
@@ -23,6 +24,7 @@ public class UnknownOperationException extends ParserException {
      * @return the invalid operation
      */
     public String getInvalidOperation() {
+        
         return _operation;
     }
 }

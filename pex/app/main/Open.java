@@ -18,22 +18,22 @@ import pt.utl.ist.po.ui.InvalidOperation;
  * Open existing interpreter.
  */
 public class Open extends Command<App> {
-    /**
-     * @param receiver 
+    
+    /** 
      * @param receiver
      */
     public Open(App receiver) {
+        
         super(Label.OPEN, receiver);
     }
 
-    /** @see pt.tecnico.po.ui.Command#execute() */
+    /** 
+     * @see pt.tecnico.po.ui.Command#execute() 
+     */
     @Override
     public final void execute() throws InvalidOperation {
         
-        Display prompt = new Display();
-        prompt.add(Message.openFile());
-        prompt.display();
-
+        entity().println(Message.openFile());
         String filename = entity().readString();
 
         try
@@ -48,7 +48,8 @@ public class Open extends Command<App> {
             
 	        inInterp.close();
         }
-//TODO tirar os println's e implementer as respectivas excepcoes (no pex.core )
+        
+        //TODO tirar os println's e implementer as respectivas excepcoes (no pex.core )
         catch(FileNotFoundException e)
         {
             throw new InvalidOperation(Message.fileNotFound());
@@ -64,5 +65,4 @@ public class Open extends Command<App> {
         	throw new InvalidOperation(Message.fileNotFound());
         }
     }
-
 }

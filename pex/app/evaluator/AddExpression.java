@@ -15,16 +15,21 @@ import pt.utl.ist.po.ui.InputInteger;
  * Add expression.
  */
 public class AddExpression extends ProgramCommand {
+    
     /**
      * @param receiver
      */
-    public AddExpression(Program program) {
-        super(Label.ADD_EXPRESSION, program);
+    public AddExpression(Program receiver) {
+        
+        super(Label.ADD_EXPRESSION, receiver);
     }
     
-    /** @see pt.utl.ist.po.ui.Command#execute() */
+    /** 
+     *  @see pt.utl.ist.po.ui.Command#execute() 
+     */
     @Override
     public final void execute() throws BadExpressionException, BadPositionException {
+        
         //FIXME implement
     }
 }

@@ -21,12 +21,11 @@ import pt.utl.ist.po.ui.UserInteraction;
  * This is a sample client for the expression evaluator.
  * It uses a text-based user interface.
  */
-public class App implements AppIO, java.io.Serializable
-{
+public class App implements AppIO, java.io.Serializable {
+    
     private Interpreter _currentInterpreter = null;
 
-    public App() 
-    {
+    public App() {
     
     }
 
@@ -71,10 +70,12 @@ public class App implements AppIO, java.io.Serializable
     }
     
     public void setCurrentInterpreter(Interpreter interpreter) {
-    	_currentInterpreter = interpreter;
+    	
+        _currentInterpreter = interpreter;
     }
 
     public Interpreter getCurrentInterpreter() {
+        
         return _currentInterpreter;
     }    
     
@@ -84,12 +85,12 @@ public class App implements AppIO, java.io.Serializable
     public static void main(String[] args) {
 
         App app = new App();
-
-        Interpreter interpreter = new Interpreter(app);
         
+        Interpreter interpreter = new Interpreter(app);
         app.setCurrentInterpreter(interpreter);
 
         String datafile = System.getProperty("import"); //$NON-NLS-1$
+        
         if (datafile != null) {
             
             try {
@@ -100,6 +101,7 @@ public class App implements AppIO, java.io.Serializable
             } 
 
             catch (ParserException e) {
+                
                 // no behavior described: just present the problem
                 e.printStackTrace();
             }

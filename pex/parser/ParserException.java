@@ -12,6 +12,7 @@ public class ParserException extends Exception {
    * Default constructor
    */
   public ParserException() {
+
     // do nothing
   }
 
@@ -20,6 +21,7 @@ public class ParserException extends Exception {
    * @param cause
    */
     public ParserException(String description, Exception cause) {
+        
         super(description, cause);
   }
 
@@ -27,6 +29,7 @@ public class ParserException extends Exception {
    * @param description
    */
   public ParserException(String description) {
+    
     super(description);
   }
 
@@ -34,6 +37,7 @@ public class ParserException extends Exception {
    * @param cause
    */
   public ParserException(Exception cause) {
+   
     super(cause);
   }
 

@@ -15,15 +15,17 @@ public class EvaluatorMenu extends Menu {
     /**
      * @param program
      */
-    public EvaluatorMenu(Program program) {
+    public EvaluatorMenu(Program receiver) {
+        
         super(Label.TITLE,
               new Command<?>[] { 
-                      new ShowProgram(program), 
-                      new RunProgram(program), 
-                      new AddExpression(program),
-                      new ReplaceExpression(program),
-                      new ShowAllIdentifiers(program),
-                      new ShowUninitializedIdentifiers(program),
+                      
+                      new ShowProgram(receiver), 
+                      new RunProgram(receiver), 
+                      new AddExpression(receiver),
+                      new ReplaceExpression(receiver),
+                      new ShowAllIdentifiers(receiver),
+                      new ShowUninitializedIdentifiers(receiver),
                       });
     }
 

@@ -18,7 +18,8 @@ public class MainMenu extends Menu {
     public MainMenu(App app) {
 
         super(Label.TITLE,
-              new Command<?>[] { 
+              new Command<?>[] {
+               
                   new New(app), 
                   new Open(app), 
                   new Save(app), 

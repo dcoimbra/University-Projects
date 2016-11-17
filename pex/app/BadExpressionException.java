@@ -18,6 +18,7 @@ public class BadExpressionException extends InvalidOperation {
    * @param description
    */
   public BadExpressionException(String description) {
+    
     _description = description;
   }
   
@@ -25,12 +26,14 @@ public class BadExpressionException extends InvalidOperation {
    * @return the description
    */
   public String getDescription() {
+    
     return _description;
   }
 
   /** @see pt.tecnico.po.ui.DialogException#getMessage() */
   @Override
   public String getMessage() {
+    
     return "Problemas na expressão: " + _description;
   }
 }

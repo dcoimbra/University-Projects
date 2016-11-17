@@ -20,23 +20,24 @@ import pt.utl.ist.po.ui.InvalidOperation;
  * Write (save) program to file.
  */
 public class WriteProgram extends Command<App> {
+    
     /**
      * @param receiver
      */
     public WriteProgram(App receiver) {
+        
         super(Label.WRITE_PROGRAM, receiver);
     }
 
-    /** @see pt.utl.ist.po.ui.Command#execute() */
+    /** 
+     * @see pt.utl.ist.po.ui.Command#execute() 
+     */
     @Override
     public final void execute() throws InvalidOperation
     {
     	try {
 
-    		Display promptPID = new Display();
-        	promptPID.add(Message.requestProgramId());
-        	promptPID.display();
-
+    		entity().println(Message.requestProgramId());
 	        String programID = entity().readString();
 	
 	        Interpreter interpreter = entity().getCurrentInterpreter();
@@ -48,19 +49,14 @@ public class WriteProgram extends Command<App> {
 	        
 	        String programCode = program.getAsText();
 	
-	        Display promptFile = new Display();
-        	promptFile.add(Message.programFileName());
-        	promptFile.display();
-
+	        entity().println(Message.programFileName());
 	        String filename = entity().readString();
 	
 	        FileWriter out = new FileWriter(filename);
-			
 	        BufferedWriter buffer = new BufferedWriter(out);
 	        PrintWriter printer = new PrintWriter(buffer);
 	
 	        printer.write(programCode);
-	        
 	        printer.close();
     	} 
     	
