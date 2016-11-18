@@ -25,10 +25,13 @@ public class NewProgram extends Command<App> {
     /** @see pt.utl.ist.po.ui.Command#execute() */
     @Override
     public final void execute() {
+
+        Form f = new Form();
+        InputString inputProgramID = new InputString(f, Message.requestProgramId());
+        f.parse();
     	
-        entity().println(Message.requestProgramId());
-        String programID = entity().readString();
-        
+        String programID = inputProgramID.toString();
+
         Program program = new Program(programID);
         (entity().getCurrentInterpreter()).addProgram(program);
     }

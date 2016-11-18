@@ -56,7 +56,7 @@ public class Program implements java.io.Serializable {
 		
 		String allExpressions = "";
 		
-		for(Expression expression : _expressions){
+		for(Expression expression : _expressions) {
 		
 			allExpressions += expression.getAsText();
 		}

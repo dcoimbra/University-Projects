@@ -27,7 +27,7 @@ public abstract class VariadicExpression extends CompositeExpression {
 			asText += " " + argument.getAsText();
 		}
 		
-		return asText + ")";
+		return asText + ")\n";
 	}
 
 	public abstract String getOperator();

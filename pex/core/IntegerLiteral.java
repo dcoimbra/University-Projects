@@ -12,7 +12,7 @@ public class IntegerLiteral extends Literal {
 	@Override
 	public String getAsText() {
 		
-		return Integer.toString(_value);
+		return (Integer.toString(_value));
 	}
 
 }

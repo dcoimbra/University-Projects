@@ -1,7 +1,7 @@
 package pex.app.evaluator;
 
-//FIXME import used core classes
 import pex.core.Program;
+
 import pt.utl.ist.po.ui.Command;
 
 /**

@@ -33,34 +33,45 @@ public class WriteProgram extends Command<App> {
      * @see pt.utl.ist.po.ui.Command#execute() 
      */
     @Override
-    public final void execute() throws InvalidOperation
-    {
-    	try {
+    public final void execute() throws InvalidOperation {
+    	
+    	Form f1 = new Form();
+        InputString inputProgramID = new InputString(f1, Message.requestProgramId());
+        f1.parse();
 
-    		entity().println(Message.requestProgramId());
-	        String programID = entity().readString();
+        String programID = inputProgramID.toString();
 	
-	        Interpreter interpreter = entity().getCurrentInterpreter();
-	        Program program = interpreter.getProgram(programID);
+	    Interpreter interpreter = entity().getCurrentInterpreter();
+	    Program program = interpreter.getProgram(programID);
 	        
-	        if (program == null){
-	        	throw new ProgramNotFoundException(Message.noSuchProgram(programID));
-	        }
+	    if (program == null) { 
+	    	
+	    	Display errDisplay = new Display();
+	    	errDisplay.add(Message.noSuchProgram(programID));
+	    	errDisplay.display();
+
+	    	return;
+	    }
 	        
-	        String programCode = program.getAsText();
+	    String programCode = program.getAsText();
+		
+		Form f2 = new Form();
+        InputString inputFilename = new InputString(f2, Message.programFileName());
+        f2.parse();
+
+        String filename = inputFilename.toString();
 	
-	        entity().println(Message.programFileName());
-	        String filename = entity().readString();
+		try { 
+	    
+	    	FileWriter out = new FileWriter(filename);
+	    	BufferedWriter buffer = new BufferedWriter(out);
+	    	PrintWriter printer = new PrintWriter(buffer);
 	
-	        FileWriter out = new FileWriter(filename);
-	        BufferedWriter buffer = new BufferedWriter(out);
-	        PrintWriter printer = new PrintWriter(buffer);
-	
-	        printer.write(programCode);
-	        printer.close();
+	    	printer.write(programCode);
+	   		printer.close();
     	} 
     	
-        catch (IOException e) { //TODO como lidar com estas excepcoes?
+        catch (IOException e) {
 			throw new InvalidOperation(e.getMessage());
 		}
     }

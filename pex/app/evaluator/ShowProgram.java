@@ -1,10 +1,8 @@
 package pex.app.evaluator;
 
-//FIXME import core classes
 import pex.core.Program;
 
 import pt.utl.ist.po.ui.Display;
-
 
 /**
  * Show program (present code).

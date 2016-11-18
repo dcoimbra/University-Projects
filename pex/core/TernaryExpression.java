@@ -18,7 +18,10 @@ public abstract class TernaryExpression extends BinaryExpression {
 	@Override
 	public String getAsText() {
 		
-		return "(" + getOperator() + " " + getFirstArgument().getAsText() + " " + getSecondArgument().getAsText()+ " " + _arg3.getAsText() + ")";
+		return "(" + getOperator() + " " 
+				   + getFirstArgument().getAsText() + " " 
+				   + getSecondArgument().getAsText()+ " " 
+				   + _arg3.getAsText() + ")";
 	}
 
 	public abstract String getOperator();

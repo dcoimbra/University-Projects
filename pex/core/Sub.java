@@ -9,6 +9,7 @@ public class Sub extends BinaryExpression {
 	
 	@Override
 	public String getOperator() {
+		
 		return "sub";
 	}
 

@@ -28,22 +28,28 @@ public class EditProgram extends Command<App> {
     }
 
     /** 
-     * @throws ProgramNotFoundException 
      * @see pt.utl.ist.po.ui.Command#execute()
      */
     @Override
-    public final void execute() throws ProgramNotFoundException {
+    public final void execute() {
        
         Interpreter interpreter = entity().getCurrentInterpreter();
 
-        entity().println(Message.requestProgramId());
-        String programID = entity().readString();
+        Form f = new Form();
+        InputString inputProgramID = new InputString(f, Message.requestProgramId());
+        f.parse();
+        
+        String programID = inputProgramID.toString();
         
         Program program = interpreter.getProgram(programID);
 
         if (program == null) {
-        	
-            throw new ProgramNotFoundException(Message.noSuchProgram(programID));
+
+            Display errDisplay = new Display();
+            errDisplay.add(Message.noSuchProgram(programID));
+            errDisplay.display();
+
+            return;
         }
         
         EvaluatorMenu menu = new EvaluatorMenu(program);

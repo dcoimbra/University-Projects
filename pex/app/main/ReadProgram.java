@@ -28,8 +28,11 @@ public class ReadProgram extends Command<App> {
     @Override
     public final void execute() throws InvalidOperation {
     	
-        entity().println(Message.requestProgramId());
-        String filename = entity().readString();
+        Form f = new Form();
+        InputString inputFilename = new InputString(f, Message.programFileName());
+        f.parse();
+
+        String filename = inputFilename.toString();
     	
         try {        
 	
@@ -39,7 +42,7 @@ public class ReadProgram extends Command<App> {
 	        entity().getCurrentInterpreter().addProgram(program);
     	} 
     	
-    	catch (pex.parser.BadSourceException bse){
+    	catch (pex.parser.BadSourceException bse) {
     		throw new InvalidOperation(Message.fileNotFound(filename));
     	}
     	

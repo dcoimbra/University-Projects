@@ -1,6 +1,5 @@
 package pex.app.main;
 
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -23,6 +22,7 @@ public class Save extends Command<App> {
      * @param receiver
      */
     public Save(App receiver) {
+        
         super(Label.SAVE, receiver);
     }
 
@@ -34,28 +34,28 @@ public class Save extends Command<App> {
 
         Interpreter interpreter = entity().getCurrentInterpreter();
         String fileAssociation = interpreter.getFileAssociation();
-        
-        try {
         	
-	        if (fileAssociation == null)
-	        {
-	        	entity().println(Message.newSaveAs());
-	            fileAssociation = entity().readString();
-	            interpreter.setFileAssociation(fileAssociation);
-	        }
+	    if (fileAssociation == null) {
+
+	        Form f = new Form();
+	        InputString inputFileAssociation = new InputString(f, Message.newSaveAs());
+	        f.parse();
+
+	        fileAssociation = inputFileAssociation.toString();
+	        interpreter.setFileAssociation(fileAssociation);
+	    }
+
+	    try {
 	
 	        FileOutputStream fpOut = new FileOutputStream(fileAssociation);
-
 			ObjectOutputStream out = new ObjectOutputStream(fpOut);
-        
- 
 	        out.writeObject(interpreter);
 	            
 	        out.flush();
 	        out.close();    
 		} 
 
-		catch (IOException e) { //TODO criar excepcao para aqui
+		catch (IOException e) {
 			
 			throw new InvalidOperation(e.getMessage()); 
 		}

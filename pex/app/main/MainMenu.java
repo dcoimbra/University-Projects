@@ -13,20 +13,20 @@ import pt.utl.ist.po.ui.Menu;
 public class MainMenu extends Menu {
 
     /**
-     * @param app
+     * @param receiver
      */
-    public MainMenu(App app) {
+    public MainMenu(App receiver) {
 
         super(Label.TITLE,
               new Command<?>[] {
                
-                  new New(app), 
-                  new Open(app), 
-                  new Save(app), 
-                  new NewProgram(app), 
-                  new ReadProgram(app), 
-                  new WriteProgram(app), 
-                  new EditProgram(app), 
+                  new New(receiver), 
+                  new Open(receiver), 
+                  new Save(receiver), 
+                  new NewProgram(receiver), 
+                  new ReadProgram(receiver), 
+                  new WriteProgram(receiver), 
+                  new EditProgram(receiver), 
                 });
     }
 }
