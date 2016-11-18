@@ -18,7 +18,7 @@ public abstract class UnaryExpression extends CompositeExpression {
 	public String getAsText() {
 		
 		return "(" + getOperator() + " " 
-				   + _arg1.getAsText() + ")";
+				   + _arg1.getAsText() + ")\n";
 	}
 
 	public abstract String getOperator();

@@ -24,7 +24,9 @@ public class ReplaceExpression extends ProgramCommand {
         super(Label.REPLACE_EXPRESSION, receiver);
     }
 
-    /** @see pt.utl.ist.po.ui.Command#execute() */
+    /** 
+     * @see pt.utl.ist.po.ui.Command#execute() 
+     */
     @Override
     public final void execute() throws BadExpressionException, BadPositionException {
         

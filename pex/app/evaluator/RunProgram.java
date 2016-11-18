@@ -16,7 +16,9 @@ public class RunProgram extends ProgramCommand {
         super(Label.RUN_PROGRAM, receiver);
     }
 
-    /** @see pt.utl.ist.po.ui.Command#execute() */
+    /** 
+     * @see pt.utl.ist.po.ui.Command#execute() 
+     */
     @Override
     public final void execute() {
         

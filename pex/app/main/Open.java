@@ -55,12 +55,12 @@ public class Open extends Command<App> {
         
         catch(IOException e)
         {
-        	throw new InvalidOperation(Message.fileNotFound());
+        	throw new InvalidOperation(e.getMessage());
         }
         
         catch(ClassNotFoundException e)
         {
-        	throw new InvalidOperation(Message.fileNotFound());
+        	throw new InvalidOperation(e.getMessage());
         }
     }
 }

@@ -20,7 +20,7 @@ public abstract class BinaryExpression extends UnaryExpression {
 		
 		return ("(" + getOperator() + " " 
 					+ getFirstArgument().getAsText() + " " 
-					+ _arg2.getAsText() + ")");
+					+ _arg2.getAsText() + ")\n");
 	}
 
 	public abstract String getOperator();

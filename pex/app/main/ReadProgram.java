@@ -43,7 +43,10 @@ public class ReadProgram extends Command<App> {
     	} 
     	
     	catch (pex.parser.BadSourceException bse) {
-    		throw new InvalidOperation(Message.fileNotFound(filename));
+    		
+            Display errDisplay = new Display();
+            errDisplay.add(Message.fileNotFound(filename));
+            errDisplay.display();
     	}
     	
     	catch (Exception e) {

@@ -21,7 +21,7 @@ public abstract class TernaryExpression extends BinaryExpression {
 		return "(" + getOperator() + " " 
 				   + getFirstArgument().getAsText() + " " 
 				   + getSecondArgument().getAsText()+ " " 
-				   + _arg3.getAsText() + ")";
+				   + _arg3.getAsText() + ")\n";
 	}
 
 	public abstract String getOperator();
