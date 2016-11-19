@@ -30,7 +30,9 @@ public class BadExpressionException extends InvalidOperation {
     return _description;
   }
 
-  /** @see pt.tecnico.po.ui.DialogException#getMessage() */
+  /** 
+   * @see pt.tecnico.po.ui.DialogException#getMessage() 
+   */
   @Override
   public String getMessage() {
     

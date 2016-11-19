@@ -12,7 +12,7 @@ public class StringLiteral extends Literal {
 	@Override
 	public String getAsText() {
 		
-		return "\"" + _value + "\"" ;
+		return "\"" + _value + "\"";
 	}
 
 }

@@ -21,7 +21,9 @@ public class New extends Command<App> {
         super(Label.NEW, receiver);
     }
 
-    /** @see pt.utl.ist.po.ui.Command#execute() */
+    /** 
+     * @see pt.utl.ist.po.ui.Command#execute() 
+     */
     @Override
     public final void execute() {
         

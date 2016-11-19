@@ -33,6 +33,12 @@ public class Save extends Command<App> {
     public final void execute() throws InvalidOperation {
 
         Interpreter interpreter = entity().getCurrentInterpreter();
+
+        if (!(interpreter.wasChanged())) {
+
+        	return;
+        }
+
         String fileAssociation = interpreter.getFileAssociation();
         	
 	    if (fileAssociation == null) {
@@ -43,6 +49,8 @@ public class Save extends Command<App> {
 
 	        fileAssociation = inputFileAssociation.toString();
 	        interpreter.setFileAssociation(fileAssociation);
+
+	        interpreter.setWasChangedFlag(false);
 	    }
 
 	    try {

@@ -44,13 +44,11 @@ public class Program implements java.io.Serializable {
 		return null;
 	}
 	
-	
 	public void set(Collection<Expression> expressions) {
 		
 		_expressions = new ArrayList<>(expressions);
 		
 	}
-	
 	
 	public String getAsText() {
 		
@@ -58,12 +56,11 @@ public class Program implements java.io.Serializable {
 		
 		for(Expression expression : _expressions) {
 		
-			allExpressions += expression.getAsText();
+			allExpressions = allExpressions + (expression.getAsText() + "\n");
 		}
 		
 		return allExpressions;
 	}
-	
 	
 	public Literal execute() {
 		

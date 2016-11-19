@@ -18,7 +18,9 @@ public class ShowAllIdentifiers extends ProgramCommand {
         super(Label.SHOW_ALL_IDENTIFIERS, receiver);
     }
 
-    /** @see pt.utl.ist.po.ui.Command#execute() */
+    /** 
+     * @see pt.utl.ist.po.ui.Command#execute() 
+     */
     @Override
     public final void execute() {
         

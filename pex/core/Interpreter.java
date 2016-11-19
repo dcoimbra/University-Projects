@@ -12,6 +12,7 @@ public class Interpreter implements java.io.Serializable {
 	private Map<String, Program> _programs;
 	private AppIO _app;
 	private String _fileAssociation = null;
+	private boolean _wasChangedFlag = true;
 
 	public Interpreter(AppIO app) {
 
@@ -58,5 +59,15 @@ public class Interpreter implements java.io.Serializable {
 	public String getFileAssociation() {
 		  
 		return _fileAssociation;
+	}
+
+	public boolean wasChanged() {
+
+		return _wasChangedFlag;
+	}
+
+	public void setWasChangedFlag(boolean status) {
+
+		_wasChangedFlag = status;
 	}
 }

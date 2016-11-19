@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import pex.app.App;
+
 import pex.core.Interpreter;
 import pex.core.Program;
 
@@ -71,6 +72,7 @@ public class WriteProgram extends Command<App> {
     	} 
     	
         catch (IOException e) {
+			
 			throw new InvalidOperation(e.getMessage());
 		}
     }

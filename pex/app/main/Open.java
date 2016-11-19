@@ -40,8 +40,8 @@ public class Open extends Command<App> {
 
         String filename = inputFilename.toString();
 
-        try
-        {
+        try {
+            
             FileInputStream fpIn = new FileInputStream(filename);
             ObjectInputStream inInterp = new ObjectInputStream(fpIn);
 
@@ -53,14 +53,16 @@ public class Open extends Command<App> {
 	        inInterp.close();
         }
         
-        catch(IOException e)
-        {
-        	throw new InvalidOperation(e.getMessage());
+        catch(IOException e) {
+        	
+            Display errDisplay = new Display();
+            errDisplay.add(Message.fileNotFound());
+            errDisplay.display();
         }
         
-        catch(ClassNotFoundException e)
-        {
-        	throw new InvalidOperation(e.getMessage());
+        catch(ClassNotFoundException e) {
+        	
+            throw new InvalidOperation(e.getMessage());
         }
     }
 }

@@ -30,7 +30,9 @@ public class BadPositionException extends InvalidOperation {
     return _position;
   }
 
-  /** @see pt.tecnico.po.ui.DialogException#getMessage() */
+  /** 
+   * @see pt.tecnico.po.ui.DialogException#getMessage() 
+   */
   @Override
   public String getMessage() {
     

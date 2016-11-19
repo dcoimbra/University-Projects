@@ -1,8 +1,12 @@
 package pex.app.main;
 
 import pex.app.App;
+
+import pex.core.Interpreter;
 import pex.core.Program;
+
 import pex.parser.NewParser;
+
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.Display;
 import pt.utl.ist.po.ui.Form;
@@ -38,8 +42,11 @@ public class ReadProgram extends Command<App> {
 	
 	        NewParser parser = new NewParser();        
 	        Program program = parser.parseFile(filename, filename);
-	
-	        entity().getCurrentInterpreter().addProgram(program);
+	       
+            Interpreter interpreter = entity().getCurrentInterpreter();
+	        interpreter.addProgram(program);
+
+            interpreter.setWasChangedFlag(true);
     	} 
     	
     	catch (pex.parser.BadSourceException bse) {
@@ -50,7 +57,8 @@ public class ReadProgram extends Command<App> {
     	}
     	
     	catch (Exception e) {
-    		throw new InvalidOperation(e.getMessage());
+    		
+            throw new InvalidOperation(e.getMessage());
     	}
     }
 }

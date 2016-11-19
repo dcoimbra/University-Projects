@@ -2,6 +2,7 @@ package pex.app.main;
 
 import pex.app.App;
 
+import pex.core.Interpreter;
 import pex.core.Program;
 
 import pt.utl.ist.po.ui.Command;
@@ -22,7 +23,9 @@ public class NewProgram extends Command<App> {
         super(Label.NEW_PROGRAM, receiver);
     }
 
-    /** @see pt.utl.ist.po.ui.Command#execute() */
+    /** 
+     * @see pt.utl.ist.po.ui.Command#execute() 
+     */
     @Override
     public final void execute() {
 
@@ -33,6 +36,10 @@ public class NewProgram extends Command<App> {
         String programID = inputProgramID.toString();
 
         Program program = new Program(programID);
-        (entity().getCurrentInterpreter()).addProgram(program);
+
+        Interpreter interpreter = entity().getCurrentInterpreter();
+        interpreter.addProgram(program);
+
+        interpreter.setWasChangedFlag(true);
     }
 }
