@@ -6,6 +6,8 @@ import pex.core.Interpreter;
 import pex.core.Program;
 
 import pex.parser.NewParser;
+import pex.parser.BadSourceException;
+import pex.parser.ParserException;
 
 import pt.utl.ist.po.ui.Command;
 import pt.utl.ist.po.ui.Display;
@@ -47,18 +49,19 @@ public class ReadProgram extends Command<App> {
 	        interpreter.addProgram(program);
 
             interpreter.setWasChangedFlag(true);
-    	} 
+    	}
     	
-    	catch (pex.parser.BadSourceException bse) {
+    	catch (BadSourceException bse) {
     		
             Display errDisplay = new Display();
             errDisplay.add(Message.fileNotFound(filename));
             errDisplay.display();
     	}
-    	
-    	catch (Exception e) {
-    		
-            throw new InvalidOperation(e.getMessage());
-    	}
+
+        catch (ParserException e) {
+                
+                // no behavior described: just present the problem
+                e.printStackTrace();
+            }
     }
 }
