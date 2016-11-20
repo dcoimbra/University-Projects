@@ -50,7 +50,6 @@ public class Save extends Command<App> {
 	        fileAssociation = inputFileAssociation.toString();
 	        interpreter.setFileAssociation(fileAssociation);
 
-	        interpreter.setWasChangedFlag(false);
 	    }
 
 	    try {
@@ -60,8 +59,11 @@ public class Save extends Command<App> {
 	        out.writeObject(interpreter);
 	            
 	        out.flush();
-	        out.close();    
+	        out.close();
+		   
+	        interpreter.setWasChangedFlag(false);
 		} 
+	    
 
 		catch (IOException e) {
 			

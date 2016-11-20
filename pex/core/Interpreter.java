@@ -41,7 +41,7 @@ public class Interpreter implements java.io.Serializable {
 	 *
 	 * Initial value is true.
 	 */
-	private boolean _wasChangedFlag = true;
+	private boolean _wasChanged = true;
 
 	/**
 	 * Class constructor.
@@ -90,7 +90,7 @@ public class Interpreter implements java.io.Serializable {
 	 * Gives the program referenced by the given name.
 	 *
 	 * @param name the program's name.
-	 * @return the program seeked if it exists, null if it doesn't
+	 * @return the searched program if it exists, null if it doesn't
 	 */
 	public Program getProgram(String name) {
 
@@ -135,7 +135,7 @@ public class Interpreter implements java.io.Serializable {
 	 */
 	public boolean wasChanged() {
 
-		return _wasChangedFlag;
+		return _wasChanged;
 	}
 
 	/**
@@ -143,6 +143,6 @@ public class Interpreter implements java.io.Serializable {
 	 */
 	public void setWasChangedFlag(boolean status) {
 
-		_wasChangedFlag = status;
+		_wasChanged = status;
 	}
 }
