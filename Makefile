@@ -10,4 +10,7 @@ runtests:
 	
 clean:
 	rm -f `find pex -name "*.class"`
+	
+jar:
+	jar cf proj.jar `find pex -name "*.java"`
 
