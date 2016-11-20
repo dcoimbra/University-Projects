@@ -46,9 +46,9 @@ public class Open extends Command<App> {
 
             Interpreter loadedInterpreter = (Interpreter)inInterp.readObject();
             
-            loadedInterpreter.setFileAssociation(filename);           
+            loadedInterpreter.setFileAssociation(filename);
+            loadedInterpreter.setWasChangedFlag(false);
             entity().setCurrentInterpreter(loadedInterpreter);
-            (entity().getCurrentInterpreter()).setWasChangedFlag(false);
             
 	        inInterp.close();
         }
