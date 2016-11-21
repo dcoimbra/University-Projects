@@ -10,7 +10,7 @@ import java.util.Collection;
  *
  * Can be stored in a file for posterior use.
  *
- * Grupo 4
+ * @author Grupo 4
  * @author Filipa Marques - 57842
  * @author David Coimbra  - 84708 
  */
@@ -29,7 +29,7 @@ public class Program implements java.io.Serializable {
 	private ArrayList<Expression> _expressions = new ArrayList<>();
 	
 	/**
-	 * Class constructor.
+	 * Class constructor. Also sets program name.
 	 *
 	 * @param programName this program's name.
 	 */
@@ -43,7 +43,7 @@ public class Program implements java.io.Serializable {
 	 *
 	 * @return this program's name
 	 */
-	public String getProgramName(){
+	public String getProgramName() {
 		
 		return _name;
 	}
@@ -71,7 +71,10 @@ public class Program implements java.io.Serializable {
 	}
 	
 	/**
-	 * @see pex.core.Interpreter#setIdentifierValue(Identifier id, Literal value)
+	 * Sets the value for a given identifier.
+	 *
+	 * @param id the given identifier
+	 * @param value the value to set
 	 */
 	public void setIdentifierValue(Identifier id, Literal value) {
 		
@@ -79,7 +82,10 @@ public class Program implements java.io.Serializable {
 	}
 
 	/**
-	 * @see pex.core.Interpreter#getIdentifierValue(Identifier id, Literal value)
+	 * Gives the value associated to the given identifier.
+	 *
+	 * @param id the given identifier
+	 * @return the associated value
 	 */
 	public Literal getIdentifierValue(Identifier id) {
 		
@@ -103,7 +109,7 @@ public class Program implements java.io.Serializable {
 	/**
 	 * Converts the entire program to a text format, in the program's language.
 	 *
-	 * The conversion is done expression to expression, and every expression is placed in a new line.
+	 * The conversion is done expression by expression, and every expression is placed in a new line.
 	 *
 	 * @return the program in text format, as one String 
 	 */
@@ -114,7 +120,7 @@ public class Program implements java.io.Serializable {
 		for(Expression expression : _expressions) {
 		
 			//call getAsText() for every expression and separate them in lines
-			allExpressions = allExpressions + (expression.getAsText() + "\n");
+			allExpressions += (expression.getAsText() + "\n");
 		}
 		
 		return allExpressions;

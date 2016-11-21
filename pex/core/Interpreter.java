@@ -94,12 +94,7 @@ public class Interpreter implements java.io.Serializable {
 	 */
 	public Program getProgram(String name) {
 
-		if (_programs.containsKey(name)) {
-
-			return _programs.get(name);
-		}
-
-		return null;
+		return _programs.get(name);
 	}
 
 	/**

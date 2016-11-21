@@ -17,5 +17,10 @@ clean1:
 	
 jar:
 	make clean1
-	jar cf proj.jar `find pex -name "*.java"`
+	jar cvf proj.jar `find pex -name "*.java"`
 
+extract:
+	jar xvf proj.jar
+
+doc:
+	javadoc -d docs `find pex -name "*.java"`
