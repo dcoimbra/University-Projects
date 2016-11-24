@@ -45,6 +45,7 @@
 #define CMD_BUFFER_DIM (NUM_TRABALHADORAS * 2)
 
 typedef struct {
+		const char* op_texto;
 		int operacao;
 		int idConta1;
 		int idConta2;
@@ -55,7 +56,7 @@ void funcaoSaida(int nFilhos);
 void enviarSignal(int pidFilhos[], int nFilhos);
 void criaPoolTarefas();
 
-void cria_trabalho(int oper, int accountID1, int accountID2, int moneyValue);
+void cria_trabalho(const char* op_comando, int oper, int accountID1, int accountID2, int moneyValue);
 void* tarefa_trabalhadora(void *dummy);
 void realiza_trabalho(comando_t trabalho);
 
@@ -85,8 +86,9 @@ int main (int argc, char** argv) {
 	char buffer[BUFFER_SIZE];
 
 	pid_t pidFilhos[MAX_CHILDREN];
+	pid_t main_tid = gettid();
+	
 	int nFilhos = 0;  /* numero de processos filho criados */
-
 	int i;
 
 /* --- inicializacao dos mutexes e dos semaforos --- */
@@ -131,16 +133,24 @@ int main (int argc, char** argv) {
 
 			/* Sair Agora */
 			if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
-				enviarSignal(pidFilhos, nFilhos);			
+				enviarSignal(pidFilhos, nFilhos);
 	
 			for (i = 0; i < NUM_TRABALHADORAS; i++) 
-				cria_trabalho(OP_SAIR, 0, 0, 0);	/* no comando sair e' mandado o comando de saida a cada thread,			   */
+				cria_trabalho(COMANDO_SAIR, OP_SAIR, 0, 0, 0);	/* no comando sair e' mandado o comando de saida a cada thread,			   */
 												/* enviando para o buffer tantos comandos de saida quantas threads existem */
 			
 			for (i = 0; i < NUM_TRABALHADORAS; i++)
 				pthread_join((tid[i]), NULL);   /* de seguida fica 'a espera que todas as threads terminem antes de sair do programa. */
 			
 			funcaoSaida(nFilhos);
+
+			if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
+				fprintf(logFile, "%d: %s %s\n", main_tid, COMANDO_SAIR, COMANDO_SAIR_AGORA);
+
+			else
+				fprintf(logFile, "%d: %s\n", main_tid, COMANDO_SAIR);
+
+			fclose(logFile);
 			exit(EXIT_SUCCESS);
 		}
 		
@@ -162,7 +172,7 @@ int main (int argc, char** argv) {
 			idConta = atoi(args[1]);
 			valor = atoi(args[2]);
 
-			cria_trabalho(OP_DEBITAR, idConta, 0, valor);
+			cria_trabalho(COMANDO_DEBITAR, OP_DEBITAR, idConta, 0, valor);
 		}
 
 		/* Creditar */
@@ -179,7 +189,7 @@ int main (int argc, char** argv) {
 			idConta = atoi(args[1]);
 			valor = atoi(args[2]);
 
-			cria_trabalho(OP_CREDITAR, idConta, 0, valor);
+			cria_trabalho(COMANDO_CREDITAR, OP_CREDITAR, idConta, 0, valor);
 		}
 
 		/* Ler Saldo */
@@ -195,9 +205,10 @@ int main (int argc, char** argv) {
 
 			idConta = atoi(args[1]);
 
-			cria_trabalho(OP_LERSALDO, idConta, 0, 0);
+			cria_trabalho(COMANDO_LER_SALDO, OP_LERSALDO, idConta, 0, 0);
 		}
 
+		/* Transferir */
 		else if (strcmp(args[0], COMANDO_TRANSFERIR) == 0) {
 
 			int idConta1, idConta2, valor;
@@ -212,7 +223,7 @@ int main (int argc, char** argv) {
 			idConta2 = atoi(args[2]);
 			valor = atoi(args[3]);
 
-			cria_trabalho(OP_TRANSFERIR, idConta1, idConta2, valor);
+			cria_trabalho(COMANDO_TRANSFERIR, OP_TRANSFERIR, idConta1, idConta2, valor);
 		}
 					
 		/* Simular */
@@ -252,9 +263,11 @@ int main (int argc, char** argv) {
 						
 						pidFilhos[nFilhos++] = pid;
 					}
-				
+
 				pthread_mutex_unlock(&count_mutex);
 			}
+
+			fprintf(logFile, "%d: %s %d\n", main_tid, COMANDO_SIMULAR, numAnos);
 		}
 
 		else 
@@ -300,18 +313,16 @@ void funcaoSaida(int nFilhos) {
 		printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[j]);
 	}
 
-	fclose(logFile);
-
 	printf("--\n");
 	printf("i-banco terminou.\n");
 }
 
 /* Envia um signal a todos os processos criados */
 void enviarSignal(pid_t pidFilhos[], int nFilhos) {
-		int i;
+	int i;
 
-		for (i = 0; i < nFilhos; i++) 
-				kill(pidFilhos[i], SIGUSR1);
+	for (i = 0; i < nFilhos; i++) 
+		kill(pidFilhos[i], SIGUSR1);
 }
 
 /* Cria uma pool de NUM_TRABALHADORAS tarefas e associa-as 'a tarefa_trabalhadora */
@@ -332,9 +343,10 @@ void criaPoolTarefas() {
 	A criacao do trabalho consiste em colocar a operacao no buffer (cmd_buffer) na forma de comando_t, de modo 
 	a ser posteriormente executada. 
 	Funciona como um produtor. */
-void cria_trabalho(int oper, int accountID1, int accountID2, int moneyValue) {
+void cria_trabalho(const char* op_comando, int oper, int accountID1, int accountID2, int moneyValue) {
 
 	comando_t trabalho;
+	trabalho.op_texto = op_comando;
 	trabalho.operacao = oper;
 	trabalho.idConta1 = accountID1;
 	trabalho.idConta2 = accountID2;
@@ -349,11 +361,9 @@ void cria_trabalho(int oper, int accountID1, int accountID2, int moneyValue) {
 	cmd_buffer[buff_write_idx] = trabalho;
 	buff_write_idx = (buff_write_idx + 1) % CMD_BUFFER_DIM;
 
-
 	pthread_mutex_lock(&count_mutex);
 	count++;
 	pthread_mutex_unlock(&count_mutex);
-
 
 	pthread_mutex_unlock(&trinco_write); 
 	/* --------------------- Fim de exclusao mutua ------------------- */
@@ -401,11 +411,14 @@ void* tarefa_trabalhadora(void *dummy) {
 		pthread_mutex_lock(&trinco_log);
 		/*----*/ 
 		
-		fprintf(logFile, "%d: %d\n", tid, trabalho.operacao);
+		if (trabalho.operacao == OP_LERSALDO)
+			fprintf(logFile, "%d: %s %d\n", tid, trabalho.op_texto, trabalho.idConta1);
+
+		else
+			fprintf(logFile, "%d: %s %d %d\n", tid, trabalho.op_texto, trabalho.idConta1, trabalho.valor);
 		
 		/*----*/
 		pthread_mutex_unlock(&trinco_log);
-
 	}
 
 	return NULL;
@@ -483,13 +496,5 @@ void realiza_trabalho(comando_t trabalho) {
 
 		default:
 			printf("Erro: valor %d desconhecido.\n", oper);
-	}
-}
-
-char* nomeOperacao(int opCode) {
-
-	switch (opCode) {
-
-		
 	}
 }
