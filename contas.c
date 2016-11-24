@@ -62,9 +62,6 @@ void simular(int numAnos) {
 
   int ano, i, saldo;
 
-  if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
-    perror ("Erro.");                           /* caso haja erro */
-
   for (ano = 0; ano <= numAnos; ano++) {
     
     printf("SIMULACAO: Ano %d\n", ano);

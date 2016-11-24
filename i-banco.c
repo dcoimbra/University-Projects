@@ -1,7 +1,12 @@
 /*
-// Projeto SO - exercicio 2, version 1
+// Projeto SO - exercicio 3, version 1
 // Sistemas Operativos, DEI/IST/ULisboa 2016-17
 */
+
+/*
+// 57842 - Filipa Marques
+// 84708 - David Coimbra
+*/ 
 
 #include "commandlinereader.h"
 #include "contas.h"
@@ -13,6 +18,9 @@
 #include <sys/wait.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <sys/syscall.h>
+
+#define gettid() syscall(SYS_gettid)
 
 #define COMANDO_DEBITAR "debitar"
 #define COMANDO_CREDITAR "creditar"
@@ -54,6 +62,7 @@ void realiza_trabalho(comando_t trabalho);
 pthread_mutex_t trinco_write;
 pthread_mutex_t trinco_read;
 pthread_mutex_t trincos_contas[NUM_CONTAS];
+pthread_mutex_t trinco_log;
 
 sem_t sem_write;
 sem_t sem_read;
@@ -68,6 +77,7 @@ comando_t cmd_buffer[CMD_BUFFER_DIM];
 
 pthread_t tid[NUM_TRABALHADORAS];
 
+FILE *logFile;
 
 int main (int argc, char** argv) {
 
@@ -92,10 +102,14 @@ int main (int argc, char** argv) {
 	}
 
 	pthread_mutex_init(&count_mutex, NULL);
+	pthread_mutex_init(&trinco_log, NULL);
+
 	pthread_cond_init(&count_cond, NULL);
 
 	if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
     	perror ("Erro.");                           /* caso haja erro */
+
+	logFile = fopen("log.txt", "a");
 
 	criaPoolTarefas();
 
@@ -229,11 +243,13 @@ int main (int argc, char** argv) {
 					pid = fork();
 
 					if (pid == 0) {
+						
 						simular(numAnos);
 						exit(EXIT_SUCCESS); /* retorna ao processo pai */
 					}
 
 					else {
+						
 						pidFilhos[nFilhos++] = pid;
 					}
 				
@@ -283,6 +299,8 @@ void funcaoSaida(int nFilhos) {
 		j--;
 		printf("FILHO TERMINADO (PID=%d; terminou abruptamente)\n", pids_failure[j]);
 	}
+
+	fclose(logFile);
 
 	printf("--\n");
 	printf("i-banco terminou.\n");
@@ -351,6 +369,7 @@ void* tarefa_trabalhadora(void *dummy) {
 	while(1) {
 
 		comando_t trabalho;
+		pid_t tid = gettid();
 		
 		/* Consome uma vaga para leitura do buffer. Se nao houver vagas, bloqueia-se e espera que haja. */
 		sem_wait(&sem_read);
@@ -370,9 +389,23 @@ void* tarefa_trabalhadora(void *dummy) {
 		realiza_trabalho(trabalho);
 
 		pthread_mutex_lock(&count_mutex);
+		/*----*/
+		
 		count--;
 		pthread_cond_signal(&count_cond);
+		
+		/*----*/
 		pthread_mutex_unlock(&count_mutex);
+		
+		
+		pthread_mutex_lock(&trinco_log);
+		/*----*/ 
+		
+		fprintf(logFile, "%d: %d\n", tid, trabalho.operacao);
+		
+		/*----*/
+		pthread_mutex_unlock(&trinco_log);
+
 	}
 
 	return NULL;
@@ -450,5 +483,13 @@ void realiza_trabalho(comando_t trabalho) {
 
 		default:
 			printf("Erro: valor %d desconhecido.\n", oper);
+	}
+}
+
+char* nomeOperacao(int opCode) {
+
+	switch (opCode) {
+
+		
 	}
 }
