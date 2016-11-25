@@ -414,6 +414,9 @@ void* tarefa_trabalhadora(void *dummy) {
 		if (trabalho.operacao == OP_LERSALDO)
 			fprintf(logFile, "%d: %s %d\n", tid, trabalho.op_texto, trabalho.idConta1);
 
+		else if (trabalho.operacao == OP_TRANSFERIR)
+			fprintf(logFile, "%d: %s %d %d %d\n", tid, trabalho.op_texto, trabalho.idConta1, trabalho.idConta2, trabalho.valor);
+
 		else
 			fprintf(logFile, "%d: %s %d %d\n", tid, trabalho.op_texto, trabalho.idConta1, trabalho.valor);
 		
