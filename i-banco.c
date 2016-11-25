@@ -111,8 +111,6 @@ int main (int argc, char** argv) {
 	if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
     	perror ("Erro.");                           /* caso haja erro */
 
-	logFile = fopen("log.txt", "a");
-
 	criaPoolTarefas();
 
 	inicializarContas();
@@ -143,6 +141,8 @@ int main (int argc, char** argv) {
 				pthread_join((tid[i]), NULL);   /* de seguida fica 'a espera que todas as threads terminem antes de sair do programa. */
 			
 			funcaoSaida(nFilhos);
+
+			logFile = fopen("log.txt", "a");
 
 			if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
 				fprintf(logFile, "%d: %s %s\n", main_tid, COMANDO_SAIR, COMANDO_SAIR_AGORA);
@@ -267,7 +267,9 @@ int main (int argc, char** argv) {
 				pthread_mutex_unlock(&count_mutex);
 			}
 
+			logFile = fopen("log.txt", "a");
 			fprintf(logFile, "%d: %s %d\n", main_tid, COMANDO_SIMULAR, numAnos);
+			fclose(logFile);
 		}
 
 		else 
@@ -411,6 +413,8 @@ void* tarefa_trabalhadora(void *dummy) {
 		pthread_mutex_lock(&trinco_log);
 		/*----*/ 
 		
+		logFile = fopen("log.txt", "a");
+
 		if (trabalho.operacao == OP_LERSALDO)
 			fprintf(logFile, "%d: %s %d\n", tid, trabalho.op_texto, trabalho.idConta1);
 
@@ -420,6 +424,8 @@ void* tarefa_trabalhadora(void *dummy) {
 		else
 			fprintf(logFile, "%d: %s %d %d\n", tid, trabalho.op_texto, trabalho.idConta1, trabalho.valor);
 		
+		fclose(logFile);
+
 		/*----*/
 		pthread_mutex_unlock(&trinco_log);
 	}
