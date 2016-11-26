@@ -55,7 +55,6 @@ typedef struct {
 void funcaoSaida(int nFilhos);
 void enviarSignal(int pidFilhos[], int nFilhos);
 void criaPoolTarefas();
-
 void cria_trabalho(const char* op_comando, int oper, int accountID1, int accountID2, int moneyValue);
 void* tarefa_trabalhadora(void *dummy);
 void realiza_trabalho(comando_t trabalho);
@@ -117,8 +116,9 @@ int main (int argc, char** argv) {
 	if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
     	perror ("Erro.");                           /* caso haja erro */
 
-	/* abrir o ficheiro de log para escrita */
-	logFileDescriptor = open("log.txt", O_WRONLY);
+	/* abrir o ficheiro de log para escrita (criando se nao existe com permissao para o utilizador atual escrever) */
+
+	logFileDescriptor = open("log.txt", O_CREAT | O_WRONLY, S_IWUSR);
 
 	criaPoolTarefas();
 

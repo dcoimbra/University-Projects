@@ -11,3 +11,6 @@ contas.o: contas.c contas.h
 
 commandlinereader.o: commandlinereader.c commandlinereader.h
 	gcc -c $(CFLAGS) commandlinereader.c commandlinereader.h
+
+clean:
+	rm i-banco *.o *.gch log.txt

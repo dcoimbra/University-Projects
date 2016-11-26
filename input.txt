@@ -1,10 +1,7 @@
+simular 0
 creditar 1 1000
-creditar 2 2000
-transferir 1 2 300
-simular 1
-transferir 2 3 500
+debitar 1 300
+simular 0
 lerSaldo 1
-lerSaldo 2
-simular 1
-lerSaldo 3
+transferir 1 2 300
 sair agora
