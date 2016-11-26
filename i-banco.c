@@ -19,8 +19,8 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <sys/syscall.h>
-
-#define gettid() syscall(SYS_gettid)
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #define COMANDO_DEBITAR "debitar"
 #define COMANDO_CREDITAR "creditar"
@@ -63,7 +63,7 @@ void realiza_trabalho(comando_t trabalho);
 pthread_mutex_t trinco_write;
 pthread_mutex_t trinco_read;
 pthread_mutex_t trincos_contas[NUM_CONTAS];
-pthread_mutex_t trinco_log;
+pthread_mutex_t log_mutex;
 
 sem_t sem_write;
 sem_t sem_read;
@@ -78,7 +78,8 @@ comando_t cmd_buffer[CMD_BUFFER_DIM];
 
 pthread_t tid[NUM_TRABALHADORAS];
 
-FILE *logFile;
+/* Descritor do ficheiro para onde escrever o log*/
+int logFileDescriptor;
 
 int main (int argc, char** argv) {
 
@@ -86,10 +87,17 @@ int main (int argc, char** argv) {
 	char buffer[BUFFER_SIZE];
 
 	pid_t pidFilhos[MAX_CHILDREN];
-	pid_t main_tid = gettid();
+	
+	pthread_t main_tid = pthread_self();
 	
 	int nFilhos = 0;  /* numero de processos filho criados */
 	int i;
+
+	/* Buffer para guardar os comandos executados na thread principal */
+	char logBufferMain[BUFFER_SIZE];
+
+	/* numero de carateres a escrever no ficheiro */
+	int toWrite;
 
 /* --- inicializacao dos mutexes e dos semaforos --- */
 	pthread_mutex_init(&(trinco_write), NULL);
@@ -98,18 +106,19 @@ int main (int argc, char** argv) {
 	sem_init(&sem_write, 0, CMD_BUFFER_DIM);
 	sem_init(&sem_read, 0, 0);
 
-	for (i = 0; i < NUM_CONTAS; ++i) {
-		
+	for (i = 0; i < NUM_CONTAS; ++i) 
 		pthread_mutex_init(&(trincos_contas[i]), NULL);
-	}
-
+	
 	pthread_mutex_init(&count_mutex, NULL);
-	pthread_mutex_init(&trinco_log, NULL);
+	pthread_mutex_init(&log_mutex, NULL);
 
 	pthread_cond_init(&count_cond, NULL);
 
 	if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
     	perror ("Erro.");                           /* caso haja erro */
+
+	/* abrir o ficheiro de log para escrita */
+	logFileDescriptor = open("log.txt", O_WRONLY);
 
 	criaPoolTarefas();
 
@@ -130,8 +139,16 @@ int main (int argc, char** argv) {
 			printf("i-banco vai terminar.\n--\n");
 
 			/* Sair Agora */
-			if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
+			if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0) {
+				
 				enviarSignal(pidFilhos, nFilhos);
+
+				/* o buffer e' preenchido com o comando que foi executado */ 
+				toWrite = snprintf(logBufferMain, BUFFER_SIZE, "%lu: %s %s\n", main_tid, COMANDO_SAIR, COMANDO_SAIR_AGORA);
+			}
+
+			else
+				toWrite = snprintf(logBufferMain, BUFFER_SIZE, "%lu: %s\n", main_tid, COMANDO_SAIR);
 	
 			for (i = 0; i < NUM_TRABALHADORAS; i++) 
 				cria_trabalho(COMANDO_SAIR, OP_SAIR, 0, 0, 0);	/* no comando sair e' mandado o comando de saida a cada thread,			   */
@@ -141,16 +158,16 @@ int main (int argc, char** argv) {
 				pthread_join((tid[i]), NULL);   /* de seguida fica 'a espera que todas as threads terminem antes de sair do programa. */
 			
 			funcaoSaida(nFilhos);
+			
+			pthread_mutex_lock(&log_mutex);
+			/* -- Inicio de seccao critica da escrita em ficheiro de log -- */
 
-			logFile = fopen("log.txt", "a");
+			write(logFileDescriptor, logBufferMain, toWrite);
+			close(logFileDescriptor);
 
-			if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
-				fprintf(logFile, "%d: %s %s\n", main_tid, COMANDO_SAIR, COMANDO_SAIR_AGORA);
+			/* -- Fim de seccao critica da escrita em ficheiro de log ----- */
+			pthread_mutex_unlock(&log_mutex);
 
-			else
-				fprintf(logFile, "%d: %s\n", main_tid, COMANDO_SAIR);
-
-			fclose(logFile);
 			exit(EXIT_SUCCESS);
 		}
 		
@@ -244,7 +261,9 @@ int main (int argc, char** argv) {
 				printf("%s(%d): Erro.\n\n", COMANDO_SIMULAR, numAnos);
 
 			else {
+				
 				pthread_mutex_lock(&count_mutex);
+				/* -- Inicio de seccao critica para verificacao do contador de trabalhos -- */
 
 				while(count != 0) {
 					
@@ -255,6 +274,7 @@ int main (int argc, char** argv) {
 
 					if (pid == 0) {
 						
+						logFileDescriptor = -1;
 						simular(numAnos);
 						exit(EXIT_SUCCESS); /* retorna ao processo pai */
 					}
@@ -263,13 +283,18 @@ int main (int argc, char** argv) {
 						
 						pidFilhos[nFilhos++] = pid;
 					}
-
+				/* -- Fim de seccao critica para verificacao do contador de trabalhos ---- */
 				pthread_mutex_unlock(&count_mutex);
 			}
 
-			logFile = fopen("log.txt", "a");
-			fprintf(logFile, "%d: %s %d\n", main_tid, COMANDO_SIMULAR, numAnos);
-			fclose(logFile);
+			pthread_mutex_lock(&log_mutex);
+			/* -- Inicio de seccao critica da escrita em ficheiro de log -- */
+			
+			toWrite = snprintf(logBufferMain, BUFFER_SIZE, "%lu: %s %d\n", main_tid, COMANDO_SIMULAR, numAnos);
+			write(logFileDescriptor, logBufferMain, toWrite);
+
+			/* -- Fim de seccao critica da escrita em ficheiro de log ----- */
+			pthread_mutex_unlock(&log_mutex);
 		}
 
 		else 
@@ -357,18 +382,22 @@ void cria_trabalho(const char* op_comando, int oper, int accountID1, int account
 	/* Consome uma vaga para a escrita no buffer. Se nao houver vagas, bloqueia-se e espera que haja. */
 	sem_wait(&sem_write);
 
-	/* ----- A operacao e' colocada no buffer em exclusao mutua. ----- */
 	pthread_mutex_lock(&trinco_write);
+	/* -- Inicio de seccao critica para escrita no buffer ----------------------- */
 
 	cmd_buffer[buff_write_idx] = trabalho;
 	buff_write_idx = (buff_write_idx + 1) % CMD_BUFFER_DIM;
 
 	pthread_mutex_lock(&count_mutex);
+	/* -- Inicio de seccao critica para incremento do contador de trabalhos -- */
+
 	count++;
+
+	/* -- Fim de seccao critica para incremento do contador de trabalhos ----- */
 	pthread_mutex_unlock(&count_mutex);
 
+	/* -- Fim de seccao critica para escrita no buffer -------------------------- */
 	pthread_mutex_unlock(&trinco_write); 
-	/* --------------------- Fim de exclusao mutua ------------------- */
 	
 	/* Assinala aos consumidores que ha operacoes para serem executadas. */
 	sem_post(&sem_read);
@@ -381,17 +410,20 @@ void* tarefa_trabalhadora(void *dummy) {
 	while(1) {
 
 		comando_t trabalho;
-		pid_t tid = gettid();
+		pthread_t tid = pthread_self();
+		char logBufferThreads[BUFFER_SIZE];
+		int toWrite;
 		
 		/* Consome uma vaga para leitura do buffer. Se nao houver vagas, bloqueia-se e espera que haja. */
 		sem_wait(&sem_read);
 
-	/* ----- Leitura dos comandos a partir do buffer feita em exclusao mutua -----*/
 		pthread_mutex_lock(&trinco_read);
-
+		/* -- Inicio de seccao critica para leitura do buffer -- */
+		
 		trabalho = cmd_buffer[buff_read_idx];
 		buff_read_idx = (buff_read_idx + 1) % CMD_BUFFER_DIM;
 
+		/* -- Fim de seccao critica para leitura do buffer ----- */ 
 		pthread_mutex_unlock(&trinco_read); 
 	/* ---------------------- Fim de exclusao mutua ----------------------------- */
 
@@ -401,33 +433,34 @@ void* tarefa_trabalhadora(void *dummy) {
 		realiza_trabalho(trabalho);
 
 		pthread_mutex_lock(&count_mutex);
-		/*----*/
+		/* -- Inicio de seccao critica para decremento do contador de trabalhos -- */
 		
 		count--;
 		pthread_cond_signal(&count_cond);
 		
-		/*----*/
+		/* -- Fim de seccao critica para incremento do contador de trabalhos ----- */
 		pthread_mutex_unlock(&count_mutex);
 		
+		/* a escrita no ficheiro log e' apenas feita pelo processo pai */
+		if (logFileDescriptor != -1) {
 		
-		pthread_mutex_lock(&trinco_log);
-		/*----*/ 
-		
-		logFile = fopen("log.txt", "a");
+			pthread_mutex_lock(&log_mutex);
+			/* -- Inicio de seccao critica para escrita em ficheiro de log -- */
+			
+			if (trabalho.operacao == OP_LERSALDO)
+				toWrite = snprintf(logBufferThreads, BUFFER_SIZE, "%lu: %s %d\n", tid, trabalho.op_texto, trabalho.idConta1);
 
-		if (trabalho.operacao == OP_LERSALDO)
-			fprintf(logFile, "%d: %s %d\n", tid, trabalho.op_texto, trabalho.idConta1);
+			else if (trabalho.operacao == OP_TRANSFERIR)
+				toWrite = snprintf(logBufferThreads, BUFFER_SIZE, "%lu: %s %d %d %d\n", tid, trabalho.op_texto, trabalho.idConta1, trabalho.idConta2, trabalho.valor);
 
-		else if (trabalho.operacao == OP_TRANSFERIR)
-			fprintf(logFile, "%d: %s %d %d %d\n", tid, trabalho.op_texto, trabalho.idConta1, trabalho.idConta2, trabalho.valor);
+			else
+				toWrite = snprintf(logBufferThreads, BUFFER_SIZE, "%lu: %s %d %d\n", tid, trabalho.op_texto, trabalho.idConta1, trabalho.valor);
 
-		else
-			fprintf(logFile, "%d: %s %d %d\n", tid, trabalho.op_texto, trabalho.idConta1, trabalho.valor);
-		
-		fclose(logFile);
+			write(logFileDescriptor, logBufferThreads, toWrite);		
 
-		/*----*/
-		pthread_mutex_unlock(&trinco_log);
+			/* -- Fim de seccao critica para escrita em ficheiro de log -- */
+			pthread_mutex_unlock(&log_mutex);
+		}
 	}
 
 	return NULL;
