@@ -3,52 +3,7 @@
 // Sistemas Operativos, DEI/IST/ULisboa 2016-17
 */
 
-#include "commandlinereader.h"
-#include "contas.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-
-#define COMANDO_DEBITAR "debitar"
-#define COMANDO_CREDITAR "creditar"
-#define COMANDO_LER_SALDO "lerSaldo"
-#define COMANDO_SIMULAR "simular"
-#define COMANDO_TRANSFERIR "transferir"
-#define COMANDO_SAIR "sair"
-#define COMANDO_SAIR_AGORA "agora"
-
-#define OP_DEBITAR 2
-#define OP_CREDITAR 3
-#define OP_LERSALDO 4
-#define OP_TRANSFERIR 5
-#define OP_SIMULAR 6
-#define OP_SAIR 1
-#define OP_SAIR_AGORA 0
-
-#define MAX_CHILDREN 20
-
-#define NUM_TRABALHADORAS 3
-#define CMD_BUFFER_DIM (NUM_TRABALHADORAS * 2)
-
-#define MAX_STR_SIZE 48
-#define MAX_BUF 1024
-
-#define FILE "log.txt"
-
-typedef struct {
-		int operacao;
-		int idConta1;
-		int idConta2;
-		int valor;
-		char fifoL[MAX_STR_SIZE];
-} comando_t;
+#include "i-banco.h"
 
 void funcaoSaida(int nFilhos);
 void enviarSignal(int pidFilhos[], int nFilhos);
@@ -104,9 +59,9 @@ int main (int argc, char** argv) {
 	pthread_cond_init(&count_cond, NULL);
 
 	if (signal(SIGUSR1, tratarSignal) == SIG_ERR) /* Faz o handle do signal e indica*/
-    	perror ("Erro.");                           /* caso haja erro */
+    	perror ("Signal(SIGUSR1");                           /* caso haja erro */
 
-	logFileDescriptor = open("log.txt", O_CREAT | O_RDWR | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
+	logFileDescriptor = open("log.txt", O_CREAT | O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
 	if(logFileDescriptor == -1) {
 		perror("open(logFileDescriptor)");
 	}

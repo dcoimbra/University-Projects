@@ -3,59 +3,13 @@
 // Sistemas Operativos, DEI/IST/ULisboa 2016-17
 */
 
-#include "commandlinereader.h"
-#include "contas.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <time.h>
-
-
-#define COMANDO_DEBITAR "debitar"
-#define COMANDO_CREDITAR "creditar"
-#define COMANDO_LER_SALDO "lerSaldo"
-#define COMANDO_SIMULAR "simular"
-#define COMANDO_TRANSFERIR "transferir"
-#define COMANDO_SAIR "sair"
-#define COMANDO_SAIR_AGORA "agora"
-#define COMANDO_SAIR_TERMINAL "sair-terminal"
-
-#define OP_DEBITAR 2
-#define OP_CREDITAR 3
-#define OP_LERSALDO 4
-#define OP_TRANSFERIR 5
-#define OP_SIMULAR 6
-#define OP_SAIR 1
-#define OP_SAIR_AGORA 0
-
-#define MAXARGS 4
-#define BUFFER_SIZE 100
-
-#define MAX_CHILDREN 20
-
-#define NUM_TRABALHADORAS 3
-#define CMD_BUFFER_DIM (NUM_TRABALHADORAS * 2)
-
-#define MAX_STR_SIZE 48
-#define MAX_BUF 1024
-
-typedef struct {
-		int operacao;
-		int idConta1;
-		int idConta2;
-		int valor;
-		char fifoL[MAX_STR_SIZE];
-} comando_t;
-
+#include "i-banco.h"
 
 void envia_trabalho(int oper, int accountID1, int accountID2, int moneyValue, int fdE, char* fifoL);
+
+void funcSP() { }
+
+int fdLeitura;
 
 
 int main (int argc, char** argv) {
@@ -64,18 +18,22 @@ int main (int argc, char** argv) {
 	char buffer[BUFFER_SIZE];
 
 	char fifoLeitura[MAX_STR_SIZE];
-	char *fifo_escrita;
+	char *fifoEscrita;
 
 	int fdEscrita;
+
+	if (signal(SIGPIPE, funcSP) == SIG_ERR) {
+		perror("signal(SIGPIPE)");
+	}
 
 	if(argc < 2) {
 		printf("Erro: numero de argumentos insuficiente.");
 		exit(EXIT_FAILURE);
 	}
 
-	fifo_escrita = argv[1];
+	fifoEscrita = argv[1];
 
-	if ((fdEscrita = open(fifo_escrita, O_WRONLY)) == -1) {
+	if ((fdEscrita = open(fifoEscrita, O_WRONLY)) == -1) {
 		perror("open(fifo)");
 	}
 
@@ -83,6 +41,7 @@ int main (int argc, char** argv) {
     if(mkfifo(fifoLeitura, 0666) != 0) {
     	perror("mkfifo");
     }
+
 
 	printf("Bem-vinda/o ao i-banco\n\n");
 			
@@ -230,7 +189,10 @@ void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdE
 	
 
 	time(&start_t);
-	wrValue = write(fdEscrita, (void*)&trabalho, sizeof(trabalho));
+	if( (wrValue = write(fdEscrita, (void*)&trabalho, sizeof(trabalho))) == -1)  {
+		printf("i-banco-pipe nao existe\n Por favor feche o terminal (sair-terminal)\n");
+		return;
+	}
 	
 	printf("wr value: %d\n", wrValue);
 
@@ -252,4 +214,5 @@ void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdE
 	close(fdLeitura);
 
 }
+
 
