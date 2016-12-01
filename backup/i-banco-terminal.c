@@ -22,40 +22,31 @@ int main (int argc, char** argv) {
 	int fdEscrita;
 
 	if (signal(SIGPIPE, funcSP) == SIG_ERR) {
-		
 		perror("signal(SIGPIPE)");
-		exit(EXIT_FAILURE);
 	}
 
-	if (argc < 2) {
-		
-		printf("Erro: numero de argumentos insuficiente.\n");
+	if(argc < 2) {
+		printf("Erro: numero de argumentos insuficiente.");
 		exit(EXIT_FAILURE);
 	}
 
 	fifoEscrita = argv[1];
 
 	if ((fdEscrita = open(fifoEscrita, O_WRONLY)) == -1) {
-		
-		perror("open(fifoEscrita)");
-		exit(EXIT_FAILURE);
+		perror("open(fifo)");
 	}
-	
 
 	snprintf(fifoLeitura, MAX_STR_SIZE, "/tmp/i-banco-pipe-%d", getpid());
-    
-    if (mkfifo(fifoLeitura, 0666) != 0) {
-    	
-    	perror("mkfifo(fifoLeitura)");
-    	exit(EXIT_FAILURE);
+    if(mkfifo(fifoLeitura, 0666) != 0) {
+    	perror("mkfifo");
     }
 
 
 	printf("Bem-vinda/o ao i-banco\n\n");
 			
 	while (1) {
-		
 		int numargs;
+		printf(">> ");
 
 		numargs = readLineArguments(args, MAXARGS+1, buffer, BUFFER_SIZE);
 
@@ -63,29 +54,22 @@ int main (int argc, char** argv) {
 		if (numargs < 0 ||
 		   (numargs > 0 && (strcmp(args[0], COMANDO_SAIR) == 0))) {
 
+
 			/* Sair Agora */
 			if ((args[1] != NULL) && (strcmp(args[1], COMANDO_SAIR_AGORA)) == 0)
 				envia_trabalho(OP_SAIR_AGORA, 0, 0, 0, fdEscrita, fifoLeitura);	
 
 			else
 				envia_trabalho(OP_SAIR, 0, 0, 0, fdEscrita, fifoLeitura);
+
 		}
 
 		else if (strcmp(args[0], COMANDO_SAIR_TERMINAL) == 0) {
 
 			printf("i-banco-terminal vai terminar.\n--\n");
 
-			if (close(fdEscrita) == -1) {
-
-				perror("close(fdEscrita)");
-				exit(EXIT_FAILURE);
-			}
-
-			if (unlink(fifoLeitura) == -1) {
-
-				perror("unlink(fifoLeitura");
-				exit(EXIT_FAILURE);
-			}
+			close(fdEscrita);
+			unlink(fifoLeitura);
 
 			printf("\n--\ni-banco-terminal terminou.\n");
 			exit(EXIT_SUCCESS);
@@ -191,11 +175,9 @@ int main (int argc, char** argv) {
 void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdEscrita, char* fifoLeitura) {
 	
 	time_t start_t, end_t;
-	
 	int fdLeitura;
-	int  wrValue = 0;
-	
 	char buf[MAX_BUF];
+	int  wrValue = 0;
 
 	comando_t trabalho;
 	trabalho.operacao = oper;
@@ -206,50 +188,28 @@ void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdE
 	
 
 	time(&start_t);
-
-	if (start_t == -1) {
-
-		perror("time(start_t)");
-		exit(EXIT_FAILURE);
-	} 
+	if( (wrValue = write(fdEscrita, (void*)&trabalho, sizeof(trabalho))) == -1)  {
+		printf("i-banco-pipe nao existe\n Por favor feche o terminal (sair-terminal)\n");
+		return;
+	}
 	
-	if ((wrValue = write(fdEscrita, (void*)&trabalho, sizeof(trabalho))) == -1)  {
-		
-		printf("i-banco-pipe nao existe\n Por favor feche o terminal (sair-terminal) ou abra um novo i-banco\n");
+	printf("wr value: %d\n", wrValue);
+
+	if(oper == OP_SIMULAR || oper == OP_SAIR || oper == OP_SAIR_AGORA) {
 		return;
 	}
 
-	if (oper == OP_SIMULAR || oper == OP_SAIR || oper == OP_SAIR_AGORA) 
-		return;
-	
-	if ((fdLeitura = open(fifoLeitura, O_RDONLY)) == -1) {
-		
+	printf("aguardando resposta\n");
+	if((fdLeitura = open(fifoLeitura, O_RDONLY)) == -1) {
 		perror("open(fifoLeitura)");
-		exit(EXIT_FAILURE);
 	}
+
 	
-	if (read(fdLeitura, buf, MAX_BUF) == -1) {
-
-		perror("read(fdLeitura, buf, MAX_BUF");
-		exit(EXIT_FAILURE);
-	}
-
+	read(fdLeitura, buf, MAX_BUF);
 	time(&end_t);
-
-	if (end_t == -1) {
-
-		perror ("time(end_t)");
-		exit(EXIT_FAILURE);	
-	}
-
 	printf("%s", buf);
 	printf("tempo de execucao: %ds\n", (int)difftime(end_t, start_t));
 
-	if (close(fdLeitura) == -1) {
+	close(fdLeitura);
 
-		perror("close(fdLeitura)");
-		exit(EXIT_FAILURE);
-	}
 }
-
-
