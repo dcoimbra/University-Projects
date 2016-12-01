@@ -4,6 +4,19 @@
 */
 
 #include "i-banco.h"
+#include "commandlinereader.h"
+#include "contas.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <time.h>
 
 void envia_trabalho(int oper, int accountID1, int accountID2, int moneyValue, int fdE, char* fifoL);
 
@@ -56,7 +69,7 @@ int main (int argc, char** argv) {
 	while (1) {
 		
 		int numargs;
-
+		printf(">> ");
 		numargs = readLineArguments(args, MAXARGS+1, buffer, BUFFER_SIZE);
 
 		/* EOF (end of file) do stdin ou comando "sair" */
@@ -78,6 +91,7 @@ int main (int argc, char** argv) {
 			if (close(fdEscrita) == -1) {
 
 				perror("close(fdEscrita)");
+				unlink(fifoLeitura);
 				exit(EXIT_FAILURE);
 			}
 
@@ -212,21 +226,24 @@ void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdE
 		perror("time(start_t)");
 		exit(EXIT_FAILURE);
 	} 
-	
-	if ((wrValue = write(fdEscrita, (void*)&trabalho, sizeof(trabalho))) == -1)  {
+	printf("vou enviar o comando: ...");
+	if ((wrValue = write(fdEscrita, (void*)&trabalho, sizeof(trabalho))) == -1 || wrValue == 0)  {
 		
 		printf("i-banco-pipe nao existe\n Por favor feche o terminal (sair-terminal) ou abra um novo i-banco\n");
 		return;
 	}
+	printf("comando enviado\n");
 
 	if (oper == OP_SIMULAR || oper == OP_SAIR || oper == OP_SAIR_AGORA) 
 		return;
 	
+	printf("estou 'a espera de resposta\n");
 	if ((fdLeitura = open(fifoLeitura, O_RDONLY)) == -1) {
 		
 		perror("open(fifoLeitura)");
 		exit(EXIT_FAILURE);
 	}
+	printf("ja' abri, vou tentar ler\n");
 	
 	if (read(fdLeitura, buf, MAX_BUF) == -1) {
 

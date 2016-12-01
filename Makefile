@@ -22,4 +22,6 @@ commandlinereader.o: commandlinereader.c commandlinereader.h
 	gcc -c $(CFLAGS) commandlinereader.c commandlinereader.h
 
 remove:
-	rm -f *.o *.gch
+	rm -f *.o *.gch i-banco-sim*
+	
+	

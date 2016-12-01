@@ -4,6 +4,19 @@
 */
 
 #include "i-banco.h"
+#include "commandlinereader.h"
+#include "contas.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <time.h>
 
 void funcaoSaida(int nFilhos);
 void enviarSignal(int pidFilhos[], int nFilhos);
@@ -120,6 +133,7 @@ int main (int argc, char** argv) {
 	if (fdLeitura == -1) {
 		
 		perror ("open(fifoLeitura)");
+		unlink(fifoLeitura);
 		exit(EXIT_FAILURE);
 	}
 			
@@ -135,6 +149,7 @@ int main (int argc, char** argv) {
 
 			perror ("read(fdLeitura)");
 			close(fdLeitura);
+			unlink(fifoLeitura);
 			exit(EXIT_FAILURE); 
 		}
 
@@ -143,6 +158,7 @@ int main (int argc, char** argv) {
 	    	if (close(fdLeitura) == -1) {
 
 	    		perror ("close(fdLeitura)");
+				unlink(fifoLeitura);
 	    		exit(EXIT_FAILURE);
 	    	}
 	    	
@@ -151,6 +167,7 @@ int main (int argc, char** argv) {
 	    	if (fdLeitura == -1) {
 	    		
 	    		perror ("open(fifoLeitura)");
+				unlink(fifoLeitura);
 	    		exit(EXIT_FAILURE);
 	    	}
 
@@ -181,15 +198,24 @@ int main (int argc, char** argv) {
 
 					perror ("pthread_join(tid)");
 					exit(EXIT_FAILURE);
-				} 
+				}
 			}
 
+			if( close(fdLeitura) == -1) {
+				
+				perror("close(fdLeitura");
+			}
+			
 			if (unlink(fifoLeitura) == -1) {
 
 				perror ("unlink(fifoLeitura)");
 				exit(EXIT_FAILURE);
 			}
+			
 
+
+	
+			printf("ja' terminei tudo, vou esperar pelos filhos.\n");
 			funcaoSaida(nFilhos);
 			exit(EXIT_SUCCESS);
 			
@@ -211,6 +237,8 @@ int main (int argc, char** argv) {
 			if (pthread_mutex_lock(&count_mutex) != 0) {
 
 				perror ("pthread_mutex_lock(count_mutex)");
+				close(fdLeitura);
+				unlink(fifoLeitura);
 				exit(EXIT_FAILURE);
 			}
 
@@ -219,15 +247,18 @@ int main (int argc, char** argv) {
 				if (pthread_cond_wait(&count_cond, &count_mutex) != 0) {
 					
 					perror ("pthread_cond_wait(count_cond, count_mutex)");
+					close(fdLeitura);
+					unlink(fifoLeitura);
 					exit(EXIT_FAILURE);
 				}
 			}
 
-			pid = fork();
-
-			if (pid == -1) {
+			
+			if ( (pid = fork()) == -1) {
 				
 				perror ("fork()");
+				close(fdLeitura);
+				unlink(fifoLeitura);
 				exit(EXIT_FAILURE);
 			}
 
@@ -248,6 +279,7 @@ int main (int argc, char** argv) {
 				if (dup2(sim_fd, STDOUT_FILENO) == -1) {
 					
 					perror("dup2(sim_fd, STDOUT_FILENO)");
+					close(sim_fd);
 					exit(EXIT_FAILURE);
 				}
 
@@ -268,6 +300,8 @@ int main (int argc, char** argv) {
 			if (pthread_mutex_unlock(&count_mutex) != 0) {
 				
 				perror ("pthread_mutex_unlock(count_mutex)");
+				close(fdLeitura);
+				unlink(fifoLeitura);
 				exit(EXIT_FAILURE);
 			}
 		
@@ -288,10 +322,8 @@ void funcaoSaida(int nFilhos) {
 
 	while ((i+j) < (nFilhos)) {
 		
-		pid = wait(&estado);
 
-
-		if (pid == -1) {
+		if (( pid = wait(&estado) ) == -1) {
 
 			perror ("wait()");
 			exit(EXIT_FAILURE);
@@ -333,11 +365,7 @@ void enviarSignal(pid_t pidFilhos[], int nFilhos) {
 
 	for (i = 0; i < nFilhos; i++) { 
 
-		if (kill(pidFilhos[i], SIGUSR1) == -1) {
-
-			perror ("kill(pidFilhos, SIGUSR1)");
-			exit(EXIT_FAILURE);
-		}
+		kill(pidFilhos[i], SIGUSR1);
 	}
 }
 
@@ -624,12 +652,13 @@ void realiza_trabalho(comando_t trabalho) {
 		if (write(fdE, buf, bufSize + 1) == -1) {
 
 			perror("write(fdE, buf, bufSize + 1)");
+			close(fdE);
 			exit(EXIT_FAILURE);
 		}
 
 		if (close(fdE) == -1) {
 
-			perror("close(fdE)\n");
+			perror("close(fdE)");
 			exit(EXIT_FAILURE);
 		}
 	}

@@ -1,19 +1,7 @@
 #ifndef I_BANCO_H
 #define I_BANCO_H
 
-#include "commandlinereader.h"
-#include "contas.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <time.h>
+
 
 
 #define COMANDO_DEBITAR "debitar"
