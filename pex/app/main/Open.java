@@ -2,6 +2,7 @@ package pex.app.main;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.ObjectInputStream;
 
 import pex.app.App;
@@ -48,13 +49,18 @@ public class Open extends Command<App> {
            entity().setCurrentInterpreter(loadedInterpreter);
         }
         
-        catch(IOException e) {
+        catch(FileNotFoundException e) {
         	
             Display errDisplay = new Display();
             errDisplay.add(Message.fileNotFound());
             errDisplay.display();
         }
         
+        catch(IOException e) {
+            
+           throw new InvalidOperation(e.getMessage());
+        }
+
         catch(ClassNotFoundException e) {
         	
             throw new InvalidOperation(e.getMessage());
