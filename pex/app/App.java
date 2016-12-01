@@ -118,10 +118,8 @@ public class App implements AppIO, java.io.Serializable {
             
             try {
             	
-                NewParser parser = new NewParser();
-                Program program = parser.parseFile(datafile, "import");
-                app.getCurrentInterpreter().addProgram(program);
-            } 
+                app.getCurrentInterpreter().readProgramFromFile(datafile, "import");
+            }
 
             catch (ParserException e) {
                 

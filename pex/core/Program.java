@@ -1,6 +1,10 @@
 package pex.core;
 
 import java.io.Serializable;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +24,7 @@ public class Program implements java.io.Serializable {
 	 * This program's name.
 	 */
 	private String _name;
+	private Interpreter _currentInterpreter;
 
 	/**
 	 * Structure for storing the program's expressions.
@@ -33,9 +38,10 @@ public class Program implements java.io.Serializable {
 	 *
 	 * @param programName this program's name.
 	 */
-	public Program(String programName) {
+	public Program(String programName, Interpreter currentInterpreter) {
 		
 		_name = programName;
+		_currentInterpreter = currentInterpreter;
 	}
 
 	/**
@@ -46,6 +52,11 @@ public class Program implements java.io.Serializable {
 	public String getProgramName() {
 		
 		return _name;
+	}
+
+	public Interpreter getCurrentInterpreter() {
+
+		return _currentInterpreter;
 	}
 	
 	/**
@@ -124,6 +135,18 @@ public class Program implements java.io.Serializable {
 		}
 		
 		return allExpressions;
+	}
+
+	public void writeToFile(String fileName) throws IOException {
+
+		String programCode = this.getAsText();
+
+		FileWriter out = new FileWriter(fileName);
+	    BufferedWriter buffer = new BufferedWriter(out);
+	    PrintWriter printer = new PrintWriter(buffer);
+	
+   		printer.write(programCode);
+	   	printer.close();
 	}
 	
 	/**

@@ -42,13 +42,8 @@ public class ReadProgram extends Command<App> {
     	
         try {        
 	
-	        NewParser parser = new NewParser();        
-	        Program program = parser.parseFile(filename, filename);
-	       
-            Interpreter interpreter = entity().getCurrentInterpreter();
-	        interpreter.addProgram(program);
-
-            interpreter.setWasChangedFlag(true);
+	        Interpreter interpreter = entity().getCurrentInterpreter();
+            interpreter.readProgramFromFile(filename, filename);
     	}
     	
     	catch (BadSourceException bse) {

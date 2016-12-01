@@ -27,9 +27,9 @@ public class NewParser {
         _tokenizer.eolIsSignificant(false);
     }
 
-    public Program parseFile(String fileName, String programName) throws BadSourceException, BadNumberException, InvalidExpressionException, 
+    public Program parseFile(String fileName, String programName, Interpreter currentInterpreter) throws BadSourceException, BadNumberException, InvalidExpressionException, 
                                                                                                   MissingClosingParenthesisException, UnknownOperationException, EndOfInputException  {
-        _program = new Program(programName);
+        _program = new Program(programName, currentInterpreter);
 
         try (FileReader reader = new FileReader(fileName)) {
 

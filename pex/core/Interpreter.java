@@ -1,11 +1,29 @@
 package pex.core;
 
 import java.io.Serializable;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+
+
 
 import java.util.HashMap;
 import java.util.Map;
 
 import pex.AppIO;
+
+import pex.app.main.Message;
+
+import pex.parser.NewParser;
+import pex.parser.BadSourceException;
+import pex.parser.ParserException;
+
+import pt.utl.ist.po.ui.Form;
+import pt.utl.ist.po.ui.InputString;
+import pt.utl.ist.po.ui.Display;
+import pt.utl.ist.po.ui.InvalidOperation;
 
 /**
  * Main core entity. Manages and executes programs.
@@ -139,5 +157,40 @@ public class Interpreter implements java.io.Serializable {
 	public void setWasChangedFlag(boolean status) {
 
 		_wasChanged = status;
+	}
+
+	public void save(String fileName) throws IOException {
+
+        FileOutputStream fpOut = new FileOutputStream(fileName);
+		ObjectOutputStream out = new ObjectOutputStream(fpOut);
+        out.writeObject(this);
+	            
+        out.flush();
+        out.close();
+	}
+
+	public Interpreter load(String fileName) throws IOException, ClassNotFoundException {
+
+		FileInputStream fpIn = new FileInputStream(fileName);
+        ObjectInputStream inInterp = new ObjectInputStream(fpIn);
+
+        Interpreter loadedInterpreter = (Interpreter)inInterp.readObject();
+
+        inInterp.close();
+            
+        loadedInterpreter.setFileAssociation(fileName);
+        loadedInterpreter.setWasChangedFlag(false);
+        
+        return loadedInterpreter;
+	}
+
+	public void readProgramFromFile(String fileName, String programName) throws BadSourceException, ParserException {
+
+		NewParser parser = new NewParser();        
+	    Program program = parser.parseFile(fileName, programName, this);
+
+	    this.addProgram(program);
+
+	    this.setWasChangedFlag(true);
 	}
 }

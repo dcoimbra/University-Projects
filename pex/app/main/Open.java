@@ -37,20 +37,15 @@ public class Open extends Command<App> {
         InputString inputFilename = new InputString(f, Message.openFile());
         f.parse();
 
-        String filename = inputFilename.toString();
+        String fileName = inputFilename.toString();
+
+        Interpreter currentInterpreter = entity().getCurrentInterpreter();
 
         try {
             
-            FileInputStream fpIn = new FileInputStream(filename);
-            ObjectInputStream inInterp = new ObjectInputStream(fpIn);
+           Interpreter loadedInterpreter = currentInterpreter.load(fileName);
 
-            Interpreter loadedInterpreter = (Interpreter)inInterp.readObject();
-            
-            loadedInterpreter.setFileAssociation(filename);
-            loadedInterpreter.setWasChangedFlag(false);
-            entity().setCurrentInterpreter(loadedInterpreter);
-            
-	        inInterp.close();
+           entity().setCurrentInterpreter(loadedInterpreter);
         }
         
         catch(IOException e) {

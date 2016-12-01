@@ -44,7 +44,13 @@ public class WriteProgram extends Command<App> {
 	    Interpreter interpreter = entity().getCurrentInterpreter();
 	    Program program = interpreter.getProgram(programID);
 	        
-	    if (program == null) { 
+		Form f2 = new Form();
+        InputString inputFileName = new InputString(f2, Message.programFileName());
+        f2.parse();
+
+        String fileName = inputFileName.toString();
+
+        if (program == null) { 
 	    	
 	    	Display errDisplay = new Display();
 	    	errDisplay.add(Message.noSuchProgram(programID));
@@ -52,23 +58,10 @@ public class WriteProgram extends Command<App> {
 
 	    	return;
 	    }
-	        
-	    String programCode = program.getAsText();
-		
-		Form f2 = new Form();
-        InputString inputFilename = new InputString(f2, Message.programFileName());
-        f2.parse();
-
-        String filename = inputFilename.toString();
 	
 		try { 
 	    
-	    	FileWriter out = new FileWriter(filename);
-	    	BufferedWriter buffer = new BufferedWriter(out);
-	    	PrintWriter printer = new PrintWriter(buffer);
-	
-	    	printer.write(programCode);
-	   		printer.close();
+	    	program.writeToFile(fileName);
     	} 
     	
         catch (IOException e) {

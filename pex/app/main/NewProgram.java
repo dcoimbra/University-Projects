@@ -35,9 +35,10 @@ public class NewProgram extends Command<App> {
     	
         String programID = inputProgramID.toString();
 
-        Program program = new Program(programID);
-
         Interpreter interpreter = entity().getCurrentInterpreter();
+
+        Program program = new Program(programID, interpreter);
+
         interpreter.addProgram(program);
 
         interpreter.setWasChangedFlag(true);

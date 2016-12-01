@@ -36,38 +36,30 @@ public class Save extends Command<App> {
 
         if (!(interpreter.wasChanged())) {
 
-        	return;
+            return;
         }
 
         String fileAssociation = interpreter.getFileAssociation();
+            
+        if (fileAssociation == null) {
+
+            Form f = new Form();
+            InputString inputFileAssociation = new InputString(f, Message.newSaveAs());
+            f.parse();
+
+            fileAssociation = inputFileAssociation.toString();
+            interpreter.setFileAssociation(fileAssociation);
+        }
+
+        try {
         	
-	    if (fileAssociation == null) {
+        	interpreter.save(fileAssociation);
+            interpreter.setWasChangedFlag(false);
+        }
 
-	        Form f = new Form();
-	        InputString inputFileAssociation = new InputString(f, Message.newSaveAs());
-	        f.parse();
+        catch (IOException e) {
 
-	        fileAssociation = inputFileAssociation.toString();
-	        interpreter.setFileAssociation(fileAssociation);
-
-	    }
-
-	    try {
-	
-	        FileOutputStream fpOut = new FileOutputStream(fileAssociation);
-			ObjectOutputStream out = new ObjectOutputStream(fpOut);
-	        out.writeObject(interpreter);
-	            
-	        out.flush();
-	        out.close();
-		   
-	        interpreter.setWasChangedFlag(false);
-		} 
-	    
-
-		catch (IOException e) {
-			
-			throw new InvalidOperation(e.getMessage()); 
-		}
+        	throw new InvalidOperation(e.getMessage());
+        }
     }
 }
