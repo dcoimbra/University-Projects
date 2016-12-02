@@ -1,7 +1,6 @@
 CFLAGS = -g -Wall -pedantic
 
 all: i-banco i-banco-terminal
-	rm -f /tmp/i-banco*
 
 i-banco: i-banco.o contas.o
 	gcc -o i-banco $(CFLAGS) -pthread contas.o i-banco.o
@@ -20,8 +19,4 @@ contas.o: contas.c contas.h
 
 commandlinereader.o: commandlinereader.c commandlinereader.h
 	gcc -c $(CFLAGS) commandlinereader.c commandlinereader.h
-
-remove:
-	rm -f *.o *.gch i-banco-sim*
-	
 	

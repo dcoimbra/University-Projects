@@ -110,7 +110,7 @@ int main (int argc, char** argv) {
     	exit(EXIT_FAILURE);
     }
 
-	logFileDescriptor = open("log.txt", O_CREAT | O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+	logFileDescriptor = open("log.txt", O_CREAT | O_WRONLY | O_APPEND, 0666);
 	
 	if (logFileDescriptor == -1) {
 		
@@ -212,10 +212,6 @@ int main (int argc, char** argv) {
 				exit(EXIT_FAILURE);
 			}
 			
-
-
-	
-			printf("ja' terminei tudo, vou esperar pelos filhos.\n");
 			funcaoSaida(nFilhos);
 			exit(EXIT_SUCCESS);
 			
@@ -253,8 +249,7 @@ int main (int argc, char** argv) {
 				}
 			}
 
-			
-			if ( (pid = fork()) == -1) {
+			if ((pid = fork()) == -1) {
 				
 				perror ("fork()");
 				close(fdLeitura);
@@ -265,6 +260,12 @@ int main (int argc, char** argv) {
 			if (pid == 0) {
 
 				int sim_fd;
+
+				if (close(fdLeitura) == -1) {
+
+					perror("close(fdLeitura");
+					exit(EXIT_FAILURE);
+				}
 				
 				snprintf(simFileName, MAX_STR_SIZE, "i-banco-sim-%d.txt", getpid());
 
@@ -308,6 +309,7 @@ int main (int argc, char** argv) {
 		break;
 
 		default: 
+			
 			printf("Erro: comando desconhecido.\n");
 		}
 	} 
@@ -322,7 +324,6 @@ void funcaoSaida(int nFilhos) {
 
 	while ((i+j) < (nFilhos)) {
 		
-
 		if (( pid = wait(&estado) ) == -1) {
 
 			perror ("wait()");
@@ -641,6 +642,7 @@ void realiza_trabalho(comando_t trabalho) {
 		}
 	}
 
+	/* enviar resultado do comando recebido do terminal */
 	if(bufSize > 0) {
 		
 		if ((fdE = open(fifoEscrita, O_WRONLY)) == -1) {
@@ -651,7 +653,7 @@ void realiza_trabalho(comando_t trabalho) {
 		
 		if (write(fdE, buf, bufSize + 1) == -1) {
 
-			perror("write(fdE, buf, bufSize + 1)");
+			perror("write(fdE, buf, bufSize)");
 			close(fdE);
 			exit(EXIT_FAILURE);
 		}

@@ -1,9 +1,6 @@
 #ifndef I_BANCO_H
 #define I_BANCO_H
 
-
-
-
 #define COMANDO_DEBITAR "debitar"
 #define COMANDO_CREDITAR "creditar"
 #define COMANDO_LER_SALDO "lerSaldo"
@@ -26,7 +23,7 @@
 
 #define MAX_CHILDREN 20
 
-#define NUM_TRABALHADORAS 3
+#define NUM_TRABALHADORAS 2
 #define CMD_BUFFER_DIM (NUM_TRABALHADORAS * 2)
 
 #define MAX_STR_SIZE 48

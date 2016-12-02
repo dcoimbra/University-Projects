@@ -69,6 +69,7 @@ int main (int argc, char** argv) {
 	while (1) {
 		
 		int numargs;
+		
 		printf(">> ");
 		numargs = readLineArguments(args, MAXARGS+1, buffer, BUFFER_SIZE);
 
@@ -226,24 +227,21 @@ void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdE
 		perror("time(start_t)");
 		exit(EXIT_FAILURE);
 	} 
-	printf("vou enviar o comando: ...");
+	
 	if ((wrValue = write(fdEscrita, (void*)&trabalho, sizeof(trabalho))) == -1 || wrValue == 0)  {
 		
 		printf("i-banco-pipe nao existe\n Por favor feche o terminal (sair-terminal) ou abra um novo i-banco\n");
 		return;
 	}
-	printf("comando enviado\n");
 
 	if (oper == OP_SIMULAR || oper == OP_SAIR || oper == OP_SAIR_AGORA) 
 		return;
 	
-	printf("estou 'a espera de resposta\n");
 	if ((fdLeitura = open(fifoLeitura, O_RDONLY)) == -1) {
 		
 		perror("open(fifoLeitura)");
 		exit(EXIT_FAILURE);
 	}
-	printf("ja' abri, vou tentar ler\n");
 	
 	if (read(fdLeitura, buf, MAX_BUF) == -1) {
 
