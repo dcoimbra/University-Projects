@@ -125,7 +125,6 @@ int main (int argc, char** argv) {
 	if (mkfifo(fifoLeitura, 0666) != 0) {
 		
 		perror ("mkfifo(fifoLeitura)");
-		exit(EXIT_FAILURE);
 	}
 
 	fdLeitura = open(fifoLeitura, O_RDONLY);
