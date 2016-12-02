@@ -324,7 +324,7 @@ void funcaoSaida(int nFilhos) {
 
 	while ((i+j) < (nFilhos)) {
 		
-		if (( pid = wait(&estado) ) == -1) {
+		if ((pid = wait(&estado)) == -1) {
 
 			perror ("wait()");
 			exit(EXIT_FAILURE);

@@ -53,7 +53,6 @@ int main (int argc, char** argv) {
 		perror("open(fifoEscrita)");
 		exit(EXIT_FAILURE);
 	}
-	
 
 	snprintf(fifoLeitura, MAX_STR_SIZE, "/tmp/i-banco-pipe-%d", getpid());
     
@@ -62,7 +61,6 @@ int main (int argc, char** argv) {
     	perror("mkfifo(fifoLeitura)");
     	exit(EXIT_FAILURE);
     }
-
 
 	printf("Bem-vinda/o ao i-banco\n\n");
 			
@@ -208,7 +206,7 @@ void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdE
 	time_t start_t, end_t;
 	
 	int fdLeitura;
-	int  wrValue = 0;
+	int wrValue = 0;
 	
 	char buf[MAX_BUF];
 
@@ -230,7 +228,7 @@ void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdE
 	
 	if ((wrValue = write(fdEscrita, (void*)&trabalho, sizeof(trabalho))) == -1 || wrValue == 0)  {
 		
-		printf("i-banco-pipe nao existe\n Por favor feche o terminal (sair-terminal) ou abra um novo i-banco\n");
+		printf("i-banco-pipe nao existe\nPor favor feche o terminal (sair-terminal) ou abra um novo i-banco\n");
 		return;
 	}
 
@@ -266,5 +264,3 @@ void envia_trabalho(int oper, int accountID1, int accountID2, int value, int fdE
 		exit(EXIT_FAILURE);
 	}
 }
-
-
