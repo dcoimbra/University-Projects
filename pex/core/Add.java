@@ -1,6 +1,6 @@
 package pex.core;
 
-public class Add extends BinaryExpression {
+public class Add extends BinaryExpressionInteger {
 
 	public Add(Expression arg1, Expression arg2) {
 		
@@ -13,4 +13,9 @@ public class Add extends BinaryExpression {
 		return "add";
 	}
 
+	@Override
+	public int evaluateInteger(int int1, int int2) {
+
+		return int1 + int2;
+	}
 }

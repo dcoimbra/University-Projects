@@ -22,6 +22,6 @@ public class RunProgram extends ProgramCommand {
     @Override
     public final void execute() {
         
-        //FIXME implement
+        entity().execute();
     }
 }

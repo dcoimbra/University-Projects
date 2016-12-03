@@ -13,4 +13,25 @@ public class While extends BinaryExpression {
 		return "while";
 	}
 
+	@Override
+	public Literal evaluate() {
+		
+		while(true) {
+			
+			Literal arg1 = getFirstArgument().evaluate();
+			
+			if(!arg1.isIntegerLiteral()) {
+				System.out.println("argumentos inválidos\n");
+				return null;
+			}
+			
+			if(((IntegerLiteral)arg1).intValue() == 0) {
+				return new IntegerLiteral(0);
+			}
+			
+			Literal arg2 = getSecondArgument().evaluate();			
+		}
+
+	}
+
 }

@@ -1,6 +1,6 @@
 package pex.core;
 
-public class Div extends BinaryExpression {
+public class Div extends BinaryExpressionInteger {
 
 	public Div(Expression arg1, Expression arg2) {
 		
@@ -11,6 +11,12 @@ public class Div extends BinaryExpression {
 	public String getOperator() {
 		
 		return "div";
+	}
+
+	@Override
+	public int evaluateInteger(int int1, int int2) {
+
+		return int1 / int2;
 	}
 
 }

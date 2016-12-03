@@ -13,4 +13,23 @@ public class If extends TernaryExpression {
 		return "if";
 	}
 
+	@Override
+	public Literal evaluate() {
+		
+		Literal arg1 = getFirstArgument().evaluate();
+		
+		if(!arg1.isIntegerLiteral()) {
+			System.out.println("argumentos inválidos\n");
+			return null;
+		}
+		
+		if(((IntegerLiteral)arg1).intValue() != 0) {
+			Literal arg2 = getSecondArgument().evaluate();
+			return arg2;
+		}
+		
+		Literal arg3 = getThirdArgument().evaluate();
+		return arg3;
+	}
+
 }

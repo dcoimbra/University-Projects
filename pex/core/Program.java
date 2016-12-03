@@ -45,13 +45,22 @@ public class Program implements java.io.Serializable {
 	}
 
 	/**
-	 * Gives the program's name.
+	 * Returns the program's name.
 	 *
-	 * @return this program's name
+	 * @return the current program's name
 	 */
-	public String getProgramName() {
-		
+	public String getName() {
 		return _name;
+	}
+	
+	/**
+	 * Returns the program with the given name.
+	 *
+	 * @return the program with the given name
+	 */
+ 	public Program getProgram(String name) {
+		
+		return _currentInterpreter.getProgram(name);
 	}
 
 	public Interpreter getCurrentInterpreter() {
@@ -93,7 +102,7 @@ public class Program implements java.io.Serializable {
 	 */
 	public void setIdentifierValue(Identifier id, Literal value) {
 		
-		// TODO
+		_currentInterpreter.setIdentifierValue(id, value);
 	}
 
 	/**
@@ -104,8 +113,7 @@ public class Program implements java.io.Serializable {
 	 */
 	public Literal getIdentifierValue(Identifier id) {
 		
-		// TODO
-		return null;
+		return _currentInterpreter.getIdentifierValue(id);
 	}
 	
 	/**
@@ -160,7 +168,12 @@ public class Program implements java.io.Serializable {
 	 */
 	public Literal execute() {
 		
-		// TODO
-		return null;
+		Literal result = new IntegerLiteral(0);
+		
+		for (Expression expression : _expressions) {
+			result = expression.evaluate();
+		}
+		
+		return result;
 	}
 }

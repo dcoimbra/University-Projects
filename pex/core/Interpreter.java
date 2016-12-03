@@ -60,6 +60,8 @@ public class Interpreter implements java.io.Serializable {
 	 * Initial value is true.
 	 */
 	private boolean _wasChanged = true;
+	
+	private Map<String, Literal> _identifiers = new HashMap<>();
 
 	/**
 	 * Class constructor.
@@ -79,7 +81,7 @@ public class Interpreter implements java.io.Serializable {
 	 */
 	public void setIdentifierValue(Identifier id, Literal value) {
 
-		// TODO  
+		_identifiers.put(id.getAsText(), value);  
 	}
 
 	/**
@@ -89,9 +91,8 @@ public class Interpreter implements java.io.Serializable {
 	 * @return the associated value
 	 */
 	public Literal getIdentifierValue(Identifier id) {
-
-		// TODO  
-		return null;
+		
+		return _identifiers.getOrDefault(id.getAsText(), new IntegerLiteral(0));
 	}
 	
 	/**
@@ -101,13 +102,13 @@ public class Interpreter implements java.io.Serializable {
 	 */
 	public void addProgram(Program program) {
 
-		_programs.put(program.getProgramName(), program);
+		_programs.put(program.getName(), program);
 	}
 	
 	/**
-	 * Gives the program referenced by the given name.
+	 * Returns the program referenced by the given name.
 	 *
-	 * @param name the program's name.
+	 * @param name of a program.
 	 * @return the searched program if it exists, null if it doesn't
 	 */
 	public Program getProgram(String name) {
@@ -116,7 +117,7 @@ public class Interpreter implements java.io.Serializable {
 	}
 
 	/**
-	 * Gives the associated interface for user interaction
+	 * Returns the associated interface for user interaction
 	 */
 	public AppIO getAppIO() {
 		
@@ -132,7 +133,7 @@ public class Interpreter implements java.io.Serializable {
 	}
 
 	/**
-	 * Gives the associated file's name
+	 * Returns the associated file's name
 	 *
 	 * @return the associated filename
 	 */

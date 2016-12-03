@@ -16,4 +16,18 @@ public class Seq extends VariadicExpression {
 		return "seq";
 	}
 
+
+	@Override
+	public Literal evaluate() {
+		
+		Literal result = new IntegerLiteral(0);
+		
+		for(Expression arg: getArguments()) {
+			
+			result = arg.evaluate();
+		}
+		
+		return result;
+	}
+
 }

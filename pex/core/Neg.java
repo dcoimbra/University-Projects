@@ -1,6 +1,6 @@
 package pex.core;
 
-public class Neg extends UnaryExpression {
+public class Neg extends UnaryExpressionInteger {
 
 	public Neg(Expression arg1) {
 		
@@ -12,6 +12,12 @@ public class Neg extends UnaryExpression {
 	public String getOperator() {
 		
 		return "neg";
+	}
+
+
+	@Override
+	public int evaluateInteger(int int1) {
+		return (-int1);
 	}
 
 }

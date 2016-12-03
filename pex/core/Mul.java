@@ -1,6 +1,6 @@
 package pex.core;
 
-public class Mul extends BinaryExpression {
+public class Mul extends BinaryExpressionInteger {
 
 	public Mul(Expression arg1, Expression arg2) {
 		
@@ -11,6 +11,12 @@ public class Mul extends BinaryExpression {
 	public String getOperator() {
 		
 		return "mul";
+	}
+
+	@Override
+	public int evaluateInteger(int int1, int int2) {
+
+		return int1 * int2;
 	}
 
 }

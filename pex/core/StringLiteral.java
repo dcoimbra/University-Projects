@@ -8,6 +8,11 @@ public class StringLiteral extends Literal {
 		
 		_value = sLiteral; 
 	}
+	
+	public String stringValue() {
+		
+		return _value;
+	}
 
 	@Override
 	public String getAsText() {

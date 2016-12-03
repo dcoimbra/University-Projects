@@ -9,12 +9,14 @@ import java.io.Reader;
 import java.util.Collection;
 import java.util.ArrayList;
 
+import pex.AppIO;
 import pex.core.*;
 
 public class NewParser {
 
     private Program _program;
     private StreamTokenizer _tokenizer;
+    private AppIO _app;
 
     // may need aditional fields
 
@@ -30,7 +32,9 @@ public class NewParser {
     public Program parseFile(String fileName, String programName, Interpreter currentInterpreter) throws BadSourceException, BadNumberException, InvalidExpressionException, 
                                                                                                   MissingClosingParenthesisException, UnknownOperationException, EndOfInputException  {
         _program = new Program(programName, currentInterpreter);
+        _app = currentInterpreter.getAppIO();
 
+      
         try (FileReader reader = new FileReader(fileName)) {
 
             initTokenizer(reader);
@@ -57,6 +61,7 @@ public class NewParser {
     public Expression parseString(String expression, Program program) throws BadSourceException, BadNumberException, InvalidExpressionException,
                                                                              MissingClosingParenthesisException, UnknownOperationException, EndOfInputException {
         _program = program;
+        _app = _program.getCurrentInterpreter().getAppIO();
 
         try (StringReader reader = new StringReader(expression)) {
             
@@ -93,7 +98,7 @@ public class NewParser {
                 return new StringLiteral(_tokenizer.sval);
 
             case StreamTokenizer.TT_WORD:
-                return new Identifier(_tokenizer.sval /* may need aditional parameters */);
+                return new Identifier(_tokenizer.sval, _program /* may need aditional parameters */);
 
             case '(':
                 Expression exp = parseCompositeExpression();
@@ -143,10 +148,10 @@ public class NewParser {
             
             // process no-args expressions
             case "reads":
-                return new ReadS(/* may need additional parameters */);
+                return new ReadS(_app);
 
             case "readi":
-                return new ReadI(/* may need additional parameters */);
+                return new ReadI(_app);
               
              // processing unary expressions
             case "neg":
@@ -158,7 +163,7 @@ public class NewParser {
             case "call":
                 try {
                     
-                    return new Call((StringLiteral)parseArgument() /* may need additional parameter */);
+                    return new Call((StringLiteral)parseArgument(), _program);
                 } 
 
                 catch(ClassCastException cce) { // it is not a StringLiteral
@@ -207,7 +212,7 @@ public class NewParser {
                  return new Or(parseArgument(), parseArgument());
 
              case "set":
-                 return new Set(parseArgument(), parseArgument() /* may need additional parameters */);
+                 return new Set(parseArgument(), parseArgument(), _program);
 
              case "while":
                  return new While(parseArgument(), parseArgument());
@@ -249,7 +254,7 @@ public class NewParser {
                  
                  else {
                      
-                     return new Print(args /* may need additional parameters */);
+                     return new Print(args, _app);
                  }
         
              default:
