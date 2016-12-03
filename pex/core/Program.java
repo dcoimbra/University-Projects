@@ -62,10 +62,14 @@ public class Program implements java.io.Serializable {
 	/**
 	 * Stores the given expression in the position represented by the given index.
 	 *
+	 * If sucessful, shifts the expression currently at that position (if any) and any subsequent elements to the right.
+	 *
 	 * @param idx position where the expression is stored
 	 * @param expression expression to store
+	 * 
+	 * @throws IndexOutOfBoundsException if idx is out of range
 	 */ 
-	public void add(int idx, Expression expression) {
+	public void add(int idx, Expression expression) throws IndexOutOfBoundsException {
 		
 		_expressions.add(idx, expression);
 	}
