@@ -20,4 +20,9 @@ public class StringLiteral extends Literal {
 		return "\"" + _value + "\"";
 	}
 
+	@Override
+	public String getValueAsString() {
+		return _value;
+	}
+
 }

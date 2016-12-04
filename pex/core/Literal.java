@@ -9,4 +9,6 @@ public abstract class Literal extends Expression {
 	public boolean isIntegerLiteral(){
 		 return false;
 	}
+	
+	public abstract String getValueAsString();
 }

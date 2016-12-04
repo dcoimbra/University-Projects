@@ -1,7 +1,5 @@
 package pex.core;
 
-import pt.utl.ist.po.ui.InputInteger;
-
 public class IntegerLiteral extends Literal {
 	
 	int _value;
@@ -25,6 +23,11 @@ public class IntegerLiteral extends Literal {
 	public String getAsText() {
 		
 		return (Integer.toString(_value));
+	}
+
+	@Override
+	public String getValueAsString() {
+		return getAsText();
 	}
 
 }

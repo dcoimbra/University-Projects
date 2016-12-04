@@ -1,5 +1,7 @@
 package pex.core;
 
+import java.util.HashSet;
+
 public class Set extends BinaryExpression {
 	private Program _program;
 
@@ -30,5 +32,22 @@ public class Set extends BinaryExpression {
 		
 		return value;
 	}
+	
+	@Override
+	public HashSet<String> getInitializedIdentifiers() {
+		
+		Expression arg1 = getFirstArgument();
+		
+		if(!arg1.isIdentifier()) {
+			System.out.println("argumentos inválidos.");
+			return null;
+		}
+		
+		HashSet<String> result =  new HashSet<String>();
+		result.add(arg1.getAsText());
+		
+		return result;
+	}
+	
 
 }

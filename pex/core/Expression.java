@@ -1,11 +1,20 @@
 package pex.core;
 
 import java.io.Serializable;
+import java.util.HashSet;
 
-public abstract class Expression implements java.io.Serializable{
+public abstract class Expression implements Serializable {
 	
 	public boolean isIdentifier(){
 		return false;
+	}
+	
+	public HashSet<String> getIdentifiers() {
+		return new HashSet<String>();
+	}
+	
+	public HashSet<String> getInitializedIdentifiers() {
+		return new HashSet<String>();
 	}
 	
 	public abstract String getAsText();

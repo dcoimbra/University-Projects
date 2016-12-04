@@ -14,16 +14,9 @@ import java.util.Map;
 
 import pex.AppIO;
 
-import pex.app.main.Message;
-
 import pex.parser.NewParser;
 import pex.parser.BadSourceException;
 import pex.parser.ParserException;
-
-import pt.utl.ist.po.ui.Form;
-import pt.utl.ist.po.ui.InputString;
-import pt.utl.ist.po.ui.Display;
-import pt.utl.ist.po.ui.InvalidOperation;
 
 /**
  * Main core entity. Manages and executes programs.
@@ -34,7 +27,7 @@ import pt.utl.ist.po.ui.InvalidOperation;
  * @author Filipa Marques - 57842
  * @author David Coimbra  - 84708 
  */
-public class Interpreter implements java.io.Serializable {
+public class Interpreter implements Serializable {
 	
 	/**
 	 * Structure where programs are saved. Programs have their names as keys.

@@ -3,8 +3,6 @@ package pex.core;
 import java.util.ArrayList;
 
 import pex.AppIO;
-import pex.app.App;
-import pt.utl.ist.po.ui.Display;
 
 public class Print extends VariadicExpression {
 	AppIO _appIO;
@@ -31,7 +29,7 @@ public class Print extends VariadicExpression {
 			
 			result = arg.evaluate();
 			
-	        resultString += result.getAsText();
+			resultString += result.getValueAsString();   
 		}
 		
 		_appIO.println(resultString);

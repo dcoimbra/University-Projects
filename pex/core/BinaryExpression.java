@@ -1,5 +1,9 @@
 package pex.core;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 public abstract class BinaryExpression extends UnaryExpression {
 
 	private Expression _arg2;
@@ -13,6 +17,14 @@ public abstract class BinaryExpression extends UnaryExpression {
 	public Expression getSecondArgument(){
 		
 		return _arg2;
+	}
+	
+	@Override
+	public List<Expression> getArguments() {
+		List<Expression> args = new ArrayList<Expression>();
+		args.add(getFirstArgument());
+		args.add(_arg2);
+		return args;
 	}
 	
 	@Override
