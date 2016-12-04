@@ -1,6 +1,7 @@
 package pex.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public abstract class VariadicExpression extends CompositeExpression {
@@ -12,6 +13,7 @@ public abstract class VariadicExpression extends CompositeExpression {
 		_args = args;
 	}
 	
+	@Override
 	public List<Expression> getArguments(){
 	
 		return _args;

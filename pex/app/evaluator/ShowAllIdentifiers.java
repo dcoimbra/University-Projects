@@ -1,8 +1,8 @@
 package pex.app.evaluator;
 
-//FIXME import core classes
+import java.util.ArrayList;
+import pex.app.main.Message;
 import pex.core.Program;
-
 import pt.utl.ist.po.ui.Display;
 
 /**
@@ -20,10 +20,17 @@ public class ShowAllIdentifiers extends ProgramCommand {
 
     /** 
      * @see pt.utl.ist.po.ui.Command#execute() 
-     */
+     */ 
     @Override
     public final void execute() {
         
-        //FIXME implement
+    	ArrayList<String> ids = entity().getSortedIdentifiers();
+    	
+    	for(String name : ids) {
+    		Display display = new Display();
+    		display.add(name);
+            display.display();
+    	}
+        
     }
 }

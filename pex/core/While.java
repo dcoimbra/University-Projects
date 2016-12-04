@@ -29,7 +29,7 @@ public class While extends BinaryExpression {
 				return new IntegerLiteral(0);
 			}
 			
-			Literal arg2 = getSecondArgument().evaluate();			
+			getSecondArgument().evaluate();			
 		}
 
 	}

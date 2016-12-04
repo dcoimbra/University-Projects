@@ -1,5 +1,7 @@
 package pex.app.evaluator;
 
+import java.util.ArrayList;
+
 //FIXME import core classes
 import pex.core.Program;
 
@@ -24,6 +26,12 @@ public class ShowUninitializedIdentifiers extends ProgramCommand {
     @Override
     public final void execute() {
         
-        //FIXME implement
+    	ArrayList<String> ids = entity().getSortedUninitializedIdentifiers();
+    	
+    	for(String name : ids) {
+    		Display display = new Display();
+    		display.add(name);
+            display.display();
+    	}
     }
 }

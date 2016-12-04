@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * A program consists of a set of expressions. Can be executed by its interpreter.
@@ -18,7 +20,7 @@ import java.util.Collection;
  * @author Filipa Marques - 57842
  * @author David Coimbra  - 84708 
  */
-public class Program implements java.io.Serializable {
+public class Program implements Serializable {
 	
 	/**
 	 * This program's name.
@@ -33,6 +35,8 @@ public class Program implements java.io.Serializable {
 	 */
 	private ArrayList<Expression> _expressions = new ArrayList<>();
 	
+//	private HashSet<String> _allIdenfiers = new HashSet<String>();
+	
 	/**
 	 * Class constructor. Also sets program name.
 	 *
@@ -43,6 +47,7 @@ public class Program implements java.io.Serializable {
 		_name = programName;
 		_currentInterpreter = currentInterpreter;
 	}
+	
 
 	/**
 	 * Returns the program's name.
@@ -52,6 +57,7 @@ public class Program implements java.io.Serializable {
 	public String getName() {
 		return _name;
 	}
+	
 	
 	/**
 	 * Returns the program with the given name.
@@ -67,6 +73,7 @@ public class Program implements java.io.Serializable {
 
 		return _currentInterpreter;
 	}
+	
 	
 	/**
 	 * Stores the given expression in the position represented by the given index.
@@ -114,6 +121,59 @@ public class Program implements java.io.Serializable {
 	public Literal getIdentifierValue(Identifier id) {
 		
 		return _currentInterpreter.getIdentifierValue(id);
+	}
+	
+	public HashSet<String> getIdentifiers() {
+		
+		HashSet<String> result = new HashSet<String>();
+		
+		for(Expression expression : _expressions) {
+			
+			result.addAll(expression.getIdentifiers());
+			
+		}
+		return result;	
+	}
+	
+	
+	public HashSet<String> getInitializedIdentifiers() {
+		
+		HashSet<String> result = new HashSet<String>();
+		
+		for(Expression expression : _expressions) {
+			
+			result.addAll(expression.getInitializedIdentifiers());
+			
+		}
+		
+		return result;	
+	}
+	
+	public HashSet<String> getUnitilializedIdentifiers() {
+		HashSet<String> result = getIdentifiers();
+		
+		result.removeAll(getInitializedIdentifiers());
+		
+		return result;
+	}
+	
+	
+	public ArrayList<String> sortIdentifiers(HashSet<String> ids) {
+		
+		ArrayList<String> result = new ArrayList<String>(ids); 
+		
+		Collections.sort(result);
+		
+		return result;
+	}
+	
+
+	public ArrayList<String> getSortedIdentifiers() {
+		return sortIdentifiers(getIdentifiers());
+	}
+	
+	public ArrayList<String> getSortedUninitializedIdentifiers() {
+		return sortIdentifiers(getUnitilializedIdentifiers());
 	}
 	
 	/**

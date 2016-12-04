@@ -1,5 +1,9 @@
 package pex.core;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 public abstract class TernaryExpression extends BinaryExpression {
 	
 	private Expression _arg3;
@@ -13,6 +17,15 @@ public abstract class TernaryExpression extends BinaryExpression {
 	public Expression getThirdArgument(){
 		
 		return _arg3;
+	}
+	
+	@Override
+	public List<Expression> getArguments() {
+		List<Expression> args = new ArrayList<Expression>();
+		args.add(getFirstArgument());
+		args.add(getSecondArgument());
+		args.add(_arg3);
+		return args;
 	}
 	
 	@Override
