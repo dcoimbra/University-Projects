@@ -13,4 +13,9 @@ public abstract class Literal extends Expression {
 	}
 	
 	public abstract String getValueAsString();
+	
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

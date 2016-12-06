@@ -1,7 +1,5 @@
 package pex.core;
 
-import java.util.HashSet;
-
 public class Identifier extends Expression {
 	
 	private String _name;
@@ -15,10 +13,9 @@ public class Identifier extends Expression {
 	
 	@Override
 	public boolean isIdentifier() {
-		
 		return true;
 	}
-
+	
 	@Override
 	public String getAsText() {
 		
@@ -31,12 +28,8 @@ public class Identifier extends Expression {
 		return _program.getIdentifierValue(this);
 	}
 
-	@Override
-	public HashSet<String> getIdentifiers() {
-		
-		HashSet<String> result =  new HashSet<String>();
-		result.add(_name);
-		
-		return result;
-	}	
+	
+	public void accept(Visitor v) {
+		v.visit(this);
+	}
 }

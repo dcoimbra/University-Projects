@@ -1,7 +1,5 @@
 package pex.core;
 
-import java.util.HashSet;
-
 public class Set extends BinaryExpression {
 	private Program _program;
 
@@ -35,21 +33,8 @@ public class Set extends BinaryExpression {
 	}
 	
 	@Override
-	public HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
-		
-		Expression arg1 = getFirstArgument();
-		
-		if(!arg1.isIdentifier()) {
-			
-			throw new InvalidArgumentException(arg1);
-		}
-		
-		HashSet<String> result =  new HashSet<String>();
-		
-		result.add(arg1.getAsText());
-		
-		return result;
+	public void accept(Visitor v) {
+		v.visit(this);
 	}
-	
 
 }

@@ -35,7 +35,8 @@ public class Program implements Serializable {
 	 */
 	private ArrayList<Expression> _expressions = new ArrayList<>();
 	
-//	private HashSet<String> _allIdentifiers = new HashSet<String>();
+	private VisitorAllIdentifiers _allIdentifiers = new VisitorAllIdentifiers();
+	private VisitorInitializedIdentifiers _allInitializedIdentifiers = new VisitorInitializedIdentifiers();
 	
 	/**
 	 * Class constructor.
@@ -120,32 +121,28 @@ public class Program implements Serializable {
 		return _currentInterpreter.getIdentifierValue(id);
 	}
 	
-	public HashSet<String> getIdentifiers() {
-		
-		HashSet<String> result = new HashSet<String>();
+	public HashSet<String> getAllIdentifiers() {
 		
 		for(Expression expression : _expressions) {
 			
-			result.addAll(expression.getIdentifiers());
+			expression.accept(_allIdentifiers);
 		}
 		
-		return result;	
+		return _allIdentifiers.getIdentifiers();	
 	}
 	
 	public HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
-		HashSet<String> result = new HashSet<String>();
-		
 		for(Expression expression : _expressions) {
 			
-			result.addAll(expression.getInitializedIdentifiers());
+			expression.accept(_allInitializedIdentifiers);
 		}
 		
-		return result;	
+		return _allInitializedIdentifiers.getInitializedIdentifiers();	
 	}
 	
 	public HashSet<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
-		HashSet<String> result = getIdentifiers();
+		HashSet<String> result = getAllIdentifiers();
 		
 		result.removeAll(getInitializedIdentifiers());
 		
@@ -163,7 +160,7 @@ public class Program implements Serializable {
 	
 	public ArrayList<String> getSortedIdentifiers() throws InvalidArgumentException {
 		
-		return sortIdentifiers(getIdentifiers());
+		return sortIdentifiers(getAllIdentifiers());
 	}
 	
 	public ArrayList<String> getSortedUninitializedIdentifiers() throws InvalidArgumentException {
