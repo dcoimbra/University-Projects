@@ -1,7 +1,6 @@
 package pex.core;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public abstract class UnaryExpression extends CompositeExpression {

@@ -8,7 +8,7 @@ public abstract class UnaryExpressionInteger extends UnaryExpression {
 	}
 
 	@Override
-	public Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
+	public final Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
 		
 		Literal arg1 = getFirstArgument().evaluate();
 		
@@ -23,4 +23,5 @@ public abstract class UnaryExpressionInteger extends UnaryExpression {
 	}
 	
 	public abstract int evaluateInteger(int int1);
+
 }

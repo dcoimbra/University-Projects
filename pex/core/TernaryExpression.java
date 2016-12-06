@@ -1,7 +1,6 @@
 package pex.core;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public abstract class TernaryExpression extends BinaryExpression {
@@ -32,7 +31,7 @@ public abstract class TernaryExpression extends BinaryExpression {
 	}
 	
 	@Override
-	public String getAsText() {
+	public final String getAsText() {
 		
 		return "(" + getOperator() + " " 
 				   + getFirstArgument().getAsText() + " " 
@@ -41,4 +40,5 @@ public abstract class TernaryExpression extends BinaryExpression {
 	}
 
 	public abstract String getOperator();
+
 }
