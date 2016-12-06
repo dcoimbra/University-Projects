@@ -35,9 +35,6 @@ public class Program implements Serializable {
 	 */
 	private ArrayList<Expression> _expressions = new ArrayList<>();
 	
-	private VisitorAllIdentifiers _allIdentifiers = new VisitorAllIdentifiers();
-	private VisitorInitializedIdentifiers _allInitializedIdentifiers = new VisitorInitializedIdentifiers();
-	
 	/**
 	 * Class constructor.
 	 *
@@ -123,22 +120,27 @@ public class Program implements Serializable {
 	
 	public HashSet<String> getAllIdentifiers() {
 		
+		VisitorAllIdentifiers allIdentifiers = new VisitorAllIdentifiers();
+		
+		
 		for(Expression expression : _expressions) {
 			
-			expression.accept(_allIdentifiers);
+			expression.accept(allIdentifiers);
 		}
 		
-		return _allIdentifiers.getIdentifiers();	
+		return allIdentifiers.getIdentifiers();	
 	}
 	
 	public HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
+		VisitorInitializedIdentifiers allInitializedIdentifiers = new VisitorInitializedIdentifiers();
+		
 		for(Expression expression : _expressions) {
 			
-			expression.accept(_allInitializedIdentifiers);
+			expression.accept(allInitializedIdentifiers);
 		}
 		
-		return _allInitializedIdentifiers.getInitializedIdentifiers();	
+		return allInitializedIdentifiers.getInitializedIdentifiers();	
 	}
 	
 	public HashSet<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
