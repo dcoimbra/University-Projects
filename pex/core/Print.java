@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import pex.AppIO;
 
 public class Print extends VariadicExpression {
+	
 	AppIO _appIO;
 
 	public Print(ArrayList<Expression> args, AppIO app) {
 		
-		super(args);
+		super (args);
 		_appIO = app;
 	}
 
@@ -20,7 +21,7 @@ public class Print extends VariadicExpression {
 	}
 
 	@Override
-	public Literal evaluate() {
+	public Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
 		
 		Literal result = new IntegerLiteral(0);
 		String resultString = "";
@@ -32,8 +33,7 @@ public class Print extends VariadicExpression {
 			resultString += result.getValueAsString();   
 		}
 		
-		_appIO.println(resultString);
+		_appIO.println(resultString);		
 		return result;
 	}
-
 }

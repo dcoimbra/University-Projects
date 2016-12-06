@@ -17,18 +17,17 @@ public class Call extends UnaryExpression {
 	}
 
 	@Override
-	public Literal evaluate() {
+	public Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
 		
 		StringLiteral literalName = (StringLiteral) getFirstArgument();
 		
 		Program program = _program.getProgram(literalName.stringValue());
 		
 		if (program == null) {
-			System.out.println("o programa não existe... :( ");
-			return new IntegerLiteral(0);
+			
+			throw new NoSuchProgramException(literalName.stringValue());
 		}
 		
 		return program.execute();
 	}
-
 }

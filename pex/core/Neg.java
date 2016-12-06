@@ -7,16 +7,15 @@ public class Neg extends UnaryExpressionInteger {
 		super(arg1); 
 	}
 
-
 	@Override
 	public String getOperator() {
 		
 		return "neg";
 	}
 
-
 	@Override
 	public int evaluateInteger(int int1) {
+		
 		return (-int1);
 	}
 

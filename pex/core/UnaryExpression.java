@@ -20,6 +20,7 @@ public abstract class UnaryExpression extends CompositeExpression {
 	
 	@Override
 	public List<Expression> getArguments() {
+		
 		List<Expression> args = new ArrayList<Expression>();
 		args.add(getFirstArgument());
 

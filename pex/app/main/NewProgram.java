@@ -40,7 +40,5 @@ public class NewProgram extends Command<App> {
         Program program = new Program(programID, interpreter);
 
         interpreter.addProgram(program);
-
-        interpreter.setWasChangedFlag(true);
     }
 }

@@ -1,7 +1,10 @@
 package pex.app.evaluator;
 
-//FIXME import used core classes
 import pex.core.Program;
+import pex.core.InvalidArgumentException;
+import pex.core.NoSuchProgramException;
+
+import pt.utl.ist.po.ui.InvalidOperation;
 
 /**
  * Run program.
@@ -20,8 +23,21 @@ public class RunProgram extends ProgramCommand {
      * @see pt.utl.ist.po.ui.Command#execute() 
      */
     @Override
-    public final void execute() {
+    public final void execute() throws InvalidOperation {
         
-        entity().execute();
+        try {
+            
+            entity().execute();
+        }
+
+        catch (InvalidArgumentException iae) {
+
+            throw new InvalidOperation(iae.getMessage());
+        }
+
+        catch (NoSuchProgramException nspe) {
+
+            throw new InvalidOperation(nspe.getMessage());
+        }
     }
 }

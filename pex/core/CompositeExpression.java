@@ -7,6 +7,7 @@ import java.util.List;
 public abstract class CompositeExpression extends Expression {
 
 	public List<Expression> getArguments() {
+		
 		return new ArrayList<Expression>();
 	}
 	
@@ -14,18 +15,20 @@ public abstract class CompositeExpression extends Expression {
 		
 		HashSet<String> result =  new HashSet<String>();
 		
-		for(Expression expression : getArguments()) {
+		for (Expression expression : getArguments()) {
+			
 			result.addAll(expression.getIdentifiers());
 		}
 		
 		return result;
 	}
 	
-	public HashSet<String> getInitializedIdentifiers() {
+	public HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
 		HashSet<String> result =  new HashSet<String>();
 		
-		for(Expression expression : getArguments()) {
+		for (Expression expression : getArguments()) {
+			
 			result.addAll(expression.getInitializedIdentifiers());
 		}
 		

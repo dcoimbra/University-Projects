@@ -1,7 +1,5 @@
 package pex.app.evaluator;
 
-//FIXME import used core classes
-
 import pex.app.BadExpressionException;
 import pex.app.BadPositionException;
 
@@ -44,7 +42,7 @@ public class ReplaceExpression extends ProgramCommand {
         InputString inputExpression = new InputString(f2, Message.requestExpression());
         f2.parse();
 
-        String strExpression = inputExpression.value();
+        String strExpression = inputExpression.toString();
 
         NewParser parser = new NewParser();
 

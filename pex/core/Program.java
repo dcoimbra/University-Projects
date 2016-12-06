@@ -35,10 +35,10 @@ public class Program implements Serializable {
 	 */
 	private ArrayList<Expression> _expressions = new ArrayList<>();
 	
-//	private HashSet<String> _allIdenfiers = new HashSet<String>();
+//	private HashSet<String> _allIdentifiers = new HashSet<String>();
 	
 	/**
-	 * Class constructor. Also sets program name.
+	 * Class constructor.
 	 *
 	 * @param programName this program's name.
 	 */
@@ -47,7 +47,6 @@ public class Program implements Serializable {
 		_name = programName;
 		_currentInterpreter = currentInterpreter;
 	}
-	
 
 	/**
 	 * Returns the program's name.
@@ -57,7 +56,6 @@ public class Program implements Serializable {
 	public String getName() {
 		return _name;
 	}
-	
 	
 	/**
 	 * Returns the program with the given name.
@@ -73,7 +71,6 @@ public class Program implements Serializable {
 
 		return _currentInterpreter;
 	}
-	
 	
 	/**
 	 * Stores the given expression in the position represented by the given index.
@@ -130,26 +127,24 @@ public class Program implements Serializable {
 		for(Expression expression : _expressions) {
 			
 			result.addAll(expression.getIdentifiers());
-			
 		}
+		
 		return result;	
 	}
 	
-	
-	public HashSet<String> getInitializedIdentifiers() {
+	public HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
 		HashSet<String> result = new HashSet<String>();
 		
 		for(Expression expression : _expressions) {
 			
 			result.addAll(expression.getInitializedIdentifiers());
-			
 		}
 		
 		return result;	
 	}
 	
-	public HashSet<String> getUnitilializedIdentifiers() {
+	public HashSet<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
 		HashSet<String> result = getIdentifiers();
 		
 		result.removeAll(getInitializedIdentifiers());
@@ -157,8 +152,7 @@ public class Program implements Serializable {
 		return result;
 	}
 	
-	
-	public ArrayList<String> sortIdentifiers(HashSet<String> ids) {
+	public ArrayList<String> sortIdentifiers(HashSet<String> ids) throws InvalidArgumentException {
 		
 		ArrayList<String> result = new ArrayList<String>(ids); 
 		
@@ -167,12 +161,13 @@ public class Program implements Serializable {
 		return result;
 	}
 	
-
-	public ArrayList<String> getSortedIdentifiers() {
+	public ArrayList<String> getSortedIdentifiers() throws InvalidArgumentException {
+		
 		return sortIdentifiers(getIdentifiers());
 	}
 	
-	public ArrayList<String> getSortedUninitializedIdentifiers() {
+	public ArrayList<String> getSortedUninitializedIdentifiers() throws InvalidArgumentException {
+		
 		return sortIdentifiers(getUnitilializedIdentifiers());
 	}
 	
@@ -185,8 +180,7 @@ public class Program implements Serializable {
 	 */
 	public void set(Collection<Expression> expressions) {
 		
-		_expressions = new ArrayList<>(expressions);
-		
+		_expressions = new ArrayList<>(expressions);	
 	}
 	
 	/**
@@ -226,7 +220,7 @@ public class Program implements Serializable {
 	 *
 	 * @return the program's value.
 	 */
-	public Literal execute() {
+	public Literal execute() throws InvalidArgumentException, NoSuchProgramException {
 		
 		Literal result = new IntegerLiteral(0);
 		

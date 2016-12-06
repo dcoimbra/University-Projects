@@ -18,7 +18,7 @@ public class Seq extends VariadicExpression {
 
 
 	@Override
-	public Literal evaluate() {
+	public Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
 		
 		Literal result = new IntegerLiteral(0);
 		

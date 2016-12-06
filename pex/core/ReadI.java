@@ -6,6 +6,7 @@ public class ReadI extends CompositeExpression {
 	AppIO _appIO;
 	
 	public ReadI(AppIO app) {
+		
 		_appIO = app;
 	}
 	

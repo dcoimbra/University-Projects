@@ -48,13 +48,11 @@ public class Save extends Command<App> {
             f.parse();
 
             fileAssociation = inputFileAssociation.toString();
-            interpreter.setFileAssociation(fileAssociation);
         }
 
         try {
         	
         	interpreter.save(fileAssociation);
-            interpreter.setWasChangedFlag(false);
         }
 
         catch (IOException e) {

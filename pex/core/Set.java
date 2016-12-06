@@ -18,32 +18,34 @@ public class Set extends BinaryExpression {
 	}
 
 	@Override
-	public Literal evaluate() {
+	public Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
 		
 		Expression arg1 = getFirstArgument();
 		
-		if(!arg1.isIdentifier()) {
-			System.out.println("argumentos inválidos.");
-			return null;
+		if (!arg1.isIdentifier()) {
+			
+			throw new InvalidArgumentException(arg1);
 		}
 		
 		Literal value = getSecondArgument().evaluate();
+		
 		_program.setIdentifierValue((Identifier)arg1, value);
 		
 		return value;
 	}
 	
 	@Override
-	public HashSet<String> getInitializedIdentifiers() {
+	public HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
 		Expression arg1 = getFirstArgument();
 		
 		if(!arg1.isIdentifier()) {
-			System.out.println("argumentos inválidos.");
-			return null;
+			
+			throw new InvalidArgumentException(arg1);
 		}
 		
 		HashSet<String> result =  new HashSet<String>();
+		
 		result.add(arg1.getAsText());
 		
 		return result;

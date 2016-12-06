@@ -7,8 +7,6 @@ import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
-
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,7 +76,7 @@ public class Interpreter implements Serializable {
 	}
 
 	/**
-	 * Gives the value associated to the given identifier.
+	 * Returns the value associated to the given identifier.
 	 *
 	 * @param id the given identifier
 	 * @return the associated value
@@ -96,6 +94,7 @@ public class Interpreter implements Serializable {
 	public void addProgram(Program program) {
 
 		_programs.put(program.getName(), program);
+		this.setWasChangedFlag(true);
 	}
 	
 	/**
@@ -161,6 +160,9 @@ public class Interpreter implements Serializable {
 	            
         out.flush();
         out.close();
+
+        this.setFileAssociation(fileName);
+        this.setWasChangedFlag(false);
 	}
 
 	public Interpreter load(String fileName) throws IOException, ClassNotFoundException {
@@ -184,7 +186,7 @@ public class Interpreter implements Serializable {
 	    Program program = parser.parseFile(fileName, programName, this);
 
 	    this.addProgram(program);
-
+	    
 	    this.setWasChangedFlag(true);
 	}
 }

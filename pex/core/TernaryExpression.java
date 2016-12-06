@@ -21,10 +21,13 @@ public abstract class TernaryExpression extends BinaryExpression {
 	
 	@Override
 	public List<Expression> getArguments() {
+		
 		List<Expression> args = new ArrayList<Expression>();
+		
 		args.add(getFirstArgument());
 		args.add(getSecondArgument());
 		args.add(_arg3);
+		
 		return args;
 	}
 	
@@ -38,5 +41,4 @@ public abstract class TernaryExpression extends BinaryExpression {
 	}
 
 	public abstract String getOperator();
-
 }

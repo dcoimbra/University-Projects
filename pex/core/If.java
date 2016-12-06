@@ -14,21 +14,24 @@ public class If extends TernaryExpression {
 	}
 
 	@Override
-	public Literal evaluate() {
+	public Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
 		
 		Literal arg1 = getFirstArgument().evaluate();
 		
-		if(!arg1.isIntegerLiteral()) {
-			System.out.println("argumentos inválidos\n");
-			return null;
+		if (!arg1.isIntegerLiteral()) {
+			
+			throw new InvalidArgumentException(arg1);
 		}
 		
-		if(((IntegerLiteral)arg1).intValue() != 0) {
+		if (((IntegerLiteral)arg1).intValue() != 0) {
+			
 			Literal arg2 = getSecondArgument().evaluate();
+			
 			return arg2;
 		}
 		
 		Literal arg3 = getThirdArgument().evaluate();
+		
 		return arg3;
 	}
 

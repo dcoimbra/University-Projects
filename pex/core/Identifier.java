@@ -13,9 +13,9 @@ public class Identifier extends Expression {
 		_program = program;		
 	}
 	
-	
 	@Override
 	public boolean isIdentifier() {
+		
 		return true;
 	}
 
@@ -31,7 +31,6 @@ public class Identifier extends Expression {
 		return _program.getIdentifierValue(this);
 	}
 
-
 	@Override
 	public HashSet<String> getIdentifiers() {
 		
@@ -39,6 +38,5 @@ public class Identifier extends Expression {
 		result.add(_name);
 		
 		return result;
-	}
-	
+	}	
 }

@@ -22,6 +22,7 @@ public class StringLiteral extends Literal {
 
 	@Override
 	public String getValueAsString() {
+		
 		return _value;
 	}
 

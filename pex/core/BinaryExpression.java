@@ -21,9 +21,12 @@ public abstract class BinaryExpression extends UnaryExpression {
 	
 	@Override
 	public List<Expression> getArguments() {
+		
 		List<Expression> args = new ArrayList<Expression>();
+		
 		args.add(getFirstArgument());
 		args.add(_arg2);
+		
 		return args;
 	}
 	

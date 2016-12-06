@@ -2,10 +2,12 @@ package pex.app.evaluator;
 
 import java.util.ArrayList;
 
-//FIXME import core classes
 import pex.core.Program;
+import pex.core.InvalidArgumentException;
 
 import pt.utl.ist.po.ui.Display;
+import pt.utl.ist.po.ui.InvalidOperation;
+
 
 /**
  * Show uninitialized identifiers.
@@ -24,14 +26,22 @@ public class ShowUninitializedIdentifiers extends ProgramCommand {
      * @see pt.utl.ist.po.ui.Command#execute() 
      */
     @Override
-    public final void execute() {
+    public final void execute() throws InvalidOperation {
+
+        try {
+        	ArrayList<String> ids = entity().getSortedUninitializedIdentifiers();
+        	
+        	for(String name : ids) {
+        		
+                Display display = new Display();
+        		display.add(name);
+                display.display();
+        	}
+        }
         
-    	ArrayList<String> ids = entity().getSortedUninitializedIdentifiers();
-    	
-    	for(String name : ids) {
-    		Display display = new Display();
-    		display.add(name);
-            display.display();
-    	}
+        catch (InvalidArgumentException iae) {
+
+            throw new InvalidOperation(iae.getMessage());
+        }    
     }
 }

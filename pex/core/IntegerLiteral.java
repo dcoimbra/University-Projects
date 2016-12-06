@@ -16,6 +16,7 @@ public class IntegerLiteral extends Literal {
 	
 	@Override
 	public boolean isIntegerLiteral(){
+		 
 		 return true;
 	}
 	
@@ -27,7 +28,7 @@ public class IntegerLiteral extends Literal {
 
 	@Override
 	public String getValueAsString() {
+		
 		return getAsText();
 	}
-
 }

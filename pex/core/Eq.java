@@ -18,5 +18,4 @@ public class Eq extends BinaryExpressionInteger {
 
 		return (int1 == int2 ? 1 : 0);
 	}
-
 }

@@ -1,9 +1,15 @@
 package pex.app.evaluator;
 
 import java.util.ArrayList;
+
 import pex.app.main.Message;
+
 import pex.core.Program;
+import pex.core.InvalidArgumentException;
+
 import pt.utl.ist.po.ui.Display;
+
+import pt.utl.ist.po.ui.InvalidOperation;
 
 /**
  * Show all program identifiers.
@@ -22,15 +28,22 @@ public class ShowAllIdentifiers extends ProgramCommand {
      * @see pt.utl.ist.po.ui.Command#execute() 
      */ 
     @Override
-    public final void execute() {
-        
-    	ArrayList<String> ids = entity().getSortedIdentifiers();
-    	
-    	for(String name : ids) {
-    		Display display = new Display();
-    		display.add(name);
-            display.display();
-    	}
-        
+    public final void execute() throws InvalidOperation {
+       
+        try { 
+            
+            ArrayList<String> ids = entity().getSortedIdentifiers();
+
+            for(String name : ids) {
+                Display display = new Display();
+                display.add(name);
+                display.display();
+            }
+        }
+
+        catch (InvalidArgumentException iae) {
+
+            throw new InvalidOperation(iae.getMessage());
+        }
     }
 }
