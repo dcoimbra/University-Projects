@@ -14,7 +14,6 @@ public class VisitorAllIdentifiers implements Visitor {
 		return _allIdentifiers;
 	}
 	
-	@Override
 	public void visit(CompositeExpression expression) {
 		
 		for(Expression exp : expression.getArguments()) {
@@ -40,6 +39,16 @@ public class VisitorAllIdentifiers implements Visitor {
 	@Override
 	public void visit(Literal literal) {
 				
+	}
+
+	@Override
+	public void visit(Program program) {
+		
+		for(Expression expression : program.getExpressionList()) {
+			
+			expression.accept(this);
+		}
+		
 	}
 
 

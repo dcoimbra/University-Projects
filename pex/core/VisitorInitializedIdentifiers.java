@@ -44,4 +44,14 @@ public class VisitorInitializedIdentifiers implements Visitor {
 		return _allInitializedIdentifiers;
 	}
 
+	@Override
+	public void visit(Program program) {
+		
+		for(Expression expression : program.getExpressionList()) {
+			
+			expression.accept(this);
+		}
+		
+	}
+
 }

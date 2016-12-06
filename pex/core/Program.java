@@ -20,7 +20,7 @@ import java.util.HashSet;
  * @author Filipa Marques - 57842
  * @author David Coimbra  - 84708 
  */
-public class Program implements Serializable {
+public class Program implements Serializable, Element {
 	
 	/**
 	 * This program's name.
@@ -68,6 +68,22 @@ public class Program implements Serializable {
 	public Interpreter getCurrentInterpreter() {
 
 		return _currentInterpreter;
+	}
+	
+	public ArrayList<Expression> getExpressionList() {
+		return _expressions;
+	}
+	
+	/**
+	 * Sets the program's expressions to the given collection of expressions.
+	 *
+	 * The collection is "converted" to an ArrayList.
+	 * 
+	 * @param expressions collection of expressions to set 
+	 */
+	public void set(Collection<Expression> expressions) {
+		
+		_expressions = new ArrayList<>(expressions);	
 	}
 	
 	/**
@@ -118,32 +134,31 @@ public class Program implements Serializable {
 		return _currentInterpreter.getIdentifierValue(id);
 	}
 	
-	public HashSet<String> getAllIdentifiers() {
+	@Override
+	public void accept(Visitor v) {
+		v.visit(this);	
+	}
+	
+	private HashSet<String> getAllIdentifiers() {
 		
 		VisitorAllIdentifiers allIdentifiers = new VisitorAllIdentifiers();
 		
-		
-		for(Expression expression : _expressions) {
-			
-			expression.accept(allIdentifiers);
-		}
+		accept(allIdentifiers);
 		
 		return allIdentifiers.getIdentifiers();	
 	}
 	
-	public HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
+	private HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
 		VisitorInitializedIdentifiers allInitializedIdentifiers = new VisitorInitializedIdentifiers();
 		
-		for(Expression expression : _expressions) {
-			
-			expression.accept(allInitializedIdentifiers);
-		}
+		accept(allInitializedIdentifiers);
 		
 		return allInitializedIdentifiers.getInitializedIdentifiers();	
 	}
 	
-	public HashSet<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
+	private HashSet<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
+		
 		HashSet<String> result = getAllIdentifiers();
 		
 		result.removeAll(getInitializedIdentifiers());
@@ -151,7 +166,7 @@ public class Program implements Serializable {
 		return result;
 	}
 	
-	public ArrayList<String> sortIdentifiers(HashSet<String> ids) throws InvalidArgumentException {
+	private ArrayList<String> sortIdentifiers(HashSet<String> ids) throws InvalidArgumentException {
 		
 		ArrayList<String> result = new ArrayList<String>(ids); 
 		
@@ -170,17 +185,6 @@ public class Program implements Serializable {
 		return sortIdentifiers(getUnitilializedIdentifiers());
 	}
 	
-	/**
-	 * Sets the program's expressions to the given collection of expressions.
-	 *
-	 * The collection is "converted" to an ArrayList.
-	 * 
-	 * @param expressions collection of expressions to set 
-	 */
-	public void set(Collection<Expression> expressions) {
-		
-		_expressions = new ArrayList<>(expressions);	
-	}
 	
 	/**
 	 * Converts the entire program to a text format, in the program's language.
@@ -229,4 +233,5 @@ public class Program implements Serializable {
 		
 		return result;
 	}
+
 }
