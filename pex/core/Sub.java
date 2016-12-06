@@ -18,5 +18,4 @@ public class Sub extends BinaryExpressionInteger {
 
 		return int1 - int2;
 	}
-
 }

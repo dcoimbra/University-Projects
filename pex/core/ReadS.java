@@ -2,6 +2,7 @@ package pex.core;
 import pex.AppIO;
 
 public class ReadS extends CompositeExpression {
+	
 	AppIO _appIO;
 
 	public ReadS(AppIO app) {
@@ -20,5 +21,4 @@ public class ReadS extends CompositeExpression {
 		
 		return new StringLiteral(_appIO.readString());
 	}
-
 }

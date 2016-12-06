@@ -40,5 +40,4 @@ public abstract class TernaryExpression extends BinaryExpression {
 	}
 
 	public abstract String getOperator();
-
 }

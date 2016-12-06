@@ -18,5 +18,4 @@ public class Ge extends BinaryExpressionInteger {
 
 		return (int1 >= int2 ? 1 : 0);
 	}
-
 }

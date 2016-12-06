@@ -21,16 +21,17 @@ public abstract class VariadicExpression extends CompositeExpression {
 	@Override
 	public String getAsText() {
 		
-		String asText = "(" + getOperator();
+		StringBuffer asTextBuf = new StringBuffer("(" + getOperator());
 		
-		for(Expression argument : _args) {
+		for (Expression argument : _args) {
 	
-			asText += " " + argument.getAsText();
+			asTextBuf.append(" " + argument.getAsText());
 		}
 		
+		String asText = asTextBuf.toString();
+
 		return asText + ")";
 	}
 
 	public abstract String getOperator();
-
 }

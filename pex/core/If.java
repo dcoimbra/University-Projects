@@ -34,5 +34,4 @@ public class If extends TernaryExpression {
 		
 		return arg3;
 	}
-
 }

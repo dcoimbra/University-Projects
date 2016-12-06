@@ -52,6 +52,7 @@ public class Program implements Serializable, Element {
 	 * @return the current program's name
 	 */
 	public String getName() {
+		
 		return _name;
 	}
 	
@@ -195,14 +196,15 @@ public class Program implements Serializable, Element {
 	 */
 	public String getAsText() {
 		
-		String allExpressions = "";
+		StringBuffer allExpressionsBuf = new StringBuffer();
 		
 		for(Expression expression : _expressions) {
 		
 			//call getAsText() for every expression and separate them in lines
-			allExpressions += (expression.getAsText() + "\n");
+			allExpressionsBuf.append(expression.getAsText() + "\n");
 		}
 		
+		String allExpressions = allExpressionsBuf.toString();
 		return allExpressions;
 	}
 
@@ -233,5 +235,4 @@ public class Program implements Serializable, Element {
 		
 		return result;
 	}
-
 }

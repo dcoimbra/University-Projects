@@ -25,5 +25,4 @@ public class StringLiteral extends Literal {
 		
 		return _value;
 	}
-
 }

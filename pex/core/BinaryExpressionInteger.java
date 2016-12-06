@@ -8,10 +8,12 @@ public abstract class BinaryExpressionInteger extends BinaryExpression {
 
 	@Override
 	public Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
+		
 		Literal arg1 = getFirstArgument().evaluate();
 		Literal arg2 = getSecondArgument().evaluate();
 		
-		if(arg1.isIntegerLiteral() && arg2.isIntegerLiteral()){
+		if (arg1.isIntegerLiteral() && arg2.isIntegerLiteral()){
+			
 			int int1 = ((IntegerLiteral)arg1).intValue();
 			int int2 = ((IntegerLiteral)arg2).intValue();
 			
@@ -22,5 +24,4 @@ public abstract class BinaryExpressionInteger extends BinaryExpression {
 	}
 	
 	public abstract int evaluateInteger(int int1, int int2);
-
 }

@@ -185,7 +185,7 @@ public class Interpreter implements Serializable {
 		NewParser parser = new NewParser();        
 	    Program program = parser.parseFile(fileName, programName, this);
 
-	    this.addProgram(program);
+	    this.addProgram(program);	    
 	    
 	    this.setWasChangedFlag(true);
 	}

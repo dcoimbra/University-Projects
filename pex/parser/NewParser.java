@@ -21,6 +21,7 @@ public class NewParser {
     // may need aditional fields
 
     public NewParser() {
+    
     }
 
     private void initTokenizer(Reader reader) {
@@ -33,7 +34,6 @@ public class NewParser {
                                                                                                   MissingClosingParenthesisException, UnknownOperationException, EndOfInputException  {
         _program = new Program(programName, currentInterpreter);
         _app = currentInterpreter.getAppIO();
-
       
         try (FileReader reader = new FileReader(fileName)) {
 

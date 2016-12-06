@@ -24,14 +24,16 @@ public class Print extends VariadicExpression {
 	public Literal evaluate() throws InvalidArgumentException, NoSuchProgramException {
 		
 		Literal result = new IntegerLiteral(0);
-		String resultString = "";
+		StringBuffer resultStringBuf = new StringBuffer();
         		
-		for(Expression arg: getArguments()) {
+		for (Expression arg : getArguments()) {
 			
 			result = arg.evaluate();
 			
-			resultString += result.getValueAsString();   
+			resultStringBuf.append(result.getValueAsString());   
 		}
+		
+		String resultString = resultStringBuf.toString();
 		
 		_appIO.println(resultString);		
 		return result;

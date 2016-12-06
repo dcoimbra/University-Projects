@@ -18,5 +18,4 @@ public class Not extends UnaryExpressionInteger {
 		
 		return (int1 == 0 ? 1 : 0);
 	}
-
 }

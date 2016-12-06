@@ -18,5 +18,4 @@ public class Mul extends BinaryExpressionInteger {
 
 		return int1 * int2;
 	}
-
 }

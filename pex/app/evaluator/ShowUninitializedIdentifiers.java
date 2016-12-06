@@ -29,14 +29,17 @@ public class ShowUninitializedIdentifiers extends ProgramCommand {
     public final void execute() throws InvalidOperation {
 
         try {
-        	ArrayList<String> ids = entity().getSortedUninitializedIdentifiers();
         	
-        	for(String name : ids) {
-        		
-                Display display = new Display();
-        		display.add(name);
-                display.display();
+            ArrayList<String> ids = entity().getSortedUninitializedIdentifiers();
+        	
+            Display display = new Display();
+        	
+            for (String name : ids) {
+                    
+        		display.addNewLine(name);
         	}
+
+            display.display();
         }
         
         catch (InvalidArgumentException iae) {

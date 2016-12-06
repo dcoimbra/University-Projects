@@ -10,9 +10,8 @@ public abstract class CompositeExpression extends Expression {
 		return new ArrayList<Expression>();
 	}
 	
-	
 	public void accept(Visitor v) {
+		
 		v.visit(this);
-	}
-	
+	}	
 }

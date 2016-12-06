@@ -34,11 +34,14 @@ public class ShowAllIdentifiers extends ProgramCommand {
             
             ArrayList<String> ids = entity().getSortedIdentifiers();
 
-            for(String name : ids) {
-                Display display = new Display();
-                display.add(name);
-                display.display();
+            Display display = new Display();
+            
+            for (String name : ids) {
+                        
+                display.addNewLine(name);
             }
+
+            display.display();
         }
 
         catch (InvalidArgumentException iae) {

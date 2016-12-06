@@ -32,7 +32,5 @@ public class While extends BinaryExpression {
 			
 			getSecondArgument().evaluate();			
 		}
-
 	}
-
 }

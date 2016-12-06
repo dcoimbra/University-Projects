@@ -25,6 +25,7 @@ public class MissingClosingParenthesisException extends ParserException {
      * @return the invalid expression
      */
     public String getInvalidOperation() {
+        
         return _expression;
     }
 

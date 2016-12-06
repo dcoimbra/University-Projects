@@ -25,6 +25,7 @@ public class BadNumberException extends ParserException {
    * @return the number
    */
   public String getNumber() {
+    
     return _number;
   }
 

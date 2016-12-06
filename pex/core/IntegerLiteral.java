@@ -31,5 +31,4 @@ public class IntegerLiteral extends Literal {
 		
 		return getAsText();
 	}
-
 }

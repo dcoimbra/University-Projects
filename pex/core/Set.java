@@ -34,7 +34,7 @@ public class Set extends BinaryExpression {
 	
 	@Override
 	public void accept(Visitor v) {
+		
 		v.visit(this);
 	}
-
 }

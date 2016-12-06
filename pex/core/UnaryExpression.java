@@ -34,5 +34,4 @@ public abstract class UnaryExpression extends CompositeExpression {
 	}
 
 	public abstract String getOperator();
-
 }
