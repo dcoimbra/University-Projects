@@ -14,6 +14,7 @@ public class VisitorAllIdentifiers implements Visitor {
 		return _allIdentifiers;
 	}
 	
+	@Override
 	public void visit(CompositeExpression expression) {
 		
 		for(Expression exp : expression.getArguments()) {
@@ -24,6 +25,8 @@ public class VisitorAllIdentifiers implements Visitor {
 	
 	@Override
 	public void visit(Set expression) {
+
+		visit((CompositeExpression)expression);
 		
 	}
 
