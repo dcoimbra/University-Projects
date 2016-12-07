@@ -18,7 +18,8 @@ public class VisitorAllIdentifiers implements Visitor {
 	
 	public void visit(CompositeExpression expression) {
 		
-		for(Expression exp : expression.getArguments()) {
+		for (Expression exp : expression.getArguments()) {
+			
 			exp.accept(this);
 		}	
 	}
