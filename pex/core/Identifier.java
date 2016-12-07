@@ -13,6 +13,7 @@ public class Identifier extends Expression {
 	
 	@Override
 	public boolean isIdentifier() {
+	
 		return true;
 	}
 	

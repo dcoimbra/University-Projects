@@ -1,17 +1,17 @@
 package pex.core;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 public class VisitorAllIdentifiers implements Visitor {
 	
-	private HashSet<String> _allIdentifiers;
+	private TreeSet<String> _allIdentifiers;
 	
 	public VisitorAllIdentifiers() {
 		
-		_allIdentifiers =  new HashSet<String>();
+		_allIdentifiers = new TreeSet<String>();
 	}
 	
-	public HashSet<String> getIdentifiers() {
+	public TreeSet<String> getIdentifiers() {
 		
 		return _allIdentifiers;
 	}

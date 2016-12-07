@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 /**
  * A program consists of a set of expressions. Can be executed by its interpreter.
@@ -47,8 +47,6 @@ public class Program implements Serializable, Element {
 	}
 
 	/**
-	 * Returns the program's name.
-	 *
 	 * @return the current program's name
 	 */
 	public String getName() {
@@ -57,8 +55,6 @@ public class Program implements Serializable, Element {
 	}
 	
 	/**
-	 * Returns the program with the given name.
-	 *
 	 * @return the program with the given name
 	 */
  	public Program getProgram(String name) {
@@ -66,12 +62,19 @@ public class Program implements Serializable, Element {
 		return _currentInterpreter.getProgram(name);
 	}
 
+	/**
+	 * @return the current interpreter
+	 */
 	public Interpreter getCurrentInterpreter() {
 
 		return _currentInterpreter;
 	}
 	
+	/**
+	 * @return this program's expressions
+	 */
 	public ArrayList<Expression> getExpressionList() {
+	
 		return _expressions;
 	}
 	
@@ -135,7 +138,6 @@ public class Program implements Serializable, Element {
 		return _currentInterpreter.getIdentifierValue(id);
 	}
 	
-
 	/**
 	 * Accepts a visit by a given visitor
 	 *
@@ -152,13 +154,18 @@ public class Program implements Serializable, Element {
 	 *
 	 * @return set that contains all identifiers
 	 */
-	private HashSet<String> getAllIdentifiers() {
+	public ArrayList<String> getAllIdentifiers() throws InvalidArgumentException {
 		
 		VisitorAllIdentifiers allIdentifiers = new VisitorAllIdentifiers();
+		TreeSet<String> ids;
+		ArrayList<String> result;
 		
 		accept(allIdentifiers);
 		
-		return allIdentifiers.getIdentifiers();	
+		ids = allIdentifiers.getIdentifiers();
+		result = new ArrayList<String>(ids);
+
+		return result;
 	}
 	
 	/**
@@ -166,13 +173,18 @@ public class Program implements Serializable, Element {
 	 *
 	 * @return set that contains all initialized identifiers
 	 */
-	private HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
+	private ArrayList<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
 		VisitorInitializedIdentifiers allInitializedIdentifiers = new VisitorInitializedIdentifiers();
+		TreeSet<String> ids;
+		ArrayList<String> result;
 		
 		accept(allInitializedIdentifiers);
 		
-		return allInitializedIdentifiers.getInitializedIdentifiers();	
+		ids = allInitializedIdentifiers.getInitializedIdentifiers();
+		result = new ArrayList<String>(ids);
+
+		return result;	
 	}
 	
 	/**
@@ -180,43 +192,13 @@ public class Program implements Serializable, Element {
 	 * 
 	 * @return set that contains all unitialized identifiers
 	 */
-	private HashSet<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
+	public ArrayList<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
 		
-		HashSet<String> result = getAllIdentifiers();
+		ArrayList<String> result = getAllIdentifiers();
 		
 		result.removeAll(getInitializedIdentifiers());
 		
 		return result;
-	}
-	
-	/**
-	 * Sorts a set of given identifiers
-	 *
-	 * @return sorted identifier list
-	 */
-	private ArrayList<String> sortIdentifiers(HashSet<String> ids) throws InvalidArgumentException {
-		
-		ArrayList<String> result = new ArrayList<String>(ids); 
-		
-		Collections.sort(result);
-		
-		return result;
-	}
-	
-	/**
-	 * @return sorted identifier list 
-	 */
-	public ArrayList<String> getSortedIdentifiers() throws InvalidArgumentException {
-		
-		return sortIdentifiers(getAllIdentifiers());
-	}
-
-	/**
-	 * @return sorted list of uninitialized identifiers
-	 */
-	public ArrayList<String> getSortedUninitializedIdentifiers() throws InvalidArgumentException {
-		
-		return sortIdentifiers(getUnitilializedIdentifiers());
 	}
 	
 	/**
@@ -228,7 +210,7 @@ public class Program implements Serializable, Element {
 	 */
 	public String getAsText() {
 		
-		StringBuffer allExpressionsBuf = new StringBuffer();
+		StringBuilder allExpressionsBuf = new StringBuilder();
 		
 		for(Expression expression : _expressions) {
 		
@@ -242,6 +224,8 @@ public class Program implements Serializable, Element {
 
 	/**
 	 * Writes the program's textual form to a file.
+	 *
+	 * @param file to write in
 	 */
 	public void writeToFile(String fileName) throws IOException {
 
@@ -265,6 +249,7 @@ public class Program implements Serializable, Element {
 		Literal result = new IntegerLiteral(0);
 		
 		for (Expression expression : _expressions) {
+			
 			result = expression.evaluate();
 		}
 		

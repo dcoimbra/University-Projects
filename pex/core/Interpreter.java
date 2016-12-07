@@ -52,6 +52,9 @@ public class Interpreter implements Serializable {
 	 */
 	private boolean _wasChanged = true;
 	
+	/**
+	 * Identifiers associated to the programs in this interpreter
+	 */
 	private Map<String, Literal> _identifiers = new HashMap<>();
 
 	/**

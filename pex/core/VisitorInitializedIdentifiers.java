@@ -1,14 +1,14 @@
 package pex.core;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 public class VisitorInitializedIdentifiers implements Visitor {
 	
-	private HashSet<String> _allInitializedIdentifiers;
+	private TreeSet<String> _allInitializedIdentifiers;
 	
 	public VisitorInitializedIdentifiers() {
 		
-		_allInitializedIdentifiers =  new HashSet<String>();
+		_allInitializedIdentifiers =  new TreeSet<String>();
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class VisitorInitializedIdentifiers implements Visitor {
 	
 	}
 	
-	public HashSet<String> getInitializedIdentifiers() {
+	public TreeSet<String> getInitializedIdentifiers() {
 		
 		return _allInitializedIdentifiers;
 	}

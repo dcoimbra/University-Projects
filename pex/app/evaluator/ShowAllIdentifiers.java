@@ -32,7 +32,7 @@ public class ShowAllIdentifiers extends ProgramCommand {
        
         try { 
             
-            ArrayList<String> ids = entity().getSortedIdentifiers();
+            ArrayList<String> ids = entity().getAllIdentifiers();
 
             Display display = new Display();
             

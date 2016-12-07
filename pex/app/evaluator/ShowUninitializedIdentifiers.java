@@ -30,7 +30,7 @@ public class ShowUninitializedIdentifiers extends ProgramCommand {
 
         try {
         	
-            ArrayList<String> ids = entity().getSortedUninitializedIdentifiers();
+            ArrayList<String> ids = entity().getUnitilializedIdentifiers();
         	
             Display display = new Display();
         	
