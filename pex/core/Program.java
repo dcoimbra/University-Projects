@@ -125,7 +125,7 @@ public class Program implements Serializable, Element {
 	}
 
 	/**
-	 * Gives the value associated to the given identifier.
+	 * Returns the value associated to the given identifier.
 	 *
 	 * @param id the given identifier
 	 * @return the associated value
@@ -135,11 +135,23 @@ public class Program implements Serializable, Element {
 		return _currentInterpreter.getIdentifierValue(id);
 	}
 	
+
+	/**
+	 * Accepts a visit by a given visitor
+	 *
+	 * @param the given visitor
+	 */
 	@Override
 	public void accept(Visitor v) {
+		
 		v.visit(this);	
 	}
 	
+	/**
+	 * Returns the identifiers shared by the programs.
+	 *
+	 * @return set that contains all identifiers
+	 */
 	private HashSet<String> getAllIdentifiers() {
 		
 		VisitorAllIdentifiers allIdentifiers = new VisitorAllIdentifiers();
@@ -149,6 +161,11 @@ public class Program implements Serializable, Element {
 		return allIdentifiers.getIdentifiers();	
 	}
 	
+	/**
+	 * Returns the initialized identifiers shared by the programs.
+	 *
+	 * @return set that contains all initialized identifiers
+	 */
 	private HashSet<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
 		VisitorInitializedIdentifiers allInitializedIdentifiers = new VisitorInitializedIdentifiers();
@@ -158,6 +175,11 @@ public class Program implements Serializable, Element {
 		return allInitializedIdentifiers.getInitializedIdentifiers();	
 	}
 	
+	/**
+	 * Returns the unitialized identifiers shared by the programs.
+	 * 
+	 * @return set that contains all unitialized identifiers
+	 */
 	private HashSet<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
 		
 		HashSet<String> result = getAllIdentifiers();
@@ -167,6 +189,11 @@ public class Program implements Serializable, Element {
 		return result;
 	}
 	
+	/**
+	 * Sorts a set of given identifiers
+	 *
+	 * @return sorted identifier list
+	 */
 	private ArrayList<String> sortIdentifiers(HashSet<String> ids) throws InvalidArgumentException {
 		
 		ArrayList<String> result = new ArrayList<String>(ids); 
@@ -176,16 +203,21 @@ public class Program implements Serializable, Element {
 		return result;
 	}
 	
+	/**
+	 * @return sorted identifier list 
+	 */
 	public ArrayList<String> getSortedIdentifiers() throws InvalidArgumentException {
 		
 		return sortIdentifiers(getAllIdentifiers());
 	}
-	
+
+	/**
+	 * @return sorted list of uninitialized identifiers
+	 */
 	public ArrayList<String> getSortedUninitializedIdentifiers() throws InvalidArgumentException {
 		
 		return sortIdentifiers(getUnitilializedIdentifiers());
 	}
-	
 	
 	/**
 	 * Converts the entire program to a text format, in the program's language.
@@ -208,6 +240,9 @@ public class Program implements Serializable, Element {
 		return allExpressions;
 	}
 
+	/**
+	 * Writes the program's textual form to a file.
+	 */
 	public void writeToFile(String fileName) throws IOException {
 
 		String programCode = this.getAsText();
