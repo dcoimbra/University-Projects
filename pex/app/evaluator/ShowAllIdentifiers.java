@@ -2,13 +2,10 @@ package pex.app.evaluator;
 
 import java.util.ArrayList;
 
-import pex.app.main.Message;
-
 import pex.core.Program;
 import pex.core.InvalidArgumentException;
 
 import pt.utl.ist.po.ui.Display;
-
 import pt.utl.ist.po.ui.InvalidOperation;
 
 /**

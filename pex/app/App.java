@@ -2,13 +2,11 @@ package pex.app;
 
 import pex.AppIO;
 
-import pex.parser.NewParser;
 import pex.parser.ParserException;
 
 import pex.app.main.MainMenu;
 
 import pex.core.Interpreter;
-import pex.core.Program;
 
 import java.io.Serializable;
 
@@ -23,7 +21,7 @@ import pt.utl.ist.po.ui.UserInteraction;
  * This is a sample client for the expression evaluator.
  * It uses a text-based user interface.
  */
-public class App implements AppIO, java.io.Serializable {
+public class App implements AppIO, Serializable {
     
     /**
      * Current interpreter, associated to this app.

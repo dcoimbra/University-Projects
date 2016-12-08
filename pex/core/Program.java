@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.TreeSet;
 
 /**
@@ -150,9 +149,9 @@ public class Program implements Serializable, Element {
 	}
 	
 	/**
-	 * Returns the identifiers shared by the programs.
+	 * Returns the identifiers in the program.
 	 *
-	 * @return set that contains all identifiers
+	 * @return set that contains all identifiers in the program
 	 */
 	public ArrayList<String> getAllIdentifiers() throws InvalidArgumentException {
 		
@@ -169,9 +168,9 @@ public class Program implements Serializable, Element {
 	}
 	
 	/**
-	 * Returns the initialized identifiers shared by the programs.
+	 * Returns the initialized identifiers in the program.
 	 *
-	 * @return set that contains all initialized identifiers
+	 * @return set that contains all initialized identifiers in the program
 	 */
 	private ArrayList<String> getInitializedIdentifiers() throws InvalidArgumentException {
 		
@@ -188,9 +187,9 @@ public class Program implements Serializable, Element {
 	}
 	
 	/**
-	 * Returns the unitialized identifiers shared by the programs.
+	 * Returns the uninitialized identifiers in the program.
 	 * 
-	 * @return set that contains all unitialized identifiers
+	 * @return set that contains all uninitialized identifiers in the program
 	 */
 	public ArrayList<String> getUnitilializedIdentifiers() throws InvalidArgumentException {
 		
