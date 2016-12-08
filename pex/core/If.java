@@ -20,7 +20,7 @@ public class If extends TernaryExpression {
 		
 		if (!arg1.isIntegerLiteral()) {
 			
-			throw new InvalidArgumentException(arg1);
+			throw new InvalidArgumentException(this);
 		}
 		
 		if (((IntegerLiteral)arg1).intValue() != 0) {

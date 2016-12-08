@@ -20,7 +20,7 @@ public abstract class BinaryExpressionInteger extends BinaryExpression {
 			return new IntegerLiteral(evaluateInteger(int1, int2));
 		}
 		
-		throw new InvalidArgumentException(arg1,arg2);
+		throw new InvalidArgumentException(this);
 	}
 	
 	public abstract int evaluateInteger(int int1, int int2);

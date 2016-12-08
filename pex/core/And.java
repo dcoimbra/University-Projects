@@ -20,7 +20,7 @@ public class And extends BinaryExpression {
 		
 		if (!arg1.isIntegerLiteral()) {
 			
-			throw new InvalidArgumentException(arg1);
+			throw new InvalidArgumentException(this);
 		}
 		
 		int int1 = ((IntegerLiteral)arg1).intValue();
@@ -34,7 +34,7 @@ public class And extends BinaryExpression {
 		
 		if (!arg2.isIntegerLiteral()) {
 
-			throw new InvalidArgumentException(arg2);
+			throw new InvalidArgumentException(this);
 		}
 		
 		int int2 = ((IntegerLiteral)arg2).intValue();

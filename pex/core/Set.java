@@ -22,7 +22,7 @@ public class Set extends BinaryExpression {
 		
 		if (!arg1.isIdentifier()) {
 			
-			throw new InvalidArgumentException(arg1);
+			throw new InvalidArgumentException(this);
 		}
 		
 		Literal value = getSecondArgument().evaluate();

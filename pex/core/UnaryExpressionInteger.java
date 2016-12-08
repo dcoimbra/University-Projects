@@ -19,7 +19,7 @@ public abstract class UnaryExpressionInteger extends UnaryExpression {
 			return new IntegerLiteral(evaluateInteger(int1));
 		}
 		
-		throw new InvalidArgumentException(arg1);
+		throw new InvalidArgumentException(this);
 	}
 	
 	public abstract int evaluateInteger(int int1);
