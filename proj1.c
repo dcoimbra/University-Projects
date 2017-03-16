@@ -25,12 +25,17 @@ void addEdge(Graph graph, int origin, int destination);
 void dfs(Graph graph);
 void dfsVisit(Graph graph, int head, int* time);
 
-int* colour;
-int* parent;
-int* disc_time;
-int* fin_time;
+typedef struct photo {
 
-int main(int argc, char const *argv[])
+	int colour;
+	int parent;
+	int disc_time;
+	int fin_time;
+} Photo;
+
+Photo* photo_info;
+
+int main()
 {
 	int vertices, edges;
 	int i;
@@ -77,10 +82,12 @@ Graph initGraph(int vertices) {
 		graph->adjacency_list[i] = NULL;
 	}
 
-	colour = (int*) malloc(vertices * sizeof(int));
+	/*colour = (int*) malloc(vertices * sizeof(int));
 	parent = (int*) malloc(vertices * sizeof(int));
 	disc_time = (int*) malloc(vertices * sizeof(int));
-	fin_time = (int*) malloc(vertices * sizeof(int));
+	fin_time = (int*) malloc(vertices * sizeof(int)); */
+
+	photo_info = (Photo*) malloc(vertices * sizeof(struct photo)); 
 
 	return graph;
 }
@@ -99,15 +106,15 @@ void dfs(Graph graph) {
 
 	for (i = 0; i < vertices; i++) {
 
-		colour[i] = WHITE;
-		parent[i] = NIL;
+		photo_info[i].colour = WHITE;
+		photo_info[i].parent = NIL;
 	}
 
 	time = 1;
 
 	for (i = 0; i < vertices; i++) {
 
-		if (colour[i] == WHITE) {
+		if (photo_info[i].colour == WHITE) {
 
 			dfsVisit(graph, i, &time);
 		}
@@ -121,10 +128,10 @@ void dfsVisit(Graph graph, int head, int* time) {
 	Node* list;
 	Node temp;
 
-	colour[head] = GREY;
-	disc_time[head] = *time;
+	photo_info[head].colour = GREY;
+	photo_info[head].disc_time = *time;
 
-	printf("Photo %d is grey at time %d\n", head + 1, disc_time[head]);
+	printf("Photo %d is grey at time %d\n", head + 1, photo_info[head].disc_time);
 
 	(*time)++;
 
@@ -135,17 +142,17 @@ void dfsVisit(Graph graph, int head, int* time) {
 
 		adj_idx = temp->vertex;
 
-		if (colour[adj_idx] == WHITE) {
+		if (photo_info[adj_idx].colour == WHITE) {
 
-			parent[adj_idx] = head;
+			photo_info[adj_idx].parent = head;
 			dfsVisit(graph, adj_idx, time);
 		}
 
 		temp = temp->next;
 	}
 
-	colour[head] = BLACK;
-	fin_time[head] = *time;
-	printf("Photo %d is black at time %d\n", head + 1, fin_time[head]);
+	photo_info[head].colour = BLACK;
+	photo_info[head].fin_time = *time;
+	printf("Photo %d is black at time %d\n", head + 1, photo_info[head].fin_time);
 	(*time)++;
 }
