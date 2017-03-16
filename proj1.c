@@ -6,6 +6,9 @@
 #define BLACK 2 
 #define NIL -1
 
+#define SUCCESS 1
+#define FAILURE 0
+
 typedef struct node {
 	
 	int vertex;
@@ -34,6 +37,7 @@ typedef struct photo {
 } Photo;
 
 Photo* photo_info;
+int* sorted;
 
 int main()
 {
@@ -82,11 +86,6 @@ Graph initGraph(int vertices) {
 		graph->adjacency_list[i] = NULL;
 	}
 
-	/*colour = (int*) malloc(vertices * sizeof(int));
-	parent = (int*) malloc(vertices * sizeof(int));
-	disc_time = (int*) malloc(vertices * sizeof(int));
-	fin_time = (int*) malloc(vertices * sizeof(int)); */
-
 	photo_info = (Photo*) malloc(vertices * sizeof(struct photo)); 
 
 	return graph;
@@ -104,6 +103,10 @@ void dfs(Graph graph) {
 	int i;
 	int time;
 
+	int nil_total = 0;
+
+	sorted = (int*) malloc(vertices * sizeof(int));
+
 	for (i = 0; i < vertices; i++) {
 
 		photo_info[i].colour = WHITE;
@@ -119,19 +122,41 @@ void dfs(Graph graph) {
 			dfsVisit(graph, i, &time);
 		}
 	}
-}
+
+	for (i = 0; i < vertices; i++)
+	{
+		if (photo_info[i].parent == NIL) {
+
+			nil_total++;
+		}
+
+		if (nil_total > 1) {
+
+			printf("Insuficiente\n");
+			return;
+		}
+	}
+	
+	for (i = (vertices - 1); i > 0; i--) {
+
+		printf("%d ", sorted[i] + 1);
+	}
+
+	printf("%d\n", sorted[i] + 1);
+}	
 
 void dfsVisit(Graph graph, int head, int* time) {
 
 	int adj_idx;
 
+	static int idx = 0;
+
 	Node* list;
+	
 	Node temp;
 
 	photo_info[head].colour = GREY;
 	photo_info[head].disc_time = *time;
-
-	printf("Photo %d is grey at time %d\n", head + 1, photo_info[head].disc_time);
 
 	(*time)++;
 
@@ -152,7 +177,7 @@ void dfsVisit(Graph graph, int head, int* time) {
 	}
 
 	photo_info[head].colour = BLACK;
+	sorted[idx++] = head;
 	photo_info[head].fin_time = *time;
-	printf("Photo %d is black at time %d\n", head + 1, photo_info[head].fin_time);
 	(*time)++;
 }
