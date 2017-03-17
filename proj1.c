@@ -6,9 +6,6 @@
 #define BLACK 2 
 #define NIL -1
 
-#define SUCCESS 1
-#define FAILURE 0
-
 typedef struct node {
 	
 	int vertex;
@@ -38,7 +35,7 @@ typedef struct photo {
 
 Photo* photo_info;
 
-int* sorted;
+Node head_sorted = NULL;
 
 int sort_possible = SUCCESS;
 
@@ -106,7 +103,8 @@ void dfs(Graph graph) {
 	int i;
 	int time;
 
-	sorted = (int*) malloc(vertices * sizeof(int));
+	head_sorted = (Node) malloc(sizeof(struct node));
+	head_sorted->next = NULL;
 
 	for (i = 0; i < vertices; i++) {
 
@@ -126,24 +124,25 @@ void dfs(Graph graph) {
 	
 	if (sort_possible) {
 		
-		for (i = (vertices - 1); i > 0; i--) {
+		if (head_sorted) {
+		
+			for(; (head_sorted->next)->next; head_sorted = head_sorted->next) {
+			
+				printf("%d ", head_sorted->vertex);
+			}
 
-			printf("%d ", sorted[i] + 1);
+			printf("%d\n", head_sorted->vertex);
 		}
-
-		printf("%d\n", sorted[i] + 1);
 	}
-}	
+}
 
 void dfsVisit(Graph graph, int head, int* time) {
 
 	int adj_idx;
 
-	static int idx = 0;
-
 	Node* list;
 	
-	Node temp;
+	Node visitor;
 
 	if (!sort_possible) {
 
@@ -161,26 +160,33 @@ void dfsVisit(Graph graph, int head, int* time) {
 		
 		photo_info[head].colour = GREY;
 		photo_info[head].disc_time = *time;
-
 		(*time)++;
 
 		list = graph->adjacency_list;
-		temp = list[head];
+		visitor = list[head];
 
-		while (temp != NULL) {
+		if (visitor) {
 
-			adj_idx = temp->vertex;
+			while (visitor != NULL) {
 
-			photo_info[adj_idx].parent = head;
-			
-			dfsVisit(graph, adj_idx, time);
+				adj_idx = visitor->vertex;
 
-			temp = temp->next;
+				photo_info[adj_idx].parent = head;
+				
+				dfsVisit(graph, adj_idx, time);
+
+				visitor = visitor->next;
+			}
 		}
-
+		
 		photo_info[head].colour = BLACK;
-		sorted[idx++] = head;
 		photo_info[head].fin_time = *time;
+
+		if (head_sorted) {
+			
+			head_sorted = addNode(head + 1, head_sorted);
+		}
+		
 		(*time)++;
 	}
 }	
