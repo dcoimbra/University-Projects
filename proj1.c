@@ -26,7 +26,7 @@ Graph initGraph(int vertices);
 void addEdge(Graph graph, int origin, int destination);
 int findEdge(Graph graph, int origin, int destination);
 void dfs(Graph graph);
-void dfsVisit(Graph graph, int head, int* time);
+void dfsVisit(Graph graph, int head);
 
 typedef struct photo {
 
@@ -36,7 +36,7 @@ typedef struct photo {
 	int fin_time;
 } Photo;
 
-Photo* photo_info;
+int* colour;
 
 Node head_sorted = NULL;
 
@@ -89,7 +89,7 @@ Graph initGraph(int vertices) {
 		graph->adjacency_list[i] = NULL;
 	}
 
-	photo_info = (Photo*) malloc(vertices * sizeof(struct photo)); 
+	colour = (int*) malloc(vertices * sizeof(int)); 
 
 	return graph;
 }
@@ -104,7 +104,6 @@ void dfs(Graph graph) {
 
 	int vertices = graph->vertices;
 	int i;
-	int time;
 
 	int u, v;
 
@@ -115,17 +114,14 @@ void dfs(Graph graph) {
 
 	for (i = 0; i < vertices; i++) {
 
-		photo_info[i].colour = WHITE;
-		photo_info[i].parent = NIL;
+		colour[i] = WHITE;
 	}
-
-	time = 1;
 
 	for (i = 0; i < vertices; i++) {
 
-		if (photo_info[i].colour == WHITE) {
+		if (colour[i] == WHITE) {
 
-			dfsVisit(graph, i, &time);
+			dfsVisit(graph, i);
 		}
 	}
 
@@ -133,7 +129,6 @@ void dfs(Graph graph) {
 
 		aux = head_sorted;
 
-		printf("Checking uniqueness...\n");
 		if (aux) {
 			
 			for (; (aux->next)->next; aux = aux->next) {
@@ -141,18 +136,13 @@ void dfs(Graph graph) {
 				u = (aux->vertex);
 				v = (aux->next)->vertex;
 
-				printf("Finding edge (%d %d)\n", u + 1 , v + 1);
 				if (!(findEdge(graph, u, v))) {
 
 					printf("Insuficiente\n");
 					return; 
 				}
-
-				printf("Found edge (%d %d)\n", u + 1, v + 1);
 			}
 		}
-
-		printf("Unique!\n");
 			
 		if (head_sorted) {
 			
@@ -166,7 +156,7 @@ void dfs(Graph graph) {
 	}
 }
 
-void dfsVisit(Graph graph, int head, int* time) {
+void dfsVisit(Graph graph, int head) {
 
 	int adj_idx;
 
@@ -179,18 +169,16 @@ void dfsVisit(Graph graph, int head, int* time) {
 		return;
 	}
 
-	if (photo_info[head].colour == GREY) {
+	if (colour[head] == GREY) {
 
 		printf("Inconsistente\n");
 		sort_possible = FAILURE;
 		return;
 	}
 
-	if (photo_info[head].colour == WHITE) {
+	if (colour[head] == WHITE) {
 		
-		photo_info[head].colour = GREY;
-		photo_info[head].disc_time = *time;
-		(*time)++;
+		colour[head] = GREY;
 
 		list = graph->adjacency_list;
 		visitor = list[head];
@@ -198,20 +186,15 @@ void dfsVisit(Graph graph, int head, int* time) {
 		while (visitor != NULL) {
 
 			adj_idx = visitor->vertex;
-
-			photo_info[adj_idx].parent = head;
 				
-			dfsVisit(graph, adj_idx, time);
+			dfsVisit(graph, adj_idx);
 
 			visitor = visitor->next;
 		}
 				
-		photo_info[head].colour = BLACK;
-		photo_info[head].fin_time = *time;
+		colour[head] = BLACK;
 	
 		head_sorted = addNode(head, head_sorted);
-		
-		(*time)++;
 	}
 }
 
@@ -221,14 +204,10 @@ int findEdge(Graph graph, int origin, int destination) {
 
 	Node visitor = list[origin];
 
-	printf("In list %d\n", origin + 1);
-
 	while (visitor != NULL) {
 
-		printf("Checking vertex %d\n", visitor->vertex + 1);
 		if (visitor->vertex == destination) {
 
-			printf("%d is adjacent to %d\n", visitor->vertex + 1, origin + 1);
 			return SUCCESS;
 		}
 
