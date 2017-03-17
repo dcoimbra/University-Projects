@@ -37,7 +37,10 @@ typedef struct photo {
 } Photo;
 
 Photo* photo_info;
+
 int* sorted;
+
+int sort_possible = SUCCESS;
 
 int main()
 {
@@ -121,12 +124,15 @@ void dfs(Graph graph) {
 		}
 	}
 	
-	for (i = (vertices - 1); i > 0; i--) {
+	if (sort_possible) {
+		
+		for (i = (vertices - 1); i > 0; i--) {
 
-		printf("%d ", sorted[i] + 1);
+			printf("%d ", sorted[i] + 1);
+		}
+
+		printf("%d\n", sorted[i] + 1);
 	}
-
-	printf("%d\n", sorted[i] + 1);
 }	
 
 void dfsVisit(Graph graph, int head, int* time) {
@@ -139,29 +145,42 @@ void dfsVisit(Graph graph, int head, int* time) {
 	
 	Node temp;
 
-	photo_info[head].colour = GREY;
-	photo_info[head].disc_time = *time;
+	if (!sort_possible) {
 
-	(*time)++;
-
-	list = graph->adjacency_list;
-	temp = list[head];
-
-	while (temp != NULL) {
-
-		adj_idx = temp->vertex;
-
-		if (photo_info[adj_idx].colour == WHITE) {
-
-			photo_info[adj_idx].parent = head;
-			dfsVisit(graph, adj_idx, time);
-		}
-
-		temp = temp->next;
+		return;
 	}
 
-	photo_info[head].colour = BLACK;
-	sorted[idx++] = head;
-	photo_info[head].fin_time = *time;
-	(*time)++;
-}
+	if (photo_info[head].colour == GREY) {
+
+		printf("Inconsistente\n");
+		sort_possible = FAILURE;
+		return;
+	}
+
+	if (photo_info[head].colour == WHITE) {
+		
+		photo_info[head].colour = GREY;
+		photo_info[head].disc_time = *time;
+
+		(*time)++;
+
+		list = graph->adjacency_list;
+		temp = list[head];
+
+		while (temp != NULL) {
+
+			adj_idx = temp->vertex;
+
+			photo_info[adj_idx].parent = head;
+			
+			dfsVisit(graph, adj_idx, time);
+
+			temp = temp->next;
+		}
+
+		photo_info[head].colour = BLACK;
+		sorted[idx++] = head;
+		photo_info[head].fin_time = *time;
+		(*time)++;
+	}
+}	
