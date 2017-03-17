@@ -156,14 +156,14 @@ void dfs(Graph graph) {
 			
 		if (head_sorted) {
 			
-				for (; (head_sorted->next)->next; head_sorted = head_sorted->next) {
+			for (; (head_sorted->next)->next; head_sorted = head_sorted->next) {
 				
-					printf("%d ", head_sorted->vertex + 1);
-				}
-
-				printf("%d\n", head_sorted->vertex + 1);
+				printf("%d ", head_sorted->vertex + 1);
 			}
+
+			printf("%d\n", head_sorted->vertex + 1);
 		}
+	}
 }
 
 void dfsVisit(Graph graph, int head, int* time) {
