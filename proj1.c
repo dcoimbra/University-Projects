@@ -103,8 +103,6 @@ void dfs(Graph graph) {
 	int i;
 	int time;
 
-	int nil_total = 0;
-
 	sorted = (int*) malloc(vertices * sizeof(int));
 
 	for (i = 0; i < vertices; i++) {
@@ -120,20 +118,6 @@ void dfs(Graph graph) {
 		if (photo_info[i].colour == WHITE) {
 
 			dfsVisit(graph, i, &time);
-		}
-	}
-
-	for (i = 0; i < vertices; i++)
-	{
-		if (photo_info[i].parent == NIL) {
-
-			nil_total++;
-		}
-
-		if (nil_total > 1) {
-
-			printf("Insuficiente\n");
-			return;
 		}
 	}
 	
