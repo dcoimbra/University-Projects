@@ -21,7 +21,6 @@ typedef struct node {
 typedef struct graph {
 	
 	int vertices;
-	int edges;
 	Node* adjacency_list;
 }* Graph;
 
@@ -97,7 +96,6 @@ Graph initGraph(int vertices) {
 	Graph graph = (Graph) malloc(sizeof(struct graph));
 
 	graph->vertices = vertices;
-	graph->edges = 0;
 	graph->adjacency_list = (Node*) malloc(vertices * sizeof(struct node));
 
 	for (i = 0; i < vertices; i++) {
@@ -105,7 +103,7 @@ Graph initGraph(int vertices) {
 		graph->adjacency_list[i] = NULL;
 	}
 
-	/* also allocates memory for DFS colour array */
+	/* allocating memory for DFS colour array */
 	vertex_colour = (int*) malloc(vertices * sizeof(int)); 
 
 	return graph;
@@ -126,7 +124,6 @@ Node addNode(int vertex, Node head) {
 void addEdge(Graph graph, int origin, int destination) {
 
 	graph->adjacency_list[origin] = addNode(destination, graph->adjacency_list[origin]);
-	graph->edges++;
 }
 
 /* finds a given directed edge in a given graph */
@@ -174,7 +171,7 @@ void dfsVisit(Graph graph, int head) {
 	Node* list;
 	Node visitor;
 
-	/* if we find a vertex that has already been visited, but not closed, there is a cycle */
+	/* finding incoherences */
 	if (vertex_colour[head] == GREY) {
 		
 		printf("Incoerente\n");
@@ -194,14 +191,14 @@ void dfsVisit(Graph graph, int head) {
 			dfsVisit(graph, adj_idx);	
 		}
 		
-		/* closed vertex is added to the beginning of the topological order */
+		/* adding closed vertex to the beginning of the sorted list (and marking it as closed) */
 		vertex_colour[head] = BLACK;	
 		head_sorted = addNode(head, head_sorted);
 	}
 }
 
-/* checks if the topological order is unique for a given graph
-   if the topological order is a Hamilton path in the graph, the 
+/* Checks if the topological order is unique for a given graph.
+   If the topological order is a Hamilton path in the graph, the 
    order is unique */
 int uniqueOrder(Graph graph) {
 
@@ -225,7 +222,7 @@ int uniqueOrder(Graph graph) {
 	return SUCCESS;
 }
 
-/* Prints all the values topologically ordered */
+/* Prints all the values, topologically ordered */
 void printSortedList() {
 
 	if (head_sorted) {
@@ -239,7 +236,7 @@ void printSortedList() {
 	}
 }
 
-/* Frees memory allocated for a graph */
+/* Frees all memory allocated for a graph */
 void cleanupGraph(Graph graph) {
 
 	int i;
@@ -252,7 +249,7 @@ void cleanupGraph(Graph graph) {
 	free(graph);
 }
 
-/* Frees memory allocated for a linked list */
+/* Frees all memory allocated for a linked list */
 void cleanupList(Node head) {
 
 	Node temp; 
