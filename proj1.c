@@ -1,3 +1,8 @@
+/*1º Projecto de ASA 16/17 - Taguspark
+	Filipa Marques - 57842
+	David Coimbra - 84705
+	Grupo 10 */
+
 /* Standard library*/
 #include <stdio.h>
 #include <stdlib.h>
