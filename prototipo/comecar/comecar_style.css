@@ -1,0 +1,31 @@
+body {
+
+	font-family: Times;
+}
+
+#circle {
+	background: transparent; 
+	border-radius: 50%;
+	width: 500pt;
+	height: 500pt;
+	border: 1.7pt solid black;
+	line-height: 500pt;
+	text-align: center;
+	position: relative;  /* Child elements with absolute positioning will be positioned relative to this div */
+	font-size: 50pt;
+}
+
+#tophalfcircle {
+
+	position: absolute;
+	background: transparent;
+	width: 300pt;
+	height: 150pt;
+    border: 1.7pt solid black;
+    border-top-left-radius: 160pt;  
+    border-top-right-radius: 160pt;
+    border-bottom: 0;
+   	top: 50%;
+  	left: 50%;
+   	margin: -150pt 0pt 0pt -150pt;
+}
