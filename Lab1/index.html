@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>HTML Page</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+      <script type="text/javascript">
+        console.log("Outra coisa qualquer!!!!!!");
+        function changeTextColor() {
+            document.getElementById('texto').style.color = "blue";
+        }
+      </script>
+      <header id="header1"><b>Cor</b></header>
+      <br>
+      <header id="header2">RGB, CMY e HSV</header>
+      <br>
+      <table id="texto">
+          <tr>
+              <td>RGB</td>
+              <td>CMY</td>
+              <td>HSV</td>
+          </tr>
+          <tr>
+              <td><img id="rgb" onclick="changeTextColor()" src="rgb.jpg" width="250px" alt="RGB"></td>
+              <td><img src="cmy.gif" width="250px" alt="CMY"></td>
+              <td><img src="hsv.png" width="250px" alt="HSV"></td>
+          </tr>
+      </table>
+  </body>
+</html>
