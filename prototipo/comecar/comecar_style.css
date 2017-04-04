@@ -1,9 +1,10 @@
 body {
 
-	font-family: Times;
+	font-family: sans-serif;
 }
 
 #circle {
+	
 	background: transparent; 
 	border-radius: 50%;
 	width: 500pt;
@@ -13,19 +14,52 @@ body {
 	text-align: center;
 	position: relative;  /* Child elements with absolute positioning will be positioned relative to this div */
 	font-size: 50pt;
+	margin: auto;
 }
 
-#tophalfcircle {
 
+#innercircle {
+
+	border-radius: 50%;
 	position: absolute;
 	background: transparent;
-	width: 300pt;
-	height: 150pt;
+	width: 325pt;
+	height: 325pt;
     border: 1.7pt solid black;
-    border-top-left-radius: 160pt;  
-    border-top-right-radius: 160pt;
-    border-bottom: 0;
-   	top: 50%;
+    top: 50%;
   	left: 50%;
-   	margin: -150pt 0pt 0pt -150pt;
+   	margin: -162.5pt 0pt 0pt -162.5pt;
+}
+
+#loginbutton {
+
+	z-index: 0;
+	height: 150pt;
+}
+
+#loginpic {
+
+	width: 200pt;	
+}
+
+#space {
+
+	z-index: 1;
+	height: 175pt;
+}
+
+#tableft {
+
+	position: relative;
+	height: 525pt;
+	width: 200pt;
+	float: left;
+}
+
+#waiterpic {
+
+	position: absolute;
+	z-index: 2;
+	width: 200pt;
+	border: 1.7pt solid black;
 }
