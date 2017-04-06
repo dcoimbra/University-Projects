@@ -51,15 +51,17 @@ body {
 #tableft {
 
 	position: relative;
-	height: 525pt;
+	height: 100%;
 	width: 200pt;
 	float: left;
 }
 
 #waiterpic {
 
-	position: absolute;
+	position: fixed;
 	z-index: 2;
 	width: 200pt;
 	border: 1.7pt solid black;
+	bottom: 0;
+	left: 0;
 }
