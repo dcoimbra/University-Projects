@@ -1,0 +1,46 @@
+body {
+
+	height: 100%;
+	overflow: hidden;
+}
+
+
+#loginbutton {
+	
+	position: absolute;
+	border: solid black;
+	top: 0;
+	left: 0;
+	height: 8.3%;
+	width: 17.9%;
+	z-index: -1;
+}
+
+#userpic {
+
+	position: absolute;
+	top: 0.5%;
+	left: 0;
+	height: 8.3%;
+}
+
+#comecarbutton {
+
+	height: 80.6%;
+	width: 45.2%;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+#waiterbutton {
+
+	height: 31.3%;
+	border: solid black;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
