@@ -1,14 +1,38 @@
 body {
 
 	height: 100%;
+	font-family: "Myriad Pro";
 	overflow: hidden;
 }
 
+button {
+
+	display: inline-block;
+	background-color: white;
+    border: solid black;
+    width: auto;
+}
+
+.buttontext {
+
+	float: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.imgbutton {
+
+	border: solid black;
+}
+
+#loginconfirm {
+
+	margin: 0 auto;
+}
 
 #loginbutton {
 	
 	position: absolute;
-	border: solid black;
 	top: 0;
 	left: 0;
 	height: 8.3%;
@@ -39,7 +63,6 @@ body {
 #waiterbutton {
 
 	height: 31.3%;
-	border: solid black;
 	position: absolute;
 	bottom: 0;
 	left: 0;
