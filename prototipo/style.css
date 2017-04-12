@@ -15,7 +15,6 @@ button {
 
 .buttontext {
 
-	float: left;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -25,9 +24,34 @@ button {
 	border: solid black;
 }
 
+.loginbutton {
+
+	height: 19.2%;
+	width: 11%;
+}
+
 #loginconfirm {
 
+	display: block;
 	margin: 0 auto;
+}
+
+#facebutton {
+
+	margin-top: 3%;
+	margin-left: 30%;
+}
+
+#nfcbutton {
+
+	margin-top: 3%;
+	margin-left: 3%;
+}
+
+#fingerprintbutton {
+
+	margin-left: 3%;
+	margin-top: 3%;
 }
 
 #loginbutton {
@@ -40,12 +64,22 @@ button {
 	z-index: -1;
 }
 
+#backbutton {
+
+	margin-left: 38%;
+	margin-right: 38%;
+	margin-top: 8%;
+	font-size: 200%;
+	text-align: center;
+}
+
 #userpic {
 
 	position: absolute;
 	top: 0.5%;
 	left: 0;
 	height: 8.3%;
+	border: none;
 }
 
 #comecarbutton {
