@@ -66,9 +66,9 @@ button {
 
 #backbutton {
 
-	margin-left: 38%;
-	margin-right: 38%;
-	margin-top: 8%;
+	position: absolute;
+	bottom: 4%;
+	left: 38%;
 	font-size: 200%;
 	text-align: center;
 }

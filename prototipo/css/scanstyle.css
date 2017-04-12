@@ -1,0 +1,58 @@
+html, body {
+
+	height: 100%;
+	font-family: "Myriad Pro" sans-serif;
+	overflow: hidden;
+}
+
+button {
+
+	display: inline-block;
+	background-color: white;
+    border: solid black;
+    width: auto;
+}
+
+.buttontext {
+
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.imgbutton {
+
+	border: solid black;
+}
+
+.loginbutton {
+
+	height: 19.2%;
+	width: 11%;
+}
+
+.instructions {
+
+	font-size: 300%;
+	width: 35%;
+	text-align: center;
+	margin-top: 4%;
+	margin-left: 33%;
+}
+
+.placehere {
+
+	position: absolute;
+	width: 20%;
+	height: 38%;
+	left: 40%;
+	top: 30%;
+}
+
+#backbutton {
+
+	position: absolute;
+	bottom: 4%;
+	left: 38%;
+	font-size: 200%;
+	text-align: center;
+}
