@@ -170,3 +170,18 @@ button {
 	background-color: black;
 	color: white;
 }
+
+#myProgress {
+	margin-left: 35%;
+	width: 30%;
+	height: 30px;
+	position: absolute;
+	background-color: #ddd;
+}
+
+#myBar {
+  background-color: #4CAF50;
+  width: 10px;
+  height: 30px;
+  position: absolute;
+}

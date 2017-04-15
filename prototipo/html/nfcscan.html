@@ -8,7 +8,6 @@
 
 	  <meta charset="utf-8" />
 	  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	   <meta http-equiv="refresh" content="5;url=pessoal.html" />
 
 	  <!-- Bootstrap core CSS -->
       <link rel="stylesheet" href="./login_files/bootstrap.min.css" />
@@ -21,7 +20,7 @@
 
 	</head>
 
-	<body>
+	<body onload="move()">
 
 	  <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
 
@@ -29,6 +28,27 @@
 	  <div class="instructions">Coloque o seu<br />smartphone no espaço abaixo</div>
 
 	  <img src="../images/scan/nfcscan.png" class="placehere" alt="Put your phone here" />
+
+      <div id="myProgress">
+          <div id="myBar"></div>
+      </div>
+
+      <script>
+          function move() {
+              var elem = document.getElementById("myBar");
+              var width = 0;
+              var id = setInterval(frame, 10);
+              function frame() {
+                  if (width == 100) {
+                      clearInterval(id);
+                      window.location="pessoal.html";
+                  } else {
+                      width++;
+                      elem.style.width = width + '%';
+                  }
+              }
+          }
+      </script>
 
 	  <button onclick="goBack()" class="btn-lg" id="backbutton"><span class="buttontext"><= Voltar ao menu anterior</span></button>
 	</body>
