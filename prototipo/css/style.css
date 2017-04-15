@@ -60,7 +60,7 @@ button {
 	top: 0;
 	left: 0;
 	height: 8.3%;
-	width: 17.9%;
+	width: 15.9%;
 	z-index: -1;
 }
 
@@ -78,8 +78,9 @@ button {
 	position: absolute;
 	top: 0.5%;
 	left: 0;
-	height: 8.3%;
+	height: 7.8%;
 	border: none;
+	padding-left: 23px;
 }
 
 #comecarbutton {
