@@ -105,8 +105,8 @@ button {
 	margin-top: 3%;
 }
 
-#loginbut {
-	
+#loginbutton {
+
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -152,4 +152,25 @@ button {
 	position: absolute;
 	bottom: 0;
 	left: 0;
+}
+
+#menu {
+	width: 100vw;
+}
+
+#menuHeader {
+	text-align: center;
+	font-size: 400%;
+	margin-top: 6%;
+	margin-bottom: 2%;
+}
+
+.menuItem {
+	font-size: 200%;
+	text-align: center;
+	display: block;
+	width: 40vw;
+	padding: 1.5vh 0;
+	border: solid black;
+	margin: 1% 0;
 }
