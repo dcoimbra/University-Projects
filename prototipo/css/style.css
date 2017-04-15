@@ -62,22 +62,6 @@ button {
 	margin-top: 3.5%;
 }
 
-.profileoption {
-
-	width: 40%;
-	height: 10%;
-	padding: 2% 0;
-	margin-left: auto;
-	margin-right: auto;
-	border: solid black;
-	text-align: center;
-	font-size: 200%;
-	margin-top: 1%;
-	vertical-align: middle;
-	display: block;
-}
-
-
 .textheightfix {
 
 	line-height: 300%;
@@ -161,18 +145,18 @@ button {
 	left: 0;
 }
 
-#menu {
+#menu, #dadosOpcoes {
 	width: 100vw;
 }
 
-#menuHeader {
+#menuHeader, #dadosHeader {
 	text-align: center;
 	font-size: 400%;
 	margin-top: 6%;
 	margin-bottom: 2%;
 }
 
-.menuItem {
+.menuItem, .profileoption, .dadosopcoes {
 	font-size: 200%;
 	text-align: center;
 	display: block;
@@ -182,7 +166,7 @@ button {
 	margin: 1% 0;
 }
 
-.profileoption:active, .menuItem:active {
+.profileoption:active, .menuItem:active, .dadosopcoes:active{
 	background-color: black;
 	color: white;
 }
