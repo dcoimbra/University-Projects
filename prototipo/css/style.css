@@ -173,6 +173,7 @@ button {
 }
 
 #myProgress {
+	visibility: visible;
 	margin-left: 35%;
 	width: 30%;
 	height: 30px;
@@ -181,8 +182,9 @@ button {
 }
 
 #myBar {
-  background-color: #4CAF50;
-  width: 10px;
-  height: 30px;
-  position: absolute;
+	visibility: visible;
+	background-color: #4CAF50;
+	width: 10px;
+	height: 30px;
+	position: absolute;
 }
