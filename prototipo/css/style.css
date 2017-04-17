@@ -21,6 +21,7 @@ button {
 
 .imgbutton {
 
+	cursor: pointer;
 	border: solid black;
 }
 
