@@ -58,3 +58,13 @@ function clearUsername() {
 
     sessionStorage.removeItem("username");
 }
+
+function checklogin() {
+
+    var status = sessionStorage.getItem("login");
+
+    if (status === "true") {
+
+        document.getElementById("loginbutton").src = "../images/logout.svg"
+    }
+}

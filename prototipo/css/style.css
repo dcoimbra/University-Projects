@@ -110,7 +110,9 @@ button {
 	height: 8.3%;
 	width: 15.9%;
 	z-index: -1;
+	padding-right: 1%;
 }
+
 
 #backbutton {
 
