@@ -19,6 +19,11 @@ button {
     overflow: hidden;
 }
 
+.backtext {
+
+	padding-left: 6%;
+}
+
 .imgbutton {
 
 	cursor: pointer;
@@ -112,8 +117,13 @@ button {
 	position: absolute;
 	bottom: 4%;
 	left: 38%;
+	width: 25%;
 	font-size: 200%;
 	text-align: center;
+	background-image: url("../images/back_arrow_filled.png");
+	background-repeat: no-repeat;
+	background-position: 3%;
+	background-size: 40%;
 }
 
 #userpic {
