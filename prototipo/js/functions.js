@@ -32,3 +32,29 @@ function move() {
         }
     }
 }
+
+function storeUsername() {
+
+    var username = document.getElementById("inputUsername");
+    sessionStorage.setItem("username", username.value);
+}
+
+function setUsername() {
+
+    var username = sessionStorage.getItem("username");
+    
+    if (username == null) {
+
+        document.getElementById("header1").innerHTML = "Olá, utilizador!";
+    }
+
+    else {
+    
+        document.getElementById("header1").innerHTML = "Olá, " + username + "!";
+    }   
+}
+
+function clearUsername() {
+
+    sessionStorage.removeItem("username");
+}

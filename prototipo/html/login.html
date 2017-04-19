@@ -55,22 +55,22 @@
         <br />
         <div class="container">
 
-          <form class="form-signin" action="pessoal.html">
+          <form class="form-signin" action="pessoal.html" method="post">
 
             <label for="inputUsername" class="sr-only">Username</label>
-            <input type="text" id="inputUsername" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Username" />
+            <input name="inputUsername" type="text" id="inputUsername" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Username" />
             <br />
             <label for="inputPassword" class="sr-only">Password</label>
-            <input lang="pt" type="password" id="inputPassword" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Password" />
+            <input name="inputPassword" lang="pt" type="password" id="inputPassword" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Password" />
 
             <br />
 
-            <button type="submit" class="btn-lg" id="loginconfirm"><span class="buttontext">LOGIN</span></button>
+            <button onclick="storeUsername()" type="submit" class="btn-lg" id="loginconfirm"><span class="buttontext">LOGIN</span></button>
           </form>
 
-          <img onclick="window.location='facescan.html'" src="../images/login/face.png" id="facebutton" class="imgbutton loginbutton" alt="Reconhecimento facial" />
-          <img onclick="window.location='nfcscan.html'" src="../images/login/nfcbutton.png" id="nfcbutton" class="imgbutton loginbutton" alt="NFC" />
-          <img onclick="showBar()" src="../images/login/fingerprinticon.png" id="fingerprintbutton" class="imgbutton loginbutton" alt="Impressão digital" />
+          <img onclick="window.location='facescan.html';clearUsername()" src="../images/login/face.png" id="facebutton" class="imgbutton loginbutton" alt="Reconhecimento facial" />
+          <img onclick="window.location='nfcscan.html';clearUsername()" src="../images/login/nfcbutton.png" id="nfcbutton" class="imgbutton loginbutton" alt="NFC" />
+          <img onclick="showBar();clearUsername()" src="../images/login/fingerprinticon.png" id="fingerprintbutton" class="imgbutton loginbutton" alt="Impressão digital" />
         </div> <!-- /container -->
 
         <div class="popup" id="myProgress">
