@@ -42,16 +42,16 @@ function storeUsername() {
 function setUsername() {
 
     var username = sessionStorage.getItem("username");
-    
+
     if (username == null) {
 
         document.getElementById("header1").innerHTML = "Olá, utilizador!";
     }
 
     else {
-    
+
         document.getElementById("header1").innerHTML = "Olá, " + username + "!";
-    }   
+    }
 }
 
 function clearUsername() {
@@ -64,7 +64,15 @@ function checklogin() {
     var status = sessionStorage.getItem("login");
 
     if (status === "true") {
-
-        document.getElementById("loginbutton").src = "../images/logout.svg"
+        document.getElementById("loginbutton").src = "../images/area_pessoal_21.png";
+        document.getElementById("loginlink").href="pessoal.html";
+        $('#loginbutton').attr('data-target','#myModal');
+        $('#loginbutton').attr('data-toggle','modal');
     }
+}
+
+function logout() {
+
+        $('#loginbutton').attr('data-target','#myModal');
+        $('#loginbutton').attr('data-toggle','modal');
 }

@@ -1,7 +1,7 @@
 body {
 
 	height: 100%;
-	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	overflow: hidden;
 }
 
@@ -107,8 +107,8 @@ button {
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 8.3%;
-	width: 15.9%;
+	height: 60px;
+	width: 210px;
 	z-index: -1;
 	padding-right: 1%;
 }
@@ -118,8 +118,8 @@ button {
 
 	position: absolute;
 	bottom: 4%;
-	left: 38%;
-	width: 25%;
+	left: 36%;
+	width: 28%;
 	font-size: 200%;
 	text-align: center;
 	background-image: url("../images/back_arrow_filled.png");
@@ -143,7 +143,7 @@ button {
 	color: white;
 }
 
-.formpessoal { 
+.formpessoal {
 
 	text-align: start !important;
 	border-radius: 15px;
@@ -207,4 +207,13 @@ button {
 	width: 10px;
 	height: 30px;
 	position: absolute;
+}
+
+.modal-header {
+	font-size: 250%;
+	font-weight: bold;
+}
+
+.modal-body {
+	font-size: 150%;
 }
