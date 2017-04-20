@@ -71,8 +71,19 @@ function checklogin() {
     }
 }
 
+function preparelogout() {
+
+    $('#loginbutton').attr('data-target','#myModal');
+    $('#loginbutton').attr('data-toggle','modal');
+}
+
+function login() {
+
+    sessionStorage.setItem('login', 'true');
+}
+
 function logout() {
 
-        $('#loginbutton').attr('data-target','#myModal');
-        $('#loginbutton').attr('data-toggle','modal');
+    sessionStorage.setItem('login', 'false');
+    window.location = 'menu.html';
 }

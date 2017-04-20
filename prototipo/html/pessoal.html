@@ -25,7 +25,7 @@
     </head>
 
 
-    <body onload="setUsername();sessionStorage.setItem('login', 'true');logout()">
+    <body onload="setUsername();login();preparelogout()">
 
     	<div class="headercontainer">
 
@@ -49,7 +49,7 @@
                         <p>Tem a certeza que deseja fazer logout?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-footer btn-success" data-dismiss="modal">Confirmar</button>
+                        <button type="button" class="btn btn-footer btn-success" data-dismiss="modal" onclick="logout()">Confirmar</button>
                         <button type="button" class="btn btn-footer btn-danger" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
