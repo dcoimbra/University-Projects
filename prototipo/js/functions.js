@@ -85,5 +85,19 @@ function login() {
 function logout() {
 
     sessionStorage.setItem('login', 'false');
-    window.location = 'menu.html';
+    getlastpage();
+}
+
+function savelastpage() {
+
+    $('#loginbutton').click(function() {
+        sessionStorage.setItem('lastpage', window.location.href);
+        alert(sessionStorage.getItem('lastpage'));
+    });
+}
+
+function getlastpage() {
+
+    var lastpage = sessionStorage.getItem('lastpage');
+    window.location = lastpage;
 }
