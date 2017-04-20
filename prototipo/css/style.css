@@ -128,6 +128,28 @@ button {
 	background-size: 40%;
 }
 
+.menuItem {
+	font-size: 200%;
+	text-align: center;
+	display: block;
+	width: 40vw;
+	padding: 2vh 0;
+	border: solid black;
+	margin: 1% 0;
+}
+
+.menuItem:active {
+	background-color: black;
+	color: white;
+}
+
+.formpessoal { 
+
+	text-align: start !important;
+	border-radius: 15px;
+	height: 90%;
+}
+
 #userpic {
 
 	position: absolute;
@@ -169,20 +191,6 @@ button {
 	margin-bottom: 2%;
 }
 
-.menuItem {
-	font-size: 200%;
-	text-align: center;
-	display: block;
-	width: 40vw;
-	padding: 2vh 0;
-	border: solid black;
-	margin: 1% 0;
-}
-
-.menuItem:active {
-	background-color: black;
-	color: white;
-}
 
 #myProgress {
 	visibility: visible;
