@@ -6,6 +6,7 @@
 typedef struct node {
 	
 	int vertex;
+	int cost;
 	struct node* next;
 }* Node;
 
@@ -16,13 +17,10 @@ typedef struct graph {
 	Node* adjacency_list;
 }* Graph;
 
-/* Global variables */
-int** cost;
-
 /* Prototype */
 Graph initGraph(int vertices);
-void addEdge(Graph graph, int origin, int destination);
-Node addNode(int vertex, Node head);
+void addEdge(Graph graph, int origin, int destination, int cost);
+Node addNode(int vertex, int cost, Node head);
 int getGraphCost(Graph graph);
 
 /* Main program */
@@ -38,14 +36,6 @@ int main() {
 	if (scanf("%d", &vertices) == -1) {
 		
 		perror("scanf\n");
-	}
-
-	/* initializing cost matrix */
-	cost = (int **) malloc((vertices + 1) * sizeof(int*));
-	
-	for (i = 0; i < (vertices + 1); i++) {
-
-		cost[i] = (int *) malloc((vertices + 1) * sizeof(int));
 	}
 
 	/* initializing a graph that uses airports and one that doesn't */
@@ -64,10 +54,7 @@ int main() {
 			perror("scanf\n");
 		}
 
-		addEdge(with_airports, (airport_city - 1), (vertices));
-	
-		cost[airport_city - 1][vertices] = airport_cost;
-		cost[vertices][airport_city - 1] = airport_cost;
+		addEdge(with_airports, (airport_city - 1), (vertices), airport_cost);
 	}
 
 	if (scanf("%d", &road_edges) == -1) {
@@ -82,13 +69,10 @@ int main() {
 			perror("scanf\n");
 		}
 
-		addEdge(no_airports, (road_src - 1), (road_dest - 1));
-		addEdge(with_airports, (road_src - 1), (road_dest - 1));
-
-		cost[road_src - 1][road_dest - 1] = road_cost;
-		cost[road_dest - 1][road_src - 1] = road_cost;
+		addEdge(no_airports, (road_src - 1), (road_dest - 1), road_cost);
+		addEdge(with_airports, (road_src - 1), (road_dest - 1), road_cost);
 	}
-
+	
 	return 0;
 }
 
@@ -111,20 +95,21 @@ Graph initGraph(int vertices) {
 }
 
 /* adds a directed edge to a given graph */
-void addEdge(Graph graph, int origin, int destination) {
+void addEdge(Graph graph, int origin, int destination, int cost) {
 
-	graph->adjacency_list[origin] = addNode(destination, graph->adjacency_list[origin]);
-	graph->adjacency_list[destination] = addNode(origin, graph->adjacency_list[destination]);
+	graph->adjacency_list[origin] = addNode(destination, cost, graph->adjacency_list[origin]);
+	graph->adjacency_list[destination] = addNode(origin, cost, graph->adjacency_list[destination]);
 
 	graph->edges++;
 }
 
 /* adds a node to the beginning of a linked list */
-Node addNode(int vertex, Node head) {
+Node addNode(int vertex, int cost, Node head) {
 
 	Node new = (Node) malloc(sizeof(struct node));
 
 	new->vertex = vertex;
+	new->cost = cost;
 	new->next = head;
 
 	return new;
