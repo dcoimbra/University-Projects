@@ -200,7 +200,7 @@ void prim(Graph g, int r, Graph mst) {
 		if ((pi[i] == NIL) && (i != r)) {
 
 			printf("Insuficiente\n");
-			exit(0);
+			break;
 		}
 	}
 }
