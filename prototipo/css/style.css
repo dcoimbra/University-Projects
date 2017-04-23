@@ -254,3 +254,20 @@ button {
 .modal-body {
 	font-size: 150%;
 }
+
+.popover {
+	border: solid black;
+	font-size: 130%;
+	width: 35vw !important;
+	height: 35vh;
+}
+
+.popover-title {
+	text-align: center;
+	font-size: 150%;
+	font-weight: bold;
+}
+
+.arrow {
+	visibility: hidden;
+}

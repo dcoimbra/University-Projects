@@ -36,10 +36,23 @@
 			</div>
 			<header class="menusubHeader">Peixe</header>
 			<div class="prato" align="left">
-				<button type="button" class="menuscomida">Bacalhau com Natas</button>
+				<button type="button" class="menuscomida" data-placement='right' title="Bacalhau com Natas">Bacalhau com Natas</button>
 				<div class="dot"></div>
 				<p class="price">4€00</p>
-			</div>
+            </div>
+            <div id="popoverbacalhau" style="display: none">Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</div>
+
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $('.menuscomida').popover({
+                        html : true,
+                        content: function() {
+                            return $('#popoverbacalhau').html();
+                        }
+                    });
+                });
+            </script>
+
         </div>
 
         <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
