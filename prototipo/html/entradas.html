@@ -10,11 +10,11 @@
         <!-- Bootstrap -->
         <link href="./login_files/bootstrap.min.css" rel="stylesheet" />
         <!-- jQuery -->
-        <script src="../j   s/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <!-- Bootstrap javascript -->
         <script src="../js/bootstrap.min.js" type="text/javascript"></script>
 
-        <title>Menu Principal</title>
+        <title>Entradas</title>
 
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <script src="../js/functions.js" type="text/javascript"></script>
@@ -27,14 +27,22 @@
         </a>
 
         <div id="menu" align="center">
-            <header class="menuHeader">Menu</header>
-            <button type="button" class="menuItem" onclick="window.location='bebidas.html'">Bebidas</button>
-            <button type="button" class="menuItem" onclick="window.location='entradas.html'">Entradas</button>
-            <button type="button" class="menuItem" onclick="window.location='pratos.html'">Pratos do Dia</button>
-            <button type="button" class="menuItem" onclick="window.location='sobremesas.html'">Sobremesas</button>
+            <header class="menuHeader">Entradas</header>
+			<div class="entrada" align="left">
+				<button type="button" class="menuscomida">Couvert</button>
+				<div class="dot"></div>
+				<p class="price">1€50</p>
+			</div>
+			<div class="entrada" align="left">
+				<button type="button" class="menuscomida">Sopa de Legumes</button>
+				<div class="dot"></div>
+				<p class="price">2€00</p>
+			</div>
         </div>
 
         <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
+
+		<button onclick="goBack()" class="btn-lg" id="backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
     </body>
 
