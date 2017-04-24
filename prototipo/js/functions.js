@@ -89,10 +89,7 @@ function logout() {
 }
 
 function savelastpage() {
-
-    $('#loginbutton').click(function() {
         sessionStorage.setItem('lastpage', window.location.href);
-    });
 }
 
 function getlastpage() {
