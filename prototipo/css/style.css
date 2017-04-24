@@ -216,3 +216,13 @@ button {
 .modal-body {
 	font-size: 150%;
 }
+
+.modifybutton {
+	text-align: center;
+	font-size: 150%;
+	border: solid black;
+	width: 30vw;
+	margin-left: 35vw;
+	margin-top: 40vh;
+	border-radius: 0;
+}
