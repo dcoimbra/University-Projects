@@ -18,7 +18,6 @@ typedef struct node {
 typedef struct graph {
 	
 	int vertices;
-	int edges;
 	Node* adjacency_list;
 }* Graph;
 
@@ -32,16 +31,20 @@ typedef struct heapnode {
 /* Global variables */
 Heapnode* priority;
 int* position;
+int* visited;
 
 /* Prototype */
 Graph initGraph(int vertices);
 void addEdge(Graph graph, int origin, int destination, int cost);
 Node addNode(int vertex, int cost, Node head);
-int prim(Graph g, int* visited, int* key, int* parent, int has_airports);
+int prim(Graph g, int* key, int* parent, int has_airports);
 void buildMinHeap(Heapnode* priority, int heap_length);
 void minHeapify(Heapnode* priority, int heap_length, int i);
 int extractMin(Heapnode* priority, int heap_length, int* visited, int total_vertices, int has_airports);
 void decreaseKey(Heapnode* priority, int vertex, int newKey);
+void cleanupGraph(Graph graph);
+void cleanupList(Node head);
+
 
 /* Main program */
 int main() {
@@ -50,14 +53,12 @@ int main() {
 	int airport_city, airport_cost, road_src, road_dest, road_cost;
 	int i;
 	int cost_no_airports, cost_with_airports, least_cost;
-	int airport_total, road_total;
+	int airport_total, road_total, road_total_with_airports, road_total_no_airports;
 	int sufficiency;
 
-	int* visited_no_airports;
 	int* parent_no_airports;
 	int* key_no_airports;
 
-	int* visited_with_airports;
 	int* parent_with_airports;
 	int* key_with_airports;
 
@@ -72,16 +73,7 @@ int main() {
 	/* Allocating relevant arrays for both kinds of network.
 		visited[u] - TRUE if u was extracted from the priority list
 		parent[u] is the parent of u in the minimum spanning tree 
-		key[u] is the minimum cost edge that connects u to the minimum spanning tree 
-	*/ 
-
-	visited_no_airports = (int *) malloc(vertices * sizeof(int));
-	parent_no_airports = (int *) malloc(vertices * sizeof(int));
-	key_no_airports = (int *) malloc(vertices * sizeof(int));
-
-	visited_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
-	parent_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
-	key_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
+		key[u] is the minimum cost edge that connects u to the minimum spanning tree */ 
 
 	/* initializing a graph that uses airports and one that doesn't */
 	no_airports = initGraph(vertices);
@@ -120,10 +112,17 @@ int main() {
 		addEdge(with_airports, (road_src - 1), (road_dest - 1), road_cost);
 	}
 
+	road_total_with_airports = 0;
+	airport_total = 0;
+
 	if (airport_edges) { 
 
+		parent_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
+		key_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
+
 		/* Finding a minimum spanning tree for a road & airport network using Prim's algorithm */
-		sufficiency = prim(with_airports, visited_with_airports, key_with_airports, parent_with_airports, TRUE);
+		sufficiency = prim(with_airports, key_with_airports, parent_with_airports, TRUE);
+		free(with_airports);
 
 		if (sufficiency == NIL) {
 
@@ -133,59 +132,10 @@ int main() {
 
 		cost_with_airports = 0;
 
-		for (i = 0; i < with_airports->vertices; i++) {
+		for (i = 0; i < (vertices + 1); i++) {
 
 			cost_with_airports += key_with_airports[i];
-		}
-	}
 
-	else {
-
-		cost_with_airports = INT_MAX;
-	}
-
-	/* Finding a minimum spanning tree for a road-only network using Prim's algorithm */
-	sufficiency = prim(no_airports, visited_no_airports, key_no_airports, parent_no_airports, FALSE);
-
-	if (sufficiency != NIL) { 
-
-		cost_no_airports = 0;
-
-		for (i = 0; i < no_airports->vertices; i++) {
-
-			cost_no_airports += key_no_airports[i];
-		}
-	}
-
-	else {
-
-		cost_no_airports = INT_MAX;
-	}
-
-	if (cost_no_airports <= cost_with_airports) {
-
-		least_cost = cost_no_airports;
-		airport_total = 0;
-		road_total = 0;
-		
-		for (i = 0; i < no_airports->vertices; i++) {
-
-			if (parent_no_airports[i] != NIL) {
-
-				road_total++;
-			} 
-		}
-	}
-
-	else {
-
-		least_cost = cost_with_airports;
-
-		airport_total = 0;
-		road_total = 0;
-
-		for (i = 0; i < with_airports->vertices; i++) {
-			
 			if (parent_with_airports[i] != NIL) {
 
 				if ((i == vertices) || (parent_with_airports[i] == vertices)) {
@@ -195,10 +145,63 @@ int main() {
 				
 				else {
 
-					road_total++;
+					road_total_with_airports++;
 				}
 			} 
 		}
+
+		free(key_with_airports);
+		free(parent_with_airports);
+	}
+
+	else {
+
+		cost_with_airports = INT_MAX;
+	}
+
+	parent_no_airports = (int *) malloc(vertices * sizeof(int));
+	key_no_airports = (int *) malloc(vertices * sizeof(int));
+
+	/* Finding a minimum spanning tree for a road-only network using Prim's algorithm */
+	sufficiency = prim(no_airports, key_no_airports, parent_no_airports, FALSE);
+	free(no_airports);
+
+	road_total_no_airports = 0;
+
+	if (sufficiency != NIL) { 
+
+		cost_no_airports = 0;
+
+		for (i = 0; i < vertices; i++) {
+
+			cost_no_airports += key_no_airports[i];
+
+			if (parent_no_airports[i] != NIL) {
+
+				road_total_no_airports++;
+			}
+		}
+	}
+
+	else {
+
+		cost_no_airports = INT_MAX;
+	}
+
+	free(key_no_airports);
+	free(parent_no_airports);
+
+	if (cost_no_airports <= cost_with_airports) {
+
+		least_cost = cost_no_airports;
+		airport_total = 0;
+		road_total = road_total_no_airports;
+	}
+
+	else {
+
+		least_cost = cost_with_airports;
+		road_total = road_total_with_airports;
 	}
 
 	printf("%d\n", least_cost);
@@ -214,7 +217,6 @@ Graph initGraph(int vertices) {
 	Graph graph = (Graph) malloc(sizeof(struct graph));
 
 	graph->vertices = vertices;
-	graph->edges = 0;
 	graph->adjacency_list = (Node*) malloc(vertices * sizeof(struct node));
 
 	for (i = 0; i < vertices; i++) {
@@ -230,8 +232,6 @@ void addEdge(Graph graph, int origin, int destination, int cost) {
 
 	graph->adjacency_list[origin] = addNode(destination, cost, graph->adjacency_list[origin]);
 	graph->adjacency_list[destination] = addNode(origin, cost, graph->adjacency_list[destination]);
-
-	graph->edges++;
 }
 
 /* adds a node to the beginning of a linked list */
@@ -246,7 +246,7 @@ Node addNode(int vertex, int cost, Node head) {
 	return new;
 }
 
-int prim(Graph g, int* visited, int* key, int* parent, int has_airports) {
+int prim(Graph g, int* key, int* parent, int has_airports) {
 
 	int u;
 	int i;
@@ -257,7 +257,7 @@ int prim(Graph g, int* visited, int* key, int* parent, int has_airports) {
 
 	priority = (Heapnode*) malloc((g->vertices) * sizeof(Heapnode));
 	position = (int *) malloc((g->vertices) * sizeof(int)); /* position of a vertex in the priority list */
-
+	visited = (int *) malloc((g->vertices) * sizeof(int));
 
 	for (u = 0; u < g->vertices; u++) {
 		
@@ -298,7 +298,6 @@ int prim(Graph g, int* visited, int* key, int* parent, int has_airports) {
 		}
 	}
 
-
 	/* Checking if algorithm produced a connected spanning tree.
 		If there exists a vertex, besides the root, that has no parent,
 		then both the original graph is disconnected
@@ -310,6 +309,10 @@ int prim(Graph g, int* visited, int* key, int* parent, int has_airports) {
 			return NIL;
 		}
 	}
+
+	free(priority);
+	free(position);
+	free(visited);
 
 	return 1;
 }
@@ -365,15 +368,15 @@ void minHeapify(Heapnode* priority, int heap_length, int i) {
 	}
 }
 
-int extractMin(Heapnode* priority, int heap_length, int* visited, int total_vertices, int has_airports) {
+int extractMin(Heapnode* priority, int heap_length, int* visited, int total_vertices, int has_airports) { 
+
+	Heapnode min;
+	Heapnode aux;
 
 	/* if the head is the airport vertex,
 	   checks if any of its children has the same key.
 	   If one of them does, exchanges it with the head.
-	   This is done to add as few airports as possible. */ 
-
-	Heapnode min;
-	Heapnode aux;
+	   This is done to add as few airports as possible. */
 
 	if (has_airports) {
 
@@ -433,5 +436,31 @@ void decreaseKey(Heapnode* priority, int vertex, int newKey) {
 		priority[parent] = aux;
 
 		index = parent;
+	}
+}
+
+/* Frees memory allocated for a graph */
+void cleanupGraph(Graph graph) {
+
+	int i;
+
+	for (i = 0; i < graph->vertices; i++) {
+
+		cleanupList(graph->adjacency_list[i]);
+	}
+
+	free(graph);
+}
+
+/* Frees memory allocated for a linked list */
+void cleanupList(Node head) {
+
+	Node temp; 
+
+	while (head) {
+
+		temp = head;
+		head = head->next;
+		free(temp);
 	}
 }
