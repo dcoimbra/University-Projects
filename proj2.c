@@ -53,6 +53,14 @@ int main() {
 	int airport_total, road_total;
 	int sufficiency;
 
+	int* visited_no_airports;
+	int* parent_no_airports;
+	int* key_no_airports;
+
+	int* visited_with_airports;
+	int* parent_with_airports;
+	int* key_with_airports;
+
 	Graph no_airports;
 	Graph with_airports;
 
@@ -67,13 +75,13 @@ int main() {
 		key[u] is the minimum cost edge that connects u to the minimum spanning tree 
 	*/ 
 
-	int* visited_no_airports = (int *) malloc(vertices * sizeof(int));
-	int* parent_no_airports = (int *) malloc(vertices * sizeof(int));
-	int* key_no_airports = (int *) malloc(vertices * sizeof(int));
+	visited_no_airports = (int *) malloc(vertices * sizeof(int));
+	parent_no_airports = (int *) malloc(vertices * sizeof(int));
+	key_no_airports = (int *) malloc(vertices * sizeof(int));
 
-	int* visited_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
-	int* parent_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
-	int* key_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
+	visited_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
+	parent_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
+	key_with_airports = (int *) malloc((vertices + 1) * sizeof(int));
 
 	/* initializing a graph that uses airports and one that doesn't */
 	no_airports = initGraph(vertices);
@@ -359,10 +367,10 @@ int extractMin(Heapnode* priority, int length, int* visited) {
 
 	Heapnode min = priority[0];
 
-	priority[0] = priority[length - 1];
-
 	position[min.vertex] = length - 1;
 	position[priority[0].vertex] = 0;
+
+	priority[0] = priority[length - 1];
 
 	minHeapify(priority, length - 1, 0);
 
@@ -389,5 +397,5 @@ void decreaseKey(Heapnode* priority, int vertex, int newKey) {
 		priority[parent] = aux;
 
 		index = parent;
-	}	
+	}
 }
