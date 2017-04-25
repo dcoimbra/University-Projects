@@ -37,10 +37,10 @@ int* position;
 Graph initGraph(int vertices);
 void addEdge(Graph graph, int origin, int destination, int cost);
 Node addNode(int vertex, int cost, Node head);
-int prim(Graph g, int* visited, int* key, int* parent);
-void buildMinHeap(Heapnode* priority, int length);
-void minHeapify(Heapnode* priority, int length, int i);
-int extractMin(Heapnode* priority, int length, int* visited);
+int prim(Graph g, int* visited, int* key, int* parent, int has_airports);
+void buildMinHeap(Heapnode* priority, int heap_length);
+void minHeapify(Heapnode* priority, int heap_length, int i);
+int extractMin(Heapnode* priority, int heap_length, int* visited, int total_vertices, int has_airports);
 void decreaseKey(Heapnode* priority, int vertex, int newKey);
 
 /* Main program */
@@ -123,7 +123,7 @@ int main() {
 	if (airport_edges) { 
 
 		/* Finding a minimum spanning tree for a road & airport network using Prim's algorithm */
-		sufficiency = prim(with_airports, visited_with_airports, key_with_airports, parent_with_airports);
+		sufficiency = prim(with_airports, visited_with_airports, key_with_airports, parent_with_airports, TRUE);
 
 		if (sufficiency == NIL) {
 
@@ -145,7 +145,7 @@ int main() {
 	}
 
 	/* Finding a minimum spanning tree for a road-only network using Prim's algorithm */
-	sufficiency = prim(no_airports, visited_no_airports, key_no_airports, parent_no_airports);
+	sufficiency = prim(no_airports, visited_no_airports, key_no_airports, parent_no_airports, FALSE);
 
 	if (sufficiency != NIL) { 
 
@@ -246,11 +246,12 @@ Node addNode(int vertex, int cost, Node head) {
 	return new;
 }
 
-int prim(Graph g, int* visited, int* key, int* parent) {
+int prim(Graph g, int* visited, int* key, int* parent, int has_airports) {
 
 	int u;
 	int i;
-	int length;
+	int heap_length;
+	int total_vertices;
 	Node head;
 	Node v;
 
@@ -271,14 +272,15 @@ int prim(Graph g, int* visited, int* key, int* parent) {
 	priority[0].key = 0;
 	key[0] = 0;
 
-	length = g->vertices;
+	total_vertices = g->vertices;
+	heap_length = g->vertices;
 
-	buildMinHeap(priority, length);	
+	buildMinHeap(priority, heap_length);	
 
-	while (length != 0) {
+	while (heap_length != 0) {
 			
-		u = extractMin(priority, length, visited);
-		length--;
+		u = extractMin(priority, heap_length, visited, total_vertices, has_airports);
+		heap_length--;
 
 		head = g->adjacency_list[u];
 
@@ -314,18 +316,18 @@ int prim(Graph g, int* visited, int* key, int* parent) {
 
 /* Here be heap operations */
 
-void buildMinHeap(Heapnode* priority, int length) {
+void buildMinHeap(Heapnode* priority, int heap_length) {
 
-	int start = ((length) / 2) - 1;
+	int start = ((heap_length) / 2) - 1;
 	int i;
 
 	for (i = start; i >= 0; i--) {
 
-		minHeapify(priority, length, i);
+		minHeapify(priority, heap_length, i);
 	}
 }
 
-void minHeapify(Heapnode* priority, int length, int i) {
+void minHeapify(Heapnode* priority, int heap_length, int i) {
 
 	int left, right;
 	int smallest;
@@ -335,7 +337,7 @@ void minHeapify(Heapnode* priority, int length, int i) {
 	left = ((i * 2) + 1);
 	right = left + 1;
 
-	if ((left < length) && (priority[left].key < priority[i].key)) {
+	if ((left < heap_length) && (priority[left].key < priority[i].key)) {
 
 		smallest = left;
 	}
@@ -345,7 +347,7 @@ void minHeapify(Heapnode* priority, int length, int i) {
 		smallest = i;
 	}
 
-	if ((right < length) && (priority[right].key < priority[smallest].key)) {
+	if ((right < heap_length) && (priority[right].key < priority[smallest].key)) {
 
 		smallest = right;
 	}
@@ -359,20 +361,54 @@ void minHeapify(Heapnode* priority, int length, int i) {
 		priority[i] = priority[smallest];
 		priority[smallest] = aux;
 
-		minHeapify(priority, length, smallest);
+		minHeapify(priority, heap_length, smallest);
 	}
 }
 
-int extractMin(Heapnode* priority, int length, int* visited) {
+int extractMin(Heapnode* priority, int heap_length, int* visited, int total_vertices, int has_airports) {
 
-	Heapnode min = priority[0];
+	/* if the head is the airport vertex,
+	   checks if any of its children has the same key.
+	   If one of them does, exchanges it with the head.
+	   This is done to add as few airports as possible. */ 
 
-	position[min.vertex] = length - 1;
+	Heapnode min;
+	Heapnode aux;
+
+	if (has_airports) {
+
+		if (priority[0].vertex == (total_vertices - 1)) {
+
+			if (priority[0].key == priority[1].key) {
+
+				position[priority[0].vertex] = 1;
+				position[priority[1].vertex] = 0;
+
+				aux = priority[0];
+				priority[0] = priority[1];
+				priority[1] = aux;
+			}
+
+			else if (priority[0].key == priority[2].key) {
+
+				position[priority[0].vertex] = 2;
+				position[priority[2].vertex] = 0;
+
+				aux = priority[0];
+				priority[0] = priority[2];
+				priority[2] = aux;
+			}
+		}
+	} 
+
+	min = priority[0];
+
+	position[min.vertex] = heap_length - 1;
 	position[priority[0].vertex] = 0;
 
-	priority[0] = priority[length - 1];
+	priority[0] = priority[heap_length - 1];
 
-	minHeapify(priority, length - 1, 0);
+	minHeapify(priority, heap_length - 1, 0);
 
 	visited[min.vertex] = TRUE;
 
