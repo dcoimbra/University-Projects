@@ -34,7 +34,6 @@ void runPrim(Graph graph, int cities, int airport_edges, int road_edges, int has
 int* prim(Graph graph, int has_airports);
 
 /* min heap functions: */
-Heapnode** initMinHeap(int len);
 void buildMinHeap(Heapnode** pQ, int len);
 Heapnode* extractMin(Heapnode** pQ, int len);
 void minHeapify(Heapnode** pQ, int k, int len);
@@ -125,9 +124,9 @@ int* prim(Graph graph, int has_airports) {
 	Heapnode* u;
 	Node v, head;
 
-	vInfo = (Heapnode*)malloc((len + 1) * sizeof(struct heapnode));
+	vInfo  = (Heapnode*)malloc((len + 1) * sizeof(struct heapnode));
+	pQueue = (Heapnode**)malloc((len + 1) * sizeof(Heapnode*));;
 
-	pQueue = initMinHeap(len);
 	for (i = 1; i <= len; i++) {
 		vInfo[i].vertex = i;
 		vInfo[i].key = INT_MAX;
@@ -138,11 +137,10 @@ int* prim(Graph graph, int has_airports) {
 	}
 
 	buildMinHeap(pQueue, len);
-
 	pQueue[1]->key = 0;
 
 	/* if has_airports is FALSE, the algorythm should ignore all airport related edges, which is done by
-	ignoring the last vertex ("airport hub") and setting the number of total vertices accordingly. */
+	ignoring the last vertex ("airport hub"), setting it as vsited, and setting the number of total vertices accordingly. */
 	if (!has_airports) {
 		vInfo[len--].visited = TRUE; /*to ensure that edges connecting to the "airport hub" are ignored */
 		total_vertices--;
@@ -233,11 +231,6 @@ int* maxCost(Heapnode* vInfo, int len, int has_airports) {
 
 
 /* ---------------heap functions --------------------------- */
-Heapnode** initMinHeap(int len) {
-	Heapnode** pQueue = (Heapnode**)malloc((len + 1) * sizeof(Heapnode*));
-	return pQueue;
-}
-
 void buildMinHeap(Heapnode** pQueue, int len) {
 	int i;
 	if (len > 0) {
