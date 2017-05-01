@@ -123,6 +123,7 @@ all airport related edges and try to build an MST using the remaining edges.*/
 int* prim(Graph graph, int has_airports) {
 	int i, visited_vertices = 0;
 	int len = graph->vertices;
+	int total_vertices = graph->vertices;
 	int* result;
 	Heapnode** pQueue; /* pQueue(priority Queue): each pQueue[i] has a pointer to the heapnode    */
 	Heapnode* vInfo;  /*  					 occupying the position i in this priority queue.  */
@@ -146,11 +147,10 @@ int* prim(Graph graph, int has_airports) {
 	vInfo[pQueue[1]->vertex].key = 0;
 	
 	/* if has_airports is FALSE, the algorythm should ignore all airport related edges, which is done by 
-	setting the "airport hub" vertex status to "visited", updating the number of visited vertices accordingly 
-	and ignoring the last vertex ("airport hub") completely by ignoring vInfo's last position.*/
+	ignoring the last vertex ("airport hub") and setting the number of total vertices accordingly. */
 	if (!has_airports) {
-		vInfo[len--].visited = TRUE;
-		visited_vertices++;
+		total_vertices--;
+		len--;
 	}
 
 	while (len) {
@@ -164,7 +164,7 @@ int* prim(Graph graph, int has_airports) {
 		}
 
 		visited_vertices++;
-		if (visited_vertices == graph->vertices) {
+		if (visited_vertices == total_vertices) {
 			break;
 		}
 
@@ -180,17 +180,17 @@ int* prim(Graph graph, int has_airports) {
 			}
 		}
 
-		len--;
 
+		len--;
 	}
 
-	if (visited_vertices < graph->vertices) {
+	if (visited_vertices < total_vertices) {
 		free(vInfo);
 		free(pQueue);
 		return NULL;
 	}
 
-	result = maxCost(vInfo, graph->vertices, has_airports);
+	result = maxCost(vInfo, total_vertices, has_airports);
 	free(vInfo);
 	free(pQueue);
 	return result;
@@ -198,7 +198,6 @@ int* prim(Graph graph, int has_airports) {
 
 
 /* ------------- other functions --------------------------- */
-
 /* calculates the total cost of an MST, as well as the total number of airports and roads */
 int* maxCost(Heapnode* vInfo, int len, int has_airports) {
 
@@ -211,43 +210,30 @@ int* maxCost(Heapnode* vInfo, int len, int has_airports) {
 
 		if (vInfo[i].visited && vInfo[i].vertex != 1) {
 
-			if (has_airports) {
-				if (vInfo[i].parent == vInfo[len].vertex || vInfo[i].vertex == len) {
+			if (has_airports && 
+				(vInfo[i].parent == vInfo[len].vertex || vInfo[i].vertex == len) ) {
 
-					total_airports++;
-					airports_cost += (vInfo[i].key - 1);
-				}
-
-				else {
-					total_roads++;
-					total_cost += vInfo[i].key;
-				}
+				total_airports++;
+				airports_cost += (vInfo[i].key - 1);
 			}
 			else {
-				/* the last vertex will be the "airport hub" vertex and should 
-				be ignored if there were no airports in the graph */
-				if (vInfo[i].vertex != len) { 
-					total_roads++;
-					total_cost += vInfo[i].key;
-				}
+				total_roads++;
+				total_cost += vInfo[i].key;
 			}
 		}
-
 	}
+
+	/* if there is only 1 airport, we only have 1 edge connecting a vertex to the "airport hub" but no real airway 
+	between two (or more) cities. So this edge should be ignored, and both airport and associated cost are kept out. */
 	if (total_airports > 1) {
 		total_cost += airports_cost;
 		result[1] = total_airports;
 	}
-
-	/* if there is only 1 airport, then we only have 1 edge connecting a vertex 
-	to the "airport hub" and no real airway between two (or more) cities. So this
-	edge should be ignored, and both airport and associated cost are kept out. */
 	else
 		result[1] = 0;
 
 	result[0] = total_cost/10;
 	result[2] = total_roads;
-
 	return result;
 }
 
@@ -271,7 +257,6 @@ void buildMinHeap(Heapnode** pQueue, Heapnode* vInfo, int len) {
 
 
 Heapnode* extractMin(Heapnode** pQueue, Heapnode* vInfo, int len) {
-
 	Heapnode* min;
 
 	swap(pQueue, vInfo, 1, len);
@@ -287,7 +272,6 @@ void minHeapify(Heapnode** pQ, Heapnode* vInfo, int k, int len) {
 	int right = 2 * k + 1;
 
 	int smallest = k;
-
 	if (left < len && vInfo[pQ[smallest]->vertex].key > vInfo[pQ[left]->vertex].key) {
 		smallest = left;
 	}
@@ -300,7 +284,6 @@ void minHeapify(Heapnode** pQ, Heapnode* vInfo, int k, int len) {
 		swap(pQ, vInfo, k, smallest);
 		minHeapify(pQ, vInfo, smallest, len);
 	}
-
 }
 
 void bubbleUp(Heapnode** pQ, Heapnode* vInfo, int len) {
@@ -317,9 +300,8 @@ void bubbleUp(Heapnode** pQ, Heapnode* vInfo, int len) {
 
 
 /* ------------- helper functions --------------------------- */
-
-/* Swaps positions of two nodes in an array and
-updates the new positions in the vertex info array (vInfo) */
+/* Swaps positions of two nodes in an array and updates the 
+new positions in the vertex info array (vInfo) */
 void swap(Heapnode** queue, Heapnode* vInfo, int a, int b) {
 
 	Heapnode* temp = queue[a];
@@ -332,7 +314,6 @@ void swap(Heapnode** queue, Heapnode* vInfo, int a, int b) {
 
 
 /* ------------------ graph functions --------------------------- */
-
 /* Initializes a graph with given vertex number */
 Graph initGraph(int vertices) {
 
@@ -371,7 +352,6 @@ Node addNode(int vertex, int cost, Node head) {
 
 
 /* --------------- Freeing memory functions------------------------ */
-
 /* Frees memory allocated for a graph */
 void cleanupGraph(Graph graph) {
 
