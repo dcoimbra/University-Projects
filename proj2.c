@@ -36,9 +36,9 @@ int* prim(Graph graph, int has_airports);
 /* min heap functions: */
 Heapnode** initMinHeap(int len);
 void buildMinHeap(Heapnode** pQ, int len);
-void bubbleUp(Heapnode** pQ, int len);
 Heapnode* extractMin(Heapnode** pQ, int len);
 void minHeapify(Heapnode** pQ, int k, int len);
+void bubbleUp(Heapnode** pQ, int len);
 
 /* graph related functions: */
 Graph initGraph(int total_vertices);
@@ -56,7 +56,6 @@ int* maxCost(Heapnode* vInfo, int len, int has_airports);
 
 /* ------------ Code ------------ */
 int main(int argc, char const *argv[]) {
-
 	int i, vertices; 
 	int road_edges, road_source, road_destination, road_cost;
 	int airport_edges, airport_city, has_airports, airport_cost;
@@ -65,7 +64,6 @@ int main(int argc, char const *argv[]) {
 	if (scanf("%d", &vertices) == -1) { perror("scanf\n"); }
 	graph = initGraph(vertices + 1);
 	
-
 	if (scanf("%d", &airport_edges) == -1) { perror("scanf\n"); }
 	for (i = 0; i < airport_edges; i++) {
 		
@@ -177,7 +175,6 @@ int* prim(Graph graph, int has_airports) {
 			}
 		}
 
-
 		len--;
 	}
 
@@ -197,7 +194,6 @@ int* prim(Graph graph, int has_airports) {
 /* ------------- other functions --------------------------- */
 /* calculates the total cost of an MST, as well as the total number of airports and roads */
 int* maxCost(Heapnode* vInfo, int len, int has_airports) {
-
 	int i, airports_cost, total_airports, total_roads, total_cost;
 	static int result[3];
 	result[0] = result[1] = result[2] = 0;
@@ -236,12 +232,10 @@ int* maxCost(Heapnode* vInfo, int len, int has_airports) {
 
 
 /* ---------------heap functions --------------------------- */
-
 Heapnode** initMinHeap(int len) {
 	Heapnode** pQueue = (Heapnode**)malloc((len + 1) * sizeof(Heapnode*));
 	return pQueue;
 }
-
 
 void buildMinHeap(Heapnode** pQueue, int len) {
 	int i;
@@ -252,7 +246,6 @@ void buildMinHeap(Heapnode** pQueue, int len) {
 	}
 }
 
-
 Heapnode* extractMin(Heapnode** pQueue, int len) {
 	Heapnode* min;
 
@@ -262,7 +255,6 @@ Heapnode* extractMin(Heapnode** pQueue, int len) {
 	minHeapify(pQueue, 1, len);
 	return min;
 }
-
 
 void minHeapify(Heapnode** pQ, int k, int len) {
 	int left = 2 * k;
@@ -287,7 +279,7 @@ void bubbleUp(Heapnode** pQ, int len) {
 	int pos = len;
 
 	while ((pos / 2) > 0 && pQ[pos / 2]->key > pQ[pos]->key) {
-		
+
 		if (!(pQ[pos]->visited)) {
 			swap(pQ, pos, pos / 2);
 		}
@@ -297,8 +289,7 @@ void bubbleUp(Heapnode** pQ, int len) {
 
 
 /* ------------- helper functions --------------------------- */
-/* Swaps positions of two nodes in an array and updates the 
-new positions in the vertex info array (vInfo) */
+/* Swaps positions of two nodes in an array and updates the new positions in the pointed heapnode */
 void swap(Heapnode** queue, int a, int b) {
 
 	Heapnode* temp = queue[a];
@@ -313,7 +304,6 @@ void swap(Heapnode** queue, int a, int b) {
 /* ------------------ graph functions --------------------------- */
 /* Initializes a graph with given vertex number */
 Graph initGraph(int vertices) {
-
 	int i;
 	Graph graph = (Graph)malloc(sizeof(struct graph));
 
@@ -330,14 +320,12 @@ Graph initGraph(int vertices) {
 
 /* adds a directed edge to a given graph */
 void addEdge(Graph graph, int origin, int destination, int cost) {
-
 	graph->adjacency_list[origin] = addNode(destination, cost, graph->adjacency_list[origin]);
 	graph->adjacency_list[destination] = addNode(origin, cost, graph->adjacency_list[destination]);
 }
 
 /* adds a node to the beginning of a linked list */
 Node addNode(int vertex, int cost, Node head) {
-
 	Node new = (Node)malloc(sizeof(struct node));
 
 	new->vertex = vertex;
@@ -351,7 +339,6 @@ Node addNode(int vertex, int cost, Node head) {
 /* --------------- Freeing memory functions------------------------ */
 /* Frees memory allocated for a graph */
 void cleanupGraph(Graph graph) {
-
 	int i;
 
 	for (i = 0; i < graph->vertices; i++) {
@@ -364,7 +351,6 @@ void cleanupGraph(Graph graph) {
 
 /* Frees memory allocated for a linked list */
 void cleanupList(Node head) {
-
 	Node temp;
 
 	while (head) {
