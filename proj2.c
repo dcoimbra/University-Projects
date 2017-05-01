@@ -35,10 +35,10 @@ int* prim(Graph graph, int has_airports);
 
 /* min heap functions: */
 Heapnode** initMinHeap(int len);
-void buildMinHeap(Heapnode** pQ, Heapnode* vInfo, int len);
-void bubbleUp(Heapnode** pQ, Heapnode* vInfo, int len);
-Heapnode* extractMin(Heapnode** pQ, Heapnode* vInfo, int len);
-void minHeapify(Heapnode** pQ, Heapnode* vInfo, int k, int len);
+void buildMinHeap(Heapnode** pQ, int len);
+void bubbleUp(Heapnode** pQ, int len);
+Heapnode* extractMin(Heapnode** pQ, int len);
+void minHeapify(Heapnode** pQ, int k, int len);
 
 /* graph related functions: */
 Graph initGraph(int total_vertices);
@@ -46,7 +46,7 @@ void addEdge(Graph graph, int origin, int destination, int cost);
 Node addNode(int vertex, int cost, Node head);
 
 /* helper functions: */
-void swap(Heapnode** queue, Heapnode* vInfo, int a, int b);
+void swap(Heapnode** queue, int a, int b);
 void cleanupGraph(Graph graph);
 void cleanupList(Node head);
 
@@ -63,7 +63,6 @@ int main(int argc, char const *argv[]) {
 	Graph graph;
 
 	if (scanf("%d", &vertices) == -1) { perror("scanf\n"); }
-	
 	graph = initGraph(vertices + 1);
 	
 
@@ -83,9 +82,7 @@ int main(int argc, char const *argv[]) {
 		addEdge(graph, road_source, road_destination, road_cost * 10);
 	}
 
-
 	runPrim(graph, vertices, airport_edges, road_edges, has_airports);
-
 	cleanupGraph(graph);
 	return 0;
 }
@@ -142,9 +139,9 @@ int* prim(Graph graph, int has_airports) {
 		vInfo[i].position = i; /* vertex's current index in pQueue array */
 	}
 
-	buildMinHeap(pQueue, vInfo, len);
+	buildMinHeap(pQueue, len);
 	
-	vInfo[pQueue[1]->vertex].key = 0;
+	pQueue[1]->key = 0;
 	
 	/* if has_airports is FALSE, the algorythm should ignore all airport related edges, which is done by 
 	ignoring the last vertex ("airport hub") and setting the number of total vertices accordingly. */
@@ -154,7 +151,7 @@ int* prim(Graph graph, int has_airports) {
 	}
 
 	while (len) {
-		u = extractMin(pQueue, vInfo, len);
+		u = extractMin(pQueue, len);
 
 		/* if the minimum cost vertex has no parent, there are not enough edges to complete an MST. */
 		if (u->vertex != 1 && u->parent == NIL) {
@@ -176,7 +173,7 @@ int* prim(Graph graph, int has_airports) {
 
 				vInfo[(v->vertex)].parent = u->vertex;
 				vInfo[(v->vertex)].key = v->cost;
-				bubbleUp(pQueue, vInfo, vInfo[(v->vertex)].position);
+				bubbleUp(pQueue, vInfo[(v->vertex)].position);
 			}
 		}
 
@@ -246,53 +243,53 @@ Heapnode** initMinHeap(int len) {
 }
 
 
-void buildMinHeap(Heapnode** pQueue, Heapnode* vInfo, int len) {
+void buildMinHeap(Heapnode** pQueue, int len) {
 	int i;
 	if (len > 0) {
 		for (i = (len / 2) - 1; i > 0; i--) {
-			minHeapify(pQueue, vInfo, i, len);
+			minHeapify(pQueue, i, len);
 		}
 	}
 }
 
 
-Heapnode* extractMin(Heapnode** pQueue, Heapnode* vInfo, int len) {
+Heapnode* extractMin(Heapnode** pQueue, int len) {
 	Heapnode* min;
 
-	swap(pQueue, vInfo, 1, len);
-	min = &vInfo[pQueue[len]->vertex];
+	swap(pQueue, 1, len);
+	min = pQueue[len];
 	min->visited = TRUE;
-	minHeapify(pQueue, vInfo, 1, len);
+	minHeapify(pQueue, 1, len);
 	return min;
 }
 
 
-void minHeapify(Heapnode** pQ, Heapnode* vInfo, int k, int len) {
+void minHeapify(Heapnode** pQ, int k, int len) {
 	int left = 2 * k;
 	int right = 2 * k + 1;
 
 	int smallest = k;
-	if (left < len && vInfo[pQ[smallest]->vertex].key > vInfo[pQ[left]->vertex].key) {
+	if (left < len && pQ[smallest]->key > pQ[left]->key) {
 		smallest = left;
 	}
 
-	if (right < len && vInfo[pQ[smallest]->vertex].key > vInfo[pQ[right]->vertex].key) {
+	if (right < len && pQ[smallest]->key > pQ[right]->key) {
 		smallest = right;
 	}
 
 	if (smallest != k) {
-		swap(pQ, vInfo, k, smallest);
-		minHeapify(pQ, vInfo, smallest, len);
+		swap(pQ, k, smallest);
+		minHeapify(pQ, smallest, len);
 	}
 }
 
-void bubbleUp(Heapnode** pQ, Heapnode* vInfo, int len) {
+void bubbleUp(Heapnode** pQ, int len) {
 	int pos = len;
 
-	while ((pos / 2) > 0 && vInfo[pQ[pos / 2]->vertex].key > vInfo[pQ[pos]->vertex].key) {
+	while ((pos / 2) > 0 && pQ[pos / 2]->key > pQ[pos]->key) {
 		
-		if (!(vInfo[pQ[pos]->vertex].visited)) {
-			swap(pQ, vInfo, pos, pos / 2);
+		if (!(pQ[pos]->visited)) {
+			swap(pQ, pos, pos / 2);
 		}
 		pos = pos / 2;
 	}
@@ -302,14 +299,14 @@ void bubbleUp(Heapnode** pQ, Heapnode* vInfo, int len) {
 /* ------------- helper functions --------------------------- */
 /* Swaps positions of two nodes in an array and updates the 
 new positions in the vertex info array (vInfo) */
-void swap(Heapnode** queue, Heapnode* vInfo, int a, int b) {
+void swap(Heapnode** queue, int a, int b) {
 
 	Heapnode* temp = queue[a];
 	queue[a] = queue[b];
 	queue[b] = temp;
 
-	vInfo[queue[a]->vertex].position = a;
-	vInfo[queue[b]->vertex].position = b;
+	queue[a]->position = a;
+	queue[b]->position = b;
 }
 
 
