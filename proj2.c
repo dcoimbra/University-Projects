@@ -30,7 +30,7 @@ typedef struct heapnode {
 
 
 /* ------------ prototype: ------------ */
-void runPrim(Graph graph, int cities, int airport_edges, int road_edges, int has_airports);
+void runPrim(Graph graph, int cities, int road_edges, int has_airports);
 int* prim(Graph graph, int has_airports);
 
 /* min heap functions: */
@@ -80,12 +80,12 @@ int main(int argc, char const *argv[]) {
 		addEdge(graph, road_source, road_destination, road_cost * 10);
 	}
 
-	runPrim(graph, vertices, airport_edges, road_edges, has_airports);
+	runPrim(graph, vertices, road_edges, has_airports);
 	cleanupGraph(graph);
 	return 0;
 }
 
-void runPrim(Graph graph, int cities, int airport_edges, int road_edges, int has_airports) {
+void runPrim(Graph graph, int cities, int road_edges, int has_airports) {
 	int total_cost, total_airports, total_roads;
 	int* result = prim(graph, has_airports);
 	total_cost = total_airports = total_roads = 0;
@@ -99,10 +99,10 @@ void runPrim(Graph graph, int cities, int airport_edges, int road_edges, int has
 	total_airports = result[1];
 	total_roads = result[2];
 
-	if (has_airports && airport_edges > 1 && (road_edges >= (cities - 1))) {
+	if (total_airports > 1 && (road_edges >= (cities - 1))) {
 
 		if ((result = prim(graph, FALSE))) {
-			if (result[0] == total_cost && result[1] < total_airports) {
+			if (result[0] == total_cost) {
 				total_airports = result[1];
 				total_roads = result[2];
 			}
