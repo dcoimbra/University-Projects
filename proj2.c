@@ -9,7 +9,7 @@
 typedef struct node {
 
 	int vertex;
-	int cost;
+	unsigned long int cost;
 	struct node* next;
 }*Node;
 
@@ -22,7 +22,7 @@ typedef struct graph {
 typedef struct heapnode {
 
 	int vertex;
-	int key;
+	unsigned long int key;
 	int parent;
 	int visited;
 	int position;
@@ -42,8 +42,8 @@ void bubbleUp(Heapnode** pQ, int len);
 
 /* graph related functions: */
 Graph initGraph(int total_vertices);
-void addEdge(Graph graph, int origin, int destination, int cost);
-Node addNode(int vertex, int cost, Node head);
+void addEdge(Graph graph, int origin, int destination, unsigned long int cost);
+Node addNode(int vertex, unsigned long int cost, Node head);
 
 /* helper functions: */
 void swap(Heapnode** queue, int a, int b);
@@ -56,27 +56,28 @@ int* maxCost(Heapnode* vInfo, int len, int has_airports);
 
 /* ------------ Code ------------ */
 int main(int argc, char const *argv[]) {
-	int i, vertices; 
-	int road_edges, road_source, road_destination, road_cost;
-	int airport_edges, airport_city, has_airports, airport_cost;
+	int i, vertices;
+	int road_edges, road_source, road_destination;
+	int airport_edges, airport_city, has_airports;
+	unsigned long int road_cost, airport_cost;
 	Graph graph;
 
 	if (scanf("%d", &vertices) == -1) { perror("scanf\n"); }
 	graph = initGraph(vertices + 1);
-	
+
 	if (scanf("%d", &airport_edges) == -1) { perror("scanf\n"); }
 	for (i = 0; i < airport_edges; i++) {
-		
-		if (scanf("%d %d", &airport_city, &airport_cost) == -1) { perror("scanf\n"); }
+
+		if (scanf("%d %lu", &airport_city, &airport_cost) == -1) { perror("scanf\n"); }
 		addEdge(graph, (airport_city), (vertices + 1), (airport_cost * 10) + 1);
 	}
 
-	has_airports = airport_edges > 0 ? TRUE : FALSE; 
+	has_airports = airport_edges > 0 ? TRUE : FALSE;
 
 	if (scanf("%d", &road_edges) == -1) { perror("scanf\n"); }
 	for (i = 0; i < road_edges; i++) {
-		
-		if (scanf("%d %d %d", &road_source, &road_destination, &road_cost) == -1) { perror("scanf\n"); }
+
+		if (scanf("%d %d %lu", &road_source, &road_destination, &road_cost) == -1) { perror("scanf\n"); }
 		addEdge(graph, road_source, road_destination, road_cost * 10);
 	}
 
@@ -98,21 +99,20 @@ void runPrim(Graph graph, int cities, int airport_edges, int road_edges, int has
 	total_cost = result[0];
 	total_airports = result[1];
 	total_roads = result[2];
-	
-	if (has_airports && airport_edges > 1 && (road_edges >= (cities - 1)) ) {
+
+	if (has_airports && airport_edges > 1 && (road_edges >= (cities - 1))) {
 
 		if ((result = prim(graph, FALSE))) {
-
 			if (result[0] == total_cost && result[1] < total_airports) {
-				printf("%d\n%d %d\n", result[0], result[1], result[2]);
-				return;
+				total_airports = result[1];
+				total_roads = result[2];
 			}
 		}
 	}
 	printf("%d\n%d %d\n", total_cost, total_airports, total_roads);
 }
 
-/* runs prim's algorythm to find an MST, given an undirectional weighted graph and 
+/* runs prim's algorythm to find an MST, given an undirectional weighted graph and
 a flag value to indicate if there are any airports. If flag is set to FALSE, it will ignore
 all airport related edges and try to build an MST using the remaining edges.*/
 int* prim(Graph graph, int has_airports) {
@@ -138,14 +138,14 @@ int* prim(Graph graph, int has_airports) {
 	}
 
 	buildMinHeap(pQueue, len);
-	
+
 	pQueue[1]->key = 0;
-	
-	/* if has_airports is FALSE, the algorythm should ignore all airport related edges, which is done by 
+
+	/* if has_airports is FALSE, the algorythm should ignore all airport related edges, which is done by
 	ignoring the last vertex ("airport hub") and setting the number of total vertices accordingly. */
 	if (!has_airports) {
+		vInfo[len--].visited = TRUE; /*to ensure that edges connecting to the "airport hub" are ignored */
 		total_vertices--;
-		len--;
 	}
 
 	while (len) {
@@ -194,16 +194,17 @@ int* prim(Graph graph, int has_airports) {
 /* ------------- other functions --------------------------- */
 /* calculates the total cost of an MST, as well as the total number of airports and roads */
 int* maxCost(Heapnode* vInfo, int len, int has_airports) {
-	int i, airports_cost, total_airports, total_roads, total_cost;
+	int i, total_airports, total_roads;
+	unsigned long int airports_cost, total_cost;
 	static int result[3];
 	result[0] = result[1] = result[2] = 0;
 	airports_cost = total_airports = total_roads = total_cost = 0;
-	
+
 	for (i = 1; i <= len; i++) {
 
 		if (vInfo[i].visited && vInfo[i].vertex != 1) {
 
-			if (has_airports && 
+			if (has_airports &&
 				(vInfo[i].parent == vInfo[len].vertex || vInfo[i].vertex == len) ) {
 
 				total_airports++;
@@ -216,7 +217,7 @@ int* maxCost(Heapnode* vInfo, int len, int has_airports) {
 		}
 	}
 
-	/* if there is only 1 airport, we only have 1 edge connecting a vertex to the "airport hub" but no real airway 
+	/* if there is only 1 airport, we only have 1 edge connecting a vertex to the "airport hub" but no real airway
 	between two (or more) cities. So this edge should be ignored, and both airport and associated cost are kept out. */
 	if (total_airports > 1) {
 		total_cost += airports_cost;
@@ -225,7 +226,7 @@ int* maxCost(Heapnode* vInfo, int len, int has_airports) {
 	else
 		result[1] = 0;
 
-	result[0] = total_cost/10;
+	result[0] = (int)(total_cost / 10);
 	result[2] = total_roads;
 	return result;
 }
@@ -248,7 +249,7 @@ void buildMinHeap(Heapnode** pQueue, int len) {
 
 Heapnode* extractMin(Heapnode** pQueue, int len) {
 	Heapnode* min;
-
+	
 	swap(pQueue, 1, len);
 	min = pQueue[len];
 	min->visited = TRUE;
@@ -319,13 +320,13 @@ Graph initGraph(int vertices) {
 }
 
 /* adds a directed edge to a given graph */
-void addEdge(Graph graph, int origin, int destination, int cost) {
+void addEdge(Graph graph, int origin, int destination, unsigned long int cost) {
 	graph->adjacency_list[origin] = addNode(destination, cost, graph->adjacency_list[origin]);
 	graph->adjacency_list[destination] = addNode(origin, cost, graph->adjacency_list[destination]);
 }
 
 /* adds a node to the beginning of a linked list */
-Node addNode(int vertex, int cost, Node head) {
+Node addNode(int vertex, unsigned long int cost, Node head) {
 	Node new = (Node)malloc(sizeof(struct node));
 
 	new->vertex = vertex;
