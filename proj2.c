@@ -111,7 +111,7 @@ void runPrim(Graph graph, int cities, int road_edges, int has_airports) {
 	printf("%d\n%d %d\n", total_cost, total_airports, total_roads);
 }
 
-/* runs prim's algorythm to find an MST, given an undirectional weighted graph and
+/* runs prim's algorithm to find an MST, given an undirectional weighted graph and
 a flag value to indicate if there are any airports. If flag is set to FALSE, it will ignore
 all airport related edges and try to build an MST using the remaining edges.*/
 int* prim(Graph graph, int has_airports) {
@@ -139,7 +139,7 @@ int* prim(Graph graph, int has_airports) {
 	buildMinHeap(pQueue, len);
 	pQueue[1]->key = 0;
 
-	/* if has_airports is FALSE, the algorythm should ignore all airport related edges, which is done by
+	/* if has_airports is FALSE, the algorithm should ignore all airport related edges, which is done by
 	ignoring the last vertex ("airport hub"), setting it as vsited, and setting the number of total vertices accordingly. */
 	if (!has_airports) {
 		vInfo[len--].visited = TRUE; /*to ensure that edges connecting to the "airport hub" are ignored */
