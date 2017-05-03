@@ -27,10 +27,17 @@
     <body onload="preparelogout()">
 
         <div class="menu" align="center">
-    			<header class="menuHeader">Dados Pessoais</header>
-                <button type="button" class="menuItem">Modificar Nome</button>
-                <button type="button" class="menuItem">Modificar NIF</button>
-                <button type="button" class="menuItem" onclick="window.location='alergias.html'">Alergias</button>
+    			<header class="menuHeader" id="dadosheader">Dados Pessoais</header>
+
+            <form id="modifyform">
+
+                <input type="text" id="modifyname" class="form-control input-lg" placeholder="Modificar Nome">
+                <input type="text" id="modifynif" class="form-control input-lg" placeholder="Modificar NIF">
+
+                <button onclick="storeUsername('modifyname')" type="submit" class="btn-lg" id="modifyconfirm"><span class="buttontext">OK</span></button>
+            </form>
+          
+          <button type="button" class="menuItem" onclick="window.location='alergias.html'">Alergias</button>
     			<button type="button" class="menuItem">Configurar métodos de Login</button>
         </div>
 

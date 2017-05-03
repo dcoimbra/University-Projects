@@ -205,6 +205,38 @@ button {
 	margin-right: 30vw;
 }
 
+
+#modifyname {
+
+	text-align: left;
+	padding-left: 1vh;
+	margin-top: 1vh;
+	margin-bottom: 2vh;
+	width: 55vh;
+	padding-top: 3vh;
+	padding-bottom: 3vh;
+	margin-left: -14%;
+}
+
+#modifynif {
+
+	text-align: left;
+	padding-left: 1vh; 
+	width: 55vh;
+	padding-top: 3vh;
+	padding-bottom: 3vh;
+	margin-left: -14%;
+	display: inline;
+}
+
+#modifyconfirm {
+
+	position: absolute;
+	display: inline;
+	right: 30%;
+	width: 7%;
+}
+
 #orderprice {
 
 	font-size: 170%;

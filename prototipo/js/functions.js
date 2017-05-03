@@ -33,9 +33,9 @@ function move() {
     }
 }
 
-function storeUsername() {
+function storeUsername(id) {
 
-    var username = document.getElementById("inputUsername");
+    var username = document.getElementById(id);
     sessionStorage.setItem("username", username.value);
 }
 
