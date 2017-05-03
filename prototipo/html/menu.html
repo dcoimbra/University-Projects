@@ -10,7 +10,7 @@
         <!-- Bootstrap -->
         <link href="./login_files/bootstrap.min.css" rel="stylesheet" />
         <!-- jQuery -->
-        <script src="../j   s/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
         <!-- Bootstrap javascript -->
         <script src="../js/bootstrap.min.js" type="text/javascript"></script>
 
@@ -32,6 +32,16 @@
             <button type="button" class="menuItem" onclick="window.location='entradas.html'">Entradas</button>
             <button type="button" class="menuItem" onclick="window.location='pratos.html'">Pratos do Dia</button>
             <button type="button" class="menuItem" onclick="window.location='sobremesas.html'">Sobremesas</button>
+        </div>
+
+        <div id="order">
+        	<div id="ordertitle">O meu pedido:</div>
+        	<div id="bottomlabel"> 
+        		<p id="totaltext">Total:</p>
+        		<div class="labeldot"></div>
+        		<p id="orderprice">€</p>
+        		<button type="button" id="mod">Modificar Pedido</button>
+        	</div>
         </div>
 
         <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />

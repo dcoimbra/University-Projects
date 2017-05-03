@@ -74,6 +74,38 @@ button {
 	line-height: 300%;
 }
 
+#order {
+
+	position: absolute;
+	right: 2%;
+	top: 15%;
+	height: 75%;
+	width: 19%;
+	border: solid black;
+
+}
+
+#ordertitle {
+
+	text-align: center;
+	font-size: 250%;
+}
+
+#bottomlabel {
+
+	border-top: dashed black;
+	justify-content: space-between;
+	height: 20%;
+	margin-top: 125%;
+}
+
+#totaltext {
+
+	font-size: 200%;
+	width: 30%;
+	display: inline; 
+}
+
 #header1 {
 
 	font-size: 300%;
@@ -164,6 +196,13 @@ button {
 	padding-top: 2vh;
 	font-size: 170%;
 	margin-right: 30vw;
+}
+
+#orderprice {
+
+	font-size: 170%;
+	display: inline;
+	padding-left: 18%;
 }
 
 .bebida, .entrada, .prato, .sobremesa {
@@ -274,6 +313,18 @@ button {
 	position: relative;
 	display: block;
 	height: 2vh;
+}
+
+.labeldot {
+
+	margin-left: 0.5vw;
+	padding-top: 0vh;
+	padding-left: 16vh;
+	border-bottom: dotted 5px black;
+	width: 6vw;
+	position: relative;
+	display: inline;
+	height: 1.5vh;
 }
 
 .popover {
