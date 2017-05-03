@@ -2,7 +2,6 @@ body {
 
 	height: 100%;
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-	overflow: hidden;
 }
 
 #bebidas, #pratos, #entradas, #sobremesas {
@@ -87,7 +86,6 @@ button {
 	height: 80vh;
 	width: 20vw;
 	border: solid black;
-
 }
 
 #ordertitle {
@@ -100,12 +98,18 @@ button {
 
 	border-top: dashed black;
 	justify-content: space-between;
-	margin-top: 165%;
 }
 
 #totaltext {
 
 	padding-left: 0.5vw;
+	font-size: 200%;
+	width: 30%;
+	display: inline;
+}
+
+#totalprice {
+
 	font-size: 200%;
 	width: 30%;
 	display: inline;
@@ -151,7 +155,7 @@ button {
 }
 
 
-#backbutton {
+.backbutton {
 
 	display: none;
 	position: absolute;
@@ -164,6 +168,36 @@ button {
 	background-repeat: no-repeat;
 	background-position: 3%;
 	background-size: 40%;
+}
+
+#middlelabel {
+
+	height: 60vh;
+	overflow-y: auto;
+
+}
+
+#ordertable {
+
+	width: 99%;
+}
+
+#totaltable {
+
+	width: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #333333;
 }
 
 #signin {

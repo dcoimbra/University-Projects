@@ -45,7 +45,7 @@
                 <div id="menu" align="center">
                     <header class="menuHeader">Bebidas</header>
         			<div class="bebida" align="left">
-        				<button type="button" class="menuscomida">Água Mineral</button>
+        				<button type="button" class="menuscomida" onclick="adicionaPedido('Água Mineral', 1.00)">Água Mineral</button>
         				<div class="dot"></div>
         				<p class="price">1,00€</p>
         			</div>
@@ -158,10 +158,20 @@
 
             <div id="order">
             	<div id="ordertitle">O meu pedido:</div>
+                <div id="middlelabel">
+                    <table id="ordertable">
+                        <th id="ordername">
+                        </th>
+                        <th id="orderprice">
+                        </th>
+                    </table>
+                </div>
             	<div id="bottomlabel">
-            		<p id="totaltext">Total:</p>
-            		<p id="orderprice">€</p>
-            		<button type="button" id="mod">Modificar Pedido</button>
+                    <table id="totaltable">
+            		  <th id="totaltext">Total:</th>
+            		  <th id="totalprice" style="text-align: right;"> €</th>
+                    </table>
+                    <button type="button" id="mod">Modificar Pedido</button>
             	</div>
             </div>
 

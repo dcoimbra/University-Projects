@@ -1,3 +1,5 @@
+var totalPrice = 0;
+
 function goBack() {
 
     window.history.back();
@@ -37,6 +39,43 @@ function storeUsername(id) {
 
     var username = document.getElementById(id);
     sessionStorage.setItem("username", username.value);
+}
+
+function adicionaPedido(coisa, price) {
+
+    var row1 = document.createElement('tr');
+
+    row1.className = 'order_row';
+
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+
+    row1.innerHTML = '<input type="button" value="-" onclick="removeRow(this)">';
+    
+    td1.innerHTML = ' '+coisa;
+    td2.innerHTML = price+' €';
+    td2.style = "text-align: right";
+
+    row1.appendChild(td1);
+    row1.appendChild(td2);
+
+    document.getElementById('ordertable').appendChild(row1);
+
+    addToTotal(price);
+}
+
+function removeRow(input) {
+    
+    document.getElementById('ordertable').removeChild( input.parentNode );
+    totalprice -= price;
+    console.log(price);
+    document.getElementById("totalprice").innerHTML = totalPrice + ' €';
+}
+
+function addToTotal(price) {
+    totalPrice += price;
+
+    document.getElementById("totalprice").innerHTML = totalPrice + ' €';
 }
 
 function setUsername() {
