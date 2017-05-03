@@ -50,8 +50,7 @@ function adicionaPedido(coisa, price) {
     var td1 = document.createElement('td');
     var td2 = document.createElement('td');
 
-    row1.innerHTML = '<input type="button" value="-" onclick="removeRow(this)">';
-    
+    row1.innerHTML = '<input type="button" value="-" onclick="removeRow(this);subtractFromTotal(' + price + ')">';
     td1.innerHTML = ' '+coisa;
     td2.innerHTML = price+' €';
     td2.style = "text-align: right";
@@ -67,14 +66,19 @@ function adicionaPedido(coisa, price) {
 function removeRow(input) {
     
     document.getElementById('ordertable').removeChild( input.parentNode );
-    totalprice -= price;
-    console.log(price);
+    
     document.getElementById("totalprice").innerHTML = totalPrice + ' €';
 }
 
 function addToTotal(price) {
     totalPrice += price;
 
+    document.getElementById("totalprice").innerHTML = totalPrice + ' €';
+}
+
+function subtractFromTotal(price) {
+
+    totalPrice -= price;
     document.getElementById("totalprice").innerHTML = totalPrice + ' €';
 }
 
