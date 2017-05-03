@@ -66,8 +66,6 @@ function adicionaPedido(coisa, price) {
 function removeRow(input) {
     
     document.getElementById('ordertable').removeChild( input.parentNode );
-    
-    document.getElementById("totalprice").innerHTML = totalPrice + ' €';
 }
 
 function addToTotal(price) {
