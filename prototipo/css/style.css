@@ -5,6 +5,11 @@ body {
 	overflow: hidden;
 }
 
+#bebidas, #pratos, #entradas, #sobremesas {
+
+	display: none;
+}
+
 button {
 
 	display: inline-block;
@@ -77,10 +82,10 @@ button {
 #order {
 
 	position: absolute;
-	right: 1vw;
-	top: 13vh;
-	height: 75vh;
-	width: 19vw;
+	right: 0vw;
+	top: 10vh;
+	height: 80vh;
+	width: 20vw;
 	border: solid black;
 
 }
@@ -95,8 +100,7 @@ button {
 
 	border-top: dashed black;
 	justify-content: space-between;
-	height: 20%;
-	margin-top: 125%;
+	margin-top: 165%;
 }
 
 #totaltext {
@@ -149,6 +153,7 @@ button {
 
 #backbutton {
 
+	display: none;
 	position: absolute;
 	bottom: 4%;
 	left: 36%;
@@ -221,7 +226,7 @@ button {
 #modifynif {
 
 	text-align: left;
-	padding-left: 1vh; 
+	padding-left: 1vh;
 	width: 55vh;
 	padding-top: 3vh;
 	padding-bottom: 3vh;
