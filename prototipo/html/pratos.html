@@ -31,7 +31,7 @@
 			<header class="menusubHeader">Carne</header>
             <div class="camadas">
     			<div class="prato" align="left">
-    				<button type="button" class="menuscomida">Esparguete à Bolonhesa</button>
+    				<button type="button" class="menuscomida" id="esparguete" data-placement="right" data-trigger="focus">Esparguete à Bolonhesa</button>
     				<div class="dot"></div>
     				<p class="price">4,50€</p>
     			</div>
@@ -39,13 +39,17 @@
     		<header class="menusubHeader">Peixe</header>
             <div class="camadas">
     			<div class="prato" align="left">
-    				<button type="button" class="menuscomida" id="bacalhau" data-placement='right' title="Bacalhau com Natas">Bacalhau com Natas</button>
+    				<button type="button" class="menuscomida" id="bacalhau" data-placement='right' data-trigger="focus">Bacalhau com Natas</button>
     				<div class="dot"></div>
     				<p class="price">4,00€</p>
                 </div>
             </div>
 
-            <div id="popoverbacalhau" style="display: none">Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</div>
+            <div id="popoverbacalhau" style="display: none">
+            <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas">Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</div>
+
+            <div id="popoveresparguete" style="display: none">
+            <img class="foodimage" src="../images/esparguete.jpg" alt="Esparguete à Bolonhesa">É bom!</div>
 
             <script type="text/javascript">
                 $(document).ready(function(){
@@ -53,6 +57,15 @@
                         html : true,
                         content: function() {
                             return $('#popoverbacalhau').html();
+                        }
+                    });
+                });
+
+                $(document).ready(function(){
+                    $('#esparguete').popover({
+                        html : true,
+                        content: function() {
+                            return $('#popoveresparguete').html();
                         }
                     });
                 });
