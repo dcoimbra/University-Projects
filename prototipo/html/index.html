@@ -88,7 +88,7 @@
         			<header class="menusubHeader">Carne</header>
                     <div class="camadas">
             			<div class="prato" align="left">
-            				<button type="button" class="menuscomida" id="esparguete" data-placement="right" data-trigger="focus" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50)">Esparguete à Bolonhesa</button>
+            				<button type="button" class="menuscomida" id="esparguete" data-placement="right" data-trigger="focus">Esparguete à Bolonhesa</button>
             				<div class="dot"></div>
             				<p class="price">4,50€</p>
             			</div>
@@ -96,17 +96,17 @@
             		<header class="menusubHeader">Peixe</header>
                     <div class="camadas">
             			<div class="prato" align="left">
-            				<button type="button" class="menuscomida" id="bacalhau" data-placement='right' data-trigger="focus" onclick="adicionaPedido('Água com Gás', 4.00)">Bacalhau com Natas</button>
+            				<button type="button" class="menuscomida" id="bacalhau" data-placement='right' data-trigger="focus">Bacalhau com Natas</button>
             				<div class="dot"></div>
             				<p class="price">4,00€</p>
                         </div>
                     </div>
 
                     <div id="popoverbacalhau" style="display: none">
-                    <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas">Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</div>
+                    <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas">Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.<button type="button" class="btn" onclick="adicionaPedido('Bacalhau com Natas', 4.00)">Adicionar</button></div>
 
                     <div id="popoveresparguete" style="display: none">
-                    <img class="foodimage" src="../images/esparguete.jpg" alt="Esparguete à Bolonhesa">É bom!</div>
+                    <img class="foodimage" src="../images/esparguete.jpg" alt="Esparguete à Bolonhesa">É bom!<button type="button" class="btn" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50)">Adicionar</button></div>
 
                     <script type="text/javascript">
                         $(document).ready(function(){

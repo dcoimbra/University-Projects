@@ -22,7 +22,7 @@
 
     </head>
 
-    <body onload="preparelogout()">
+    <body onload="preparelogout();$('.backbutton').show()">
 
         <div class="menu" align="center">
             <header class="menuHeader">Promoções</header>
@@ -48,7 +48,7 @@
 
         <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
 
-        <button onclick="goBack()" class="btn-lg" id="backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+        <button onclick="goBack()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
     </body>
 
 </html>

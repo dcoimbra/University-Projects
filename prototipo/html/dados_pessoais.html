@@ -24,7 +24,7 @@
 
     </head>
 
-    <body onload="preparelogout()">
+    <body onload="preparelogout();$('.backbutton').show()">
 
         <div class="menu" align="center">
     			<header class="menuHeader" id="dadosheader">Dados Pessoais</header>
@@ -36,7 +36,7 @@
 
                 <button onclick="storeUsername('modifyname')" type="submit" class="btn-lg" id="modifyconfirm"><span class="buttontext">OK</span></button>
             </form>
-          
+
           <button type="button" class="menuItem" onclick="window.location='alergias.html'">Alergias</button>
     			<button type="button" class="menuItem">Configurar métodos de Login</button>
         </div>
@@ -61,6 +61,6 @@
 
     	<img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
 
-    	<button onclick="goBack()" class="btn-lg" id="backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+    	<button onclick="goBack()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
     </body>
   </html>
