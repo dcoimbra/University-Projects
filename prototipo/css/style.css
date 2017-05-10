@@ -4,7 +4,7 @@ body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
-#bebidas, #pratos, #entradas, #sobremesas {
+#bebidas, #pratos, #entradas, #sobremesas, #apospedido, #entretenimento, #jogos {
 
 	display: none;
 }
@@ -76,6 +76,14 @@ button {
 .textheightfix {
 
 	line-height: 300%;
+}
+
+.sendorder {
+    
+    position: absolute;
+    bottom: 2vh;
+    right: 2.4vw;
+    border: solid black;
 }
 
 #order {

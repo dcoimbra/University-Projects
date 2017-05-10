@@ -37,6 +37,8 @@
                     <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show()">Pratos do Dia</button>
                     <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show()">Sobremesas</button>
                 </div>
+                
+                <button onclick="$('#menupage').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
             </div>
 
@@ -58,6 +60,8 @@
                 </div>
 
                 <button onclick="$('#bebidas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+                
+                 <button onclick="$('#bebidas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
             </div>
 
@@ -79,6 +83,8 @@
                 </div>
 
                 <button onclick="$('#entradas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+                
+                <button onclick="$('#entradas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
             </div>
 
@@ -132,6 +138,8 @@
                     </script>
 
                     <button onclick="$('#pratos').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+                    
+                    <button onclick="$('#pratos').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
                 </div>
 
@@ -158,6 +166,8 @@
                 </div>
 
                 <button onclick="$('#sobremesas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+                
+                <button onclick="$('#sobremesas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
             </div>
 
@@ -185,8 +195,32 @@
 
 
 <!-----------------------------------APÓS PEDIDO--------------------------------------------------->
-
-
+        
+            <div id="apospedido">
+                <div id="menu" align="center">
+                    <header class="menuHeader">O seu pedido está a cozinhar!</header>
+        			<button onclick="$('#apospedido').hide();$('#entretenimento').show()" type="button" class="menuItem">Enquanto espera</button>
+                    <button onclick="$('#apospedido').hide();$('#menupage').show()" type="button" class="menuItem" >Fazer novo pedido</button>
+                </div>
+            </div>
+        
+            <div id="entretenimento"> 
+                <div id="menu" align="center">
+                    <header class="menuHeader">Entretenha-se enquanto espera!</header>
+        			<button onclick="$('#entretenimento').hide();$('#jogos').show()" type="button" class="menuItem">Jogos</button>
+                    <button onclick="$('#entretenimento').hide();$('#passatempos').show()" type="button" class="menuItem">Passatempos</button>
+                </div>
+            </div>
+        
+            <div id="jogos">
+                <div id="menu" align="center">
+                    <header class="menuHeader">Jogos</header>
+        			<button onclick="$('#jogos').hide();$('#pong').show()" type="button" class="menuItem">Pong</button>
+                </div>
+            </div>
+        
+            
+                 
 <!-----------------------------------------LOGIN--------------------------------------------------->
 <!-- TODO:  LOGIN!!! -->
 
