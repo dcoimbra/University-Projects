@@ -4,7 +4,7 @@ body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
-#bebidas, #pratos, #entradas, #sobremesas, #apospedido, #entretenimento, #jogos {
+#bebidas, #pratos, #entradas, #sobremesas, #apospedido, #entretenimento, #jogos, #passatempos {
 
 	display: none;
 }
