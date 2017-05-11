@@ -1,5 +1,7 @@
 var totalPrice = 0;
-var aguaMineral = aguaGas = couvert = sopa = esparguete = bacalhau = saladaFruta = mousse = 0;
+var aguaMineral = aguaGas = sumoLaranja = cocaCola = cocaColaZero = sevenUp = 0;
+var sevenUpLight = sumolLaranja = sumolAnanas = fantaLaranja = iceTeaLimao = iceTeaPessego = iceTeaMaracuja = 0;
+var couvert = sopa = esparguete = bacalhau = saladaFruta = mousse = 0;
 
 function goBack() {
 
@@ -84,6 +86,39 @@ function findCoisa(coisa, int) {
 		case "Água com Gás":
 			aguaGas += int;
 			return aguaGas;
+		case "Sumo de Laranja":
+			sumoLaranja += int;
+			return sumoLaranja;	
+		case "Coca Cola":
+			cocaCola += int;
+			return cocaCola;
+		case "Coca Cola Zero":
+			cocaColaZero += int;
+			return cocaColaZero;
+		case "7up":
+			sevenUp += int;
+			return sevenUp;
+		case "7up Light":
+			sevenUpLight += int;
+			return sevenUpLight;
+		case "Sumol de Laranja":
+			sumolLaranja += int;
+			return sumolLaranja;
+		case "Sumol de Ananás":
+			sumolAnanas += int;
+			return sumolAnanas;
+		case "Fanta Laranja":
+			fantaLaranja += int;
+			return fantaLaranja;
+		case "Ice Tea de Limão":
+			iceTeaLimao += int;
+			return iceTeaLimao;
+		case "Ice Tea de Pêssego":
+			iceTeaPessego += int;
+			return iceTeaPessego; 
+		case "Ice Tea de Frutos Exóticos":
+			iceTeaMaracuja += int;
+			return iceTeaMaracuja;
 		case "Couvert":
 			couvert += int;
 			return couvert;

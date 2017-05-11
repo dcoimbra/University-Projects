@@ -1,69 +1,124 @@
 <!DOCTYPE html>
 <html lang="pt">
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" type="text/css" href="../css/style.css" />
-        <script src="../js/functions.js" type="text/javascript"></script>
-        <!-- Bootstrap -->
-        <link href="./login_files/bootstrap.min.css" rel="stylesheet" />
-        <!-- jQuery -->
-        <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
-        <!-- Bootstrap javascript -->
-        <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
+		<script src="../js/functions.js" type="text/javascript"></script>
+		<!-- Bootstrap -->
+		<link href="./login_files/bootstrap.min.css" rel="stylesheet" />
+		<!-- jQuery -->
+		<script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+		<!-- Bootstrap javascript -->
+		<script src="../js/bootstrap.min.js" type="text/javascript"></script>
 
-        <title>Menu Principal</title>
+		<title>Menu Principal</title>
 
-        <link rel="stylesheet" type="text/css" href="../css/style.css">
-        <script src="../js/functions.js" type="text/javascript"></script>
-    </head>
+		<link rel="stylesheet" type="text/css" href="../css/style.css">
+		<script src="../js/functions.js" type="text/javascript"></script>
+	</head>
 
-    <body onload="checklogin();waiter()">
+	<body onload="checklogin();waiter()">
 
 
-            <a href="login.html" id="loginlink">
-                <img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" onclick="savelastpage()"/>
-            </a>
+			<a href="login.html" id="loginlink">
+				<img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" onclick="savelastpage()"/>
+			</a>
 
 <!-------------------------------------------MENU-------------------------------------------------->
-            <div id="menupage">
+			<div id="menupage">
 
-                <div id="menu" align="center">
-                    <header class="menuHeader">Menu</header>
-                    <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#bebidas').show();$('.backbutton').show()">Bebidas</button>
-                    <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#entradas').show();$('.backbutton').show()">Entradas</button>
-                    <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show()">Pratos do Dia</button>
-                    <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show()">Sobremesas</button>
-                </div>
+				<div id="menu" align="center">
+					<header class="menuHeader">Menu</header>
+					<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#bebidas').show();$('.backbutton').show()">Bebidas</button>
+					<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#entradas').show();$('.backbutton').show()">Entradas</button>
+					<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show()">Pratos do Dia</button>
+					<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show()">Sobremesas</button>
+				</div>
 
-                <button onclick="$('#menupage').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+				<button onclick="$('#menupage').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
-                <button onclick="$('#menupage').hide();$('#apospedido').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+				<button onclick="$('#menupage').hide();$('#apospedido').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-            </div>
+			</div>
 
 <!---------------------------------------BEBIDAS--------------------------------------------------->
-            <div id="bebidas">
+			<div id="bebidas">
 
-                <div id="menu" align="center">
-                    <header class="menuHeader">Bebidas</header>
-        			<div class="bebida" align="left">
-        				<button type="button" class="menuscomida" onclick="adicionaPedido('Água Mineral', 1.00)">Água Mineral</button>
-        				<div class="dot"></div>
-        				<p class="price">1,00€</p>
-        			</div>
-        			<div class="bebida" align="left">
-        				<button type="button" class="menuscomida" onclick="adicionaPedido('Água com Gás', 1.00)">Água com Gás</button>
-        				<div class="dot"></div>
-        				<p class="price">1,00€</p>
-        			</div>
-                </div>
+				<div id="menu" align="center">
+					<header class="menuHeader">Bebidas</header>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Água Mineral', 1.00)">Água Mineral</button>
+						<div class="dot"></div>
+						<p class="price">1,00€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Água com Gás', 1.00)">Água com Gás</button>
+						<div class="dot"></div>
+						<p class="price">1,00€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Sumo de Laranja', 1.50)">Sumo de Laranja</button>
+						<div class="dot"></div>
+						<p class="price">1,50€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Coca Cola', 1.80)">Coca Cola</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Coca Cola Zero', 1.80)">Coca Cola Zero</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('7up', 1.80)">7up</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('7up Light', 1.80)">7up Light</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Sumol de Laranja', 1.80)">Sumol de Laranja</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Sumol de Ananás', 1.80)">Sumol de Ananás</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Fanta Laranja', 1.80)">Fanta Laranja</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Limão', 1.80)">Ice Tea de Limão</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Pêssego', 1.80)">Ice Tea de Pêssego</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+					<div class="bebida" align="left">
+						<button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Frutos Exóticos', 1.80)">Ice Tea de Frutos Exóticos</button>
+						<div class="dot"></div>
+						<p class="price">1,80€</p>
+					</div>
+				</div>
 
-                <button onclick="$('#bebidas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+				<button onclick="$('#bebidas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-                 <button onclick="$('#bebidas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+                <button onclick="$('#bebidas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
             </div>
 
@@ -246,11 +301,11 @@
 
 
 
-<!-----------------------------------------LOGIN--------------------------------------------------->
+<!-----------------------------------------LOGIN---------------------------------------------------->
 <!-- TODO:  LOGIN!!! -->
 
 
-
+<!-----------------------------------------WAITER--------------------------------------------------->
             <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
 
             <div class="modal fade" id="waitermodal" role="dialog">
