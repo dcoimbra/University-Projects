@@ -110,7 +110,7 @@ function findCoisa(coisa, int) {
 function removeRow(input, coisa, price) {
     if(findCoisa(coisa, 0) == 1) {
     	document.getElementById('ordertable').removeChild( input.parentNode );
-    	findCoisa(coisa, -1); 
+    	findCoisa(coisa, -1);
     }
     else {
     	var quantidade = findCoisa(coisa, -1);
@@ -167,6 +167,12 @@ function preparelogout() {
 
     $('#loginbutton').attr('data-target','#myModal');
     $('#loginbutton').attr('data-toggle','modal');
+}
+
+function waiter() {
+
+    $('#waiterbutton').attr('data-target','#waitermodal');
+    $('#waiterbutton').attr('data-toggle','modal');
 }
 
 function login() {
