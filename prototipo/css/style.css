@@ -79,7 +79,7 @@ button {
 }
 
 .sendorder {
-    
+
     position: absolute;
     bottom: 2vh;
     right: 2.4vw;
@@ -117,7 +117,7 @@ button {
 }
 
 #pongif {
-    
+
 	margin: auto;
 	position: absolute;
 	top: 0;
@@ -208,11 +208,11 @@ button {
 ::-webkit-scrollbar {
     width: 12px;
 }
- 
+
 ::-webkit-scrollbar-track {
     border-radius: 10px;
 }
- 
+
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background: #333333;
@@ -416,9 +416,14 @@ button {
 	border-bottom: dotted 5px black;
 }
 
+.add {
+	padding: 0.5vh 1vw;
+	margin-top: 1vh;
+	margin-left: 1.75vw;
+}
 
 .popover {
-	height: 45vh;
+	height: 50vh;
 	font-size: 130%;
 	border: solid black;
 	width: 35vw !important;
@@ -437,4 +442,5 @@ button {
 .foodimage {
 	width: 19vw;
 	padding: 1vh 0;
+	cursor: pointer;
 }
