@@ -4,7 +4,7 @@ body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
-#bebidas, #pratos, #entradas, #sobremesas, #apospedido, #entretenimento, #jogos, #passatempos {
+#bebidas, #pratos, #entradas, #sobremesas, #apospedido, #entretenimento, #jogos, #passatempos, #pong {
 
 	display: none;
 }
@@ -114,6 +114,16 @@ button {
 	font-size: 200%;
 	width: 30%;
 	display: inline;
+}
+
+#pongif {
+    
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
 
 #totalprice {
