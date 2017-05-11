@@ -1,4 +1,5 @@
 var totalPrice = 0;
+var aguaMineral = aguaGas = couvert = sopa = esparguete = bacalhau = saladaFruta = mousse = 0;
 
 function goBack() {
 
@@ -42,30 +43,80 @@ function storeUsername(id) {
 }
 
 function adicionaPedido(coisa, price) {
+    var order = findCoisa(coisa, 0);
+    var new_quantity = findCoisa(coisa, 1);
+    if(!order) { //find: switch case that connects each string to the right global var
+        var row1 = document.createElement('tr');
 
-    var row1 = document.createElement('tr');
+        row1.className = 'order_row';
+        row1.id = coisa;
 
-    row1.className = 'order_row';
+        var td1 = document.createElement('td');
+        var td2 = document.createElement('td');
+        td2.id = 'order_quantity';
+        var td3 = document.createElement('td');
 
-    var td1 = document.createElement('td');
-    var td2 = document.createElement('td');
+        row1.innerHTML = '<input type="button" value="-" onclick="removeRow(this, \'' +coisa+ '\', '+price+');subtractFromTotal(' + price + ')">';
+        td1.innerHTML = 'x '+ new_quantity; //increments the  global var associated to the given string
+        td2.innerHTML = ' '+coisa;
+        td3.innerHTML = price+' €';
+        td3.style = "text-align: right";
 
-    row1.innerHTML = '<input type="button" value="-" onclick="removeRow(this);subtractFromTotal(' + price + ')">';
-    td1.innerHTML = ' '+coisa;
-    td2.innerHTML = price+' €';
-    td2.style = "text-align: right";
+        row1.appendChild(td1);
+        row1.appendChild(td2);
+        row1.appendChild(td3);
 
-    row1.appendChild(td1);
-    row1.appendChild(td2);
-
-    document.getElementById('ordertable').appendChild(row1);
-
+        document.getElementById('ordertable').appendChild(row1);
+    }
+    else if(order > 0){
+        document.getElementById(coisa).cells[0].innerHTML =  'x '+ new_quantity;
+    	document.getElementById(coisa).cells[2].innerHTML =  (price*new_quantity)+' €';
+    }
     addToTotal(price);
 }
 
-function removeRow(input) {
-    
-    document.getElementById('ordertable').removeChild( input.parentNode );
+function findCoisa(coisa, int) {
+
+	switch (coisa){
+		case "Água Mineral":
+			aguaMineral += int;
+			return aguaMineral;
+		case "Água com Gás":
+			aguaGas += int;
+			return aguaGas;
+		case "Couvert":
+			couvert += int;
+			return couvert;
+		case "Sopa de Legumes":
+			sopa += int;
+			return sopa;
+		case "Esparguete à Bolonhesa":
+			esparguete += int;
+			return esparguete;
+		case "Bacalhau com Natas":
+			bacalhau += int;
+			return bacalhau;
+		case "Salada de Fruta":
+			saladaFruta += int;
+			return saladaFruta;
+		case "Mousse de Chocolate":
+			mousse += int;
+			return mousse;
+		default:
+			return -1;
+	}
+}
+
+function removeRow(input, coisa, price) {
+    if(findCoisa(coisa, 0) == 1) {
+    	document.getElementById('ordertable').removeChild( input.parentNode );
+    	findCoisa(coisa, -1); 
+    }
+    else {
+    	var quantidade = findCoisa(coisa, -1);
+    	document.getElementById(coisa).cells[0].innerHTML =  'x '+ quantidade;
+    	document.getElementById(coisa).cells[2].innerHTML =  (price*quantidade)+' €';
+    }
 }
 
 function addToTotal(price) {
