@@ -4,7 +4,9 @@ body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
-#bebidas, #pratos, #entradas, #sobremesas, #apospedido, #entretenimento, #jogos, #passatempos, #pong {
+#bebidas, #pratos, #entradas, 
+#sobremesas, #apospedido, #entretenimento, 
+#jogos, #passatempos, #pong, #sudoku {
 
 	display: none;
 }
@@ -87,25 +89,35 @@ button {
 }
 
 #order {
-
 	position: absolute;
 	right: 0vw;
 	top: 10vh;
-	height: 80vh;
+	height: 70vh;
 	width: 20vw;
 	border: solid black;
 }
 
 #ordertitle {
-
 	text-align: center;
 	font-size: 250%;
 }
 
-#bottomlabel {
+#middlelabel {
+	height: 75%;
+	overflow-y: auto;
+}
 
+#ordertable {
+	width: 99%;
+}
+
+#bottomlabel {
 	border-top: dashed black;
 	justify-content: space-between;
+}
+
+#totaltable {
+	width: 100%;
 }
 
 #totaltext {
@@ -188,22 +200,6 @@ button {
 	background-size: 40%;
 }
 
-#middlelabel {
-
-	height: 60vh;
-	overflow-y: auto;
-
-}
-
-#ordertable {
-
-	width: 99%;
-}
-
-#totaltable {
-
-	width: 100%;
-}
 
 ::-webkit-scrollbar {
     width: 12px;
@@ -229,6 +225,13 @@ button {
 	margin-left: 3vw;
 }
 
+#menu {
+	width: 50vw;
+	height: 65vh;
+	margin-top: 15vh; 
+	margin-left: 20vw;
+	overflow-y: auto;
+}
 .menuItem {
 	font-size: 200%;
 	text-align: center;
@@ -246,9 +249,7 @@ button {
 	width: 25vw;
 	padding: 0.5vh 0.5vw;
 	border: solid black;
-	margin-top: 0.5vh;
 	margin-bottom: 1vh;
-	margin-left: 30vw;
 }
 
 .menuItem:active, .menuscomida:active {
@@ -258,13 +259,12 @@ button {
 
 .price {
 	padding-top: 2vh;
+	padding-left: 0.3vw;
 	font-size: 170%;
-	margin-right: 30vw;
 }
 
 
 #modifyname {
-
 	text-align: left;
 	padding-left: 1vh;
 	margin-top: 1vh;
@@ -276,7 +276,6 @@ button {
 }
 
 #modifynif {
-
 	text-align: left;
 	padding-left: 1vh;
 	width: 55vh;
@@ -287,7 +286,6 @@ button {
 }
 
 #modifyconfirm {
-
 	position: absolute;
 	display: inline;
 	right: 30%;
@@ -295,7 +293,6 @@ button {
 }
 
 #orderprice {
-
 	font-size: 170%;
 	display: inline;
 	float: right;
@@ -303,19 +300,18 @@ button {
 }
 
 .bebida, .entrada, .prato, .sobremesa {
-	display: flex;
+	margin-left: auto;
+	display: -webkit-inline-box;
 	justify-content: space-between;
 }
 
 .formpessoal {
-
 	text-align: start !important;
 	border-radius: 15px;
 	height: 90%;
 }
 
 #userpic {
-
 	position: absolute;
 	top: 0.5%;
 	left: 0;
@@ -325,7 +321,6 @@ button {
 }
 
 #comecarbutton {
-
 	height: 80.6%;
 	width: 45.2%;
 	margin: auto;
@@ -337,7 +332,6 @@ button {
 }
 
 #waiterbutton {
-
 	height: 31.3%;
 	position: absolute;
 	bottom: 0;

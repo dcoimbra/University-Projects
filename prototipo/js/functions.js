@@ -72,7 +72,7 @@ function adicionaPedido(coisa, price) {
     }
     else if(order > 0){
         document.getElementById(coisa).cells[0].innerHTML =  'x '+ new_quantity;
-    	document.getElementById(coisa).cells[2].innerHTML =  (price*new_quantity)+' €';
+    	document.getElementById(coisa).cells[2].innerHTML =  (price*10*new_quantity/10)+' €';
     }
     addToTotal(price);
 }
@@ -150,20 +150,20 @@ function removeRow(input, coisa, price) {
     else {
     	var quantidade = findCoisa(coisa, -1);
     	document.getElementById(coisa).cells[0].innerHTML =  'x '+ quantidade;
-    	document.getElementById(coisa).cells[2].innerHTML =  (price*quantidade)+' €';
+    	document.getElementById(coisa).cells[2].innerHTML =  (price*10*quantidade/10)+' €';
     }
 }
 
 function addToTotal(price) {
-    totalPrice += price;
+    totalPrice += price*10;
 
-    document.getElementById("totalprice").innerHTML = totalPrice + ' €';
+    document.getElementById("totalprice").innerHTML = totalPrice/10 + ' €';
 }
 
 function subtractFromTotal(price) {
 
-    totalPrice -= price;
-    document.getElementById("totalprice").innerHTML = totalPrice + ' €';
+    totalPrice -= price*10;
+    document.getElementById("totalprice").innerHTML = totalPrice/10 + ' €';
 }
 
 function setUsername() {
