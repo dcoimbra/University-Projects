@@ -227,8 +227,7 @@ button {
 
 #menu {
 	width: 50vw;
-	height: 65vh;
-	margin-top: 15vh; 
+	height: 52vh;
 	margin-left: 20vw;
 	overflow-y: auto;
 }
@@ -343,10 +342,10 @@ button {
 }
 
 .menuHeader {
-	text-align: center;
-	font-size: 400%;
-	margin-top: 6%;
-	margin-bottom: 2%;
+    text-align: center;
+    font-size: 400%;
+    margin-top: 15vh;
+    margin-right: 11vw
 }
 
 .menusubHeader {
