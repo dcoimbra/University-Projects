@@ -14,7 +14,7 @@
 		<!-- Bootstrap javascript -->
 		<script src="../js/bootstrap.min.js" type="text/javascript"></script>
 
-		<title>Menu Principal</title>
+		<title>Com.ISTo</title>
 
 		<link rel="stylesheet" type="text/css" href="../css/style.css">
 		<script src="../js/functions.js" type="text/javascript"></script>
@@ -27,7 +27,7 @@
 				<img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" onclick="savelastpage()"/>
 			</a>
 
-<!-------------------------------------------MENU-------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - - -->
 			<div id="menupage">
 
 				<div id="menu" align="center">
@@ -44,25 +44,20 @@
 
 			</div>
 
-<!---------------------------------------BEBIDAS--------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - - BEBIDAS - - - - - - - - - - - - - - - - - - -->
 			<div id="bebidas">
 
 				<div id="menu" align="center">
 					<header class="menuHeader">Bebidas</header>
+                    <div class="bebida" align="left">
+                        <button type="button" class="menuscomida" onclick="adicionaPedido('Água com Gás', 1.00)">Água com Gás</button>
+                        <div class="dot"></div>
+                        <p class="price">1,00€</p>
+                    </div>
 					<div class="bebida" align="left">
 						<button type="button" class="menuscomida" onclick="adicionaPedido('Água Mineral', 1.00)">Água Mineral</button>
 						<div class="dot"></div>
 						<p class="price">1,00€</p>
-					</div>
-					<div class="bebida" align="left">
-						<button type="button" class="menuscomida" onclick="adicionaPedido('Água com Gás', 1.00)">Água com Gás</button>
-						<div class="dot"></div>
-						<p class="price">1,00€</p>
-					</div>
-					<div class="bebida" align="left">
-						<button type="button" class="menuscomida" onclick="adicionaPedido('Sumo de Laranja', 1.50)">Sumo de Laranja</button>
-						<div class="dot"></div>
-						<p class="price">1,50€</p>
 					</div>
 					<div class="bebida" align="left">
 						<button type="button" class="menuscomida" onclick="adicionaPedido('Coca Cola', 1.80)">Coca Cola</button>
@@ -74,16 +69,31 @@
 						<div class="dot"></div>
 						<p class="price">1,80€</p>
 					</div>
-					<div class="bebida" align="left">
-						<button type="button" class="menuscomida" onclick="adicionaPedido('7up', 1.80)">7up</button>
-						<div class="dot"></div>
-						<p class="price">1,80€</p>
-					</div>
-					<div class="bebida" align="left">
-						<button type="button" class="menuscomida" onclick="adicionaPedido('7up Light', 1.80)">7up Light</button>
-						<div class="dot"></div>
-						<p class="price">1,80€</p>
-					</div>
+                    <div class="bebida" align="left">
+                        <button type="button" class="menuscomida" onclick="adicionaPedido('Fanta Laranja', 1.80)">Fanta Laranja</button>
+                        <div class="dot"></div>
+                        <p class="price">1,80€</p>
+                    </div>
+                    <div class="bebida" align="left">
+                        <button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Frutos Exóticos', 1.80)">Ice Tea de Frutos Exóticos</button>
+                        <div class="dot"></div>
+                        <p class="price">1,80€</p>
+                    </div>
+                    <div class="bebida" align="left">
+                        <button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Limão', 1.80)">Ice Tea de Limão</button>
+                        <div class="dot"></div>
+                        <p class="price">1,80€</p>
+                    </div>
+                    <div class="bebida" align="left">
+                        <button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Pêssego', 1.80)">Ice Tea de Pêssego</button>
+                        <div class="dot"></div>
+                        <p class="price">1,80€</p>
+                    </div>
+                    <div class="bebida" align="left">
+                        <button type="button" class="menuscomida" onclick="adicionaPedido('Sumo de Laranja', 1.50)">Sumo de Laranja</button>
+                        <div class="dot"></div>
+                        <p class="price">1,50€</p>
+                    </div>
 					<div class="bebida" align="left">
 						<button type="button" class="menuscomida" onclick="adicionaPedido('Sumol de Laranja', 1.80)">Sumol de Laranja</button>
 						<div class="dot"></div>
@@ -94,26 +104,16 @@
 						<div class="dot"></div>
 						<p class="price">1,80€</p>
 					</div>
-					<div class="bebida" align="left">
-						<button type="button" class="menuscomida" onclick="adicionaPedido('Fanta Laranja', 1.80)">Fanta Laranja</button>
-						<div class="dot"></div>
-						<p class="price">1,80€</p>
-					</div>
-					<div class="bebida" align="left">
-						<button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Limão', 1.80)">Ice Tea de Limão</button>
-						<div class="dot"></div>
-						<p class="price">1,80€</p>
-					</div>
-					<div class="bebida" align="left">
-						<button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Pêssego', 1.80)">Ice Tea de Pêssego</button>
-						<div class="dot"></div>
-						<p class="price">1,80€</p>
-					</div>
-					<div class="bebida" align="left">
-						<button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Frutos Exóticos', 1.80)">Ice Tea de Frutos Exóticos</button>
-						<div class="dot"></div>
-						<p class="price">1,80€</p>
-					</div>
+                    <div class="bebida" align="left">
+                        <button type="button" class="menuscomida" onclick="adicionaPedido('7up', 1.80)">7up</button>
+                        <div class="dot"></div>
+                        <p class="price">1,80€</p>
+                    </div>
+                    <div class="bebida" align="left">
+                        <button type="button" class="menuscomida" onclick="adicionaPedido('7up Light', 1.80)">7up Light</button>
+                        <div class="dot"></div>
+                        <p class="price">1,80€</p>
+                    </div>
 				</div>
 
 				<button onclick="$('#bebidas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
@@ -122,7 +122,7 @@
 
             </div>
 
-<!--------------------------------------ENTRADAS--------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - -ENTRADAS - - - - - - - - - - - - - - - - - - -->
             <div id="entradas">
 
                 <div id="menu" align="center">
@@ -145,7 +145,7 @@
 
             </div>
 
-<!----------------------------------------PRATOS--------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - -PRATOS - - - - - - - - - - - - - - - - - - -->
             <div id="pratos">
                 <div id="menu" align="center">
                     <header class="menuHeader">Pratos do Dia</header>
@@ -205,7 +205,7 @@
 
 <!-- MODIFICAR ACOMPANHAMENTOS -->
 
-<!--------------------------------------SOBREMESAS------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - -SOBREMESAS - - - - - - - - - - - - - - - - - - -->
             <div id="sobremesas">
 
                 <div id="menu" align="center">
@@ -228,7 +228,7 @@
 
             </div>
 
-<!--------------------------------------PEDIDO----------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - - PEDIDO - - - - - - - - - - - - - - - - - - -->
             <div id="order">
             	<div id="ordertitle">O meu pedido:</div>
                 <div id="middlelabel">
@@ -253,7 +253,7 @@
 <!-- TODO: MODIFICAR PEDIDO -->
 
 
-<!-----------------------------------APÓS PEDIDO--------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - - APÓS PEDIDO - - - - - - - - - - - - - - - - - -->
 
             <div id="apospedido">
                 <div id="menu" align="center">
@@ -301,11 +301,11 @@
 
 
 
-<!-----------------------------------------LOGIN---------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - - LOGIN - - - - - - - - - - - - - - - - - - -->
 <!-- TODO:  LOGIN!!! -->
 
 
-<!-----------------------------------------WAITER--------------------------------------------------->
+<!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
             <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
 
             <div class="modal fade" id="waitermodal" role="dialog">
