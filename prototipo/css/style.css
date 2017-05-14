@@ -107,7 +107,7 @@ button {
 	overflow-y: auto;
 }
 
-#ordertable {
+.ordertable {
 	width: 99%;
 }
 
