@@ -417,6 +417,51 @@
 	    	<button onclick="$('#pessoal').hide();$(divname).show();$('.backbutton').show();checklogin()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
 		</div>
 
+        <div id="promocoes">
+            
+            <header class="cabecalhos">Promoções</header>
+            
+            <div id="menuPrincipal" align="center">
+                <h2><br />De momento não tem promoções disponíveis.<br /> :(</h2>
+            </div>
+            
+            <button onclick="$('#promocoes').hide();$('#pessoal').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+        </div>
+        
+        <div id="sugestoes">
+            
+            <header class="cabecalhos">Sugestões do Chef</header>
+            
+            <div id="menuPrincipal" align="center">
+                
+                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show()">Bacalhau com Natas</button>
+                
+                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show()">Esparguete à Bolonhesa</button>
+            </div>
+            
+            <button onclick="$('#sugestoes').hide();$('#pessoal').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+        </div>
+        
+        <div id="dadospessoais">
+              
+                <header class="cabecalhos" id="dadosheader">Dados Pessoais</header>
+                
+                <div id="menuPrincipal" align="center">
+
+                    <form id="modifyform">
+
+                        <input type="text" id="modifyname" class="form-control input-lg" placeholder="Modificar Nome">
+                        <input type="text" id="modifynif" class="form-control input-lg" placeholder="Modificar NIF">
+
+                        <button onclick="storeUsername('modifyname')" type="submit" class="btn-lg" id="modifyconfirm"><span class="buttontext">OK</span></button>
+                    </form>
+
+                    <button type="button" class="menuItem" onclick="window.location='alergias.html'">Alergias</button>
+    			    <button type="button" class="menuItem">Configurar métodos de Login</button>
+              </div>                
+                
+              <button onclick="$('#dadospessoais').hide();$('#pessoal').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+            </div>
 <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
         <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
         <div class="modal fade" id="waitermodal" role="dialog">
