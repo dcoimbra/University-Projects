@@ -172,3 +172,10 @@ function getlastpage() {
     var lastpage = sessionStorage.getItem('lastpage');
     window.location = lastpage;
 }
+
+function changeglow() {
+    
+    document.getElementById("waiterbutton").style.boxShadow = "0px 0px 50px forestgreen";
+    
+    setTimeout(function() { document.getElementById("waiterbutton").style.boxShadow = "0px 0px 50px transparent"; }, 10000);
+}
