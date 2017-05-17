@@ -3,10 +3,9 @@ var inPreview = [];
 var iterator = 0;
 var totalPrice = 0;
 var loggedin = 'false';
+var arealoggedin = 'false';
 var divname = '#menupage';
 var divloginname = '#loginpage';
-var areapessoal = ['#pessoal', '#promocoes', '#sugestoes', '#dados'];
-
 
 
 function makeBarInvisible() {
@@ -168,24 +167,24 @@ function clearUsername() {
     sessionStorage.removeItem("username");
 }
 
-function checklogin() {
-
-    if (loggedin === "true") {
-        document.getElementById("loginbutton").src = "../images/area_pessoal_21.png";
+$('#loginbutton').on('click', function() {
+    if (loggedin == 'true' && arealoggedin == 'false') {
         $(divname).hide();
         $('#pessoal').show();
-    } else if (loggedin == 'false') {
-        document.getElementById("loginbutton").src = "../images/login_21.png";
+        $('.backbutton').show();
+        enter();
+    } else if (loggedin == 'true' && arealoggedin == 'true') {
+        $(this).attr('src', '../images/logout_21.png');
+        preparelogout();
+    } else {
+        makeBarInvisible();
+        $(this).hide();
         $(divname).hide();
         $('#loginpage').show();
         $('.backbutton').show();
-        makeBarInvisible();
-    } else if ($.inArray(divname, areapessoal)) {
-        document.getElementById("loginbutton").src = "../images/logout_21.png";
-        preparelogout();
+        $(this).attr('src', '../images/login_21.png');
     }
-}
-
+});
 
 function preparelogout() {
 
@@ -199,18 +198,33 @@ function waiter() {
     $('#waiterbutton').attr('data-toggle','modal');
 }
 
+function enter() {
+    arealoggedin = 'true';
+    $('#loginbutton').attr('src', '../images/logout_21.png');
+    $('#loginbutton').show();
+}
+
+function exit() {
+    arealoggedin = 'false';
+    $('#loginbutton').removeAttr('data-toggle','modal');
+    $('#loginbutton').attr('src', '../images/area_pessoal_21.png');
+}
 
 function login() {
 
     loggedin = 'true';
+	enter();
     saveldivname('#pessoal');
 }
 
 function logout() {
 
     loggedin = 'false';
+    $(divloginname).hide();
+    exit();
+    $('#loginbutton').attr('src', '../images/login_21.png');
+    $(divname).show();
     saveldivname('#login');
-    alert('logout');
 }
 
 function savedivname(name) {

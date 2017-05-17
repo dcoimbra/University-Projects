@@ -4,9 +4,10 @@ body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
-#bebidas, #pratos, #entradas, 
-#sobremesas, #apospedido, #entretenimento, 
-#jogos, #passatempos, #pong, #sudoku, #loginpage, #facescan, #nfcscan, #pessoal, #dadospessoais, #promocoes, #sugestoes {
+#bebidas, #pratos, #entradas, #sobremesas, 
+#apospedido, #entretenimento, #jogos, #passatempos, #pong, #sudoku, 
+#loginpage, #facescan, #nfcscan, 
+#pessoal, #dadospessoais, #promocoes, #sugestoes {
 
 	display: none;
 }
