@@ -16,7 +16,7 @@
 
 	<body onload="waiter()">
 
-		<img src="../images/login_21.png" id="loginbutton" class="imgbutton" onclick="checklogin()" alt="LOGIN"/>
+		<img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN"/>
 
 <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - -  -->
 		<div id="menupage">
@@ -107,7 +107,7 @@
                 </div>
 			</div>
 
-			<button onclick="$('#bebidas').hide();$('#menupage').show();savedivname('#menu')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+			<button onclick="$('#bebidas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
             <button onclick="$('#bebidas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
@@ -130,9 +130,9 @@
     			</div>
             </div>
 
-            <button onclick="$('#entradas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#entradas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-            <button onclick="$('#entradas').hide();$('#apospedido').show();savedivname('#menu')" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+            <button onclick="$('#entradas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
         </div>
 
@@ -186,9 +186,9 @@
                     });
                 </script>
 
-                <button onclick="$('#pratos').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+                <button onclick="$('#pratos').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-                <button onclick="$('#pratos').hide();$('#apospedido').show();savedivname('#menu')" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+                <button onclick="$('#pratos').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
             </div>
 
@@ -214,9 +214,9 @@
     			</div>
             </div>
 
-            <button onclick="$('#sobremesas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#sobremesas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-            <button onclick="$('#sobremesas').hide();$('#apospedido').show(); savedivname('#menu'); leavePreviewState()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+            <button onclick="$('#sobremesas').hide();$('#apospedido').show();leavePreviewState()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
         </div>
 
