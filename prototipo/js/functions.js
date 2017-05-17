@@ -1,5 +1,7 @@
 var totalPrice = 0;
 var hash = {};
+var all_items = {};
+var modifying = 0;
 
 function goBack() {
 
@@ -55,7 +57,7 @@ function adicionaPedido(coisa, price, estado) {
         td2.id = 'order_quantity';
         var td3 = document.createElement('td');
 
-        row1.innerHTML = '<input type="button" value="-" onclick="removeRow(this, \'' +coisa+ '\', '+price+', \'' +estado+ '\');subtractFromTotal(' + price + ')">';
+        row1.innerHTML = '<input type="button" id="removeItem" value="-" onclick="removeRow(this, \'' +coisa+ '\', '+price+', \'' +estado+ '\');subtractFromTotal(' + price + ')">';
         td1.innerHTML = 'x '+ new_quantity; //increments the  global var associated to the given string
         td2.innerHTML = ' '+coisa;
         td3.innerHTML = price+' €';
@@ -71,6 +73,7 @@ function adicionaPedido(coisa, price, estado) {
         document.getElementById(coisa+estado).cells[0].innerHTML =  'x '+ new_quantity;
     	document.getElementById(coisa+estado).cells[2].innerHTML =  (price*10*new_quantity/10)+' €';
     }
+
     addToTotal(price);
 }
 

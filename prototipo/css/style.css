@@ -113,7 +113,13 @@ button {
 
 #bottomlabel {
 	border-top: dashed black;
+	height: 10vh;
 	justify-content: space-between;
+}
+
+#mod {
+	font-size: 140%;
+	margin-left: 3.5vw;
 }
 
 #totaltable {
@@ -219,11 +225,7 @@ button {
 	margin-bottom: 3vh;
 }
 
-#mod {
-	margin-top: 1.5vh;
-	font-size: 140%;
-	margin-left: 3vw;
-}
+
 
 #menu {
 	width: 50vw;
@@ -353,6 +355,10 @@ button {
 	font-size: 300%;
 	margin-top: 2vh;
 	margin-bottom: 0.5vh;
+}
+
+#removeItem {
+	display: none;
 }
 
 .camadas {
