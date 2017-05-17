@@ -1,10 +1,12 @@
 var hash = {};
+var inPreview = [];
+var iterator = 0;
 var totalPrice = 0;
 var loggedin = 'false';
 var divname = '#menupage';
 var divloginname = '#loginpage';
 var areapessoal = ['#pessoal', '#promocoes', '#sugestoes', '#dados'];
-var modifica = 0;
+
 
 
 function makeBarInvisible() {
@@ -48,6 +50,10 @@ function storeUsername(id) {
 function adicionaPedido(coisa, price, estado) {
     var order = findCoisa(coisa+estado, 0);
     var new_quantity = findCoisa(coisa+estado, 1);
+    if(estado == 'orderPreview') {
+    inPreview.push({nome: coisa, preco: price, contador:iterator++});
+    }
+
     if(!order) {
         var row1 = document.createElement('tr');
 
@@ -59,7 +65,7 @@ function adicionaPedido(coisa, price, estado) {
         td2.id = 'order_quantity';
         var td3 = document.createElement('td');
 
-        if(estado == 'orderQueue' || estado == 'orderPreview'){
+        if(estado == 'orderPreview'){
             row1.innerHTML = '<input type="button" value="-" onclick="removeRow(\'' +coisa+ '\', '+price+', \'' +estado+ '\');">';
         }
         else {
@@ -83,7 +89,7 @@ function adicionaPedido(coisa, price, estado) {
     addToTotal(price);
     
     if (estado == 'orderQueue') {
-        setTimeout(changeState, 2000, coisa, price, estado, 'orderCooking');
+        setTimeout(changeState, rndInt()*1000, coisa, price, estado, 'orderCooking');
     }
 /*    else if (estado == 'orderCooking') {
         setInterval(changeState(coisa, price, estado, 'orderReady'), prepTime);
@@ -94,6 +100,15 @@ function adicionaPedido(coisa, price, estado) {
 function changeState(nome, preco, prev_estado, next_estado) {
     removeRow(nome, preco, prev_estado);
     adicionaPedido(nome, preco, next_estado);
+}
+
+function leavePreviewState() {
+    var b = inPreview.length;
+    inPreview.forEach( 
+        function(element) {
+            var a = element;
+            changeState(element.nome, element.preco, 'orderPreview', 'orderQueue');
+        });
 }
 
 function findCoisa(coisa, int) {
@@ -115,6 +130,10 @@ function removeRow(coisa, price, estado) {
     }
     
     subtractFromTotal(price);
+}
+
+function rndInt() {
+    return Math.floor(Math.random()*(6-1))+1;
 }
 
 function addToTotal(price) {

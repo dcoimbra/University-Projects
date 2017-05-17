@@ -205,12 +205,12 @@
             <div id="menuPrincipal" align="center">
 
     			<div class="sobremesa" align="left">
-    				<button type="button" class="menuscomida" onclick="adicionaPedido('Salada de Fruta', 1.00, 'orderQueue')">Salada de Fruta</button>
+    				<button type="button" class="menuscomida" onclick="adicionaPedido('Salada de Fruta', 1.00, 'orderPreview')">Salada de Fruta</button>
     				<div class="dot"></div>
     				<p class="price">1,00€</p>
     			</div>
     			<div class="sobremesa" align="left">
-    				<button type="button" class="menuscomida" onclick="adicionaPedido('Mousse de Chocolate', 1.00, 'orderQueue')">Mousse de Chocolate</button>
+    				<button type="button" class="menuscomida" onclick="adicionaPedido('Mousse de Chocolate', 1.00, 'orderPreview')">Mousse de Chocolate</button>
     				<div class="dot"></div>
     				<p class="price">1,00€</p>
     			</div>
@@ -218,7 +218,7 @@
 
             <button onclick="$('#sobremesas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-            <button onclick="$('#sobremesas').hide();$('#apospedido').show();savedivname('#menu')" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+            <button onclick="$('#sobremesas').hide();$('#apospedido').show(); savedivname('#menu'); leavePreviewState()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
         </div>
 
@@ -226,6 +226,14 @@
         <div id="order">
         	<div id="ordertitle">O meu pedido:</div>
             <div id="middlelabel">
+               <table id="orderPreview" class="ordertable" style="">
+					<th id="quantity">
+                    </th>
+                    <th id="ordername">
+                    </th>
+                    <th id="orderprice">
+                    </th>
+                </table> 
                 <table id="orderQueue" class="ordertable" style="background-color: mistyrose;">
 					<th id="quantity">
                     </th>
@@ -256,7 +264,6 @@
         		  <th id="totaltext">Total:</th>
         		  <th id="totalprice" style="text-align: right;"> €</th>
                 </table>
-                <button type="button" id="mod">Modificar Pedido</button>
         	</div>
         </div>
 
