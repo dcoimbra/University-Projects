@@ -134,7 +134,7 @@ button {
 	display: inline;
 }
 
-#pongif {
+#pongif, #sudokugif {
 
 	margin: auto;
 	position: absolute;
