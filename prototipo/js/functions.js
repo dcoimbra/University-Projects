@@ -4,6 +4,7 @@ var loggedin = 'false';
 var divname = '#menupage';
 var divloginname = '#loginpage';
 var areapessoal = ['#pessoal', '#promocoes', '#sugestoes', '#dados'];
+var modifica = 0;
 
 
 function makeBarInvisible() {
@@ -47,7 +48,7 @@ function storeUsername(id) {
 function adicionaPedido(coisa, price, estado) {
     var order = findCoisa(coisa+estado, 0);
     var new_quantity = findCoisa(coisa+estado, 1);
-    if(!order) { //find: switch case that connects each string to the right global var
+    if(!order) {
         var row1 = document.createElement('tr');
 
         row1.className = 'order_row';
@@ -58,8 +59,13 @@ function adicionaPedido(coisa, price, estado) {
         td2.id = 'order_quantity';
         var td3 = document.createElement('td');
 
-        row1.innerHTML = '<input type="button" value="-" onclick="removeRow(this, \'' +coisa+ '\', '+price+', \'' +estado+ '\');subtractFromTotal(' + price + ')">';
-        td1.innerHTML = 'x '+ new_quantity; //increments the  global var associated to the given string
+        if(estado == 'orderQueue' || estado == 'orderPreview'){
+            row1.innerHTML = '<input type="button" value="-" onclick="removeRow(\'' +coisa+ '\', '+price+', \'' +estado+ '\');">';
+        }
+        else {
+            row1.innerHTML = '<input type="button" value="-" id="removeItem" onclick="removeRow(\'' +coisa+ '\', '+price+', \'' +estado+ '\');">';
+        }
+        td1.innerHTML = 'x '+ new_quantity; 
         td2.innerHTML = ' '+coisa;
         td3.innerHTML = price+' €';
         td3.style = "text-align: right";
@@ -75,6 +81,19 @@ function adicionaPedido(coisa, price, estado) {
     	document.getElementById(coisa+estado).cells[2].innerHTML =  (price*10*new_quantity/10)+' €';
     }
     addToTotal(price);
+    
+    if (estado == 'orderQueue') {
+        setTimeout(changeState, 2000, coisa, price, estado, 'orderCooking');
+    }
+/*    else if (estado == 'orderCooking') {
+        setInterval(changeState(coisa, price, estado, 'orderReady'), prepTime);
+    }*/
+}
+
+
+function changeState(nome, preco, prev_estado, next_estado) {
+    removeRow(nome, preco, prev_estado);
+    adicionaPedido(nome, preco, next_estado);
 }
 
 function findCoisa(coisa, int) {
@@ -84,9 +103,9 @@ function findCoisa(coisa, int) {
     return hash[coisa] += int;
 }
 
-function removeRow(input, coisa, price, estado) {
+function removeRow(coisa, price, estado) {
     if(findCoisa(coisa+estado, 0) == 1) {
-    	document.getElementById(estado).removeChild( input.parentNode );
+    	document.getElementById(estado).removeChild( document.getElementById(coisa+estado) );
     	findCoisa(coisa+estado, -1);
     }
     else {
@@ -94,6 +113,8 @@ function removeRow(input, coisa, price, estado) {
     	document.getElementById(coisa+estado).cells[0].innerHTML =  'x '+ quantidade;
     	document.getElementById(coisa+estado).cells[2].innerHTML =  (price*10*quantidade/10)+' €';
     }
+    
+    subtractFromTotal(price);
 }
 
 function addToTotal(price) {
