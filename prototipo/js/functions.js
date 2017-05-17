@@ -106,9 +106,9 @@ function leavePreviewState() {
     var b = inPreview.length;
     inPreview.forEach( 
         function(element) {
-            var a = element;
             changeState(element.nome, element.preco, 'orderPreview', 'orderQueue');
         });
+    inPreview = [];
 }
 
 function findCoisa(coisa, int) {
