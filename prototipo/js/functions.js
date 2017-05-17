@@ -1,12 +1,10 @@
-var totalPrice = 0;
 var hash = {};
-var all_items = {};
-var modifying = 0;
+var totalPrice = 0;
+var loggedin = 'false';
+var divname = '#menupage';
+var divloginname = '#loginpage';
+var areapessoal = ['#pessoal', '#promocoes', '#sugestoes', '#dados'];
 
-function goBack() {
-
-    window.history.back();
-}
 
 function makeBarInvisible() {
     var i;
@@ -30,7 +28,10 @@ function move() {
     function frame() {
         if (width == 100) {
             clearInterval(id);
-            window.location="pessoal.html";
+            $(divloginname).hide();
+            $('#pessoal').show();
+            $('.backbutton').show();
+            login();
         } else {
             width++;
             elem.style.width = width + '%';
@@ -57,7 +58,7 @@ function adicionaPedido(coisa, price, estado) {
         td2.id = 'order_quantity';
         var td3 = document.createElement('td');
 
-        row1.innerHTML = '<input type="button" id="removeItem" value="-" onclick="removeRow(this, \'' +coisa+ '\', '+price+', \'' +estado+ '\');subtractFromTotal(' + price + ')">';
+        row1.innerHTML = '<input type="button" value="-" onclick="removeRow(this, \'' +coisa+ '\', '+price+', \'' +estado+ '\');subtractFromTotal(' + price + ')">';
         td1.innerHTML = 'x '+ new_quantity; //increments the  global var associated to the given string
         td2.innerHTML = ' '+coisa;
         td3.innerHTML = price+' €';
@@ -73,14 +74,13 @@ function adicionaPedido(coisa, price, estado) {
         document.getElementById(coisa+estado).cells[0].innerHTML =  'x '+ new_quantity;
     	document.getElementById(coisa+estado).cells[2].innerHTML =  (price*10*new_quantity/10)+' €';
     }
-
     addToTotal(price);
 }
 
 function findCoisa(coisa, int) {
     if(!hash[coisa]) {
         hash[coisa] = 0;
-    } 
+    }
     return hash[coisa] += int;
 }
 
@@ -130,15 +130,22 @@ function clearUsername() {
 
 function checklogin() {
 
-    var status = sessionStorage.getItem("login");
-
-    if (status === "true") {
+    if (loggedin === "true") {
         document.getElementById("loginbutton").src = "../images/area_pessoal_21.png";
-        document.getElementById("loginlink").href="pessoal.html";
-        $('#loginbutton').attr('data-target','#myModal');
-        $('#loginbutton').attr('data-toggle','modal');
+        $(divname).hide();
+        $('#pessoal').show();
+    } else if (loggedin == 'false') {
+        document.getElementById("loginbutton").src = "../images/login_21.png";
+        $(divname).hide();
+        $('#loginpage').show();
+        $('.backbutton').show();
+        makeBarInvisible();
+    } else if ($.inArray(divname, areapessoal)) {
+        document.getElementById("loginbutton").src = "../images/logout_21.png";
+        preparelogout();
     }
 }
+
 
 function preparelogout() {
 
@@ -152,26 +159,28 @@ function waiter() {
     $('#waiterbutton').attr('data-toggle','modal');
 }
 
+
 function login() {
 
-    sessionStorage.setItem('login', 'true');
+    loggedin = 'true';
+    saveldivname('#pessoal');
 }
 
 function logout() {
 
-    sessionStorage.setItem('login', 'false');
-    getlastpage();
+    loggedin = 'false';
+    saveldivname('#login');
+    alert('logout');
 }
 
-function savelastpage() {
-        sessionStorage.setItem('lastpage', window.location.href);
+function savedivname(name) {
+    divname = name;
 }
 
-function getlastpage() {
-
-    var lastpage = sessionStorage.getItem('lastpage');
-    window.location = lastpage;
+function saveldivname(name) {
+    divloginname = name;
 }
+
 
 function changeglow() {
     

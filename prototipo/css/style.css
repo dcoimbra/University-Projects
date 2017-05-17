@@ -6,7 +6,7 @@ body {
 
 #bebidas, #pratos, #entradas, 
 #sobremesas, #apospedido, #entretenimento, 
-#jogos, #passatempos, #pong, #sudoku {
+#jogos, #passatempos, #pong, #sudoku, #loginpage, #facescan, #nfcscan, #pessoal {
 
 	display: none;
 }
@@ -37,9 +37,7 @@ button {
 }
 
 .loginbutton {
-
-	height: 19.2%;
-	width: 11%;
+	width: 15%;
 }
 
 .instructions {
@@ -162,22 +160,13 @@ button {
 	margin-left: 15vw;
 }
 
-#facebutton {
 
-	margin-top: 3%;
-	margin-left: 30%;
+#loginOptionsDiv {
+    text-align: center;
 }
 
-#nfcbutton {
-
-	margin-top: 3%;
+#loginOptions {
 	margin-left: 3%;
-}
-
-#fingerprintbutton {
-
-	margin-left: 3%;
-	margin-top: 3%;
 }
 
 #loginbutton {
@@ -221,13 +210,12 @@ button {
 }
 
 #signin {
-	margin-top: 3vh;
 	margin-bottom: 3vh;
 }
 
 
 
-#menu {
+#menuPrincipal {
 	width: 50vw;
 	height: 52vh;
 	margin-left: 20vw;
@@ -340,15 +328,16 @@ button {
     box-shadow: 0px 0px 50px transparent;
 }
 
-.menu {
+.menusPrincipais {
 	width: 100vw;
 }
 
-.menuHeader {
+.cabecalhos {
     text-align: center;
     font-size: 400%;
-    margin-top: 15vh;
-    margin-right: 11vw
+    margin-top: 3vh;
+    margin-left: 20vw;
+    width: 50%;
 }
 
 .menusubHeader {

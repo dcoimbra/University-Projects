@@ -8,45 +8,39 @@
 		<link rel="stylesheet" type="text/css" href="../css/style.css" />
 		<script src="../js/functions.js" type="text/javascript"></script>
 		<!-- Bootstrap -->
-		<link href="./login_files/bootstrap.min.css" rel="stylesheet" />
+		<link href="../css/bootstrap.min.css" rel="stylesheet" />
 		<!-- jQuery -->
 		<script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
 		<!-- Bootstrap javascript -->
 		<script src="../js/bootstrap.min.js" type="text/javascript"></script>
 
 		<title>Com.ISTo</title>
-
-		<link rel="stylesheet" type="text/css" href="../css/style.css">
-		<script src="../js/functions.js" type="text/javascript"></script>
 	</head>
 
-	<body onload="checklogin();waiter()">
+	<body onload="waiter()">
 
-		<a href="login.html" id="loginlink">
-			<img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" onclick="savelastpage()"/>
-		</a>
+		<img src="../images/login_21.png" id="loginbutton" class="imgbutton" onclick="checklogin()" alt="LOGIN"/>
 
 <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - -  -->
 		<div id="menupage">
-            <header class="menuHeader">Menu</header>
-			<div id="menu" align="center">
+            <header class="cabecalhos">Menu</header>
+			<div id="menuPrincipal" align="center">
 
-				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#bebidas').show();$('.backbutton').show()">Bebidas</button>
-				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#entradas').show();$('.backbutton').show()">Entradas</button>
-				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show()">Pratos do Dia</button>
-				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show()">Sobremesas</button>
+				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#bebidas').show();$('.backbutton').show();savedivname('#bebidas')">Bebidas</button>
+				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#entradas').show();$('.backbutton').show();savedivname('#entradas')">Entradas</button>
+				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show();savedivname('#pratos')">Pratos do Dia</button>
+				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show();savedivname('#sobremesas')">Sobremesas</button>
 			</div>
 
 			<button onclick="$('#menupage').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
-			<button onclick="$('#menupage').hide();$('#apospedido').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
 		</div>
 
 <!-- - - - - - - - - - - - - - - - - - - BEBIDAS - - - - - - - - - - - - - - - - - -->
 		<div id="bebidas">
-            <header class="menuHeader">Bebidas</header>
-			<div id="menu" align="center">
+            <header class="cabecalhos">Bebidas</header>
+			<div id="menuPrincipal" align="center">
 
                 <div class="bebida" align="left">
                     <button type="button" class="menuscomida" onclick="adicionaPedido('Água com Gás', 1.00, 'orderQueue')">Água com Gás</button>
@@ -115,7 +109,7 @@
                 </div>
 			</div>
 
-			<button onclick="$('#bebidas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+			<button onclick="$('#bebidas').hide();$('#menupage').show();savedivname('#menu')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
             <button onclick="$('#bebidas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
@@ -123,8 +117,8 @@
 
 <!-- - - - - - - - - - - - - - - - - - -ENTRADAS - - - - - - - - - - - - - - - - - -->
         <div id="entradas">
-            <header class="menuHeader">Entradas</header>
-            <div id="menu" align="center">
+            <header class="cabecalhos">Entradas</header>
+            <div id="menuPrincipal" align="center">
 
     			<div class="entrada" align="left">
     				<button type="button" class="menuscomida" onclick="adicionaPedido('Couvert', 1.50, 'orderQueue')">Couvert</button>
@@ -140,14 +134,14 @@
 
             <button onclick="$('#entradas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-            <button onclick="$('#entradas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+            <button onclick="$('#entradas').hide();$('#apospedido').show();savedivname('#menu')" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
         </div>
 
 <!-- - - - - - - - - - - - - - - - - - -PRATOS - - - - - - - - - - - - - - - - - - -->
         <div id="pratos">
-            <header class="menuHeader">Pratos do Dia</header>
-            <div id="menu" align="center">
+            <header class="cabecalhos">Pratos do Dia</header>
+            <div id="menuPrincipal" align="center">
 
     			<header class="menusubHeader">Carne</header>
                 <div class="camadas">
@@ -168,7 +162,7 @@
 
 
 <!-- TODO: Adicionar informação relativa a alergias + Acompanhamentos -->
-                <div id="popoverbacalhau" style="display: none">
+               <div id="popoverbacalhau" style="display: none">
                 <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderQueue')">Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.<button type="button" style="display:none;">Modificar Acompanhamentos</button><button type="button" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderQueue')" class="add">Adicionar ao Pedido</button></div>
 
                 <div id="popoveresparguete" style="display: none">
@@ -196,7 +190,7 @@
 
                 <button onclick="$('#pratos').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-                <button onclick="$('#pratos').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+                <button onclick="$('#pratos').hide();$('#apospedido').show();savedivname('#menu')" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
             </div>
 
@@ -207,8 +201,8 @@
 
 <!-- - - - - - - - - - - - - - - - - - -SOBREMESAS - - - - - - - - - - - - - - - - -->
         <div id="sobremesas">
-            <header class="menuHeader">Sobremesas</header>
-            <div id="menu" align="center">
+            <header class="cabecalhos">Sobremesas</header>
+            <div id="menuPrincipal" align="center">
 
     			<div class="sobremesa" align="left">
     				<button type="button" class="menuscomida" onclick="adicionaPedido('Salada de Fruta', 1.00, 'orderQueue')">Salada de Fruta</button>
@@ -224,7 +218,7 @@
 
             <button onclick="$('#sobremesas').hide();$('#menupage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-            <button onclick="$('#sobremesas').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
+            <button onclick="$('#sobremesas').hide();$('#apospedido').show();savedivname('#menu')" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
         </div>
 
@@ -271,16 +265,16 @@
 
 <!-- - - - - - - - - - - - - - - - - - - APÓS PEDIDO - - - - - - - - - - - - - - - -->
         <div id="apospedido">
-            <header class="menuHeader">O seu pedido está a cozinhar!</header>
-            <div id="menu" align="center">
+            <header class="cabecalhos">O seu pedido está a cozinhar!</header>
+            <div id="menuPrincipal" align="center">
     			<button onclick="$('#apospedido').hide();$('#entretenimento').show();$('.backbutton').show()" type="button" class="menuItem">Enquanto espera</button>
                 <button onclick="$('#apospedido').hide();$('#menupage').show();$('.backbutton').show()" type="button" class="menuItem" >Fazer novo pedido</button>
             </div>
         </div>
 
         <div id="entretenimento">
-            <header class="menuHeader">Entretenha-se enquanto espera!</header>
-            <div id="menu" align="center">
+            <header class="cabecalhos">Entretenha-se enquanto espera!</header>
+            <div id="menuPrincipal" align="center">
     			<button onclick="$('#entretenimento').hide();$('#jogos').show();$('.backbutton').show()" type="button" class="menuItem">Jogos</button>
                 <button onclick="$('#entretenimento').hide();$('#passatempos').show();$('.backbutton').show()" type="button" class="menuItem">Passatempos</button>
             </div>
@@ -290,8 +284,8 @@
         </div>
 
         <div id="jogos">
-            <header class="menuHeader">Jogos</header>
-            <div id="menu" align="center">
+            <header class="cabecalhos">Jogos</header>
+            <div id="menuPrincipal" align="center">
     			<button onclick="$('#jogos').hide();$('#pong').show();$('.backbutton').show()" type="button" class="menuItem">Pong</button>
             </div>
 
@@ -300,8 +294,8 @@
         </div>
 
         <div id="passatempos">
-            <header class="menuHeader">Passatempos</header>
-            <div id="menu" align="center">
+            <header class="cabecalhos">Passatempos</header>
+            <div id="menuPrincipal" align="center">
     			<button onclick="$('#passatempos').hide();$('#sudoku').show();$('.backbutton').show()" type="button" class="menuItem">Sudoku</button>
             </div>
 
@@ -315,15 +309,113 @@
         </div>
 
 <!-- TODO: SUDOKU -->
-        
-        <div id="sudoku">
+    
+         <div id="sudoku">
             <img id="sudokugif" src="../images/sudoku.gif" />
             <button onclick="$('#sudoku').hide();$('#jogos').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
         </div>
 
 <!-- - - - - - - - - - - - - - - - - - - LOGIN - - - - - - - - - - - - - - - - - - -->
 <!-- TODO:  LOGIN!!! -->
+		<div id="loginpage">
+	        <!-- Custom styles for this template -->
+	   <link href="../css/signin.css" rel="stylesheet" />
 
+			 <style type="text/css">
+
+	           :root #carbonads-container,
+	           :root #content > #right > .dose > .dosesingle,
+	           :root #content > #center > .dose > .dosesingle,
+	           :root .carbonad {
+
+	             display: none !important;
+	           }
+	         </style>
+
+			 <header class="cabecalhos">Acesso à área pessoal</header>
+            
+	         <div class="container" id="menuPrincipal" style="height: 62vh; overflow-y: hidden;">
+
+				<form id="signin" class="form-signin" action="pessoal.html" method="post">
+					<label for="inputUsername" class="sr-only">Username</label>
+					<input name="inputUsername" type="text" id="inputUsername" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Username" />
+					<br />
+					<label for="inputPassword" class="sr-only">Password</label>
+					<input name="inputPassword" lang="pt" type="password" id="inputPassword" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Password" />
+					<br />
+					<button onclick="storeUsername('inputUsername')" type="submit" class="btn-lg" id="loginconfirm"><span class="buttontext">LOGIN</span></button>
+				</form>
+
+                <div id="loginOptionsDiv">
+                    <img onclick="$('#loginpage').hide();$('#facescan').show();$('.backbutton').show();move();saveldivname('#facescan');clearUsername()" src="../images/login/face.png" id="loginOptions" class="imgbutton loginbutton" alt="Reconhecimento facial" />
+                    <img onclick="$('#loginpage').hide();$('#nfcscan').show();$('.backbutton').show();move();saveldivname('#nfcscan');clearUsername()" src="../images/login/nfcbutton.png" id="loginOptions" class="imgbutton loginbutton" alt="NFC" />
+                    <img onclick="showBar();clearUsername()" src="../images/login/fingerprinticon.png" id="loginOptions" class="imgbutton loginbutton" alt="Impressão digital" />
+                </div> 
+	        </div>
+
+			 <div class="popup" id="myProgress">
+ 				<div class="popup" id="myBar"></div>
+ 			</div>
+
+			<button onclick="$('#loginpage').hide();$(divname).show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+		</div>
+
+		<div id="facescan">
+
+			<div class="instructions">Centre o seu<br />rosto na moldura</div>
+
+			<img src="../images/scan/placeface.png" class="placehere" alt="Put your face here" />
+
+			<div class="popup" id="myProgress">
+				<div class="popup" id="myBar"></div>
+			</div>
+			<button onclick="$('#facescan').hide();$('#loginpage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+		</div>
+
+		<div id="nfcscan">
+			<div class="instructions">Coloque o seu<br />smartphone no espaço abaixo</div>
+
+			<img src="../images/scan/nfcscan.png" class="placehere" alt="Put your phone here" />
+
+			<div class="popup" id="myProgress">
+				<div class="popup" id="myBar"></div>
+			</div>
+
+			<button onclick="$('#nfcscan').hide();$('#loginpage').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+		</div>
+
+<!------------------------------AREA PESSOAL------------------------------------->
+
+		<div id="pessoal">
+			<div class="headercontainer">
+	    		<header class="cabecalhos">Olá, utilizador!</header>
+	    		<h2 class="centerheader" id="header2">Área Pessoal</h2>
+	    	</div>
+	        <br />
+	        <div id="menuPrincipal" align="center">
+	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#promocoes').show();$('.backbutton').show()">Promoções</button>
+	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#sugestoes').show();$('.backbutton').show()">Sugestões do Chef</button>
+	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#dadospessoais').show();$('.backbutton').show()">Dados Pessoais</button>
+	        </div>
+
+	        <div class="modal fade" id="myModal" role="dialog">
+	            <div class="modal-dialog">
+	                <div class="modal-content">
+	                    <div class="modal-header">Logout
+	                    </div>
+	                    <div class="modal-body">
+	                        <p>Tem a certeza que deseja fazer logout?</p>
+	                    </div>
+	                    <div class="modal-footer">
+	                        <button type="button" class="btn btn-footer btn-success modalbutton" data-dismiss="modal" onclick="logout()">Confirmar</button>
+	                        <button type="button" class="btn btn-footer btn-danger modalbutton" data-dismiss="modal">Cancelar</button>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+
+	    	<button onclick="$('#pessoal').hide();$(divname).show();$('.backbutton').show();checklogin()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+		</div>
 
 <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
         <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
