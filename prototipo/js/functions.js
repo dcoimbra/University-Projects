@@ -102,7 +102,8 @@ function adicionaPedido(coisa, price, estado, prepTime) {
         console.log('tempo cozinha: '+prepTime+' segundos');
         setTimeout(changeState, prepTime*1000, coisa, price, estado, 'orderReady', prepTime);
     }
-
+    
+    checkPreviewList();
 }
 
 
@@ -180,6 +181,16 @@ function setUsername() {
 
         document.getElementById("header1").innerHTML = "Olá, " + username + "!";
     }
+}
+
+function checkPreviewList() {
+    
+    if (!inPreview.length) {
+        
+        
+    }
+    else
+        console.log("tem cenas: " + inPreview.length);
 }
 
 function clearUsername() {
@@ -266,4 +277,17 @@ function changeglow() {
     document.getElementById("waiterbutton").style.boxShadow = "0px 0px 50px forestgreen";
     
     setTimeout(function() { document.getElementById("waiterbutton").style.boxShadow = "0px 0px 50px transparent"; }, 10000);
+}
+
+function changePayMethod(multibanco) {
+
+    if(multibanco) {
+        document.getElementById("pMultibanco").style.boxShadow = "0px 0px 50px forestgreen";
+        document.getElementById("pDinheiro").style.boxShadow = "0px 0px 50px transparent";
+    }
+    else {
+        document.getElementById("pDinheiro").style.boxShadow = "0px 0px 50px forestgreen";
+        document.getElementById("pMultibanco").style.boxShadow = "0px 0px 50px transparent";       
+    }
+    
 }

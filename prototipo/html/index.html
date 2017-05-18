@@ -211,8 +211,6 @@
         </div>
 
 <!-- - - - - - - - - - - - - - - - - - - PEDIDO - - - - - - - - - - - - - - - - -  -->
-        <button type="button" id="sendorder" class="btn-lg">Enviar pedido para a cozinha</button>
-       
         <div id="order">
         	<div id="ordertitle">O meu pedido:</div>
             <div id="middlelabel">
@@ -258,6 +256,10 @@
                 </table>
         	</div>
         </div>
+        
+        <button type="button" id="sendorder" class="bottomrightbutton btn-lg btn-success">Enviar pedido para a cozinha</button>
+        
+         <button type="button" id="finishmeal" onclick="$(divname).hide();$('#terminar').show()" class="bottomrightbutton btn-lg">Terminar refeição</button>
         
         <div class="modal fade" id="ordermodal" role="dialog">
             <div class="modal-dialog">
@@ -326,6 +328,50 @@
             <button onclick="$('#sudoku').hide();$('#jogos').show();savedivname('#passatempos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
         </div>
 
+        
+        <!---------------------------------------TERMINAR REFEIÇÃO---------------------------->
+        <div id="terminar">
+            
+            <header class="cabecalhos">Terminar refeição e pagar</header>
+            
+            
+            <div id="menuPrincipal" aling="center" style="display: inline-table; margin-top: 10vh;">
+              <div id="metodospagamento">
+                <h3 id="headermetodospagamento">Métodos de pagamento</h3>
+                <img src="../images/202365-200.png" id="pDinheiro" class="imagempagamento imgbutton" onclick="changePayMethod(0)" style="box-shadow: 0px 0px 50px transparent;"/>
+                <img src="../images/2000px-Multibanco.svg_.png" id="pMultibanco" class="imagempagamento imgbutton" onclick="changePayMethod(1)" />
+              </div> 
+                <div id="nifdiv" align="center">
+                <input type="number" id="nifinput" class="form-control input-lg" placeholder="NIF" align="center" >
+                
+                <table id="numtable" align="center" >
+                    <tr>
+                        <td class="num btn-default">1</td>
+                        <td class="num btn-default">2</td>
+                        <td class="num btn-default">3</td>
+                    </tr>
+                    <tr>
+                        <td class="num btn-default">4</td>
+                        <td class="num btn-default">5</td>
+                        <td class="num btn-default">6</td>
+                    </tr>
+                    <tr>
+                        <td class="num btn-default">7</td>
+                        <td class="num btn-default">8</td>
+                        <td class="num btn-default">9</td>
+                    </tr>
+                    <tr>
+                        <td class="num btn-success">OK</td>
+                        <td class="num btn-default">0</td>
+                        <td class="num btn-info">C</td>
+                    </tr>
+                </table>
+                
+            </div>
+            </div>
+            
+            
+        </div>
 <!-- - - - - - - - - - - - - - - - - - - LOGIN - - - - - - - - - - - - - - - - - - -->
 <!-- TODO:  LOGIN!!! -->
 		<div id="loginpage">

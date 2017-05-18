@@ -7,7 +7,7 @@ body {
 #bebidas, #pratos, #entradas, #sobremesas, 
 #apospedido, #entretenimento, #jogos, #passatempos, #pong, #sudoku, 
 #loginpage, #facescan, #nfcscan, 
-#pessoal, #dadospessoais, #promocoes, #sugestoes {
+#pessoal, #dadospessoais, #promocoes, #sugestoes, #terminar {
 
 	display: none;
 }
@@ -79,13 +79,15 @@ button {
 	line-height: 300%;
 }
 
-#sendorder {
+.bottomrightbutton {
 
     position: absolute;
-    bottom: 2vh;
+    bottom: 5vh;
     right: 2.4vw;
     border: solid black;
+    height: 12%;
 }
+
 
 #order {
 	position: absolute;
@@ -108,6 +110,41 @@ button {
 
 .ordertable {
 	width: 99%;
+}
+
+.imagempagamento {
+    
+    width: 110px;
+    height: 110px;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+#metodospagamento {
+    
+    width: 20vw;
+}
+
+
+.num {
+    
+    border: solid black !important;
+    text-align: center;
+    width: 70px;
+    height: 50px;
+}
+
+#nifdiv {
+    width: 30vw;
+    height: 25vh;
+    margin-left: 20vw;
+    margin-top: -20%;
+    
+}
+
+#nifinput {
+    
+    width: 30vh;
 }
 
 #bottomlabel {
