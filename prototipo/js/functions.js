@@ -46,11 +46,13 @@ function storeUsername(id) {
     sessionStorage.setItem("username", username.value);
 }
 
-function adicionaPedido(coisa, price, estado) {
+/* ----- LISTA DE PEDIDOS ----- */
+function adicionaPedido(coisa, price, estado, prepTime) {
     var order = findCoisa(coisa+estado, 0);
     var new_quantity = findCoisa(coisa+estado, 1);
+    console.log('tempo: '+prepTime);
     if(estado == 'orderPreview') {
-    inPreview.push({nome: coisa, preco: price, contador:iterator++});
+    inPreview.push({nome: coisa, preco: price, tempo: prepTime, contador:iterator++});
     }
 
     if(!order) {
@@ -58,6 +60,8 @@ function adicionaPedido(coisa, price, estado) {
 
         row1.className = 'order_row';
         row1.id = coisa+estado;
+        
+        if(estado == 'orderPreview') {var td0 = document.createElement('td');}
 
         var td1 = document.createElement('td');
         var td2 = document.createElement('td');
@@ -65,11 +69,14 @@ function adicionaPedido(coisa, price, estado) {
         var td3 = document.createElement('td');
 
         if(estado == 'orderPreview'){
-            row1.innerHTML = '<input type="button" value="-" onclick="removeRow(\'' +coisa+ '\', '+price+', \'' +estado+ '\');">';
+            row1.innerHTML = '<input type="button" value="-" onclick="removeOnClick(\'' +coisa+ '\', '+price+', \'' +estado+ '\');">';
+            td0.innerHTML = '<input type="button" value="+" onclick="adicionaPedido(\'' +coisa+ '\', '+price+', \'' +estado+ '\', \'' +prepTime+ '\');">';
+            row1.appendChild(td0);
         }
         else {
-            row1.innerHTML = '<input type="button" value="-" id="removeItem" onclick="removeRow(\'' +coisa+ '\', '+price+', \'' +estado+ '\');">';
+            row1.innerHTML = '<input type="button" value="-" id="removeItem" onclick="">';
         }
+        
         td1.innerHTML = 'x '+ new_quantity; 
         td2.innerHTML = ' '+coisa;
         td3.innerHTML = price+' €';
@@ -82,30 +89,33 @@ function adicionaPedido(coisa, price, estado) {
         document.getElementById(estado).appendChild(row1);
     }
     else if(order > 0){
-        document.getElementById(coisa+estado).cells[0].innerHTML =  'x '+ new_quantity;
-    	document.getElementById(coisa+estado).cells[2].innerHTML =  (price*10*new_quantity/10)+' €';
+        var i = (estado == 'orderPreview' ? 1 : 0);
+        document.getElementById(coisa+estado).cells[0+i].innerHTML =  'x '+ new_quantity;
+    	document.getElementById(coisa+estado).cells[2+i].innerHTML =  (price*10*new_quantity/10)+' €';
     }
     addToTotal(price);
     
     if (estado == 'orderQueue') {
-        setTimeout(changeState, rndInt()*1000, coisa, price, estado, 'orderCooking');
+        setTimeout(changeState, rndInt()*1000, coisa, price, estado, 'orderCooking', prepTime);
     }
-/*    else if (estado == 'orderCooking') {
-        setInterval(changeState(coisa, price, estado, 'orderReady'), prepTime);
-    }*/
+    else if (estado == 'orderCooking') {
+        console.log('tempo cozinha: '+prepTime+' segundos');
+        setTimeout(changeState, prepTime*1000, coisa, price, estado, 'orderReady', prepTime);
+    }
+
 }
 
 
-function changeState(nome, preco, prev_estado, next_estado) {
+function changeState(nome, preco, prev_estado, next_estado, prepTime) {
     removeRow(nome, preco, prev_estado);
-    adicionaPedido(nome, preco, next_estado);
+    adicionaPedido(nome, preco, next_estado, prepTime);
 }
 
 function leavePreviewState() {
     var b = inPreview.length;
     inPreview.forEach( 
         function(element) {
-            changeState(element.nome, element.preco, 'orderPreview', 'orderQueue');
+            changeState(element.nome, element.preco, 'orderPreview', 'orderQueue', element.tempo);
         });
     inPreview = [];
 }
@@ -123,12 +133,21 @@ function removeRow(coisa, price, estado) {
     	findCoisa(coisa+estado, -1);
     }
     else {
+        var i = (estado == 'orderPreview' ? 1 : 0);
     	var quantidade = findCoisa(coisa+estado, -1);
-    	document.getElementById(coisa+estado).cells[0].innerHTML =  'x '+ quantidade;
-    	document.getElementById(coisa+estado).cells[2].innerHTML =  (price*10*quantidade/10)+' €';
+    	document.getElementById(coisa+estado).cells[0+i].innerHTML =  'x '+ quantidade;
+    	document.getElementById(coisa+estado).cells[2+i].innerHTML =  (price*10*quantidade/10)+' €';
     }
-    
     subtractFromTotal(price);
+}
+
+function removeOnClick(coisa, price, estado) {
+    var result = $.grep(inPreview, function(e){ return e.nome == coisa; });
+    var i = inPreview.indexOf(result[(result.length)-1]);
+    inPreview.splice(i, 1);
+    
+    removeRow(coisa, price, estado);
+
 }
 
 function rndInt() {
@@ -146,6 +165,7 @@ function subtractFromTotal(price) {
     totalPrice -= price*10;
     document.getElementById("totalprice").innerHTML = totalPrice/10 + ' €';
 }
+/* ----- FIM LISTA DE PEDIDOS ----- */
 
 function setUsername() {
 
