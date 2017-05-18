@@ -218,6 +218,11 @@ function waiter() {
     $('#waiterbutton').attr('data-toggle','modal');
 }
 
+function ordercheck() {
+    $('#sendorder').attr('data-target','#ordermodal');
+    $('#sendorder').attr('data-toggle','modal');
+}
+
 function enter() {
     arealoggedin = 'true';
     $('#loginbutton').attr('src', '../images/logout_21.png');

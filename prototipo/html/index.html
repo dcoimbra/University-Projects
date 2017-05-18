@@ -14,7 +14,7 @@
 		<title>Com.ISTo</title>
 	</head>
 
-	<body onload="waiter()">
+	<body onload="waiter();ordercheck()">
 
 		<img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN"/>
 
@@ -211,7 +211,7 @@
         </div>
 
 <!-- - - - - - - - - - - - - - - - - - - PEDIDO - - - - - - - - - - - - - - - - -  -->
-        <button type="button" id="sendorder" data-placement="left" data-trigger="focus" class="btn-lg">Enviar pedido para a cozinha</button>
+        <button type="button" id="sendorder" class="btn-lg">Enviar pedido para a cozinha</button>
        
         <div id="order">
         	<div id="ordertitle">O meu pedido:</div>
@@ -259,22 +259,17 @@
         	</div>
         </div>
         
-        <div id="popoverOrder" style="display:none;">
-            <h3>O seu pedido está correto?</h3>
-            <button type="button" class="btn btn-footer btn-success" onclick="$(divname).hide();$('#apospedido').show();$('#sendorder').hide();savedivname('#apospedido')">Sim</button>
-            <button type="button" class="btn btn-footer btn-danger">Não</button>
+        <div class="modal fade" id="ordermodal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">O seu pedido está correto?</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-footer btn-success modalbutton" onclick="$(divname).hide();$('#apospedido').show();$('#sendorder').hide();savedivname('#apospedido');leavePreviewState()" data-dismiss="modal">Sim</button>
+                        <button type="button" class="btn btn-footer btn-danger modalbutton" data-dismiss="modal">Não</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('#sendorder').popover({
-                    html : true,
-                    content: function() {
-                        return $('#popoverOrder').html();
-                    }
-                });
-             });
-        </script>
 
 <!-- TODO: MODIFICAR PEDIDO -->
 
@@ -481,6 +476,7 @@
 			
 <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
         <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
+        
         <div class="modal fade" id="waitermodal" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
