@@ -79,7 +79,7 @@ button {
 	line-height: 300%;
 }
 
-.sendorder {
+#sendorder {
 
     position: absolute;
     bottom: 2vh;
@@ -410,6 +410,11 @@ button {
 	padding: 0.5vh 1vw;
 	margin-top: 1vh;
 	margin-left: 1.75vw;
+}
+
+#popoverOrder {
+    height: 20vh !important;
+    width: 40vw !important;
 }
 
 .popover {

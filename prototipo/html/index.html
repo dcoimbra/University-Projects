@@ -29,8 +29,6 @@
 				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show();savedivname('#sobremesas')">Sobremesas</button>
 			</div>
 
-			<button onclick="$('#menupage').hide();$('#apospedido').show()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
-
 			<button onclick="$('#menupage').hide();$('#apospedido').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
 		</div>
@@ -109,8 +107,6 @@
 
 			<button onclick="$('#bebidas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-            <button onclick="$('#bebidas').hide();$('#apospedido').show(); leavePreviewState()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
-
         </div>
 
 <!-- - - - - - - - - - - - - - - - - - -ENTRADAS - - - - - - - - - - - - - - - - - -->
@@ -131,8 +127,6 @@
             </div>
 
             <button onclick="$('#entradas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
-
-            <button onclick="$('#entradas').hide();$('#apospedido').show(); leavePreviewState()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
 
         </div>
 
@@ -188,8 +182,6 @@
 
                 <button onclick="$('#pratos').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-                <button onclick="$('#pratos').hide();$('#apospedido').show(); leavePreviewState()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
-
             </div>
 
         </div>
@@ -216,11 +208,11 @@
 
             <button onclick="$('#sobremesas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
-            <button onclick="$('#sobremesas').hide();$('#apospedido').show();leavePreviewState()" type="button" class="sendorder btn-lg">Enviar pedido para a cozinha</button>
-
         </div>
 
 <!-- - - - - - - - - - - - - - - - - - - PEDIDO - - - - - - - - - - - - - - - - -  -->
+        <button type="button" id="sendorder" data-placement="left" data-trigger="focus" class="btn-lg">Enviar pedido para a cozinha</button>
+       
         <div id="order">
         	<div id="ordertitle">O meu pedido:</div>
             <div id="middlelabel">
@@ -266,6 +258,23 @@
                 </table>
         	</div>
         </div>
+        
+        <div id="popoverOrder" style="display:none;">
+            <h3>O seu pedido está correto?</h3>
+            <button type="button" class="btn btn-footer btn-success" onclick="$(divname).hide();$('#apospedido').show();$('#sendorder').hide()">Sim</button>
+            <button type="button" class="btn btn-footer btn-danger">Não</button>
+        </div>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('#sendorder').popover({
+                    html : true,
+                    content: function() {
+                        return $('#popoverOrder').html();
+                    }
+                });
+             });
+        </script>
 
 <!-- TODO: MODIFICAR PEDIDO -->
 
@@ -275,7 +284,7 @@
             <header class="cabecalhos">O seu pedido está a cozinhar!</header>
             <div id="menuPrincipal" align="center">
     			<button onclick="$('#apospedido').hide();$('#entretenimento').show();$('.backbutton').show()" type="button" class="menuItem">Enquanto espera</button>
-                <button onclick="$('#apospedido').hide();$('#menupage').show();$('.backbutton').show()" type="button" class="menuItem" >Fazer novo pedido</button>
+                <button onclick="$('#apospedido').hide();$('#menupage').show();$('.backbutton').show();$('#sendorder').show()" type="button" class="menuItem" >Fazer novo pedido</button>
             </div>
         </div>
 
