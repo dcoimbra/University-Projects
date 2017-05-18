@@ -29,7 +29,7 @@
 				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show();savedivname('#sobremesas')">Sobremesas</button>
 			</div>
 
-			<button onclick="$('#menupage').hide();$('#apospedido').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+			<button onclick="$('#menupage').hide();$('#apospedido').show();savedivname('#apospedido')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
 		</div>
 
@@ -261,7 +261,7 @@
         
         <div id="popoverOrder" style="display:none;">
             <h3>O seu pedido está correto?</h3>
-            <button type="button" class="btn btn-footer btn-success" onclick="$(divname).hide();$('#apospedido').show();$('#sendorder').hide()">Sim</button>
+            <button type="button" class="btn btn-footer btn-success" onclick="$(divname).hide();$('#apospedido').show();$('#sendorder').hide();savedivname('#apospedido')">Sim</button>
             <button type="button" class="btn btn-footer btn-danger">Não</button>
         </div>
         
@@ -291,44 +291,44 @@
         <div id="entretenimento">
             <header class="cabecalhos">Entretenha-se enquanto espera!</header>
             <div id="menuPrincipal" align="center">
-    			<button onclick="$('#entretenimento').hide();$('#jogos').show();$('.backbutton').show()" type="button" class="menuItem">Jogos</button>
-                <button onclick="$('#entretenimento').hide();$('#passatempos').show();$('.backbutton').show()" type="button" class="menuItem">Passatempos</button>
+    			<button onclick="$('#entretenimento').hide();$('#jogos').show();$('.backbutton').show();savedivname('#jogos')" type="button" class="menuItem">Jogos</button>
+                <button onclick="$('#entretenimento').hide();$('#passatempos').show();$('.backbutton').show();savedivname('#passatempos')" type="button" class="menuItem">Passatempos</button>
             </div>
 
-            <button onclick="$('#entretenimento').hide();$('#apospedido').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#entretenimento').hide();$('#apospedido').show();savedivname('#apospedido')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
         <div id="jogos">
             <header class="cabecalhos">Jogos</header>
             <div id="menuPrincipal" align="center">
-    			<button onclick="$('#jogos').hide();$('#pong').show();$('.backbutton').show()" type="button" class="menuItem">Pong</button>
+    			<button onclick="$('#jogos').hide();$('#pong').show();$('.backbutton').show();savedivname('#pong')" type="button" class="menuItem">Pong</button>
             </div>
 
-            <button onclick="$('#jogos').hide();$('#entretenimento').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#jogos').hide();$('#entretenimento').show();savedivname('#entretenimento')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
         <div id="passatempos">
             <header class="cabecalhos">Passatempos</header>
             <div id="menuPrincipal" align="center">
-    			<button onclick="$('#passatempos').hide();$('#sudoku').show();$('.backbutton').show()" type="button" class="menuItem">Sudoku</button>
+    			<button onclick="$('#passatempos').hide();$('#sudoku').show();$('.backbutton').show();savedivname('#sudoku')" type="button" class="menuItem">Sudoku</button>
             </div>
 
-            <button onclick="$('#passatempos').hide();$('#entretenimento').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#passatempos').hide();$('#entretenimento').show();savedivname('#entretenimento')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
         <div id="pong">
             <img id="pongif" src="../images/pong.gif" />
-            <button onclick="$('#pong').hide();$('#jogos').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#pong').hide();$('#jogos').show();savedivname('#jogos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
         </div>
 
 <!-- TODO: SUDOKU -->
     
          <div id="sudoku">
             <img id="sudokugif" src="../images/sudoku.gif" />
-            <button onclick="$('#sudoku').hide();$('#jogos').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#sudoku').hide();$('#jogos').show();savedivname('#passatempos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
         </div>
 
 <!-- - - - - - - - - - - - - - - - - - - LOGIN - - - - - - - - - - - - - - - - - - -->
