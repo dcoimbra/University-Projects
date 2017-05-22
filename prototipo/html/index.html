@@ -18,6 +18,8 @@
 
 		<img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN"/>
 
+        <button type="button" id="waitbutton">Enquanto Espera</button>
+        
 <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - -  -->
 		<div id="menupage">
             <header class="cabecalhos">Menu</header>
@@ -28,8 +30,6 @@
 				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show();savedivname('pratos')">Pratos do Dia</button>
 				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show();savedivname('sobremesas')">Sobremesas</button>
 			</div>
-
-			<button onclick="$('#menupage').hide();$('#apospedido').show();savedivname('apospedido')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
 		</div>
 
@@ -155,10 +155,10 @@
 
 <!-- TODO: Adicionar informação relativa a alergias + Acompanhamentos -->
                <div id="popoverbacalhau" style="display: none">
-                <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)">Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.<button type="button" style="display:none;">Modificar Acompanhamentos</button><button type="button" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
+                <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)"><p>Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</p><button type="button" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
 
                 <div id="popoveresparguete" style="display: none">
-                <img class="foodimage" src="../images/esparguete.jpg" alt="Esparguete à Bolonhesa" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)">Original da cidade italiana de Bolonha, é uma das pastas italianas mais apreciadas em todo o mundo.<button type="button" style="display:none;">Modificar Acompanhamentos</button><button type="button" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
+                <img class="foodimage" src="../images/esparguete.jpg" alt="Esparguete à Bolonhesa" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)"><p>Original da cidade italiana de Bolonha, é uma das pastas italianas mais apreciadas em todo o mundo.</p><button type="button" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
 
                 <script type="text/javascript">
                     $(document).ready(function(){
@@ -267,7 +267,7 @@
                     <div class="modal-header">Após enviado para a cozinha o pedido não pode ser alterado.</div>
                     <div class="modal-body">O seu pedido está correto?</div>
                     <div class="modal-footer">
-                        <button type="button" id="checkorder" class="btn btn-success modalbutton" onclick="$(divname).hide();$('#apospedido').show();$('#sendorder').hide();savedivname('apospedido');leavePreviewState()" data-dismiss="modal">Sim</button>
+                        <button type="button" id="checkorder" class="btn btn-success modalbutton" onclick="$(divname).hide();$('#apospedido').show();$('#sendorder').hide();savedivname('apospedido');leavePreviewState();$('#sendorder').hide();$('#waitbutton').hide()" data-dismiss="modal">Sim</button>
                         <button type="button" id="denyorder" class="btn btn-danger modalbutton" data-dismiss="modal">Não</button>
                     </div>
                 </div>
@@ -278,11 +278,12 @@
 
 
 <!-- - - - - - - - - - - - - - - - - - - APÓS PEDIDO - - - - - - - - - - - - - - - -->
+        
         <div id="apospedido">
             <header class="cabecalhos">O seu pedido está a cozinhar!</header>
             <div id="menuPrincipal" align="center">
     			<button onclick="$('#apospedido').hide();$('#entretenimento').show();$('.backbutton').show()" type="button" class="menuItem">Enquanto espera</button>
-                <button onclick="$('#apospedido').hide();$('#menupage').show();$('.backbutton').show();$('#sendorder').show();savedivname('menupage')" type="button" class="menuItem" >Fazer novo pedido</button>
+                <button onclick="$('#apospedido').hide();$('#menupage').show();savedivname('menupage');$('#waitbutton').show()" type="button" class="menuItem" >Fazer novo pedido</button>
             </div>
         </div>
 
@@ -519,6 +520,7 @@
 	        </div>
 			
 <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
+                
         <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
         
         <div class="modal fade" id="waitermodal" role="dialog">

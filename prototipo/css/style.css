@@ -84,7 +84,6 @@ button {
     position: absolute;
     bottom: 5vh;
     right: 2.4vw;
-    border: solid black;
     height: 12%;
 }
 
@@ -222,7 +221,7 @@ button {
 	top: 0;
 	left: 0;
 	height: 60px;
-	width: 210px;
+	width: 16%;
 	padding-right: 1%;
 }
 
@@ -454,8 +453,8 @@ button {
 
 .add {
 	padding: 0.5vh 1vw;
-	margin-top: 1vh;
-	margin-left: 1.75vw;
+	margin-bottom: 1vh;
+	margin-left: 3.5vw;
 }
 
 #popoverOrder {
@@ -464,7 +463,7 @@ button {
 }
 
 .popover {
-	height: 50vh;
+	height: 48vh;
 	font-size: 130%;
 	border: solid black;
 	width: 35vw !important;
@@ -490,4 +489,13 @@ button {
     display: none;
     right: 0;
     width: 20vw;
+}
+
+#waitbutton {
+    display: none;
+    font-size: 130%;
+    position: absolute;
+    margin-top: 49vh;
+    width: 16%;
+    height: 12%;
 }

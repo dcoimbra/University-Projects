@@ -54,11 +54,11 @@ function adicionaPedido(coisa, price, estado, prepTime) {
     var new_quantity = findCoisa(coisa+estado, 1);
     console.log('tempo: '+prepTime);
     if(estado == 'orderPreview') {
-    inPreview.push({nome: coisa, preco: price, tempo: prepTime, contador:iterator++});
+        inPreview.push({nome: coisa, preco: price, tempo: prepTime, contador:iterator++});
+        
+        count++;
+        switchbottomrightbutton();
     }
-
-    count++;
-    switchbottomrightbutton();
     
     if(!order) {
         var row1 = document.createElement('tr');
@@ -66,7 +66,9 @@ function adicionaPedido(coisa, price, estado, prepTime) {
         row1.className = 'order_row';
         row1.id = coisa+estado;
         
-        if(estado == 'orderPreview') {var td0 = document.createElement('td');}
+        if(estado == 'orderPreview') {
+            var td0 = document.createElement('td');
+        }
 
         var td1 = document.createElement('td');
         var td2 = document.createElement('td');
@@ -102,10 +104,14 @@ function adicionaPedido(coisa, price, estado, prepTime) {
     
     if (estado == 'orderQueue') {
         setTimeout(changeState, rndInt()*1000, coisa, price, estado, 'orderCooking', prepTime);
+        
+        resetcount();
     }
     else if (estado == 'orderCooking') {
         console.log('tempo cozinha: '+prepTime+' segundos');
         setTimeout(changeState, prepTime*1000, coisa, price, estado, 'orderReady', prepTime);
+        
+        resetcount();
     }
     
     checkPreviewList();
@@ -292,6 +298,18 @@ function switchbottomrightbutton() {
         $('#finishmeal').show(); 
     }
 }
+
+function resetcount() {
+    count = 0;
+    $('#sendorder').hide();
+}
+
+$('#waitbutton').click(function() {
+    $(divname).hide();
+    $('#apospedido').show();
+    savedivname('apospedido');
+    $('#waitbutton').hide();
+});
 
 function changeglow() {
     
