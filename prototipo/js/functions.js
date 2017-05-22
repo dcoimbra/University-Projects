@@ -1,9 +1,10 @@
 var lastdiv;
 var count = 0;
 var hash = {};
-var inPreview = [];
 var iterator = 0;
 var totalPrice = 0;
+var inPreview = [];
+var countQueue = 0;
 var loggedin = 'false';
 var arealoggedin = 'false';
 var divname = '#menupage';
@@ -57,6 +58,7 @@ function adicionaPedido(coisa, price, estado, prepTime) {
         inPreview.push({nome: coisa, preco: price, tempo: prepTime, contador:iterator++});
         
         count++;
+        countQueue++;
         switchbottomrightbutton();
     }
     
@@ -112,6 +114,13 @@ function adicionaPedido(coisa, price, estado, prepTime) {
         setTimeout(changeState, prepTime*1000, coisa, price, estado, 'orderReady', prepTime);
         
         resetcount();
+    }
+    
+    else if (estado == 'orderReady') {
+        countQueue--;
+        if (countQueue == 0) {
+            $('#finishmeal').show();
+        }
     }
     
     checkPreviewList();
@@ -201,7 +210,7 @@ function checkPreviewList() {
     
     if (!inPreview.length) {
         
-        
+        console.log("tem cenas: " + inPreview.length);
     }
     else
         console.log("tem cenas: " + inPreview.length);

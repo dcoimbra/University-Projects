@@ -251,7 +251,7 @@
             </div>
         	<div id="bottomlabel">
                 <table id="totaltable">
-        		  <th id="totaltext">Total:</th>
+        		  <th id="totaltext">Total: </th>
         		  <th id="totalprice" style="text-align: right;"> €</th>
                 </table>
         	</div>
@@ -342,7 +342,7 @@
                 <img src="../images/2000px-Multibanco.svg_.png" id="pMultibanco" class="imagempagamento imgbutton" onclick="changePayMethod(1)" />
               </div> 
                 <div id="nifdiv" align="center">
-                <input type="number" id="nifinput" class="form-control input-lg" placeholder="NIF" align="center" >
+                <input type="text" pattern="\d*" id="nifinput" class="form-control input-lg" maxlength="9" placeholder="NIF" align="center" >
                 
                 <table id="numtable" align="center" >
                     <tr>
