@@ -1,3 +1,5 @@
+var lastdiv;
+var count = 0;
 var hash = {};
 var inPreview = [];
 var iterator = 0;
@@ -31,9 +33,9 @@ function move() {
         if (width == 100) {
             clearInterval(id);
             $(divloginname).hide();
+            login();
             $('#pessoal').show();
             $('.backbutton').show();
-            login();
         } else {
             width++;
             elem.style.width = width + '%';
@@ -55,6 +57,9 @@ function adicionaPedido(coisa, price, estado, prepTime) {
     inPreview.push({nome: coisa, preco: price, tempo: prepTime, contador:iterator++});
     }
 
+    count++;
+    switchbottomrightbutton();
+    
     if(!order) {
         var row1 = document.createElement('tr');
 
@@ -148,6 +153,9 @@ function removeOnClick(coisa, price, estado) {
     inPreview.splice(i, 1);
     
     removeRow(coisa, price, estado);
+    
+    count--;
+    switchbottomrightbutton();
 
 }
 
@@ -250,7 +258,7 @@ function login() {
 
     loggedin = 'true';
 	enter();
-    saveldivname('#pessoal');
+    saveldivname('pessoal');
 }
 
 function logout() {
@@ -260,17 +268,30 @@ function logout() {
     exit();
     $('#loginbutton').attr('src', '../images/login_21.png');
     $(divname).show();
-    saveldivname('#login');
+    saveldivname('loginpage');
 }
 
 function savedivname(name) {
-    divname = name;
+    divname = '#' + name;
 }
 
 function saveldivname(name) {
-    divloginname = name;
+    divloginname = '#' + name;
 }
 
+function savelastdiv(name) {
+    lastdiv = name;
+}
+
+function switchbottomrightbutton() {
+    if (count > 0) {
+        $('#finishmeal').hide();
+        $('#sendorder').show();   
+    } else {
+        $('#sendorder').hide();
+        $('#finishmeal').show(); 
+    }
+}
 
 function changeglow() {
     

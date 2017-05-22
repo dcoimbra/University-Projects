@@ -88,6 +88,15 @@ button {
     height: 12%;
 }
 
+#checkorder {
+    width: 100px;
+    margin-right: 100px;
+}
+
+#denyorder {
+    width: 100px;
+    margin-right: 100px;
+}
 
 #order {
 	position: absolute;
@@ -420,7 +429,7 @@ button {
 }
 
 .modalbutton {
-	border-radius: 0;
+	border-radius: 0 !important;
 }
 
 .modifybutton {
@@ -475,4 +484,10 @@ button {
 	width: 98%;
 	padding: 1vh 0;
 	cursor: pointer;
+}
+
+#sendorder {
+    display: none;
+    right: 0;
+    width: 20vw;
 }
