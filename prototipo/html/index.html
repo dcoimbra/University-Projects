@@ -364,28 +364,28 @@
             <div id="nifdiv" align="center">
                 <input type="text" pattern="\d*" id="nifinput" class="form-control input-lg" maxlength="9" placeholder="NIF" align="center">
 
-                <table id="numtable" align="center">
-                    <tr>
-                        <td class="num btn-default">1</td>
-                        <td class="num btn-default">2</td>
-                        <td class="num btn-default">3</td>
-                    </tr>
-                    <tr>
-                        <td class="num btn-default">4</td>
-                        <td class="num btn-default">5</td>
-                        <td class="num btn-default">6</td>
-                    </tr>
-                    <tr>
-                        <td class="num btn-default">7</td>
-                        <td class="num btn-default">8</td>
-                        <td class="num btn-default">9</td>
-                    </tr>
-                    <tr>
-                        <td class="num btn-success" onclick="$('#terminar').hide();$('#fim').show();$('.backbutton').hide();$('#loginbutton').hide();$('#order').hide();$('#waiterbutton').hide()">OK</td>
-                        <td class="num btn-default">0</td>
-                        <td class="num btn-info">C</td>
-                    </tr>
-                </table>
+            <table id="numtable" align="center" >
+                <tr>
+                    <td class="num btn-default" onClick="writeNumber('1')">1</td>
+                    <td class="num btn-default" onClick="writeNumber('2')">2</td>
+                    <td class="num btn-default" onClick="writeNumber('3')">3</td>
+                </tr>
+                <tr>
+                    <td class="num btn-default" onClick="writeNumber('4')">4</td>
+                    <td class="num btn-default" onClick="writeNumber('5')">5</td>
+                    <td class="num btn-default" onClick="writeNumber('6')">6</td>
+                </tr>
+                <tr>
+                    <td class="num btn-default" onClick="writeNumber('7')">7</td>
+                    <td class="num btn-default" onClick="writeNumber('8')">8</td>
+                    <td class="num btn-default" onClick="writeNumber('9')">9</td>
+                </tr>
+                <tr>
+                    <td class="num btn-success" onclick="$('#terminar').hide();$('#fim').show();$('.backbutton').hide();$('#loginbutton').hide();$('#order').hide();$('#waiterbutton').hide()">OK</td>
+                    <td class="num btn-default" onClick="writeNumber('0')">0</td>
+                    <td class="num btn-info" onClick="eraseNumber()">C</td>
+                </tr>
+            </table>
 
             </div>
         </div>
