@@ -366,6 +366,15 @@ button {
 	bottom: 0;
 }
 
+#keyboardImage {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    height: 50%;
+    left: 35vh;
+    
+}
+
 #waiterbutton {
 	height: 31.3%;
 	position: absolute;

@@ -369,6 +369,15 @@ function changeglow() {
     setTimeout(function() { document.getElementById("waiterbutton").style.boxShadow = "0px 0px 50px transparent"; }, 10000);
 }
 
+function showKeyboard() {
+     $("#keyboardImage").show();
+}
+
+function hideKeyboard() {
+     $("#keyboardImage").hide();
+}
+
+
 function changePayMethod(multibanco) {
 
     if(multibanco) {

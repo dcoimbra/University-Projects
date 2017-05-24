@@ -279,7 +279,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="modal fade" id="readymodal" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -291,7 +290,7 @@
                 </div>
             </div>
         </div>
-
+        
 <!-- TODO: MODIFICAR PEDIDO -->
 
 
@@ -520,10 +519,10 @@
 
                     <form id="modifyform">
 
-                        <input type="text" id="modifyname" class="form-control input-lg" placeholder="Modificar Nome">
-                        <input type="text" id="modifynif" class="form-control input-lg" placeholder="Modificar NIF">
+                        <input type="text" id="modifyname" class="form-control input-lg" placeholder="Modificar Nome" onclick="showKeyboard()">
+                        <input type="text" id="modifynif" class="form-control input-lg" placeholder="Modificar NIF" onclick="showKeyboard()">
 
-                        <button type="button" class="btn-lg" id="modifyconfirm" onclick="storeUsername('modifyname');storeNIF('modifynif')" ><span class="buttontext">OK</span></button>
+                        <button type="button" class="btn-lg" id="modifyconfirm" onclick="storeUsername('modifyname');storeNIF('modifynif'); hideKeyboard()" ><span class="buttontext">OK</span></button>
                     </form>
 
                     <button type="button" class="menuItem" onclick="$(divloginname).hide();$('#alergias').show();saveldivname('#alergias')">Alergias</button>
@@ -558,6 +557,8 @@
 	                </div>
 	            </div>
 	        </div>
+        
+        <img src="../images/keyboard.png" id="keyboardImage" class="imgbutton" alt="teclado" align="center" />
 			
 <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
                 
