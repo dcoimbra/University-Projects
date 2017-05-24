@@ -14,7 +14,7 @@
     <title>Com.ISTo</title>
 </head>
 
-<body onload="waiter();ordercheck()">
+<body onload="waiter();ordercheck();showhelp()">
 
     <img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" />
 
@@ -575,6 +575,36 @@
 
     <!-- - - - - - - - - - - - - - - - - - - HELP - - - - - - - - - - - - - - - - - - - -->
     <img src="../images/help.png" id="helpbutton" alt="ajuda" />
+    
+    <div class="modal fade" id="helpmodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span id="helptext"><b>Área Pessoal</b>
+                    <br />
+                    <p>Para aceder à sua área pessoal, toque no botão de <b>Login</b> no canto superior esquerdo.
+                    Pode fazer o login através do seu nome de utilizador e password, ou usando o reconhecimento facial, NFC ou por impressão digital.</p>
+                    <br />
+                        
+                    <b>Pedidos</b>
+                    <br />
+                    
+                    <p>Os seus pedidos são apresentados na janela à direita do ecrã e classificados através de um código de cores.</p>
+                        
+                    <p>Os pedidos apresentados com fundo branco ainda não foram enviados para a cozinha; se houver destes pedidos na lista, é ainda possível alterá-los ou removê-los.</p>
+                        
+                    <p>Os pedidos apresentados com <span style="background-color: mistyrose;">fundo vermelho</span> foram enviados para a cozinha e estão em fila de espera; neste estado e nos seguintes pode explorar as várias opções de entretenimento disponíveis para si.</p>
+                    
+                    <p>Os pedidos com <span style="background-color: lightgoldenrodyellow;">fundo amarelo</span> estão a ser confecionados;</p>
+                        
+                    <p>Os pedidos com <span style="background-color: lightgreen;">fundo verde</span> estão prontos, e chegarão à sua mesa dentro de momentos.</p></span></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-footer btn-success modalbutton" data-dismiss="modal">Entendi</button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
     
     
     <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->

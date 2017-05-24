@@ -282,6 +282,12 @@ function waiter() {
     $('#waiterbutton').attr('data-toggle','modal');
 }
 
+function showhelp() {
+    
+    $('#helpbutton').attr('data-target','#helpmodal');
+    $('#helpbutton').attr('data-toggle','modal');
+}
+
 function ordercheck() {
     $('#sendorder').attr('data-target','#ordermodal');
     $('#sendorder').attr('data-toggle','modal');

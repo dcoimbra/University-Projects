@@ -148,6 +148,12 @@ button {
     right: 2vw;
     top: 1vh;
     height: 8vh;
+    cursor: pointer;
+}
+
+#helptext {
+    
+    font-size: 85%;
 }
 
 #nifdiv {
