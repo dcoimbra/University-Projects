@@ -49,6 +49,11 @@ function storeUsername(id) {
     sessionStorage.setItem("username", username.value);
 }
 
+function storeNIF(value) {
+    var nif = document.getElementById(value);
+    sessionStorage.setItem("nif", nif.value);
+}
+
 /* ----- LISTA DE PEDIDOS ----- */
 function adicionaPedido(coisa, price, estado, prepTime) {
     var order = findCoisa(coisa+estado, 0);
@@ -206,6 +211,14 @@ function setUsername() {
     }
 }
 
+function setNIF() {
+    var nif = sessionStorage.getItem("nif");
+    
+    if (nif != null) {
+        document.getElementById('nifinput').value = nif;
+    }
+}
+
 function checkPreviewList() {
     
     if (!inPreview.length) {
@@ -273,7 +286,7 @@ function login() {
 
     loggedin = 'true';
 	enter();
-    saveldivname('pessoal');
+    saveldivname('#pessoal');
 }
 
 function logout() {
@@ -283,19 +296,36 @@ function logout() {
     exit();
     $('#loginbutton').attr('src', '../images/login_21.png');
     $(divname).show();
-    saveldivname('loginpage');
+    saveldivname('#loginpage');
 }
 
 function savedivname(name) {
-    divname = '#' + name;
+    divname = name;
 }
 
 function saveldivname(name) {
-    divloginname = '#' + name;
+    divloginname = name;
 }
 
 function savelastdiv(name) {
     lastdiv = name;
+}
+
+function choosesavediv(name) {
+    if ($.inArray(name, ['#pessoal', '#promocoes', '#sugestoes', '#dadospessoais']) > -1) {
+        saveldivname(name);
+    } else {
+        savedivname(name);
+    }
+}
+
+function choosegetdiv() {
+    if (arealoggedin == 'true') {
+        exit();
+        return divloginname;
+    } else {
+        return divname;
+    }
 }
 
 function switchbottomrightbutton() {
@@ -308,6 +338,16 @@ function switchbottomrightbutton() {
     }
 }
 
+$('#finishmeal').click(function() {
+    $(choosegetdiv()).hide();
+    $('#finishmeal').hide();
+    $('#terminar').show();
+    $('.backbutton').show();
+    savelastdiv(choosegetdiv());
+    savedivname('#terminar');
+    setNIF();
+});
+
 function resetcount() {
     count = 0;
     $('#sendorder').hide();
@@ -316,7 +356,7 @@ function resetcount() {
 $('#waitbutton').click(function() {
     $(divname).hide();
     $('#apospedido').show();
-    savedivname('apospedido');
+    savedivname('#apospedido');
     $('#waitbutton').hide();
 });
 

@@ -25,10 +25,10 @@
             <header class="cabecalhos">Menu</header>
 			<div id="menuPrincipal" align="center">
 
-				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#bebidas').show();$('.backbutton').show();savedivname('bebidas')">Bebidas</button>
-				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#entradas').show();$('.backbutton').show();savedivname('entradas')">Entradas</button>
-				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show();savedivname('pratos')">Pratos do Dia</button>
-				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show();savedivname('sobremesas')">Sobremesas</button>
+				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#bebidas').show();$('.backbutton').show();savedivname('#bebidas')">Bebidas</button>
+				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#entradas').show();$('.backbutton').show();savedivname('#entradas')">Entradas</button>
+				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show();savedivname('#pratos')">Pratos do Dia</button>
+				<button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show();savedivname('#sobremesas')">Sobremesas</button>
 			</div>
 
 		</div>
@@ -105,7 +105,7 @@
                 </div>
 			</div>
 
-			<button onclick="$(divname).hide();$('#menupage').show();savedivname('menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+			<button onclick="$(divname).hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
@@ -126,7 +126,7 @@
     			</div>
             </div>
 
-            <button onclick="$('#entradas').hide();$('#menupage').show();savedivname('menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#entradas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
@@ -180,7 +180,7 @@
                     });
                 </script>
 
-                <button onclick="$('#pratos').hide();$('#menupage').show();savedivname('menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+                <button onclick="$('#pratos').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
             </div>
 
@@ -206,7 +206,7 @@
     			</div>
             </div>
 
-            <button onclick="$('#sobremesas').hide();$('#menupage').show();savedivname('menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#sobremesas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
@@ -259,7 +259,7 @@
         
         <button type="button" id="sendorder" class="bottomrightbutton btn-lg btn-success">Enviar pedido para a cozinha</button>
         
-         <button type="button" id="finishmeal" onclick="$(divname).hide();$('#terminar').show();$('.backbutton').show();savelastdiv(divname);savedivname('terminar')" class="bottomrightbutton btn-lg">Terminar refeição</button>
+         <button type="button" id="finishmeal" class="bottomrightbutton btn-lg">Terminar refeição</button>
         
         <div class="modal fade" id="ordermodal" role="dialog">
             <div class="modal-dialog">
@@ -267,7 +267,7 @@
                     <div class="modal-header">Após enviado para a cozinha o pedido não pode ser alterado.</div>
                     <div class="modal-body">O seu pedido está correto?</div>
                     <div class="modal-footer">
-                        <button type="button" id="checkorder" class="btn btn-success modalbutton" onclick="$(divname).hide();$('#apospedido').show();$('#sendorder').hide();savedivname('apospedido');leavePreviewState();$('#sendorder').hide();$('#waitbutton').hide()" data-dismiss="modal">Sim</button>
+                        <button type="button" id="checkorder" class="btn btn-success modalbutton" onclick="$(divname).hide();$(divloginname).hide();$('#apospedido').show();$('#sendorder').hide();savedivname('#apospedido');leavePreviewState();$('#sendorder').hide();$('#waitbutton').hide()" data-dismiss="modal">Sim</button>
                         <button type="button" id="denyorder" class="btn btn-danger modalbutton" data-dismiss="modal">Não</button>
                     </div>
                 </div>
@@ -283,49 +283,49 @@
             <header class="cabecalhos">O seu pedido está a cozinhar!</header>
             <div id="menuPrincipal" align="center">
     			<button onclick="$('#apospedido').hide();$('#entretenimento').show();$('.backbutton').show()" type="button" class="menuItem">Enquanto espera</button>
-                <button onclick="$('#apospedido').hide();$('#menupage').show();savedivname('menupage');$('#waitbutton').show()" type="button" class="menuItem" >Fazer novo pedido</button>
+                <button onclick="$('#apospedido').hide();$('#menupage').show();savedivname('#menupage');$('#waitbutton').show()" type="button" class="menuItem" >Fazer novo pedido</button>
             </div>
         </div>
 
         <div id="entretenimento">
             <header class="cabecalhos">Entretenha-se enquanto espera!</header>
             <div id="menuPrincipal" align="center">
-    			<button onclick="$('#entretenimento').hide();$('#jogos').show();$('.backbutton').show();savedivname('jogos')" type="button" class="menuItem">Jogos</button>
-                <button onclick="$('#entretenimento').hide();$('#passatempos').show();$('.backbutton').show();savedivname('passatempos')" type="button" class="menuItem">Passatempos</button>
+    			<button onclick="$('#entretenimento').hide();$('#jogos').show();$('.backbutton').show();savedivname('#jogos')" type="button" class="menuItem">Jogos</button>
+                <button onclick="$('#entretenimento').hide();$('#passatempos').show();$('.backbutton').show();savedivname('#passatempos')" type="button" class="menuItem">Passatempos</button>
             </div>
 
-            <button onclick="$('#entretenimento').hide();$('#apospedido').show();savedivname('apospedido')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#entretenimento').hide();$('#apospedido').show();savedivname('#apospedido')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
         <div id="jogos">
             <header class="cabecalhos">Jogos</header>
             <div id="menuPrincipal" align="center">
-    			<button onclick="$('#jogos').hide();$('#pong').show();$('.backbutton').show();savedivname('pong')" type="button" class="menuItem">Pong</button>
+    			<button onclick="$('#jogos').hide();$('#pong').show();$('.backbutton').show();savedivname('#pong')" type="button" class="menuItem">Pong</button>
             </div>
 
-            <button onclick="$('#jogos').hide();$('#entretenimento').show();savedivname('entretenimento')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#jogos').hide();$('#entretenimento').show();savedivname('#entretenimento')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
         <div id="passatempos">
             <header class="cabecalhos">Passatempos</header>
             <div id="menuPrincipal" align="center">
-    			<button onclick="$('#passatempos').hide();$('#sudoku').show();$('.backbutton').show();savedivname('sudoku')" type="button" class="menuItem">Sudoku</button>
+    			<button onclick="$('#passatempos').hide();$('#sudoku').show();$('.backbutton').show();savedivname('#sudoku')" type="button" class="menuItem">Sudoku</button>
             </div>
 
-            <button onclick="$('#passatempos').hide();$('#entretenimento').show();savedivname('entretenimento')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#passatempos').hide();$('#entretenimento').show();savedivname('#entretenimento')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
         </div>
 
         <div id="pong">
             <img id="pongif" src="../images/pong.gif" />
-            <button onclick="$('#pong').hide();$('#jogos').show();savedivname('jogos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#pong').hide();$('#jogos').show();savedivname('#jogos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
         </div>
     
          <div id="sudoku">
             <img id="sudokugif" src="../images/sudoku.gif" />
-            <button onclick="$('#sudoku').hide();$('#jogos').show();savedivname('passatempos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+            <button onclick="$('#sudoku').hide();$('#jogos').show();savedivname('#passatempos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
         </div>
 
         
@@ -336,40 +336,41 @@
             
             
             <div id="menuPrincipal" aling="center" style="display: inline-table; margin-top: 10vh;">
-              <div id="metodospagamento">
-                <h3 id="headermetodospagamento">Métodos de pagamento</h3>
-                <img src="../images/202365-200.png" id="pDinheiro" class="imagempagamento imgbutton" onclick="changePayMethod(0)" style="box-shadow: 0px 0px 50px transparent;"/>
-                <img src="../images/2000px-Multibanco.svg_.png" id="pMultibanco" class="imagempagamento imgbutton" onclick="changePayMethod(1)" />
-              </div> 
+                <div id="metodospagamento">
+                    <h3 id="headermetodospagamento">Métodos de pagamento</h3>
+                    <img src="../images/202365-200.png" id="pDinheiro" class="imagempagamento imgbutton" onclick="changePayMethod(0)" style="box-shadow: 0px 0px 50px transparent;"/>
+                    <img src="../images/2000px-Multibanco.svg_.png" id="pMultibanco" class="imagempagamento imgbutton" onclick="changePayMethod(1)" />
+                </div> 
                 <div id="nifdiv" align="center">
-                <input type="text" pattern="\d*" id="nifinput" class="form-control input-lg" maxlength="9" placeholder="NIF" align="center" >
+                    <input type="text" pattern="\d*" id="nifinput" class="form-control input-lg" maxlength="9" placeholder="NIF" align="center" >
+
+                    <table id="numtable" align="center" >
+                        <tr>
+                            <td class="num btn-default">1</td>
+                            <td class="num btn-default">2</td>
+                            <td class="num btn-default">3</td>
+                        </tr>
+                        <tr>
+                            <td class="num btn-default">4</td>
+                            <td class="num btn-default">5</td>
+                            <td class="num btn-default">6</td>
+                        </tr>
+                        <tr>
+                            <td class="num btn-default">7</td>
+                            <td class="num btn-default">8</td>
+                            <td class="num btn-default">9</td>
+                        </tr>
+                        <tr>
+                            <td class="num btn-success">OK</td>
+                            <td class="num btn-default">0</td>
+                            <td class="num btn-info">C</td>
+                        </tr>
+                    </table>
                 
-                <table id="numtable" align="center" >
-                    <tr>
-                        <td class="num btn-default">1</td>
-                        <td class="num btn-default">2</td>
-                        <td class="num btn-default">3</td>
-                    </tr>
-                    <tr>
-                        <td class="num btn-default">4</td>
-                        <td class="num btn-default">5</td>
-                        <td class="num btn-default">6</td>
-                    </tr>
-                    <tr>
-                        <td class="num btn-default">7</td>
-                        <td class="num btn-default">8</td>
-                        <td class="num btn-default">9</td>
-                    </tr>
-                    <tr>
-                        <td class="num btn-success">OK</td>
-                        <td class="num btn-default">0</td>
-                        <td class="num btn-info">C</td>
-                    </tr>
-                </table>
-                
-            </div>
+                </div>
             </div>
             
+            <button onclick="$('#terminar').hide();$(lastdiv).show();$('#finishmeal').show();choosesavediv(lastdiv)" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>            
             
         </div>
 <!-- - - - - - - - - - - - - - - - - - - LOGIN - - - - - - - - - - - - - - - - - - -->
@@ -403,8 +404,8 @@
 				</form>
 
                 <div id="loginOptionsDiv">
-                    <img onclick="$('#loginpage').hide();$('#facescan').show();$('.backbutton').show();move();saveldivname('facescan');clearUsername()" src="../images/login/face.png" id="loginOptions" class="imgbutton loginbutton" alt="Reconhecimento facial" />
-                    <img onclick="$('#loginpage').hide();$('#nfcscan').show();$('.backbutton').show();move();saveldivname('nfcscan');clearUsername()" src="../images/login/nfcbutton.png" id="loginOptions" class="imgbutton loginbutton" alt="NFC" />
+                    <img onclick="$('#loginpage').hide();$('#facescan').show();$('.backbutton').show();move();saveldivname('#facescan');clearUsername()" src="../images/login/face.png" id="loginOptions" class="imgbutton loginbutton" alt="Reconhecimento facial" />
+                    <img onclick="$('#loginpage').hide();$('#nfcscan').show();$('.backbutton').show();move();saveldivname('#nfcscan');clearUsername()" src="../images/login/nfcbutton.png" id="loginOptions" class="imgbutton loginbutton" alt="NFC" />
                     <img onclick="showBar();clearUsername()" src="../images/login/fingerprinticon.png" id="loginOptions" class="imgbutton loginbutton" alt="Impressão digital" />
                 </div> 
 	        </div>
@@ -449,9 +450,9 @@
 	    	</div>
 	        <br />
 	        <div id="menuPrincipal" align="center">
-	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#promocoes').show();$('.backbutton').show();saveldivname('promocoes')">Promoções</button>
-	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#sugestoes').show();$('.backbutton').show();saveldivname('sugestoes')">Sugestões do Chef</button>
-	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#dadospessoais').show();$('.backbutton').show();saveldivname('dadospessoais')">Dados Pessoais</button>
+	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#promocoes').show();$('.backbutton').show();saveldivname('#promocoes')">Promoções</button>
+	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#sugestoes').show();$('.backbutton').show();saveldivname('#sugestoes')">Sugestões do Chef</button>
+	            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#dadospessoais').show();$('.backbutton').show();saveldivname('#dadospessoais')">Dados Pessoais</button>
 	        </div>
 			
 			<button onclick="$('#pessoal').hide();$(divname).show();$('.backbutton').show();exit()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
@@ -493,7 +494,7 @@
                         <input type="text" id="modifyname" class="form-control input-lg" placeholder="Modificar Nome">
                         <input type="text" id="modifynif" class="form-control input-lg" placeholder="Modificar NIF">
 
-                        <button type="button" class="btn-lg" id="modifyconfirm" onclick="storeUsername('modifyname')" ><span class="buttontext">OK</span></button>
+                        <button type="button" class="btn-lg" id="modifyconfirm" onclick="storeUsername('modifyname');storeNIF('modifynif')" ><span class="buttontext">OK</span></button>
                     </form>
 
                     <button type="button" class="menuItem" onclick="window.location='alergias.html'">Alergias</button>
