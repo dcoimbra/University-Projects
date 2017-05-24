@@ -4,10 +4,10 @@ body {
 	font-family: "Myriad Pro", Myriad, "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
-#bebidas, #pratos, #entradas, #sobremesas, 
+#menupage, #bebidas, #pratos, #entradas, #sobremesas, #order, #finishmeal, 
 #apospedido, #entretenimento, #jogos, #passatempos, #pong, #sudoku, 
 #loginpage, #facescan, #nfcscan, 
-#pessoal, #dadospessoais, #promocoes, #sugestoes, #terminar {
+#pessoal, #dadospessoais, #promocoes, #sugestoes, #alergias, #terminar, #fim {
 
 	display: none;
 }
@@ -498,4 +498,24 @@ button {
     margin-top: 49vh;
     width: 16%;
     height: 12%;
+}
+
+#endtext {
+    font-size: 350%;
+    margin-top: 10%;
+    margin-bottom: 5%;
+}
+
+#endtext2 {
+    width: 80vw;
+}
+
+.endbutton {
+    width: 10%;
+    padding: 1% 0.5%;
+    margin: 0 1%;
+}
+
+#fim2 {
+    overflow-x: hidden;
 }

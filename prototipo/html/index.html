@@ -20,6 +20,11 @@
 
         <button type="button" id="waitbutton">Enquanto Espera</button>
         
+<!--------------------------------- ECRA INICIAL ---------------------------------->
+        <div id="ecrainicial">
+            <img src="../images/ecra_inicial/comecar.svg" id="comecarbutton" alt="começar" onclick="$('#ecrainicial').hide();$('#menupage').show();$('#order').show();$('#finishmeal').show();savedivname('#menupage')"/>
+        </div>
+        
 <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - -  -->
 		<div id="menupage">
             <header class="cabecalhos">Menu</header>
@@ -181,7 +186,7 @@
                     });
                 </script>
 
-                <button onclick="$('#pratos').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+                <button onclick="$('#pratos').hide();$('#menupage').show();savedivname('#menupage');$('#esparguete').popover('hide');$('#bacalhau').popover('hide')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
 
             </div>
 
@@ -362,7 +367,7 @@
                             <td class="num btn-default">9</td>
                         </tr>
                         <tr>
-                            <td class="num btn-success">OK</td>
+                            <td class="num btn-success" onclick="$('#terminar').hide();$('#fim').show();$('.backbutton').hide();$('#loginbutton').hide();$('#order').hide();$('#waiterbutton').hide()">OK</td>
                             <td class="num btn-default">0</td>
                             <td class="num btn-info">C</td>
                         </tr>
@@ -374,6 +379,17 @@
             <button onclick="$('#terminar').hide();$(lastdiv).show();$('#finishmeal').show();choosesavediv(lastdiv)" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>            
             
         </div>
+        
+        <div id="fim">
+            <div align="center">
+                <header id="endtext">Obrigado e até breve!<br/>Volte sempre! :)</header>
+                <br />
+                <h2 id="endtext2">Ajude-nos respondendo a um pequeno questionário sobre a sua experiência com a nossa interface!</h2>
+                <button type="button" class="btn-success endbutton" onclick="window.open('https://goo.gl/forms/GHbBYnnFBQ9n70hy2')">Sim!</button>
+                <button type="button" class="btn-danger endbutton" onclick="location.reload()">Não.</button>
+            </div>
+        </div>
+        
 <!-- - - - - - - - - - - - - - - - - - - LOGIN - - - - - - - - - - - - - - - - - - -->
 		<div id="loginpage">
 	        <!-- Custom styles for this template -->
@@ -445,7 +461,7 @@
 <!------------------------------AREA PESSOAL------------------------------------->
 
 		<div id="pessoal">
-			<div class="headercontainer">
+			<div class="headercontainer"> 
 	    		<header class="cabecalhos" id="header1">Olá, utilizador!</header>
 	    		<h2 class="centerheader" id="header2">Área Pessoal</h2>
 	    	</div>
@@ -498,11 +514,21 @@
                         <button type="button" class="btn-lg" id="modifyconfirm" onclick="storeUsername('modifyname');storeNIF('modifynif')" ><span class="buttontext">OK</span></button>
                     </form>
 
-                    <button type="button" class="menuItem" onclick="window.location='alergias.html'">Alergias</button>
+                    <button type="button" class="menuItem" onclick="$(divloginname).hide();$('#alergias').show();saveldivname('#alergias')">Alergias</button>
     			    <button type="button" class="menuItem">Configurar métodos de Login</button>
               </div>                
                 
               <button onclick="$('#dadospessoais').hide();$('#pessoal').show();setUsername()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+            </div>
+        
+            <div id="alergias">
+                <header class="cabecalhos">Alergias</header>
+                <div id="menuPrincipal" align="center">
+                    <h2><br />Não existem alergias. Seja feliz!</h2>
+                    <button type="button" class="menuItem" style="display: none;">Modificar</button>
+                </div>
+                
+                <button onclick="$(divloginname).hide();$('#dadospessoais').show();saveldivname('#dadospessoais')" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
             </div>
 			
 			<div class="modal fade" id="myModal" role="dialog">

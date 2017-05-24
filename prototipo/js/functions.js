@@ -7,7 +7,7 @@ var inPreview = [];
 var countQueue = 0;
 var loggedin = 'false';
 var arealoggedin = 'false';
-var divname = '#menupage';
+var divname = '#ecrainicial';
 var divloginname = '#loginpage';
 
 
