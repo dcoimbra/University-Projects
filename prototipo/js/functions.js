@@ -125,6 +125,7 @@ function adicionaPedido(coisa, price, estado, prepTime) {
         countQueue--;
         if (countQueue == 0) {
             $('#finishmeal').show();
+            $('#readymodal').modal();
         }
     }
     
@@ -175,6 +176,7 @@ function removeOnClick(coisa, price, estado) {
     removeRow(coisa, price, estado);
     
     count--;
+    countQueue--;
     switchbottomrightbutton();
 
 }
