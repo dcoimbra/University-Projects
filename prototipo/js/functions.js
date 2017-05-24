@@ -10,7 +10,8 @@ var arealoggedin = 'false';
 var divname = '#ecrainicial';
 var divloginname = '#loginpage';
 var oldusername, oldnif;
-
+var firstTime = 1;
+var nifCount = 0;
 
 function makeBarInvisible() {
     var i;
@@ -403,4 +404,33 @@ function changePayMethod(multibanco) {
         document.getElementById("pMultibanco").style.boxShadow = "0px 0px 50px transparent";       
     }
     
+}
+
+function writeNumber(num) {
+    var nif = (document.getElementById("nifinput")).value;
+    if(firstTime) {
+        ((document.getElementById("nifinput")).value) = num;
+        firstTime = 0;
+        nifCount++;
+    }
+    else if(nifCount < 9) {
+        ((document.getElementById("nifinput")).value) += num;
+        nifCount++;
+    }
+    
+    console.log(nifCount);
+}
+
+function eraseNumber() {
+    if(nifCount > 0 ) {
+       var nif =  (document.getElementById("nifinput")).value;
+        if (nif > 10) 
+            nif = Math.floor(nif/10);
+        else
+            nif = "";
+        
+        (document.getElementById("nifinput")).value = nif;
+        nifCount--
+        console.log(nifCount);
+    }
 }
