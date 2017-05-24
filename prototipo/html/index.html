@@ -154,11 +154,12 @@
 
 
 <!-- TODO: Adicionar informação relativa a alergias + Acompanhamentos -->
-               <div id="popoverbacalhau" style="display: none">
-                <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)"><p>Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</p><button type="button" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
+                <div id="popoverbacalhau" style="display: none">
+                    <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)"><p>Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</p><button type="button" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
 
                 <div id="popoveresparguete" style="display: none">
-                <img class="foodimage" src="../images/esparguete.jpg" alt="Esparguete à Bolonhesa" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)"><p>Original da cidade italiana de Bolonha, é uma das pastas italianas mais apreciadas em todo o mundo.</p><button type="button" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
+                    <img class="foodimage" src="../images/esparguete.jpg" alt="Esparguete à Bolonhesa" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)"><p>Original da cidade italiana de Bolonha, é uma das pastas italianas mais apreciadas em todo o mundo.</p><button type="button" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button>
+                </div>
 
                 <script type="text/javascript">
                     $(document).ready(function(){
@@ -400,7 +401,7 @@
 					<label for="inputPassword" class="sr-only">Password</label>
 					<input name="inputPassword" lang="pt" type="password" id="inputPassword" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Password" />
 					<br />
-					<button onclick="storeUsername('inputUsername')" type="submit" class="btn-lg" id="loginconfirm"><span class="buttontext">LOGIN</span></button>
+					<button onclick="storeUsername('inputUsername');setUsername();$('#loginpage').hide();login();$('#pessoal').show();$('#loginbutton').show()" type="button" class="btn-lg" id="loginconfirm"><span class="buttontext">LOGIN</span></button>
 				</form>
 
                 <div id="loginOptionsDiv">
@@ -475,9 +476,9 @@
             
             <div id="menuPrincipal" align="center">
                 
-                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show()">Bacalhau com Natas</button>
+                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show();exit();savedivname('#pratos');$('#bacalhau').popover('show');">Bacalhau com Natas</button>
                 
-                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show()">Esparguete à Bolonhesa</button>
+                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show();exit();savedivname('#pratos');$('#esparguete').popover('show');">Esparguete à Bolonhesa</button>
             </div>
             
             <button onclick="$('#sugestoes').hide();$('#pessoal').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
