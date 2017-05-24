@@ -444,7 +444,7 @@
 
 		<div id="pessoal">
 			<div class="headercontainer">
-	    		<header class="cabecalhos">Olá, utilizador!</header>
+	    		<header class="cabecalhos" id="header1">Olá, utilizador!</header>
 	    		<h2 class="centerheader" id="header2">Área Pessoal</h2>
 	    	</div>
 	        <br />
@@ -493,14 +493,14 @@
                         <input type="text" id="modifyname" class="form-control input-lg" placeholder="Modificar Nome">
                         <input type="text" id="modifynif" class="form-control input-lg" placeholder="Modificar NIF">
 
-                        <button onclick="storeUsername('modifyname')" type="submit" class="btn-lg" id="modifyconfirm"><span class="buttontext">OK</span></button>
+                        <button type="button" class="btn-lg" id="modifyconfirm" onclick="storeUsername('modifyname')" ><span class="buttontext">OK</span></button>
                     </form>
 
                     <button type="button" class="menuItem" onclick="window.location='alergias.html'">Alergias</button>
     			    <button type="button" class="menuItem">Configurar métodos de Login</button>
               </div>                
                 
-              <button onclick="$('#dadospessoais').hide();$('#pessoal').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+              <button onclick="$('#dadospessoais').hide();$('#pessoal').show();setUsername()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
             </div>
 			
 			<div class="modal fade" id="myModal" role="dialog">
