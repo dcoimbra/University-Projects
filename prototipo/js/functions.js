@@ -56,12 +56,14 @@ function storeNIF(value) {
 }
 
 function checkchange(id, value) {
-    var username = document.getElementById(id);
-    var nif = document.getElementById(value);
+    var username = document.getElementById(id).value;
+    var nif = document.getElementById(value).value;
     
     if (((username != null) || (nif != null)) && ((username != oldusername) || (nif != oldnif))) {
         sessionStorage.setItem("username", username.value);
         sessionStorage.setItem("nif", nif.value);
+        oldusername = username;
+        oldnif = nif;
         $('#dadosmodal').modal();
     }
 }
