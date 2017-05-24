@@ -503,9 +503,9 @@
             
             <div id="menuPrincipal" align="center">
                 
-                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show();exit();savedivname('#pratos');$('#bacalhau').popover('show');">Bacalhau com Natas</button>
+                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show();exit();savedivname('#pratos');$('#bacalhau').popover('show');$('#order').show()">Bacalhau com Natas</button>
                 
-                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show();exit();savedivname('#pratos');$('#esparguete').popover('show');">Esparguete à Bolonhesa</button>
+                <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show();exit();savedivname('#pratos');$('#esparguete').popover('show');$('#order').show()">Esparguete à Bolonhesa</button>
             </div>
             
             <button onclick="$('#sugestoes').hide();$('#pessoal').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
@@ -522,7 +522,7 @@
                         <input type="text" id="modifyname" class="form-control input-lg" placeholder="Modificar Nome" onclick="showKeyboard()">
                         <input type="text" id="modifynif" class="form-control input-lg" placeholder="Modificar NIF" onclick="showKeyboard()">
 
-                        <button type="button" class="btn-lg" id="modifyconfirm" onclick="storeUsername('modifyname');storeNIF('modifynif'); hideKeyboard()" ><span class="buttontext">OK</span></button>
+                        <button type="button" class="btn-lg" id="modifyconfirm" onclick="checkchange('modifyname', 'modifynif'); hideKeyboard()" ><span class="buttontext">OK</span></button>
                     </form>
 
                     <button type="button" class="menuItem" onclick="$(divloginname).hide();$('#alergias').show();saveldivname('#alergias')">Alergias</button>
@@ -557,8 +557,19 @@
 	                </div>
 	            </div>
 	        </div>
+	        
+	        <div class="modal fade" id="dadosmodal" role="dialog">
+	            <div class="modal-dialog">
+	                <div class="modal-content">
+	                    <div class="modal-header">Dados pessoais alterados com sucesso!</div> 
+	                    <div class="modal-footer">
+	                        <button type="button" class="btn btn-success modalbutton" data-dismiss="modal">Ok</button>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
         
-        <img src="../images/keyboard.png" id="keyboardImage" class="imgbutton" alt="teclado" align="center" />
+            <img src="../images/keyboard.png" id="keyboardImage" class="imgbutton" alt="teclado" align="center" />
 			
 <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
                 

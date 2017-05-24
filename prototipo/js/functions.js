@@ -9,6 +9,7 @@ var loggedin = 'false';
 var arealoggedin = 'false';
 var divname = '#ecrainicial';
 var divloginname = '#loginpage';
+var oldusername, oldnif;
 
 
 function makeBarInvisible() {
@@ -52,6 +53,17 @@ function storeUsername(id) {
 function storeNIF(value) {
     var nif = document.getElementById(value);
     sessionStorage.setItem("nif", nif.value);
+}
+
+function checkchange(id, value) {
+    var username = document.getElementById(id);
+    var nif = document.getElementById(value);
+    
+    if (((username != null) || (nif != null)) && ((username != oldusername) || (nif != oldnif))) {
+        sessionStorage.setItem("username", username.value);
+        sessionStorage.setItem("nif", nif.value);
+        $('#dadosmodal').modal();
+    }
 }
 
 /* ----- LISTA DE PEDIDOS ----- */
