@@ -230,7 +230,7 @@ function setUsername() {
 function setNIF() {
     var nif = sessionStorage.getItem("nif");
     
-    if (nif != null) {
+    if (nif != "undefined") {
         document.getElementById('nifinput').value = nif;
     }
 }
