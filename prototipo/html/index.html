@@ -360,6 +360,8 @@
                 <h3 id="headermetodospagamento">Métodos de pagamento</h3>
                 <img src="../images/202365-200.png" id="pDinheiro" class="imagempagamento imgbutton" onclick="changePayMethod(0)" style="box-shadow: 0px 0px 50px transparent;" />
                 <img src="../images/2000px-Multibanco.svg_.png" id="pMultibanco" class="imagempagamento imgbutton" onclick="changePayMethod(1)" />
+                
+                <button type="button" id="paybutton" class="btn-success" onclick="checkpayment()" align="center">Efetivar pagamento</button>
             </div>
             <div id="nifdiv" align="center">
                 <input type="text" pattern="\d*" id="nifinput" class="form-control input-lg" maxlength="9" placeholder="NIF" align="center">
@@ -388,6 +390,7 @@
             </table>
 
             </div>
+            
         </div>
 
         <button onclick="$('#terminar').hide();$(lastdiv).show();$('#finishmeal').show();choosesavediv(lastdiv)" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>

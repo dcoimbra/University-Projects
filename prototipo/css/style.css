@@ -156,6 +156,14 @@ button {
     font-size: 85%;
 }
 
+#paybutton {
+    
+    margin-top: 2vh;
+    padding: 1vh 1vw;
+    font-size: 150%;
+    border: solid black;
+}
+
 #nifdiv {
     width: 30vw;
     height: 25vh;
