@@ -61,8 +61,8 @@ function checkchange(id, value) {
     var nif = document.getElementById(value).value;
     
     if (((username != null) || (nif != null)) && ((username != oldusername) || (nif != oldnif))) {
-        sessionStorage.setItem("username", username.value);
-        sessionStorage.setItem("nif", nif.value);
+        sessionStorage.setItem("username", username);
+        sessionStorage.setItem("nif", nif);
         oldusername = username;
         oldnif = nif;
         $('#dadosmodal').modal();
@@ -233,6 +233,7 @@ function setNIF() {
     
     if (nif != "undefined") {
         document.getElementById('nifinput').value = nif;
+        nifCount = nif.length;
     }
 }
 
@@ -436,7 +437,7 @@ function eraseNumber() {
             nif = "";
         
         (document.getElementById("nifinput")).value = nif;
-        nifCount--
+        nifCount--;
         console.log(nifCount);
     }
 }
