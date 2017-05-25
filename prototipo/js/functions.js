@@ -56,17 +56,24 @@ function storeNIF(value) {
     sessionStorage.setItem("nif", nif.value);
 }
 
-function checkchange(id, value) {
+function checkchange(id, nifvalue) {
+    var change = 0;
     var username = document.getElementById(id).value;
-    var nif = document.getElementById(value).value;
+    var nif = document.getElementById(nifvalue).value;
     
-    if (((username != null) || (nif != null)) && ((username != oldusername) || (nif != oldnif))) {
+    if ((username != "") && (username != oldusername)) {
         sessionStorage.setItem("username", username);
-        sessionStorage.setItem("nif", nif);
         oldusername = username;
-        oldnif = nif;
-        $('#dadosmodal').modal();
+        change = 1;
     }
+        
+    if ( (nif != "") && (nif != oldnif)) {
+        sessionStorage.setItem("nif", nif);
+        oldnif = nif;
+        change = 1;
+    }
+    
+    if(change) { $('#dadosmodal').modal(); }
 }
 
 /* ----- LISTA DE PEDIDOS ----- */
