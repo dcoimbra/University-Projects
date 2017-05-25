@@ -436,18 +436,24 @@ button {
 #myProgress {
 	visibility: visible;
 	margin-left: 35%;
+    margin-top: 75vh;
+    top: 0;
 	width: 30%;
 	height: 30px;
 	position: absolute;
 	background-color: #ddd;
 }
 
-#myBar {
+.myBar {
 	visibility: visible;
 	background-color: #A8A8A8;
 	width: 10px;
 	height: 30px;
 	position: absolute;
+}
+
+.nfc, .face {
+    position: absolute;
 }
 
 .modal-header {

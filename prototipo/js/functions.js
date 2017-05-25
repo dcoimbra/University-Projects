@@ -21,16 +21,16 @@ function makeBarInvisible() {
         popup[i].style.visibility='hidden';
 }
 
-function showBar() {
+function showBar(name, idname) {
     var i;
-    var popup = document.getElementsByClassName("popup");
+    var popup = document.getElementsByClassName(name);
     for (i = 0; i < popup.length; i++)
         popup[i].style.visibility='visible';
-    move();
+    move(idname);
 }
 
-function move() {
-    var elem = document.getElementById("myBar");
+function move(name) {
+    var elem = document.getElementById(name);
     var width = 0;
     var id = setInterval(frame, 10);
     function frame() {

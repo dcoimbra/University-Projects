@@ -451,14 +451,14 @@
             </form>
 
             <div id="loginOptionsDiv">
-                <img onclick="$('#loginpage').hide();$('#facescan').show();$('.backbutton').show();move();saveldivname('#facescan');clearUsername()" src="../images/login/face.png" id="loginOptions" class="imgbutton loginbutton" alt="Reconhecimento facial" />
-                <img onclick="$('#loginpage').hide();$('#nfcscan').show();$('.backbutton').show();move();saveldivname('#nfcscan');clearUsername()" src="../images/login/nfcbutton.png" id="loginOptions" class="imgbutton loginbutton" alt="NFC" />
-                <img onclick="showBar();clearUsername()" src="../images/login/fingerprinticon.png" id="loginOptions" class="imgbutton loginbutton" alt="Impressão digital" />
+                <img onclick="$('#loginpage').hide();$('#facescan').show();$('.backbutton').show();showBar('face', 'barface');saveldivname('#facescan');clearUsername()" src="../images/login/face.png" id="loginOptions" class="imgbutton loginbutton" alt="Reconhecimento facial" />
+                <img onclick="$('#loginpage').hide();$('#nfcscan').show();$('.backbutton').show();showBar('nfc', 'barnfc');saveldivname('#nfcscan');clearUsername()" src="../images/login/nfcbutton.png" id="loginOptions" class="imgbutton loginbutton" alt="NFC" />
+                <img onclick="showBar('finger', 'barfinger');clearUsername()" src="../images/login/fingerprinticon.png" id="loginOptions" class="imgbutton loginbutton" alt="Impressão digital" />
             </div>
         </div>
 
-        <div class="popup" id="myProgress">
-            <div class="popup" id="myBar"></div>
+        <div class="popup finger" id="myProgress">
+            <div class="myBar popup finger" id="barfinger"></div>
         </div>
 
         <button onclick="$('#loginpage').hide();$(divname).show();$('#loginbutton').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
@@ -470,8 +470,8 @@
 
         <img src="../images/scan/placeface.png" class="placehere" alt="Put your face here" />
 
-        <div class="popup" id="myProgress">
-            <div class="popup" id="myBar"></div>
+        <div class="popup face" id="myProgress">
+            <div class="popup face myBar" id="barface"></div>
         </div>
         <button onclick="$('#facescan').hide();$('#loginpage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
     </div>
@@ -481,8 +481,8 @@
 
         <img src="../images/scan/nfcscan.png" class="placehere" alt="Put your phone here" />
 
-        <div class="popup" id="myProgress">
-            <div class="popup" id="myBar"></div>
+        <div class="popup nfc" id="myProgress">
+            <div class="myBar popup nfc" id="barnfc"></div>
         </div>
 
         <button onclick="$('#nfcscan').hide();$('#loginpage').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
