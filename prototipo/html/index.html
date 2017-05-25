@@ -381,7 +381,7 @@
                     <td class="num btn-default" onClick="writeNumber('9')">9</td>
                 </tr>
                 <tr>
-                    <td class="num btn-success" onclick="$('#terminar').hide();$('#fim').show();$('.backbutton').hide();$('#loginbutton').hide();$('#order').hide();$('#waiterbutton').hide();$('#helpbutton').hide()">OK</td>
+                    <td class="num btn-success" onclick="checkpayment()">OK</td>
                     <td class="num btn-default" onClick="writeNumber('0')">0</td>
                     <td class="num btn-info" onClick="eraseNumber()">C</td>
                 </tr>
@@ -401,6 +401,18 @@
             <h2 id="endtext2">Ajude-nos respondendo a um pequeno questionário sobre a sua experiência com a nossa interface!</h2>
             <button type="button" class="btn-success endbutton" onclick="window.open('https://goo.gl/forms/GHbBYnnFBQ9n70hy2')">Sim!</button>
             <button type="button" class="btn-danger endbutton" onclick="location.reload()">Não.</button>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="paymentmodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">Método de pagamento não selecionado!</div>
+                <div class="modal-body">Por favor, selecione um método de pagamento.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success modalbutton" data-dismiss="modal">OK</button>
+                </div>
+            </div>
         </div>
     </div>
 

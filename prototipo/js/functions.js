@@ -12,6 +12,7 @@ var divloginname = '#loginpage';
 var oldusername, oldnif;
 var firstTime = 1;
 var nifCount = 0;
+var paymentselected = 0;
 
 function makeBarInvisible() {
     var i;
@@ -410,10 +411,12 @@ function hideKeyboard() {
 function changePayMethod(multibanco) {
 
     if(multibanco) {
+        paymentselected = 1;
         document.getElementById("pMultibanco").style.boxShadow = "0px 0px 50px forestgreen";
         document.getElementById("pDinheiro").style.boxShadow = "0px 0px 50px transparent";
     }
     else {
+        paymentselected = 1;
         document.getElementById("pDinheiro").style.boxShadow = "0px 0px 50px forestgreen";
         document.getElementById("pMultibanco").style.boxShadow = "0px 0px 50px transparent";       
     }
@@ -446,5 +449,19 @@ function eraseNumber() {
         (document.getElementById("nifinput")).value = nif;
         nifCount--;
         console.log(nifCount);
+    }
+}
+
+function checkpayment() {
+    if (paymentselected == 0)
+        $('#paymentmodal').modal();
+    else {
+        $('#terminar').hide();
+        $('#fim').show();
+        $('.backbutton').hide();
+        $('#loginbutton').hide();
+        $('#order').hide();
+        $('#waiterbutton').hide();
+        $('#helpbutton').hide()
     }
 }
