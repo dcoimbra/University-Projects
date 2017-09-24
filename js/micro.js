@@ -2,22 +2,28 @@
 
 var camera, scene, renderer;
 
+/* tamanho da area visivel */
+var frustumSize = 200;
+
 function createCamera() {
 	
 	'use strict'
 
-	camera = new THREE.OrthographicCamera( window.innerWidth / - 2, 
-										   window.innerWidth / 2, 
-										   window.innerHeight / 2, 
-										   window.innerHeight / - 2, 
-										   1, 
-										   1000 );
+	var aspect = window.innerWidth / window.innerHeight;
 
+	/* camara ortogonal inicializada tal como na documentacao do three.js */
+	camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2, 
+										  frustumSize * aspect / 2, 
+										  frustumSize / 2, 
+										  frustumSize / - 2, 
+										  1, 
+										  1000);
+
+	/* camara posicionada em vista de topo */
 	camera.position.x = 0;
 	camera.position.y = 50;
 	camera.position.z = 0;
 	camera.lookAt(scene.position);
-
 }
 
 function createScene() {
@@ -25,21 +31,24 @@ function createScene() {
 	'use strict';
 
 	scene = new THREE.Scene();
-	scene.add(new THREE.AxisHelper(50));
+	scene.add(new THREE.AxisHelper(10));
 }
 
 function onResize() {
 
 	'use strict';
 
+	var aspect = window.innerWidth / window.innerHeight; 
+
+	camera.left = - frustumSize * aspect / 2;
+	camera.right = frustumSize * aspect / 2;
+	camera.top = frustumSize / 2;
+	camera.bottom = - frustumSize / 2;
+	
+	camera.updateProjectionMatrix();
+
 	renderer.setSize(window.innerWidth, window.innerHeight);
-
-	if (window.innerHeight > 0 && window.innerWidth > 0) {
-
-		camera.aspect = renderer.getSize().width / renderer.getSize().height;
-		camera.updateProjectionMatrix();
-	}
-
+	
 	render();
 }
 
@@ -87,6 +96,6 @@ function init() {
 
 	render();
 
-	window.addEventListener("resize", onResize);
+	window.addEventListener('resize', onResize);
 	window.addEventListener("keydown", onKeyDown);
 }
