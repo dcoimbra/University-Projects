@@ -6,10 +6,12 @@ function createCamera() {
 	
 	'use strict'
 
-	camera = new THREE.PerspectiveCamera(70,
-										 window.innerWidth / window.innerHeight,
-										 1,
-										 1000);
+	camera = new THREE.OrthographicCamera( window.innerWidth / - 2, 
+										   window.innerWidth / 2, 
+										   window.innerHeight / 2, 
+										   window.innerHeight / - 2, 
+										   1, 
+										   1000 );
 
 	camera.position.x = 0;
 	camera.position.y = 50;
@@ -23,7 +25,7 @@ function createScene() {
 	'use strict';
 
 	scene = new THREE.Scene();
-	scene.add(new THREE.AxisHelper(10));
+	scene.add(new THREE.AxisHelper(50));
 }
 
 function onResize() {
