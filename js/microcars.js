@@ -3,7 +3,7 @@
 var camera, scene, renderer;
 
 /* tamanho da area visivel */
-var frustumSize = 200;
+var frustumSize = 100;
 
 function createCamera() {
 	
@@ -21,7 +21,7 @@ function createCamera() {
 
 	/* camara posicionada em vista de topo */
 	camera.position.x = 0;
-	camera.position.y = 50;
+	camera.position.y = 25;
 	camera.position.z = 0;
 	camera.lookAt(scene.position);
 }
