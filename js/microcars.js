@@ -1,33 +1,59 @@
 /*global THREE*/
 
+ /*********************************************Variaveis globais*************************************************************/
 var camera, scene, renderer;
 
 /* tamanho da area visivel */
 var frustumSize = 100;
+/*-------------------------------------------------------------------------------------------------------------------------*/
 
-function addTableTop(obj, material, x, y, z) {
+/******************************************Criacao da cena*****************************************************************/
+function createScene() {
 
 	'use strict';
 
-	var tabletop_geometry = new THREE.CubeGeometry(110, 2, 40);
-	var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
-	tabletop_mesh.position.set(x, y, z);
+	scene = new THREE.Scene();
+	scene.add(new THREE.AxisHelper(10));
 
-	obj.add(tabletop_mesh);
+	createTable(0, 0, 0);
+	createTrack();
 }
+/*------------------------------------------------------------------------------------------------------------------------*/
 
-/* DESCOMENTAR QUANDO NECESSARIO 
-function addTableLeg(obj, material, x, y, z) {
+
+/********************************************Criacao da camera************************************************************/
+function createCamera() {
 
 	'use strict';
 
-	var tableleg_geometry = new THREE.CubeGeometry(2, 6, 2);
-	var tableleg_mesh = new THREE.Mesh(tableleg_geometry, material);
-	tableleg_mesh.position.set(x, y - 3, z);
-	
-	obj.add(tableleg_mesh);
-} */
+	var aspect = window.innerWidth / window.innerHeight;
 
+	/* camara ortogonal inicializada tal como na documentacao do three.js */
+	camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2,
+										  frustumSize * aspect / 2,
+										  frustumSize / 2,
+										  frustumSize / - 2,
+										  1,
+										  1000);
+
+	/* camara posicionada em vista de topo */
+	camera.position.x = 0;
+	camera.position.y = 25;
+	camera.position.z = 0;
+	camera.lookAt(scene.position);
+}
+/*------------------------------------------------------------------------------------------------------------------------*/
+
+/**********************************************Cricao do render************************************************************/
+function render() {
+
+	'use strict';
+
+	renderer.render(scene, camera);
+}
+/*-------------------------------------------------------------------------------------------------------------------------*/
+
+/**********************************************Criacao da mesa e suas partes***********************************************/
 function createTable(x, y, z) {
 
 	'use strict';
@@ -49,17 +75,43 @@ function createTable(x, y, z) {
 	table.position.z = z;
 }
 
+function addTableTop(obj, material, x, y, z) {
+
+	'use strict';
+
+	var tabletop_geometry = new THREE.CubeGeometry(110, 2, 40);
+	var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
+	tabletop_mesh.position.set(x, y, z);
+
+	obj.add(tabletop_mesh);
+}
+
+/* DESCOMENTAR QUANDO NECESSARIO
+function addTableLeg(obj, material, x, y, z) {
+
+	'use strict';
+
+	var tableleg_geometry = new THREE.CubeGeometry(2, 6, 2);
+	var tableleg_mesh = new THREE.Mesh(tableleg_geometry, material);
+	tableleg_mesh.position.set(x, y - 3, z);
+
+	obj.add(tableleg_mesh);
+} */
+
+/*-----------------------------------------------------------------------------------------------------------------------*/
+
+
 function createTrack() {
 
 	'use strict';
 
-	var pathMaterial = new THREE.LineBasicMaterial( { color: 0xbada55, 
+	var pathMaterial = new THREE.LineBasicMaterial( { color: 0xbada55,
 													  linewidth: 5,
 												    });
 	var pathGeometry = new THREE.Geometry();
 
 	var track = new THREE.CatmullRomCurve3( [
-		
+
 		new THREE.Vector3(-8 * 6, 0, -0.5 * 6),
 		new THREE.Vector3(-7 * 6, 0, 1.5 * 6),
 		new THREE.Vector3(-1.5 * 6, 0, 0.5 * 6),
@@ -75,53 +127,25 @@ function createTrack() {
 	scene.add(curve);
 }
 
-function createCamera() {
-	
-	'use strict';
+/*----------------------------------------------------------------------------------------------------------------*/
 
-	var aspect = window.innerWidth / window.innerHeight;
-
-	/* camara ortogonal inicializada tal como na documentacao do three.js */
-	camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2, 
-										  frustumSize * aspect / 2, 
-										  frustumSize / 2, 
-										  frustumSize / - 2, 
-										  1, 
-										  1000);
-
-	/* camara posicionada em vista de topo */
-	camera.position.x = 0;
-	camera.position.y = 25;
-	camera.position.z = 0;
-	camera.lookAt(scene.position);
-}
-
-function createScene() {
-	
-	'use strict';
-
-	scene = new THREE.Scene();
-	scene.add(new THREE.AxisHelper(10));
-
-	createTable(0, 0, 0);
-	createTrack();
-}
+/***************************************Detalhes de visualizacao e controlo****************************************/
 
 function onResize() {
 
 	'use strict';
 
-	var aspect = window.innerWidth / window.innerHeight; 
+	var aspect = window.innerWidth / window.innerHeight;
 
 	camera.left = - frustumSize * aspect / 2;
 	camera.right = frustumSize * aspect / 2;
 	camera.top = frustumSize / 2;
 	camera.bottom = - frustumSize / 2;
-	
+
 	camera.updateProjectionMatrix();
 
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	
+
 	render();
 }
 
@@ -146,14 +170,9 @@ function onKeyDown(e) {
 
 	render();
 }
+/*---------------------------------------------------------------------------------------------------------------------------------*/
 
-function render() {
-
-	'use strict';
-
-	renderer.render(scene, camera);
-}
-
+/***************************************************Inicializacao*******************************************************************/
 function init() {
 
 	'use strict';
