@@ -49,17 +49,35 @@ function createTable(x, y, z) {
 	table.position.z = z;
 }
 
-function createTrack(x, y, z) {
+function createTrack() {
 
 	'use strict';
 
-	var start_point = new THREE.Vector2()
-	var track = new THREE.LineCurve();
+	var pathMaterial = new THREE.LineBasicMaterial( { color: 0xbada55, 
+													  linewidth: 5,
+												    });
+	var pathGeometry = new THREE.Geometry();
+
+	var track = new THREE.CatmullRomCurve3( [
+		
+		new THREE.Vector3(-8 * 6, 0, -0.5 * 6),
+		new THREE.Vector3(-7 * 6, 0, 1.5 * 6),
+		new THREE.Vector3(-1.5 * 6, 0, 0.5 * 6),
+		new THREE.Vector3(0.5 * 6, 0, -2 * 6),
+		new THREE.Vector3(4 * 6, 0, 1.5 * 6),
+		new THREE.Vector3(6.5 * 6, 0, 3 * 6)
+	] );
+
+	pathGeometry.vertices = track.getPoints(100);
+
+	var curve = new THREE.Line(pathGeometry, pathMaterial);
+
+	scene.add(curve);
 }
 
 function createCamera() {
 	
-	'use strict'
+	'use strict';
 
 	var aspect = window.innerWidth / window.innerHeight;
 
@@ -86,6 +104,7 @@ function createScene() {
 	scene.add(new THREE.AxisHelper(10));
 
 	createTable(0, 0, 0);
+	createTrack();
 }
 
 function onResize() {
