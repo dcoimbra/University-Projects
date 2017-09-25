@@ -5,6 +5,58 @@ var camera, scene, renderer;
 /* tamanho da area visivel */
 var frustumSize = 100;
 
+function addTableTop(obj, material, x, y, z) {
+
+	'use strict';
+
+	var tabletop_geometry = new THREE.CubeGeometry(110, 2, 40);
+	var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
+	tabletop_mesh.position.set(x, y, z);
+
+	obj.add(tabletop_mesh);
+}
+
+/* DESCOMENTAR QUANDO NECESSARIO 
+function addTableLeg(obj, material, x, y, z) {
+
+	'use strict';
+
+	var tableleg_geometry = new THREE.CubeGeometry(2, 6, 2);
+	var tableleg_mesh = new THREE.Mesh(tableleg_geometry, material);
+	tableleg_mesh.position.set(x, y - 3, z);
+	
+	obj.add(tableleg_mesh);
+} */
+
+function createTable(x, y, z) {
+
+	'use strict';
+
+	var table = new THREE.Object3D();
+
+	var table_material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+
+	addTableTop(table, table_material, 0, 0, 0);
+	/* addTableLeg(table, table_material, -25, -1, -8);
+	addTableLeg(table, table_material, -25, -1, 8);
+	addTableLeg(table, table_material, 25, -1, 8);
+	addTableLeg(table, table_material, 25, -1, -8); */
+
+	scene.add(table);
+
+	table.position.x = x;
+	table.position.y = y;
+	table.position.z = z;
+}
+
+function createTrack(x, y, z) {
+
+	'use strict';
+
+	var start_point = new THREE.Vector2()
+	var track = new THREE.LineCurve();
+}
+
 function createCamera() {
 	
 	'use strict'
@@ -32,6 +84,8 @@ function createScene() {
 
 	scene = new THREE.Scene();
 	scene.add(new THREE.AxisHelper(10));
+
+	createTable(0, 0, 0);
 }
 
 function onResize() {
