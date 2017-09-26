@@ -106,7 +106,7 @@ function createTrack() {
 	'use strict';
 
 	var path_material = new THREE.LineBasicMaterial( { color: 0xbada55,
-													  linewidth: 5,
+													  linewidth: 3,
 												    });
 	var path_geometry = new THREE.Geometry();
 
@@ -124,55 +124,48 @@ function createTrack() {
 
 	var track = new THREE.Line(path_geometry, path_material);
 
-	createBorders(curve);
+	createBorders(track, curve);
 
 	scene.add(track);
+
+	track.translateZ(-6);
 }
 
-function createBorders(line) {
+function createBorders(obj, line) {
 
 	'use strict';
-	var tangent_start;
-	var tangent_end;
 
-	var tangent_geometry = new THREE.Geometry();
-
-	var tangent_material = new THREE.LineBasicMaterial( { color: 0x654321,
-															 linewidth: 3,
-														   });
+	var border_Point;
+	
 	for (var i = 0; i < 1; i += 0.03) {
 		
-		tangent_start = line.getPoint(i);
-		tangent_end = line.getTangent(i);
+		border_Point = line.getPoint(i);
 
-		tangent_end.add(tangent_start);
-
-		tangent_geometry.vertices.push(tangent_start);
-		tangent_geometry.vertices.push(tangent_end);
-
-		var tangent = new THREE.Line(tangent_geometry, tangent_material);
-
-		addBoundTorus(tangent_end);
-
-		scene.add(tangent);
+		addBoundTorus(obj, border_Point);
 	}
+
+	var border2 = obj.clone(true);
+
+	scene.add(border2);
+
+	border2.translateZ(3);
 }
 
-function addBoundTorus(location) {
+function addBoundTorus(obj, location) {
 
 	var torus_geometry = new THREE.TorusGeometry( 1, 0.5, 16, 100, Math.PI * 2 );
 	var torus_material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 	var torus = new THREE.Mesh( torus_geometry, torus_material );
-	var aboveVector = new THREE.Vector3(location.getComponent(0), 
-									    6, 
-									    location.getComponent(2));
+	var above_vector = new THREE.Vector3(location.getComponent(0), 
+									     1, 
+									     location.getComponent(2));
 
-	scene.add( torus );
+	torus.position.set(location.getComponent(0), 
+					   0.5, 
+					   location.getComponent(2));
 
-	torus.position.x = location.getComponent(0);
-	torus.position.y = 0.5;
-	torus.position.z = location.getComponent(2);
-	torus.lookAt(aboveVector);
+	obj.add(torus);
+	torus.lookAt(above_vector);
 }
 /*----------------------------------------------------------------------------------------------------------------*/
 
