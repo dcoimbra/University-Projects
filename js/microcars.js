@@ -107,7 +107,12 @@ function createTrack() {
 
 	var path_material = new THREE.LineBasicMaterial( { color: 0x000000,
 													  linewidth: 3,
+													  opacity: 0,
+													  transparent: true
 												    });
+
+
+
 	var path_geometry = new THREE.Geometry();
 
 	var curve = new THREE.CatmullRomCurve3( [
