@@ -35,11 +35,13 @@ function createCamera() {
 
 	/*Camera ortogonal inicializada tal como na documentacao do three.js */
 	camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2,
-										  									frustumSize * aspect / 2,
-										  									frustumSize / 2,
-										  									frustumSize / - 2,
-										  									1,
-										  									1000);
+										  frustumSize * aspect / 2,
+										  frustumSize / 2,
+										  frustumSize / - 2,
+										  1,
+										  1000);
+
+	scene.add(camera);
 
 	/*Camera posicionada em vista de topo */
 	camera.position.x = 0;
@@ -67,10 +69,6 @@ function createTable(x, y, z) {
 	var table_material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
 
 	addTableTop(table, table_material, 0, 0, 0);
-	/* addTableLeg(table, table_material, -25, -1, -8);
-	addTableLeg(table, table_material, -25, -1, 8);
-	addTableLeg(table, table_material, 25, -1, 8);
-	addTableLeg(table, table_material, 25, -1, -8); */
 
 	scene.add(table);
 
@@ -92,18 +90,6 @@ function addTableTop(obj, material, x, y, z) {
 	obj.add(tabletop_mesh);
 }
 
-/* DESCOMENTAR QUANDO NECESSARIO
-function addTableLeg(obj, material, x, y, z) {
-
-	'use strict';
-
-	var tableleg_geometry = new THREE.CubeGeometry(2, 6, 2);
-	var tableleg_mesh = new THREE.Mesh(tableleg_geometry, material);
-	tableleg_mesh.position.set(x, y - 3, z);
-
-	obj.add(tableleg_mesh);
-} */
-
 /*-----------------------------------------------------------------------------------------------------------------------*/
 
 /*****************************************Criacao da pista e suas borders**************************************************/
@@ -115,10 +101,10 @@ function createBorderLine() {
 	//Criacao da geometria, material e respetiva caminho/linha
 	var path_geometry = new THREE.Geometry();
 	var path_material = new THREE.LineBasicMaterial( { color: 0x000000,
-													  												 linewidth: 3,
-													  											 	 opacity: 0,
-													  											   transparent: true
-												    									 			});
+													   linewidth: 3,
+													   opacity: 0,
+													    transparent: true
+												   	 });
 	var border1 = new THREE.Line(path_geometry, path_material);
 
 
@@ -186,12 +172,12 @@ function addBoundTorus(obj, location) {
 	var torus = new THREE.Mesh(torus_geometry, torus_material);
 
 	var above_vector = new THREE.Vector3(location.getComponent(0),
-									     								 1,
-									     								 location.getComponent(2));
+									     1,
+									     location.getComponent(2));
 
 	torus.position.set(location.getComponent(0),
-					   				 0.5,
-					   		 		 location.getComponent(2));
+					   0.5,
+					   location.getComponent(2));
 
 	obj.add(torus);
 	torus.lookAt(above_vector);
@@ -221,10 +207,10 @@ function onResize() {
 
 	var aspect = window.innerWidth / window.innerHeight;
 
-	camera.left = - frustumSize * aspect / 2;
+	camera.left = frustumSize * aspect / - 2;
 	camera.right = frustumSize * aspect / 2;
 	camera.top = frustumSize / 2;
-	camera.bottom = - frustumSize / 2;
+	camera.bottom = frustumSize / - 2;
 
 	camera.updateProjectionMatrix();
 
