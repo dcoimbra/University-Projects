@@ -207,11 +207,15 @@ function createButterPackages(){
 	var y = 2;
 	var z = 0;
 
+	var butterPackage_geometry;
+	var butterPackage_material;
+	var butterPackage;
+
 	for(var i = 0; i <= 5; i++){
 
-		var butterPackage_geometry = new THREE.CubeGeometry(15, 0, 15);
-		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
-		var butterPackage = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+		butterPackage_geometry = new THREE.CubeGeometry(15, 0, 15);
+		butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
+		butterPackage = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
 		x += 10;
 		y += 7;
@@ -232,6 +236,8 @@ function onResize() {
 
 	var aspect = window.innerWidth / window.innerHeight;
 
+	renderer.setSize(window.innerWidth, window.innerHeight);
+
 	camera.left = frustumSize * aspect / - 2;
 	camera.right = frustumSize * aspect / 2;
 	camera.top = frustumSize / 2;
@@ -239,10 +245,9 @@ function onResize() {
 
 	camera.updateProjectionMatrix();
 
-	renderer.setSize(window.innerWidth, window.innerHeight);
-
 	render();
 }
+
 
 /*function onResize() {
     'use strict';
@@ -250,25 +255,30 @@ function onResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     if (window.innerHeight > 0 && window.innerWidth > 0) {
+        
         var aspectRatio = window.innerWidth / window.innerHeight;
-        var height = frustrumSize;
+        var height = frustumSize;
         var width = height;
 
-        if(aspectRatio >= 1) {
-            camera.left = -aspectRatio*height;
-            camera.right = aspectRatio*height;
+        if (aspectRatio >= 1) {
+            
+            camera.left = - aspectRatio * height;
+            camera.right = aspectRatio * height;
             camera.top = height;
-            camera.bottom = -height;
+            camera.bottom = - height;
         }
         else {
-            camera.left = -width;
+            camera.left = - width;
             camera.right = width;
-            camera.top = width/aspectRatio;
-            camera.bottom = -width/aspectRatio;
+            camera.top = width / aspectRatio;
+            camera.bottom = - width / aspectRatio;
         }
+        
         camera.updateProjectionMatrix();
+
+        render();
     }
-}*/
+} */
 
 /*------------------------------------------------------------------------------------------------------------------*/
 function onKeyDown(e) {
