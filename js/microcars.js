@@ -15,8 +15,13 @@ function createScene() {
 	scene = new THREE.Scene();
 	scene.add(new THREE.AxisHelper(10));
 
+	//Posicionamento dos vários objetos
 	createTable(0, 0, 0);
-	careateBorderLine();
+	createBorderLine();
+	createOrange(0, 0, 0);
+	createOrange(15, 10, 5);
+	createOrange(25, 15, 20);
+
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
 
@@ -30,11 +35,11 @@ function createCamera() {
 
 	/*Camera ortogonal inicializada tal como na documentacao do three.js */
 	camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2,
-										  frustumSize * aspect / 2,
-										  frustumSize / 2,
-										  frustumSize / - 2,
-										  1,
-										  1000);
+										  									frustumSize * aspect / 2,
+										  									frustumSize / 2,
+										  									frustumSize / - 2,
+										  									1,
+										  									1000);
 
 	/*Camera posicionada em vista de topo */
 	camera.position.x = 0;
@@ -103,7 +108,7 @@ function addTableLeg(obj, material, x, y, z) {
 
 /*****************************************Criacao da pista e suas borders**************************************************/
 
-function careateBorderLine() {
+function createBorderLine() {
 
 	'use strict';
 
@@ -193,6 +198,21 @@ function addBoundTorus(obj, location) {
 }
 /*----------------------------------------------------------------------------------------------------------------*/
 
+/************************************Construção das manteigas e laranjas******************************************/
+function createOrange(x, y, z){
+
+	var orange_geometry = new THREE.SphereGeometry(7, 23, 13);
+	var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600});
+	var orange = new THREE.Mesh(orange_geometry, orange_material);
+
+	orange.position.x = x;
+	orange.position.y = y;
+	orange.position.z = z;
+
+	scene.add(orange);
+
+}
+/*----------------------------------------------------------------------------------------------------------------*/
 /***************************************Detalhes de visualizacao e controlo****************************************/
 
 function onResize() {
