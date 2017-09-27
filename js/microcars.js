@@ -213,7 +213,7 @@ function createButterPackages(){
 		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
 		var butterPackage = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
-		x += -10;
+		x += 10;
 		y += 7;
 		z += 5;
 
@@ -243,6 +243,32 @@ function onResize() {
 
 	render();
 }
+
+/*function onResize() {
+    'use strict';
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    if (window.innerHeight > 0 && window.innerWidth > 0) {
+        var aspectRatio = window.innerWidth / window.innerHeight;
+        var height = frustrumSize;
+        var width = height;
+
+        if(aspectRatio >= 1) {
+            camera.left = -aspectRatio*height;
+            camera.right = aspectRatio*height;
+            camera.top = height;
+            camera.bottom = -height;
+        }
+        else {
+            camera.left = -width;
+            camera.right = width;
+            camera.top = width/aspectRatio;
+            camera.bottom = -width/aspectRatio;
+        }
+        camera.updateProjectionMatrix();
+    }
+}*/
 
 /*------------------------------------------------------------------------------------------------------------------*/
 function onKeyDown(e) {
