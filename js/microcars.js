@@ -21,6 +21,8 @@ function createScene() {
 	createOrange(0, 0, 0);
 	createOrange(15, 10, 5);
 	createOrange(25, 15, 20);
+	createButterPackages();
+
 
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
@@ -188,7 +190,7 @@ function addBoundTorus(obj, location) {
 function createOrange(x, y, z){
 
 	var orange_geometry = new THREE.SphereGeometry(7, 23, 13);
-	var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600});
+	var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true });
 	var orange = new THREE.Mesh(orange_geometry, orange_material);
 
 	orange.position.x = x;
@@ -199,6 +201,29 @@ function createOrange(x, y, z){
 
 }
 /*----------------------------------------------------------------------------------------------------------------*/
+function createButterPackages(){
+
+	var x = 0;
+	var y = 2;
+	var z = 0;
+
+	for(var i = 0; i <= 5; i++){
+
+		var butterPackage_geometry = new THREE.CubeGeometry(15, 0, 15);
+		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
+		var butterPackage = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+
+		x += -10;
+		y += 7;
+		z += 5;
+
+		butterPackage.position.x = x;
+		butterPackage.position.y = y;
+		butterPackage.position.z = z;
+
+		scene.add(butterPackage);
+	}
+}
 /***************************************Detalhes de visualizacao e controlo****************************************/
 
 function onResize() {
@@ -259,6 +284,7 @@ function init() {
 
 	render();
 
+	//Adicionados eventos, quando resize and keydown
 	window.addEventListener('resize', onResize);
 	window.addEventListener("keydown", onKeyDown);
 }
