@@ -3,8 +3,12 @@
  /*********************************************Variaveis globais*************************************************************/
 var camera, scene, renderer;
 
+var car;
+
 /* tamanho da area visivel */
 var frustumSize = 60;
+
+var initialAspectRatio;
 /*-------------------------------------------------------------------------------------------------------------------------*/
 
 /******************************************Criacao da cena*****************************************************************/
@@ -17,12 +21,20 @@ function createScene() {
 
 	//Posicionamento dos vários objetos
 	createTable(0, 0, 0);
+	
 	createBorderLine();
-	createOrange(0, 0, 0);
-	createOrange(15, 10, 5);
-	createOrange(25, 15, 20);
-	createButterPackages();
+	
+	createOrange(-40, 0, 6);
+	createOrange(15, 10, -15);
+	createOrange(35, 15, 5);
+	
+	createButterPackages(10, 2, 5);
+	createButterPackages(45, 2, 15);
+	createButterPackages(-10, 2, 0);
+	createButterPackages(-25, 2, 4);
+	createButterPackages(5, 2, -15);
 
+	createCar(0, 6, 0);
 
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
@@ -34,6 +46,7 @@ function createCamera() {
 	'use strict';
 
 	var aspect = window.innerWidth / window.innerHeight;
+	initialAspectRatio = aspect;
 
 	/*Camera ortogonal inicializada tal como na documentacao do three.js */
 	camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2,
@@ -68,7 +81,7 @@ function createTable(x, y, z) {
 	'use strict';
 
 	var table = new THREE.Object3D();
-	var table_material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+	var table_material = new THREE.MeshBasicMaterial({ color: 0x007300, wireframe: true });
 
 	addTableTop(table, table_material, 0, 0, 0);
 
@@ -162,14 +175,14 @@ function createTorusBorders(obj, line) {
 
 		addBoundTorus(obj, border_Point);
 	}
-
 }
 
 /*---------------------------------------------------------------------------------------------------*/
 function addBoundTorus(obj, location) {
 
+	'use strict';
 	//Criação do toro
-	var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 16, 100, Math.PI * 2);
+	var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 8, 16, Math.PI * 2);
 	var torus_material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 	var torus = new THREE.Mesh(torus_geometry, torus_material);
 
@@ -189,7 +202,9 @@ function addBoundTorus(obj, location) {
 /************************************Construção das manteigas e laranjas******************************************/
 function createOrange(x, y, z){
 
-	var orange_geometry = new THREE.SphereGeometry(7, 23, 13);
+	'use strict';
+
+	var orange_geometry = new THREE.SphereGeometry(4, 23, 13);
 	var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true });
 	var orange = new THREE.Mesh(orange_geometry, orange_material);
 
@@ -201,36 +216,112 @@ function createOrange(x, y, z){
 
 }
 /*----------------------------------------------------------------------------------------------------------------*/
-function createButterPackages(){
+function createButterPackages(x, y, z) {
 
-	var x = 0;
-	var y = 2;
-	var z = 0;
+	var butterPackage_geometry = new THREE.CubeGeometry(6, 0, 3.5);
+	var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
+	var butterPackage = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
-	var butterPackage_geometry;
-	var butterPackage_material;
-	var butterPackage;
+	butterPackage.position.x = x;
+	butterPackage.position.y = y;
+	butterPackage.position.z = z;
 
-	for(var i = 0; i <= 5; i++){
+	scene.add(butterPackage);
+}
 
-		butterPackage_geometry = new THREE.CubeGeometry(15, 0, 15);
-		butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
-		butterPackage = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+function createCar(x, y, z) {
 
-		x += 10;
-		y += 7;
-		z += 5;
+	'use strict';
 
-		butterPackage.position.x = x;
-		butterPackage.position.y = y;
-		butterPackage.position.z = z;
+	car = new THREE.Object3D();
 
-		scene.add(butterPackage);
-	}
+	createChassis(0, 0.25, 0);
+	
+	createHood(-4.5, 4.25, 0);
+	
+	createWindShieldFront(1.2, 3.7, 0);
+	createWindShieldSide(-2.2, 3.7, -3.3); // left
+	createWindShieldSide(-2.2, 3.7, 3.3); // right
+	
+	createWheel(-6, -3.5, 6.5);
+	createWheel(6, -3.5, 6.5);
+	createWheel(-6, -3.5, -6.5);
+	createWheel(6, -3.5, -6.5);
+
+	scene.add(car);
+
+	car.position.set(x, y, z);
+
+	car.scale.multiplyScalar(1);
+}
+
+function createChassis(x, y, z) {
+
+	'use strict';
+
+	var chassis_geometry = new THREE.CubeGeometry(20, 5, 11);
+	var chassis_material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+	var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
+	chassis.position.set(x, y, z);
+
+	car.add(chassis);
+}
+
+function createHood(x, y, z) {
+	
+	'use strict';
+
+	var hood_geometry = new THREE.CubeGeometry(11, 3, 6);
+	var hood_material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+	var hood = new THREE.Mesh(hood_geometry, hood_material);
+	hood.position.set(x, y, z);
+
+	car.add(hood);
+}
+
+function createWindShieldFront(x, y, z) {
+	
+	'use strict';
+
+	var windshield_frontGeometry = new THREE.CubeGeometry(0, 2, 5.5);
+	var windshield_frontMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+	var windshield = new THREE.Mesh(windshield_frontGeometry, windshield_frontMaterial);
+	windshield.position.set(x, y, z);
+
+	car.add(windshield);
+}
+
+function createWindShieldSide(x, y, z) {
+	
+	'use strict';
+
+	var windshield_sideGeometry = new THREE.CubeGeometry(5.5, 2, 0);
+	var windshield_sideMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+	var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
+	windshield_side.position.set(x, y, z);
+
+	car.add(windshield_side);
+}
+
+function createWheel(x, y, z) {
+
+	'use strict';
+
+	var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
+	var wheel_material = new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: true } );
+	var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
+
+	var me = new THREE.Vector3(x, y, 5);
+
+	wheel.position.set(x, y, z);
+
+	wheel.lookAt(me);
+
+	car.add(wheel);
 }
 /***************************************Detalhes de visualizacao e controlo****************************************/
 
-function onResize() {
+/*function onResize() {
 
 	'use strict';
 
@@ -246,10 +337,10 @@ function onResize() {
 	camera.updateProjectionMatrix();
 
 	render();
-}
+} */
 
 
-/*function onResize() {
+function onResize() {
     'use strict';
 
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -260,7 +351,9 @@ function onResize() {
         var height = frustumSize;
         var width = height;
 
-        if (aspectRatio >= 1) {
+        console.log(initialAspectRatio, aspectRatio);
+
+        if (aspectRatio > initialAspectRatio) {
             
             camera.left = - aspectRatio * height;
             camera.right = aspectRatio * height;
@@ -268,17 +361,19 @@ function onResize() {
             camera.bottom = - height;
         }
         else {
+
             camera.left = - width;
             camera.right = width;
             camera.top = width / aspectRatio;
             camera.bottom = - width / aspectRatio;
         }
+		console.log(camera.left, camera.top);
         
         camera.updateProjectionMatrix();
 
         render();
     }
-} */
+} 
 
 /*------------------------------------------------------------------------------------------------------------------*/
 function onKeyDown(e) {
