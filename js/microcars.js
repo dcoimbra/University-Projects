@@ -21,13 +21,13 @@ function createScene() {
 
 	//Posicionamento dos vários objetos
 	createTable(0, 0, 0);
-	
+
 	createBorderLine();
-	
+
 	createOrange(-40, 0, 6);
 	createOrange(15, 10, -15);
 	createOrange(35, 15, 5);
-	
+
 	createButterPackages(10, 2, 5);
 	createButterPackages(45, 2, 15);
 	createButterPackages(-10, 2, 0);
@@ -195,11 +195,13 @@ function addBoundTorus(obj, location) {
 					   location.getComponent(2));
 
 	obj.add(torus);
+
+	//LookAt: Rotates the object to face a point in world space.
 	torus.lookAt(above_vector);
 }
 /*----------------------------------------------------------------------------------------------------------------*/
 
-/************************************Construção das manteigas e laranjas******************************************/
+/**************************Construção das manteigas, laranjas e carro******************************************/
 function createOrange(x, y, z){
 
 	'use strict';
@@ -228,6 +230,7 @@ function createButterPackages(x, y, z) {
 
 	scene.add(butterPackage);
 }
+/*----------------------------------------------------------------------------------------------------------------*/
 
 function createCar(x, y, z) {
 
@@ -236,13 +239,13 @@ function createCar(x, y, z) {
 	car = new THREE.Object3D();
 
 	createChassis(0, 0.25, 0);
-	
+
 	createHood(-4.5, 4.25, 0);
-	
+
 	createWindShieldFront(1.2, 3.7, 0);
 	createWindShieldSide(-2.2, 3.7, -3.3); // left
 	createWindShieldSide(-2.2, 3.7, 3.3); // right
-	
+
 	createWheel(-6, -3.5, 6.5);
 	createWheel(6, -3.5, 6.5);
 	createWheel(-6, -3.5, -6.5);
@@ -255,6 +258,7 @@ function createCar(x, y, z) {
 	car.scale.multiplyScalar(1);
 }
 
+/*-------------------------------------------------------------------------------------------*/
 function createChassis(x, y, z) {
 
 	'use strict';
@@ -267,8 +271,9 @@ function createChassis(x, y, z) {
 	car.add(chassis);
 }
 
+/*------------------------------------------------------------------------------------------*/
 function createHood(x, y, z) {
-	
+
 	'use strict';
 
 	var hood_geometry = new THREE.CubeGeometry(11, 3, 6);
@@ -278,9 +283,10 @@ function createHood(x, y, z) {
 
 	car.add(hood);
 }
+/*-----------------------------------------------------------------------------------------------------*/
 
 function createWindShieldFront(x, y, z) {
-	
+
 	'use strict';
 
 	var windshield_frontGeometry = new THREE.CubeGeometry(0, 2, 5.5);
@@ -290,9 +296,10 @@ function createWindShieldFront(x, y, z) {
 
 	car.add(windshield);
 }
+/*----------------------------------------------------------------------------------------------------*/
 
 function createWindShieldSide(x, y, z) {
-	
+
 	'use strict';
 
 	var windshield_sideGeometry = new THREE.CubeGeometry(5.5, 2, 0);
@@ -302,6 +309,7 @@ function createWindShieldSide(x, y, z) {
 
 	car.add(windshield_side);
 }
+/*-------------------------------------------------------------------------------------------------------------*/
 
 function createWheel(x, y, z) {
 
@@ -346,7 +354,7 @@ function onResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     if (window.innerHeight > 0 && window.innerWidth > 0) {
-        
+
         var aspectRatio = window.innerWidth / window.innerHeight;
         var height = frustumSize;
         var width = height;
@@ -354,7 +362,7 @@ function onResize() {
         console.log(initialAspectRatio, aspectRatio);
 
         if (aspectRatio > initialAspectRatio) {
-            
+
             camera.left = - aspectRatio * height;
             camera.right = aspectRatio * height;
             camera.top = height;
@@ -368,12 +376,12 @@ function onResize() {
             camera.bottom = - width / aspectRatio;
         }
 		console.log(camera.left, camera.top);
-        
+
         camera.updateProjectionMatrix();
 
         render();
     }
-} 
+}
 
 /*------------------------------------------------------------------------------------------------------------------*/
 function onKeyDown(e) {
