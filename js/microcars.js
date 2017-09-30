@@ -434,23 +434,6 @@ function onKeyDown(e) {
 function animate(){
 	'use strict';
 
-/*if(keyboard.pressed("left")) {
-    car.rotation.y += 0.1;
-    angle += 0.1;
-}
-if(keyboard.pressed("right")) {
-    car.rotation.y -= 0.1;
-    angle -= 0.1;
-}
-if(keyboard.pressed("up")) {
-    car.position.z -= Math.sin(-angle);
-    car.position.x -= Math.cos(-angle);
-}
-if(keyboard.pressed("down")) {
-    car.position.z += Math.sin(-angle);
-    car.position.x += Math.cos(-angle);
-}*/
-
 	render();
 	requestAnimationFrame(animate);
 }
