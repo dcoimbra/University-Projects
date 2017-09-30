@@ -9,6 +9,9 @@ var car;
 var frustumSize = 60;
 
 var initialAspectRatio;
+
+var clock = new THREE.Clock();
+
 /*-------------------------------------------------------------------------------------------------------------------------*/
 
 /******************************************Criacao da cena*****************************************************************/
@@ -388,7 +391,10 @@ function onKeyDown(e) {
 
 	'use strict';
 
-	var angle = 0;
+	//getDelta: Get the seconds passed since the time oldTime was set and sets oldTime to the current time.
+	var delta = clock.getDelta(); // seconds.
+	//Aplicando a equação v = x/t<=>x=v*t, sendo v=15 obtemos a distancia que vai ser percorrida
+	var distancia = 9 * delta;
 
 	switch (e.keyCode) {
 
@@ -404,18 +410,21 @@ function onKeyDown(e) {
 			});
 			break;
 
-		/*case 37: //left arrow
-			car.rotation.y += 0.1;
-			angle += 0.1;
-  	case 38: //Up arrow
-			car.position.z -= Math.sin(-angle);
-			car.position.x -= Math.cos(-angle);
-  	case 39: //Right arrow
-			car.rotation.y -= 0.1;
-			angle -= 0.1;
-  	case 40: //Down arrow
-			car.position.z += Math.sin(-angle);
-			car.position.x += Math.cos(-angle);*/
+		case 37: //left arrow
+			car.rotateY(0.1);
+			break;
+
+		case 38: //Up arrow
+			car.translateX(distancia);
+			break;
+
+		case 39: //Right arrow
+			car.rotateY(-0.1);
+			break;
+
+		case 40: //Down arrow
+			car.translateX(-moveDistance);
+			break;
 
 	}
 
