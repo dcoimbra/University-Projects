@@ -246,10 +246,10 @@ function createCar(x, y, z) {
 	createWindShieldSide(-2.2, 3.7, -3.3); // left
 	createWindShieldSide(-2.2, 3.7, 3.3); // right
 
-	createWheel(-6, -3.5, 6.5);
-	createWheel(6, -3.5, 6.5);
-	createWheel(-6, -3.5, -6.5);
-	createWheel(6, -3.5, -6.5);
+	createWheel(-6, -3.5, 6.2);
+	createWheel(6, -3.5, 6.2);
+	createWheel(-6, -3.5, -6.2);
+	createWheel(6, -3.5, -6.2);
 
 	scene.add(car);
 
@@ -388,24 +388,63 @@ function onKeyDown(e) {
 
 	'use strict';
 
+	var angle = 0;
+
 	switch (e.keyCode) {
 
-	case 65: //A
-	case 97: //a
+		case 65: //A
+		case 97: //a
 
-		scene.traverse(function (node) {
+			scene.traverse(function (node) {
 
-			if (node instanceof THREE.Mesh) {
+				if (node instanceof THREE.Mesh) {
 
-				node.material.wireframe = !node.material.wireframe;
-			}
-		});
-		break;
+					node.material.wireframe = !node.material.wireframe;
+				}
+			});
+			break;
+
+		/*case 37: //left arrow
+			car.rotation.y += 0.1;
+			angle += 0.1;
+  	case 38: //Up arrow
+			car.position.z -= Math.sin(-angle);
+			car.position.x -= Math.cos(-angle);
+  	case 39: //Right arrow
+			car.rotation.y -= 0.1;
+			angle -= 0.1;
+  	case 40: //Down arrow
+			car.position.z += Math.sin(-angle);
+			car.position.x += Math.cos(-angle);*/
+
 	}
 
 	render();
 }
 /*---------------------------------------------------------------------------------------------------------------------------------*/
+function animate(){
+	'use strict';
+
+/*if(keyboard.pressed("left")) {
+    car.rotation.y += 0.1;
+    angle += 0.1;
+}
+if(keyboard.pressed("right")) {
+    car.rotation.y -= 0.1;
+    angle -= 0.1;
+}
+if(keyboard.pressed("up")) {
+    car.position.z -= Math.sin(-angle);
+    car.position.x -= Math.cos(-angle);
+}
+if(keyboard.pressed("down")) {
+    car.position.z += Math.sin(-angle);
+    car.position.x += Math.cos(-angle);
+}*/
+
+	render();
+	requestAnimationFrame(animate);
+}
 
 /***************************************************Inicializacao*******************************************************************/
 function init() {
