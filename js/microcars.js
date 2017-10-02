@@ -6,11 +6,11 @@ var camera, scene, renderer;
 var car;
 
 /* tamanho da area visivel */
-var frustumSize = 60;
-
-var initialAspectRatio;
+var frustumSize;
 
 var clock = new THREE.Clock();
+
+var keysPressed = [ false, false, false, false ];
 
 /*-------------------------------------------------------------------------------------------------------------------------*/
 
@@ -49,7 +49,8 @@ function createCamera() {
 	'use strict';
 
 	var aspect = window.innerWidth / window.innerHeight;
-	initialAspectRatio = aspect;
+	
+	frustumSize = 60;
 
 	/*Camera ortogonal inicializada tal como na documentacao do three.js */
 	camera = new THREE.OrthographicCamera(frustumSize * aspect / - 2,
@@ -101,7 +102,7 @@ function addTableTop(obj, material, x, y, z) {
 
 	'use strict';
 
-	var tabletop_geometry = new THREE.CubeGeometry(110, 0, 45);
+	var tabletop_geometry = new THREE.CubeGeometry(55, 0, 55);
 	var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
 	tabletop_mesh.position.set(x, y, z);
 
@@ -146,8 +147,11 @@ function createBorderLine() {
 	scene.add(border1);
 
 	//Posicionamento da pista
-	border1.translateZ(-8.5);
-	border1.translateX(3);
+	border1.rotateY( - Math.PI / 6);
+
+	border1.position.set(9, 0, -5);
+
+	border1.scale.multiplyScalar(0.6);
 
 	//Criar a border de torus
 	createTorusBorders(border1, curve);
@@ -241,7 +245,7 @@ function createCar(x, y, z) {
 
 	car = new THREE.Object3D();
 
-	car.userData = { speed: 9, acceleration: 13};
+	car.userData = { speed: 0, maxSpeed: 40, acceleration: 20, isMoving: false};
 
 	createChassis(0, 0.25, 0);
 
@@ -260,7 +264,7 @@ function createCar(x, y, z) {
 
 	car.position.set(x, y, z);
 
-	car.scale.multiplyScalar(1);
+	car.scale.multiplyScalar(0.2);
 }
 
 /*-------------------------------------------------------------------------------------------*/
@@ -334,7 +338,7 @@ function createWheel(x, y, z) {
 }
 /***************************************Detalhes de visualizacao e controlo****************************************/
 
-/*function onResize() {
+function onResize() {
 
 	'use strict';
 
@@ -350,48 +354,12 @@ function createWheel(x, y, z) {
 	camera.updateProjectionMatrix();
 
 	render();
-} */
-
-
-function onResize() {
-    'use strict';
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    if (window.innerHeight > 0 && window.innerWidth > 0) {
-
-        var aspectRatio = window.innerWidth / window.innerHeight;
-        var height = frustumSize;
-        var width = height;
-
-        if (aspectRatio > initialAspectRatio) {
-
-            camera.left = - aspectRatio * height;
-            camera.right = aspectRatio * height;
-            camera.top = height;
-            camera.bottom = - height;
-        }
-        else {
-
-            camera.left = - width;
-            camera.right = width;
-            camera.top = width / aspectRatio;
-            camera.bottom = - width / aspectRatio;
-        }
-
-        camera.updateProjectionMatrix();
-    }
-}
+} 
 
 /*------------------------------------------------------------------------------------------------------------------*/
 function onKeyDown(e) {
 
 	'use strict';
-
-	//getDelta: Get the seconds passed since the time oldTime was set and sets oldTime to the current time.
-	var delta = clock.getDelta(); // seconds.
-	//Aplicando a equação v = x/t<=>x=v*t, sendo v=9 obtemos a distancia que vai ser percorrida
-	var distancia = (car.userData.speed * delta);
 
 	switch (e.keyCode) {
 
@@ -408,31 +376,149 @@ function onKeyDown(e) {
 			break;
 
 		case 37: //left arrow
-			car.rotateY(0.1);
+
+			keysPressed[0] = true;
 			break;
 
 		case 38: //Up arrow
-			car.translateX(distancia);
-			car.userData.speed += car.userData.acceleration*delta;
+
+			keysPressed[1] = true;
+			car.userData.isMoving = true;
 			break;
 
 		case 39: //Right arrow
-			car.rotateY(-0.1);
+			keysPressed[2] = true;
 			break;
 
 		case 40: //Down arrow
-			car.translateX(-distancia) -= car.userData.acceleration*delta;
+			keysPressed[3] = true;
+			car.userData.isMoving = true;
 			break;
 
 	}
 }
+
+/*------------------------------------------------------------------------------------------------------------------*/
+function onKeyUp(e) {
+	
+	'use strict';
+
+	switch (e.keyCode) {
+
+		case 37: //left arrow
+
+			keysPressed[0] = false;
+			break;
+
+		case 38: //Up arrow
+
+			keysPressed[1] = false;
+			break;
+
+		case 39: //Right arrow
+			keysPressed[2] = false;
+			break;
+
+		case 40: //Down arrow
+			keysPressed[3] = false;
+			break;
+
+	}
+}
+
 /*---------------------------------------------------------------------------------------------------------------------------------*/
-function animate(){
+function animate() {
 	'use strict';
 
 	render();
+
+	moveCar();
+
 	requestAnimationFrame(animate);
 }
+
+/*---------------------------------------------------------------------------------------------------------------------------------*/
+function moveCar() {
+
+	var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
+
+	var distance = car.userData.speed * delta; // speed = distance / time <=> distance = speed * time  
+
+	if (keysPressed[0]) {  // Left arrow
+
+		car.rotateY(0.1);  // Turn left 
+
+		if (car.userData.isMoving) {   // If the car is moving, keep it moving
+			
+			car.translateX(distance);
+		}
+	}
+
+	else if (keysPressed[1]) { // Up arrow
+
+		car.translateX(distance); // Move forward
+
+		if (car.userData.speed < car.userData.maxSpeed) { // If speed is not max, accelerate until it's max
+			
+			car.userData.speed += car.userData.acceleration*delta;
+		}
+	}
+
+	else if (keysPressed[2]) { // Right arrow
+
+		car.rotateY(-0.1); // Turn right
+
+		if (car.userData.isMoving) { // If the car is moving, keep it moving
+			
+			car.translateX(distance);
+		}
+	}
+
+	else if (keysPressed[3]) { // Down arrow
+
+		car.translateX(distance); // Do the same as up arrow, but in the opposite direction
+
+		if (car.userData.speed < car.userData.maxSpeed) {
+			
+			car.userData.speed -= car.userData.acceleration*delta;
+		}
+	}
+
+	else { // If no button is pressed
+
+		if (car.userData.speed > 0) { // If the car is moving forward
+
+			car.translateX(distance);
+
+			car.userData.speed -= car.userData.acceleration*delta; // Start slowing down
+
+			if (car.userData.speed < 0) { // When it reaches negative speed, stop the car
+
+				car.userData.speed = 0;
+				car.userData.isMoving = false;
+			}
+		}
+
+		else if (car.userData.speed < 0) { // If the car is moving backward
+
+			car.translateX(distance);
+
+			car.userData.speed += car.userData.acceleration*delta; // Start slowing down in the opposite direction
+
+			if (car.userData.speed > 0) { // When it reaches positive speed, stop the car
+
+				car.userData.speed = 0;
+				car.userData.isMoving = false;
+			}
+		}
+
+		else { // If the speed is zero
+
+			car.userData.isMoving = false; // Stop the car
+		}
+	}
+}
+
 
 /***************************************************Inicializacao*******************************************************************/
 function init() {
@@ -452,5 +538,6 @@ function init() {
 
 	//Adicionados eventos, quando resize and keydown
 	window.addEventListener('resize', onResize);
-	window.addEventListener("keydown", onKeyDown);
+	window.addEventListener('keydown', onKeyDown);
+	window.addEventListener('keyup', onKeyUp);
 }
