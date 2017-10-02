@@ -241,6 +241,8 @@ function createCar(x, y, z) {
 
 	car = new THREE.Object3D();
 
+	car.userData = { speed: 9, acceleration: 13};
+
 	createChassis(0, 0.25, 0);
 
 	createHood(-4.5, 4.25, 0);
@@ -362,8 +364,6 @@ function onResize() {
         var height = frustumSize;
         var width = height;
 
-        console.log(initialAspectRatio, aspectRatio);
-
         if (aspectRatio > initialAspectRatio) {
 
             camera.left = - aspectRatio * height;
@@ -378,11 +378,8 @@ function onResize() {
             camera.top = width / aspectRatio;
             camera.bottom = - width / aspectRatio;
         }
-		console.log(camera.left, camera.top);
 
         camera.updateProjectionMatrix();
-
-        render();
     }
 }
 
@@ -393,8 +390,8 @@ function onKeyDown(e) {
 
 	//getDelta: Get the seconds passed since the time oldTime was set and sets oldTime to the current time.
 	var delta = clock.getDelta(); // seconds.
-	//Aplicando a equação v = x/t<=>x=v*t, sendo v=15 obtemos a distancia que vai ser percorrida
-	var distancia = 9 * delta;
+	//Aplicando a equação v = x/t<=>x=v*t, sendo v=9 obtemos a distancia que vai ser percorrida
+	var distancia = (car.userData.speed * delta);
 
 	switch (e.keyCode) {
 
@@ -416,6 +413,7 @@ function onKeyDown(e) {
 
 		case 38: //Up arrow
 			car.translateX(distancia);
+			car.userData.speed += car.userData.acceleration*delta;
 			break;
 
 		case 39: //Right arrow
@@ -423,12 +421,10 @@ function onKeyDown(e) {
 			break;
 
 		case 40: //Down arrow
-			car.translateX(-moveDistance);
+			car.translateX(-distancia) -= car.userData.acceleration*delta;
 			break;
 
 	}
-
-	render();
 }
 /*---------------------------------------------------------------------------------------------------------------------------------*/
 function animate(){
