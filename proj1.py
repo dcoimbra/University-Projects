@@ -5,10 +5,12 @@ from utils import *
 ############# Classes #################
 
 class sg_state:
-
+    """Needed for informed search."""
 
     def __lt__(self, other):
-        """Needed for informed search."""
+        """ """
+        # TODO
+
 
 
 class same_game(Problem):
@@ -16,17 +18,28 @@ class same_game(Problem):
     A solution cannot have pieces left on the board."""
 
     def __init__(self, board):
+        """ """
+        # TODO
 
     def actions(self, state):
+        """ """
+        # TODO
 
     def result(self, state, action):
+        """ """
+        # TODO
 
     def goal_test(self, state):
+        """ """
+        # TODO
 
     def path_cost(self, c, state1, action, state2):
+        """ """
+        # TODO
 
     def h(self, node):
         """Needed for informed search."""
+        # TODO
 
 
 ############# TAIs ###############
@@ -63,16 +76,37 @@ def pos_c(pos):
 # TAI group
 # Lista: elementos do tipo pos
 def group(position_list):
+    """ """
+    # TODO
 
 
 # TAI board
 # Lista: linhas do tabuleiro
 def board():
+    """ """
+    #  TODO
 
+def is_board(board):
+    num_l = 0;
+    num_c = 0;
+
+    for l in board:
+        if not isinstance(l, list):
+            return False;
+        num_l += 1;
+
+        cols = len(l);
+        if num_c == 0:
+            num_c = cols;
+        elif num_c != cols:
+            return False;
+    return True;
 
 def board_find_groups(board):
     """devolve uma lista com os grupos de pecas que se podem encontrar no tabuleiro"""
+    # TODO
 
 
 def board_remove_group(board, group):
     """ remove o grupo do tabuleiro fazendo a compactacao vertical e horizontal das pecas."""
+    # TODO
