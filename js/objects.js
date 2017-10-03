@@ -75,7 +75,7 @@ function createBorderLine() {
 													   linewidth: 3,
 													   opacity: 0,
 													   transparent: true,
-													  
+
 												   	 });
 
 	var border1 = new THREE.Line(path_geometry1, path_material);
@@ -84,7 +84,9 @@ function createBorderLine() {
 	//Criacao dos pontos principais que vão constituir a curva
 	var curve1 = new THREE.CatmullRomCurve3( [
 
-		new THREE.Vector3(-6 * 9, 0.5, 4.5 * 9),
+		new THREE.Vector3(-5.9 * 9, 0.5, 4.5 * 9),
+		new THREE.Vector3(-4.9 * 9, 0.5, 4 * 9),
+		new THREE.Vector3(-4.8 * 9, 0.5, 3.8 * 9),
 		new THREE.Vector3(-4.5 * 9, 0.5, 4 * 9),
 		new THREE.Vector3(-4.5 * 8, 0.5, -1 * 10),
 		new THREE.Vector3(-7.2 * 8, 0.5, -1 * 10),
@@ -95,16 +97,21 @@ function createBorderLine() {
 		new THREE.Vector3(1 * 10, 0.5, -1),
 		new THREE.Vector3(3 * 10, 0.5, -3 * 10),
 		new THREE.Vector3(4.5 * 10, 0.5, -1 * 10),
+		new THREE.Vector3(2.5 * 10, 0.5, 4 * 10),
+		new THREE.Vector3(2.3 * 10, 0.5, 4.2 * 10),
+		new THREE.Vector3(2 * 10, 0.5, 4.5 * 10),
+		new THREE.Vector3(1.5 * 10, 0.5, 4.8 * 10),
 		new THREE.Vector3(1.5 * 10, 0.5, 4.9 * 10),
 		new THREE.Vector3(-4 * 9, 0.5, 6.1 * 9),
 		new THREE.Vector3(-6 * 9, 0.5, 5.9 * 9),
+		new THREE.Vector3(-6 * 9, 0.5, 5 * 9),
 		new THREE.Vector3(-6 * 9, 0.5, 4.5 * 9),
 	] );
 
 	var curve2 = new THREE.CatmullRomCurve3( [
 
 		new THREE.Vector3(-5 * 9, 0.5, 5 * 9),
-		new THREE.Vector3(-3 * 9, 0.5, 4.5 * 9),
+		new THREE.Vector3(-3.5 * 9, 0.5, 4.5 * 9),
 		new THREE.Vector3(-3.5 * 8, 0.5, -2 * 10),
 		new THREE.Vector3(-5.5 * 8, 0.5, -2 * 10),
 		new THREE.Vector3(-6 * 8, 0.5, -2.5 * 10),
@@ -162,7 +169,7 @@ function createTorusBorders(obj, line) {
 
 	var length = line.getLength();
 
-	var division = length / 40000; 
+	var division = length / 40000;
 
 	//Adiciona toros ao longo da linha
 	//getPoint: Returns a vector for point t of the curve where t is between 0 and 1.
