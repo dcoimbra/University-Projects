@@ -102,38 +102,38 @@ function createWheel(x, y, z) {
 function moveCar() {
 
 	var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
-	var distance = car.userData.speed * delta; // speed = distance / time <=> distance = speed * time  
+	var distance = car.userData.speed * delta; // speed = distance / time <=> distance = speed * time
 
 	if (keysPressed[0]) {  // Left arrow
 		moveLeft(distance, delta);
-		
+
 	}
 
 	else if (keysPressed[1]) { // Up arrow
 		moveForward(distance, delta);
-		
+
 	}
 
 	else if (keysPressed[2]) { // Right arrow
 		moveRight(distance, delta);
-	
+
 	}
 
 	else if (keysPressed[3]) { // Down arrow
 		moveBackwards(distance, delta);
-	
+
 	}
 
 	else { // If no button is pressed
 
 		if (car.userData.speed > 0) { // If the car is moving forward
 			forwardSlowingDown(distance, delta);
-			
+
 		}
 
 		else if (car.userData.speed < 0) { // If the car is moving backward
 			backwardsSlowingDown(distance, delta);
-		
+
 		}
 
 		else { // If the speed is zero
@@ -146,46 +146,56 @@ function moveCar() {
 
 function moveForward(distance, delta){
 
+	'use strict';
+
 	car.translateX(distance); // Move forward
 
 		if (car.userData.speed < car.userData.maxSpeed) { // If speed is not max, accelerate until it's max
-			
+
 			car.userData.speed += car.userData.acceleration*delta;
 		}
 }
 
 function moveLeft(distance, delta){
 
-	car.rotateY(0.1);  // Turn left 
+	'use strict';
+
+	car.rotateY(0.1);  // Turn left
 
 		if (car.userData.isMoving) {   // If the car is moving, keep it moving
-			
+
 			car.translateX(distance);
 		}
 }
 
 function moveRight(distance, delta){
-		
+
+	'use strict';
+
 	car.rotateY(-0.1); // Turn right
 
 		if (car.userData.isMoving) { // If the car is moving, keep it moving
-			
+
 			car.translateX(distance);
-		}	
+		}
 }
 
 function moveBackwards(distance, delta){
 
+	'use strict';
+
 	car.translateX(distance); // Do the same as up arrow, but in the opposite direction
 
 		if (car.userData.speed < car.userData.maxSpeed) {
-			
+
 			car.userData.speed -= car.userData.acceleration*delta;
 		}
 }
 
 function forwardSlowingDown(distance, delta){
-	
+
+	'use strict';
+
 	car.translateX(distance);
 
 			car.userData.speed -= car.userData.acceleration*delta; // Start slowing down
@@ -194,11 +204,13 @@ function forwardSlowingDown(distance, delta){
 
 				car.userData.speed = 0;
 				car.userData.isMoving = false;
-			}	
+			}
 }
 
 function backwardsSlowingDown(distance, delta){
-	
+
+	'use strict';
+
 	car.translateX(distance);
 
 			car.userData.speed += car.userData.acceleration*delta; // Start slowing down in the opposite direction
