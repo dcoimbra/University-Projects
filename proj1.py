@@ -2,7 +2,34 @@ from search import *
 from utils import *
 
 
-############# Classes #################
+# Classes
+
+class group:
+    positions = []
+
+    def __init__(self, positions):
+        self.positions = positions
+
+    def add_position(self, pos):
+        self.positions.append(pos)
+
+    def remove_position(self, pos):
+        self.positions.remove(pos)
+
+    def get_positions(self):
+        return self.positions
+
+
+class board:
+    lines = []
+
+    def __init__(self, lines):
+        if is_board(lines):
+            self.lines = lines
+
+    def get_lines(self):
+        return self.lines
+
 
 class sg_state:
     """Needed for informed search."""
@@ -12,14 +39,15 @@ class sg_state:
         # TODO
 
 
-
 class same_game(Problem):
     """Models a Same Game problem as a satisfaction problem.
     A solution cannot have pieces left on the board."""
 
+    board = []
+
     def __init__(self, board):
         """ """
-        # TODO
+        self.board = board
 
     def actions(self, state):
         """ """
@@ -42,7 +70,8 @@ class same_game(Problem):
         # TODO
 
 
-############# TAIs ###############
+# TAIs #
+
 
 # TAI color
 # sem cor = 0
@@ -73,34 +102,37 @@ def pos_c(pos):
     return pos[1]
 
 
-# TAI group
-# Lista: elementos do tipo pos
-def group(position_list):
-    """ """
-    # TODO
-
-
 # TAI board
 # Lista: linhas do tabuleiro
-def board():
-    """ """
-    #  TODO
 
 def is_board(board):
-    num_l = 0;
-    num_c = 0;
+    num_l = 0
+    num_c = 0
 
     for l in board:
-        if not isinstance(l, list):
-            return False;
-        num_l += 1;
 
-        cols = len(l);
+        if not isinstance(l, list):
+            return False
+
+        num_l += 1
+        cols = len(l)
+
         if num_c == 0:
-            num_c = cols;
+            num_c = cols
+
         elif num_c != cols:
-            return False;
-    return True;
+            return False
+
+    return True
+
+
+def make_group(positions):
+    return group(positions)
+
+
+def make_board(lines):
+    return board(lines)
+
 
 def board_find_groups(board):
     """devolve uma lista com os grupos de pecas que se podem encontrar no tabuleiro"""
