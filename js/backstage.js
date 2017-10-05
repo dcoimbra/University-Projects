@@ -139,12 +139,10 @@ function onKeyDown(e) {
 			break;
 
 		case 37: //left arrow
-
 			car.setMovingDirection(0, true);
 			break;
 
 		case 38: //Up arrow
-
 			car.setMovingDirection(1, true);
 			car.setMovingState(true);
 			break;
@@ -158,6 +156,9 @@ function onKeyDown(e) {
 			car.setMovingState(true);
 			break;
 
+		default:
+			break;
+
 	}
 }
 /*---------------------------------------------------------------------------------------------------------------------------------*/
@@ -168,12 +169,10 @@ function onKeyUp(e) {
 	switch (e.keyCode) {
 
 		case 37: //left arrow
-
 			car.setMovingDirection(0, false);
 			break;
 
 		case 38: //Up arrow
-
 			car.setMovingDirection(1, false);
 			break;
 
@@ -183,6 +182,9 @@ function onKeyUp(e) {
 
 		case 40: //Down arrow
 			car.setMovingDirection(3, false);
+			break;
+
+		default:
 			break;
 
 	}
