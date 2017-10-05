@@ -127,6 +127,20 @@ class Board:
         self.set_color(pos1, color2)
         self.set_color(pos2, color1)
 
+    def upper_position(self, pos):
+        if (pos_l(pos) - 1 >= 0):
+            return make_pos(pos_l(pos) - 1, pos_c(pos))
+        return
+
+    def get_line(self, index):
+        if (index >= 0 and index < self.get_num_lines()):
+            return self._board[index]
+
+    def get_last_line(self):
+        return self._board[-1]
+
+
+
     def print_board(self):
         """
         sends to stdout a graphic representation of a board
@@ -277,6 +291,36 @@ def board_find_groups_aux(board, pos, final_group, rejects, visited):
     return final_group
 
 
-def board_remove_group(board, group):
+def board_remove_group(user_board, user_group):
     """ remove o grupo do tabuleiro fazendo a compactacao vertical e horizontal das pecas."""
+    # TODO
+
+
+def vertical_align_aux(board, pos):
+    upper = board.upper_position(pos)
+    if upper and not board.is_empty_position(upper):
+        board.swap_positions(pos, upper)
+        vertical_align_aux(board, upper)
+
+def board_vertical_align(board, group):
+    aux = group.get_group()
+    for position in aux:
+        vertical_align_aux(board, position)
+
+def horizontal_align(board):
+
+    last_line = board.get_last_line()
+    index = -1
+
+    for color in last_line:
+        index += 1
+        if no_color(color):
+            erase_column(board, index)
+
+
+def erase_column(board, index):
+    for line in board.get_board():
+        line.pop(index)
+        line.append(get_no_color())
+
 
