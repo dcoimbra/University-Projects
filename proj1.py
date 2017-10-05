@@ -1,3 +1,4 @@
+import copy
 from search import *
 from utils import *
 
@@ -5,7 +6,6 @@ from utils import *
 # Classes
 
 class Group:
-
     def __init__(self):
         self._positions = []
 
@@ -30,7 +30,6 @@ class Group:
 
 # ------------------------------- #
 class Board:
-
     def __init__(self, user_board):
         self._all_positions = []
         self._board = []
@@ -45,16 +44,13 @@ class Board:
         while i < self._size[0]:
             j = 0
             while j < self._size[1]:
-                pos = make_pos(i,j)
+                pos = make_pos(i, j)
                 self._all_positions.append(pos)
                 j += 1
             i += 1
 
     def get_board(self):
         return self._board
-
-    def get_size(self):
-        return self._size
 
     def get_num_lines(self):
         return self._size[0]
@@ -68,29 +64,22 @@ class Board:
     def get_color(self, position):
         return self._board[pos_l(position)][pos_c(position)]
 
-    def set_color(self, position, color):
-        self._board[pos_l(position)][pos_c(position)] = color
+    def set_color(self, position, new_color):
+        self._board[pos_l(position)][pos_c(position)] = new_color
 
     def remove_color(self, position):
         self.set_color(position, get_no_color())
-
-    def is_empty_position(self, position):
-        return self.get_color(position) == get_no_color()
 
     def same_color(self, pos1, pos2):
         if (not self.is_empty_position(pos1)) and (not self.is_empty_position(pos2)):
             return self.get_color(pos1) == self.get_color(pos2)
         return False
 
-    def is_empty(self):
-        for position in self._all_positions:
-            if not self.is_empty_position(position):
-                return False
-        return True
+    def is_empty_position(self, position):
+        return self.get_color(position) == get_no_color()
 
-    def adjacent_pos(self, pos):
+    def adjacent_positions(self, pos):
         """
-
         :param pos: an object of type position
         :return: a list of the adjacent positions to the given one within this board
         """
@@ -100,16 +89,32 @@ class Board:
         if line <= self.get_num_lines() and col <= self.get_num_columns():
             if line - 1 >= 0:
                 res.append(make_pos(line - 1, col))
-
             if line + 1 < self.get_num_lines():
                 res.append(make_pos(line + 1, col))
-
             if col - 1 >= 0:
                 res.append(make_pos(line, col - 1))
-
             if col + 1 < self.get_num_columns():
                 res.append(make_pos(line, col + 1))
         return res
+
+    def under_position(self, pos):
+        if pos_l(pos) + 1 < self.get_num_lines():
+            return make_pos(pos_l(pos) + 1, pos_c(pos))
+        return
+
+    def swap_positions(self, pos1, pos2):
+        """swaps two positions in the same board"""
+        color1 = self.get_color(pos1)
+        color2 = self.get_color(pos2)
+
+        self.set_color(pos1, color2)
+        self.set_color(pos2, color1)
+
+    def is_empty(self):
+        for position in self._all_positions:
+            if not self.is_empty_position(position):
+                return False
+        return True
 
     def remove_group(self, group):
         """ removes a single group from the board, substituting all positions to the value 0"""
@@ -118,28 +123,17 @@ class Board:
         for elem in positions:
             self.remove_color(elem)
 
-    def swap_positions(self, pos1, pos2):
-        """swaps two positions in the same board"""
-
-        color1 = self.get_color(pos1)
-        color2 = self.get_color(pos2)
-
-        self.set_color(pos1, color2)
-        self.set_color(pos2, color1)
-
-    def upper_position(self, pos):
-        if (pos_l(pos) - 1 >= 0):
-            return make_pos(pos_l(pos) - 1, pos_c(pos))
-        return
-
     def get_line(self, index):
-        if (index >= 0 and index < self.get_num_lines()):
+        if 0 <= index < self.get_num_lines():
             return self._board[index]
 
     def get_last_line(self):
         return self._board[-1]
 
-
+    def erase_column(self, index):
+        for line in self.get_board():
+            line.pop(index)
+            line.append(get_no_color())
 
     def print_board(self):
         """
@@ -151,11 +145,10 @@ class Board:
             for i in l:
                 if i == get_no_color():
                     i = "_"
-                result += str(i)+" "
-            print(result+"|")
+                result += str(i) + " "
+            print(result + "|")
             result = "| "
         return
-
 
 
 def is_board(board):
@@ -182,16 +175,16 @@ class sg_state:
         """ """
         # TODO
 
+
 # ---------------------------- #
 class same_game(Problem):
     """Models a Same Game problem as a satisfaction problem.
     A solution cannot have pieces left on the board."""
 
-    board = []
-
-    def __init__(self, board):
+    def __init__(self, board, initial):
         """ """
-        self.board = board
+        super().__init__(initial)
+        self._board = []
 
     def actions(self, state):
         """ """
@@ -246,6 +239,12 @@ def pos_c(pos):
     return pos[1]
 
 
+def upper_position(pos):
+    if pos_l(pos) - 1 >= 0:
+        return make_pos(pos_l(pos) - 1, pos_c(pos))
+    return
+
+
 # Generic Same Game functions #
 def board_find_groups(user_board):
     """
@@ -279,7 +278,7 @@ def board_find_groups_aux(board, pos, final_group, rejects, visited):
     """
     visited[pos] = True
     final_group.add_position(pos)
-    aux_pos = board.adjacent_pos(pos)
+    aux_pos = board.adjacent_positions(pos)
     for position in aux_pos:
         if visited[position]:
             continue
@@ -294,33 +293,41 @@ def board_find_groups_aux(board, pos, final_group, rejects, visited):
 def board_remove_group(user_board, user_group):
     """ remove o grupo do tabuleiro fazendo a compactacao vertical e horizontal das pecas."""
     # TODO
+    original_board = Board(user_board)
+    egroup = Group()
+    egroup.set_group(user_group)
+    game_board = copy.deepcopy(original_board)
+    game_board.remove_group(egroup)
+    board_vertical_align(game_board, egroup)
+    board_horizontal_align(game_board)
+    return game_board.get_board()
 
-
-def vertical_align_aux(board, pos):
-    upper = board.upper_position(pos)
-    if upper and not board.is_empty_position(upper):
-        board.swap_positions(pos, upper)
-        vertical_align_aux(board, upper)
 
 def board_vertical_align(board, group):
     aux = group.get_group()
     for position in aux:
         vertical_align_aux(board, position)
 
-def horizontal_align(board):
 
+def vertical_align_aux(board, pos):
+    upper = upper_position(pos)
+    if upper and not board.is_empty_position(upper):
+        board.swap_positions(pos, upper)
+        vertical_align_aux(board, upper)
+
+        under = board.under_position(pos)
+        if under and board.is_empty_position(under):
+            board.swap_positions(pos, under)
+            vertical_align_aux(board, pos)
+
+
+def board_horizontal_align(board):
     last_line = board.get_last_line()
     index = -1
-
-    for color in last_line:
+    to_erase = []
+    for each_color in last_line:
         index += 1
-        if no_color(color):
-            erase_column(board, index)
-
-
-def erase_column(board, index):
-    for line in board.get_board():
-        line.pop(index)
-        line.append(get_no_color())
-
-
+        if no_color(each_color):
+            to_erase.insert(0, index)
+    for col in to_erase:
+        board.erase_column(col)
