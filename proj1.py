@@ -24,6 +24,9 @@ class Group:
     def is_in_group(self, pos):
         return pos in self._positions
 
+    def get_len(self):
+        return len(self._positions)
+
 
 # ------------------------------- #
 class Board:
@@ -245,7 +248,8 @@ def board_find_groups(user_board):
         if board.is_empty_position(position) or visited[position]:
             continue
         single_group = board_find_groups_aux(board, position, Group(), [], visited)
-        all_groups.append(single_group.get_group())
+        if single_group.get_len() > 1:
+            all_groups.append(single_group.get_group())
     return all_groups
 
 
