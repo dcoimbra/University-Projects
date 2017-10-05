@@ -127,13 +127,13 @@ function createBorderLine() {
 	] );
 
 
-	//Junção final da linha curva + vértices do caminho = border1
+	//Junção final da linha curva + vértices do caminho = border1 e border 2
 	//Vertices: The array of vertices holds the position of every vertex in the model.
 	//GetPoints: Returns a set of divisions + 1 points using getPoint( t ).
 	path_geometry1.vertices = curve1.getPoints(100);
 	path_geometry2.vertices = curve2.getPoints(100);
 
-	//Adicionar a border1 à cena
+	//Adicionar border1 e border2 à cena
 	scene.add(border1);
 	scene.add(border2);
 
@@ -148,16 +148,6 @@ function createBorderLine() {
 	//Criar a border de torus
 	createTorusBorders(border1, curve1);
 	createTorusBorders(border2, curve2);
-
-	//Criação da segunda border2
-	//clone: Returns a clone of this Line object and its descendants
-  //	var border2 = border1.clone();
-
-	//Adicionar a border2 à cena
-	//scene.add(border2);
-
-	//Posicionamento da border2
-	//border2.translateZ(10);
 }
 
 /*-----------------------------------------------------------------------------------------------------*/
