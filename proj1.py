@@ -102,8 +102,17 @@ def pos_c(pos):
     return pos[1]
 
 
+# TAI group
+# Lista: posicoes que constituem um grupo
+def make_group(positions):
+    return group(positions)
+
+
 # TAI board
 # Lista: linhas do tabuleiro
+def make_board(lines):
+    return board(lines)
+
 
 def is_board(board):
     num_l = 0
@@ -124,14 +133,6 @@ def is_board(board):
             return False
 
     return True
-
-
-def make_group(positions):
-    return group(positions)
-
-
-def make_board(lines):
-    return board(lines)
 
 
 def board_find_groups(board):
