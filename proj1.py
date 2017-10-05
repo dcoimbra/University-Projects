@@ -4,11 +4,10 @@ from utils import *
 
 # Classes
 
-class group:
-    _positions = []
+class Group:
 
-    def __init__(self, positions):
-        self._positions = positions
+    def __init__(self):
+        self._positions = []
 
     def get_group(self):
         return self._positions
@@ -19,14 +18,18 @@ class group:
     def remove_position(self, pos):
         self._positions.remove(pos)
 
+    def is_in_group(self, pos):
+        return pos in self._positions
+
 
 # ------------------------------- #
 class Board:
-    _board = []
-    _size = []
-    _all_positions = []
 
     def __init__(self, user_board):
+        self._all_positions = []
+        self._board = []
+        self._size = []
+
         if is_board(user_board):
             self._board = user_board
 
@@ -237,8 +240,8 @@ def board_find_groups(user_board):
     for position in all_positions:
         if board.is_empty_position(position) or visited[position]:
             continue
-        single_group = board_find_groups_aux(board, position, [], [], visited)
-        all_groups.append(single_group)
+        single_group = board_find_groups_aux(board, position, Group(), [], visited)
+        all_groups.append(single_group.get_group())
     return all_groups
 
 
@@ -247,18 +250,18 @@ def board_find_groups_aux(board, pos, final_group, rejects, visited):
     Auxiliary recursive function for board_find_groups
     :param board: an object of class Board
     :param pos: a tuple of type position
-    :param final_group: a list of type group (a list of positions)
+    :param final_group: an object of type group (a list of positions)
     :param rejects: a list of all positions which do not have the same colour as the position in search
     :param visited:  a list of all searched positions
     :return: the complete group which the given position is a part of
     """
     visited[pos] = True
-    final_group.append(pos)
+    final_group.add_position(pos)
     aux_pos = board.adjacent_pos(pos)
     for position in aux_pos:
         if visited[position]:
             continue
-        if (position in final_group) or (not board.same_color(pos, position)):
+        if (final_group.is_in_group(position)) or (not board.same_color(pos, position)):
             rejects.append(position)
             continue
         if not (position in rejects):
