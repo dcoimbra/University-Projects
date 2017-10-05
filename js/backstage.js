@@ -1,14 +1,13 @@
  /*********************************************Variaveis globais*************************************************************/
 var camera, scene, renderer;
 
-var car;
+var car, table;
 
 /* tamanho da area visivel */
 var frustumSize;
 
 var clock = new THREE.Clock();
 
-var keysPressed = [ false, false, false, false ];
 
 /*-------------------------------------------------------------------------------------------------------------------------*/
 
@@ -21,7 +20,7 @@ function createScene() {
 	scene.add(new THREE.AxisHelper(10));
 
 	//Posicionamento dos vários objetos
-	createTable(0, 0, 0);
+	table = new Table(0, 0, 0);
 
 	createBorderLine();
 
@@ -47,7 +46,7 @@ function createCamera() {
 	'use strict';
 
 	var aspect = window.innerWidth / window.innerHeight;
-	
+
 	frustumSize = 60;
 
 	/*Camera ortogonal inicializada tal como na documentacao do three.js */
@@ -119,7 +118,7 @@ function onResize() {
 	}
 
 	camera.updateProjectionMatrix();
-} 
+}
 
 /*------------------------------------------------------------------------------------------------------------------*/
 function onKeyDown(e) {
@@ -163,7 +162,7 @@ function onKeyDown(e) {
 }
 /*---------------------------------------------------------------------------------------------------------------------------------*/
 function onKeyUp(e) {
-	
+
 	'use strict';
 
 	switch (e.keyCode) {
@@ -221,4 +220,3 @@ function init() {
 	window.addEventListener('keydown', onKeyDown);
 	window.addEventListener('keyup', onKeyUp);
 }
-

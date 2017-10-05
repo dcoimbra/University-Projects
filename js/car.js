@@ -2,104 +2,25 @@
 
 // Classe carro
 class Car {
-	
+
 	constructor(x, y, z) {
 
 		'use strict';
 
 		this.car_object = new THREE.Object3D();
 
-		this.car_object.userData = { speed: 0, 
-					 			     maxSpeed: 40, 
-					 			     acceleration: 20, 
-					 			     moving: false, 
-					 				 movingDirection: [ false, false, false, false ] // [left, up, right, down]
-							   	   };
+		this.car_object.userData = { speed: 0,
+					 			    maxSpeed: 40,
+					 			    acceleration: 20,
+					 			    moving: false,
+					 				  movingDirection: [ false, false, false, false ] // [left, up, right, down]
+							   	  };
 
 		this.car_object.position.set(x, y, z);
 
 		this.build();
 	}
 
-	/*-------------------------------------------------------------------------------------------*/
-	
-	getSpeed() {
-
-		'use strict';
-
-		return this.car_object.userData.speed; 
-	}
-
-	setSpeed(speed) {
-
-		this.car_object.userData.speed = speed; 
-	}
-
-	/*-------------------------------------------------------------------------------------------*/
-
-	getMaxSpeed() {
-
-		'use strict';
-
-		return this.car_object.userData.maxSpeed;
-	}
-
-	/*-------------------------------------------------------------------------------------------*/
-
-	getAcceleration() {
-
-		'use strict';
-
-
-		return this.car_object.userData.acceleration;
-	}
-
-	/*-------------------------------------------------------------------------------------------*/
-
-	getDisplacement(delta) {
-
-		'use strict';
-
-		var distance = this.getSpeed() * delta; // speed = distance / time <=> distance = speed * time
-
-		return distance;
-	}
-
-	/*-------------------------------------------------------------------------------------------*/
-
-	isMoving() {
-
-		'use strict';
-
-		return this.car_object.userData.moving;
-	}
-
-	/*-------------------------------------------------------------------------------------------*/
-
-	setMovingState(state) {
-
-		'use strict';
-
-		this.car_object.userData.moving = state;
-	}
-
-	/*-------------------------------------------------------------------------------------------*/
-
-	setMovingDirection(index, state) {
-
-		'use strict';
-
-
-		/* left = 0
-		   up = 1
-		   right = 2
-		   down = 3
-		*/
-
-		this.car_object.userData.movingDirection[index] = state;
-	}
-
-	/*---------------------------------------------------------------------------------------------------------*/
 
 	build() {
 
@@ -197,6 +118,85 @@ class Car {
 
 		this.car_object.add(wheel);
 	}
+	/*-------------------------------------------------------------------------------------------*/
+
+	getSpeed() {
+
+		'use strict';
+
+		return this.car_object.userData.speed;
+	}
+
+	setSpeed(speed) {
+
+		this.car_object.userData.speed = speed;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	getMaxSpeed() {
+
+		'use strict';
+
+		return this.car_object.userData.maxSpeed;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	getAcceleration() {
+
+		'use strict';
+
+		return this.car_object.userData.acceleration;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	getDisplacement(delta) {
+
+		'use strict';
+
+		var distance = this.getSpeed() * delta; // speed = distance / time <=> distance = speed * time
+
+		return distance;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	isMoving() {
+
+		'use strict';
+
+		return this.car_object.userData.moving;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	setMovingState(state) {
+
+		'use strict';
+
+		this.car_object.userData.moving = state;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	setMovingDirection(index, state) {
+
+		'use strict';
+
+
+		/* left = 0
+		   up = 1
+		   right = 2
+		   down = 3
+		*/
+
+		this.car_object.userData.movingDirection[index] = state;
+	}
+
+	/*---------------------------------------------------------------------------------------------------------*/
+
 
 	/*-------------------------------------------------------------------------------------------*/
 
@@ -205,11 +205,10 @@ class Car {
 		'use strict';
 
 		var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
-
 		var distance = this.getDisplacement(delta);
 
 		if (this.car_object.userData.movingDirection[0]) {  // Left arrow
-		
+
 			this.moveLeft(distance, delta);
 		}
 
@@ -219,7 +218,7 @@ class Car {
 		}
 
 		else if (this.car_object.userData.movingDirection[2]) { // Right arrow
-		
+
 			this.moveRight(distance, delta);
 		}
 
@@ -299,7 +298,7 @@ class Car {
 		this.car_object.translateX(distance);
 
 		if (this.getSpeed() > 0) { // If the car is moving forward
-				
+
 			this.setSpeed(this.getSpeed() - this.getAcceleration() * delta); // Start slowing down
 
 			if (this.getSpeed() < 0) { // When it reaches negative speed, stop the car
@@ -310,7 +309,7 @@ class Car {
 		}
 
 		else if (this.getSpeed() < 0) { // If the car is moving backward
-		
+
 			this.setSpeed(this.getSpeed() + this.getAcceleration() * delta); // Start slowing down in the opposite direction
 
 			if (this.getSpeed() > 0) { // When it reaches positive speed, stop the car

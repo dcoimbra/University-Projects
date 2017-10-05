@@ -8,7 +8,7 @@ class Orange {
 
 		var orange_geometry = new THREE.SphereGeometry(4, 23, 13);
 		var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true });
-	
+
 		this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
 		this.orange_object.position.set(x, y, z);
@@ -27,7 +27,7 @@ class ButterPackage {
 
 		var butterPackage_geometry = new THREE.CubeGeometry(6.5 * 2, 0, 3.5 * 2);
 		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
-		
+
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
 		this.butterPackage_object.position.set(x, y, z);
@@ -40,33 +40,34 @@ class ButterPackage {
 /**********************************************Criacao da mesa e suas partes***********************************************/
 
 
-function createTable(x, y, z) {
+class Table{
+
+	constructor(x, y, z) {
 
 	'use strict';
 
-	var table = new THREE.Object3D();
+	this.table_object = new THREE.Object3D();
 	var table_material = new THREE.MeshBasicMaterial({ color: 0x007300, wireframe: true });
 
-	addTableTop(table, table_material, 0, 0, 0);
+	this.addTableTop(table_material, 0, 0, 0);
 
-	scene.add(table);
+	scene.add(this.table_object);
 
 	//Posicionamento da mesa
-	table.position.x = x;
-	table.position.y = y;
-	table.position.z = z;
-}
+	this.table_object.position.set(x, y, z);
+	}
 
 /*-------------------------------------------------------------------------------------------------------------------*/
-function addTableTop(obj, material, x, y, z) {
+	addTableTop(material, x, y, z) {
 
-	'use strict';
+		'use strict';
 
-	var tabletop_geometry = new THREE.CubeGeometry(110, 0, 110);
-	var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
-	tabletop_mesh.position.set(x, y, z);
+		var tabletop_geometry = new THREE.CubeGeometry(110, 0, 110);
+		var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
+		tabletop_mesh.position.set(x, y, z);
 
-	obj.add(tabletop_mesh);
+		this.table_object.add(tabletop_mesh);
+	}
 }
 /*------------------------------------------------------------------------------------------------------------------*/
 
