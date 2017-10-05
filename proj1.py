@@ -12,6 +12,9 @@ class Group:
     def get_group(self):
         return self._positions
 
+    def set_group(self, group):
+        self._positions = group
+
     def add_position(self, pos):
         self._positions.append(pos)
 
@@ -105,6 +108,22 @@ class Board:
                 res.append(make_pos(line, col + 1))
         return res
 
+    def remove_group(self, group):
+        """ removes a single group from the board, substituting all positions to the value 0"""
+        positions = group.get_group()
+
+        for elem in positions:
+            self.remove_color(elem)
+
+    def swap_positions(self, pos1, pos2):
+        """swaps two positions in the same board"""
+
+        color1 = self.get_color(pos1)
+        color2 = self.get_color(pos2)
+
+        self.set_color(pos1, color2)
+        self.set_color(pos2, color1)
+
     def print_board(self):
         """
         sends to stdout a graphic representation of a board
@@ -120,9 +139,6 @@ class Board:
             result = "| "
         return
 
-    def remove_group(self, group):
-        """ removes a single group from the board, substituting all positions to the value 0"""
-        # TODO
 
 
 def is_board(board):
@@ -213,18 +229,6 @@ def pos_c(pos):
     return pos[1]
 
 
-# TAI group
-# Lista: posicoes que constituem um grupo
-def make_group(positions):
-    return group(positions)
-
-
-# TAI board
-# Lista: linhas do tabuleiro
-def make_board(lines):
-    return board(lines)
-
-
 # Generic Same Game functions #
 def board_find_groups(user_board):
     """
@@ -271,4 +275,4 @@ def board_find_groups_aux(board, pos, final_group, rejects, visited):
 
 def board_remove_group(board, group):
     """ remove o grupo do tabuleiro fazendo a compactacao vertical e horizontal das pecas."""
-    # TODO
+
