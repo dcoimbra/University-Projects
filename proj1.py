@@ -305,6 +305,7 @@ def board_remove_group(user_board, user_group):
 
 def board_vertical_align(board, group):
     aux = group.get_group()
+    aux.sort()
     for position in aux:
         vertical_align_aux(board, position)
 
@@ -314,11 +315,6 @@ def vertical_align_aux(board, pos):
     if upper and not board.is_empty_position(upper):
         board.swap_positions(pos, upper)
         vertical_align_aux(board, upper)
-
-        under = board.under_position(pos)
-        if under and board.is_empty_position(under):
-            board.swap_positions(pos, under)
-            vertical_align_aux(board, pos)
 
 
 def board_horizontal_align(board):
