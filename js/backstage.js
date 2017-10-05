@@ -141,21 +141,21 @@ function onKeyDown(e) {
 
 		case 37: //left arrow
 
-			keysPressed[0] = true;
+			car.userData.movingDirection[0] = true;
 			break;
 
 		case 38: //Up arrow
 
-			keysPressed[1] = true;
+			car.userData.movingDirection[1] = true;
 			car.userData.isMoving = true;
 			break;
 
 		case 39: //Right arrow
-			keysPressed[2] = true;
+			car.userData.movingDirection[2] = true;
 			break;
 
 		case 40: //Down arrow
-			keysPressed[3] = true;
+			car.userData.movingDirection[3] = true;
 			car.userData.isMoving = true;
 			break;
 
@@ -170,20 +170,20 @@ function onKeyUp(e) {
 
 		case 37: //left arrow
 
-			keysPressed[0] = false;
+			car.userData.movingDirection[0] = false;
 			break;
 
 		case 38: //Up arrow
 
-			keysPressed[1] = false;
+			car.userData.movingDirection[1] = false;
 			break;
 
 		case 39: //Right arrow
-			keysPressed[2] = false;
+			car.userData.movingDirection[2] = false;
 			break;
 
 		case 40: //Down arrow
-			keysPressed[3] = false;
+			car.userData.movingDirection[3] = false;
 			break;
 
 	}

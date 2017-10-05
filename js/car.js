@@ -6,7 +6,12 @@ function createCar(x, y, z) {
 
 	car = new THREE.Object3D();
 
-	car.userData = { speed: 0, maxSpeed: 40, acceleration: 20, isMoving: false};
+	car.userData = { speed: 0, 
+					 maxSpeed: 40, 
+					 acceleration: 20, 
+					 isMoving: false, 
+					 movingDirection: [ false, false, false, false ] 
+					};
 
 	createChassis(0, 0.25, 0);
 
@@ -104,22 +109,22 @@ function moveCar() {
 	var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
 	var distance = car.userData.speed * delta; // speed = distance / time <=> distance = speed * time
 
-	if (keysPressed[0]) {  // Left arrow
+	if (car.userData.movingDirection[0]) {  // Left arrow
 		moveLeft(distance, delta);
 
 	}
 
-	else if (keysPressed[1]) { // Up arrow
+	else if (car.userData.movingDirection[1]) { // Up arrow
 		moveForward(distance, delta);
 
 	}
 
-	else if (keysPressed[2]) { // Right arrow
+	else if (car.userData.movingDirection[2]) { // Right arrow
 		moveRight(distance, delta);
 
 	}
 
-	else if (keysPressed[3]) { // Down arrow
+	else if (car.userData.movingDirection[3]) { // Down arrow
 		moveBackwards(distance, delta);
 
 	}
