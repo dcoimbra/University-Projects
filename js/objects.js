@@ -1,37 +1,45 @@
 /**************************Construção das manteigas, laranjas****************************************************/
-function createOrange(x, y, z){
 
-	'use strict';
+class Orange {
 
-	var orange_geometry = new THREE.SphereGeometry(4, 23, 13);
-	var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true });
-	var orange = new THREE.Mesh(orange_geometry, orange_material);
+	constructor(x, y, z) {
 
-	orange.position.x = x;
-	orange.position.y = y;
-	orange.position.z = z;
+		'use strict';
 
-	scene.add(orange);
+		var orange_geometry = new THREE.SphereGeometry(4, 23, 13);
+		var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true });
+	
+		this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
+		this.orange_object.position.set(x, y, z);
+
+		scene.add(this.orange_object);
+	}
 }
+
 /*----------------------------------------------------------------------------------------------------------------*/
-function createButterPackages(x, y, z) {
 
-	'use strict';
+class ButterPackage {
 
-	var butterPackage_geometry = new THREE.CubeGeometry(6.5 * 2, 0, 3.5 * 2);
-	var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
-	var butterPackage = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+	constructor(x, y, z) {
 
-	butterPackage.position.x = x;
-	butterPackage.position.y = y;
-	butterPackage.position.z = z;
+		'use strict';
 
-	scene.add(butterPackage);
+		var butterPackage_geometry = new THREE.CubeGeometry(6.5 * 2, 0, 3.5 * 2);
+		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
+		
+		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+
+		this.butterPackage_object.position.set(x, y, z);
+
+		scene.add(this.butterPackage_object);
+	}
 }
 /*----------------------------------------------------------------------------------------------------------------*/
 
 /**********************************************Criacao da mesa e suas partes***********************************************/
+
+
 function createTable(x, y, z) {
 
 	'use strict';

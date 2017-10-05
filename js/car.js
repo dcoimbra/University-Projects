@@ -25,12 +25,21 @@ class Car {
 	
 	getSpeed() {
 
+		'use strict';
+
 		return this.car_object.userData.speed; 
+	}
+
+	setSpeed(speed) {
+
+		this.car_object.userData.speed = speed; 
 	}
 
 	/*-------------------------------------------------------------------------------------------*/
 
 	getMaxSpeed() {
+
+		'use strict';
 
 		return this.car_object.userData.maxSpeed;
 	}
@@ -39,12 +48,17 @@ class Car {
 
 	getAcceleration() {
 
+		'use strict';
+
+
 		return this.car_object.userData.acceleration;
 	}
 
 	/*-------------------------------------------------------------------------------------------*/
 
 	getDisplacement(delta) {
+
+		'use strict';
 
 		var distance = this.getSpeed() * delta; // speed = distance / time <=> distance = speed * time
 
@@ -55,6 +69,8 @@ class Car {
 
 	isMoving() {
 
+		'use strict';
+
 		return this.car_object.userData.moving;
 	}
 
@@ -62,12 +78,17 @@ class Car {
 
 	setMovingState(state) {
 
+		'use strict';
+
 		this.car_object.userData.moving = state;
 	}
 
 	/*-------------------------------------------------------------------------------------------*/
 
 	setMovingDirection(index, state) {
+
+		'use strict';
+
 
 		/* left = 0
 		   up = 1
@@ -181,6 +202,8 @@ class Car {
 
 	move() {
 
+		'use strict';
+
 		var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
 
 		var distance = this.getDisplacement(delta);
@@ -221,7 +244,7 @@ class Car {
 
 		if (this.getSpeed() < this.getMaxSpeed()) { // If speed is not max, accelerate until it's max
 
-			this.car_object.userData.speed += this.getAcceleration() * delta;
+			this.setSpeed(this.getSpeed() + this.getAcceleration() * delta);
 		}
 	}
 
@@ -263,7 +286,7 @@ class Car {
 
 		if (this.getSpeed() < this.getMaxSpeed()) {
 
-			this.car_object.userData.speed -= this.getAcceleration() * delta;
+			this.setSpeed(this.getSpeed() - this.getAcceleration() * delta);
 		}
 	}
 
@@ -277,22 +300,22 @@ class Car {
 
 		if (this.getSpeed() > 0) { // If the car is moving forward
 				
-			this.car_object.userData.speed -= this.getAcceleration() * delta; // Start slowing down
+			this.setSpeed(this.getSpeed() - this.getAcceleration() * delta); // Start slowing down
 
 			if (this.getSpeed() < 0) { // When it reaches negative speed, stop the car
 
-				this.car_object.userData.speed = 0;
+				this.setSpeed(0);
 				this.setMovingState(false);
 		 	}
 		}
 
 		else if (this.getSpeed() < 0) { // If the car is moving backward
 		
-			this.car_object.userData.speed += this.getAcceleration() * delta; // Start slowing down in the opposite direction
+			this.setSpeed(this.getSpeed() + this.getAcceleration() * delta); // Start slowing down in the opposite direction
 
 			if (this.getSpeed() > 0) { // When it reaches positive speed, stop the car
 
-				this.car_object.userData.speed = 0;
+				this.setSpeed(0);
 				this.setMovingState(false);
 			}
 		}

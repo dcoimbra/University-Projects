@@ -25,15 +25,15 @@ function createScene() {
 
 	createBorderLine();
 
-	createOrange(-40, 0, 6);
-	createOrange(15, 10, -15);
-	createOrange(35, 15, 5);
+	var orange1 = new Orange(-40, 0, 6);
+	var orange2 = new Orange(15, 10, -15);
+	var orange3 = new Orange(35, 15, 5);
 
-	createButterPackages(10, 2, 5);
-	createButterPackages(45, 2, 15);
-	createButterPackages(-10, 2, 0);
-	createButterPackages(-25, 2, 4);
-	createButterPackages(5, 2, -15);
+	var butterPackage1 = new ButterPackage(10, 2, 5);
+	var butterPackage2 = new ButterPackage(45, 2, 15);
+	var butterPackage3 = new ButterPackage(-10, 2, 0);
+	var butterPackage4 = new ButterPackage(-25, 2, 4);
+	var butterPackage5 = new ButterPackage(5, 2, -15);
 
 	car = new Car(0, 6, 0);
 
