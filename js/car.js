@@ -1,228 +1,302 @@
 /******************************************Criaçao do carro**************************************/
 
-function createCar(x, y, z) {
+// Classe carro
+class Car {
+	
+	constructor(x, y, z) {
 
-	'use strict';
+		'use strict';
 
-	car = new THREE.Object3D();
+		this.car_object = new THREE.Object3D();
 
-	car.userData = { speed: 0, 
-					 maxSpeed: 40, 
-					 acceleration: 20, 
-					 isMoving: false, 
-					 movingDirection: [ false, false, false, false ] 
-					};
+		this.car_object.userData = { speed: 0, 
+					 			     maxSpeed: 40, 
+					 			     acceleration: 20, 
+					 			     moving: false, 
+					 				 movingDirection: [ false, false, false, false ] // [left, up, right, down]
+							   	   };
 
-	createChassis(0, 0.25, 0);
+		this.car_object.position.set(x, y, z);
 
-	createHood(-4.5, 4.25, 0);
+		this.build();
+	}
 
-	createWindShieldFront(1.2, 3.7, 0);
-	createWindShieldSide(-2.2, 3.7, -3.3); // left
-	createWindShieldSide(-2.2, 3.7, 3.3); // right
+	/*-------------------------------------------------------------------------------------------*/
+	
+	getSpeed() {
 
-	createWheel(-6, -3.5, 6.2);
-	createWheel(6, -3.5, 6.2);
-	createWheel(-6, -3.5, -6.2);
-	createWheel(6, -3.5, -6.2);
+		return this.car_object.userData.speed; 
+	}
 
-	scene.add(car);
+	/*-------------------------------------------------------------------------------------------*/
 
-	car.position.set(x, y, z);
+	getMaxSpeed() {
 
-	car.scale.multiplyScalar(0.35);
+		return this.car_object.userData.maxSpeed;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	getAcceleration() {
+
+		return this.car_object.userData.acceleration;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	getDisplacement(delta) {
+
+		var distance = this.getSpeed() * delta; // speed = distance / time <=> distance = speed * time
+
+		return distance;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	isMoving() {
+
+		return this.car_object.userData.moving;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	setMovingState(state) {
+
+		this.car_object.userData.moving = state;
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	setMovingDirection(index, state) {
+
+		/* left = 0
+		   up = 1
+		   right = 2
+		   down = 3
+		*/
+
+		this.car_object.userData.movingDirection[index] = state;
+	}
+
+	/*---------------------------------------------------------------------------------------------------------*/
+
+	build() {
+
+		'use strict';
+
+		this.createChassis(0, 0.25, 0);
+
+		this.createHood(-4.5, 4.25, 0);
+
+		this.createWindShieldFront(1.2, 3.7, 0);
+		this.createWindShieldSide(-2.2, 3.7, -3.3); // left
+		this.createWindShieldSide(-2.2, 3.7, 3.3); // right
+
+		this.createWheel(-6, -3.5, 6.2);
+		this.createWheel(6, -3.5, 6.2);
+		this.createWheel(-6, -3.5, -6.2);
+		this.createWheel(6, -3.5, -6.2);
+
+		scene.add(this.car_object);
+
+		this.car_object.scale.multiplyScalar(0.35);
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	createChassis(x, y, z) {
+
+		'use strict';
+
+		var chassis_geometry = new THREE.CubeGeometry(20, 5, 11);
+		var chassis_material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
+		chassis.position.set(x, y, z);
+
+		this.car_object.add(chassis);
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	createHood(x, y, z) {
+
+		'use strict';
+
+		var hood_geometry = new THREE.CubeGeometry(11, 3, 6);
+		var hood_material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+		var hood = new THREE.Mesh(hood_geometry, hood_material);
+		hood.position.set(x, y, z);
+
+		this.car_object.add(hood);
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	createWindShieldFront(x, y, z) {
+
+		'use strict';
+
+		var windshield_frontGeometry = new THREE.CubeGeometry(0, 2, 5.5);
+		var windshield_frontMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+		var windshield = new THREE.Mesh(windshield_frontGeometry, windshield_frontMaterial);
+		windshield.position.set(x, y, z);
+
+		this.car_object.add(windshield);
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	createWindShieldSide(x, y, z) {
+
+		'use strict';
+
+		var windshield_sideGeometry = new THREE.CubeGeometry(5.5, 2, 0);
+		var windshield_sideMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
+		windshield_side.position.set(x, y, z);
+
+		this.car_object.add(windshield_side);
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	createWheel(x, y, z) {
+
+		'use strict';
+
+		var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
+		var wheel_material = new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: true } );
+		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
+
+		var z_horizon = new THREE.Vector3(x, y, 5);
+
+		wheel.position.set(x, y, z);
+
+		wheel.lookAt(z_horizon);
+
+		this.car_object.add(wheel);
+	}
+
+	/*-------------------------------------------------------------------------------------------*/
+
+	move() {
+
+		var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
+
+		var distance = this.getDisplacement(delta);
+
+		if (this.car_object.userData.movingDirection[0]) {  // Left arrow
+		
+			this.moveLeft(distance, delta);
+		}
+
+		else if (this.car_object.userData.movingDirection[1]) { // Up arrow
+
+			this.moveForward(distance, delta);
+		}
+
+		else if (this.car_object.userData.movingDirection[2]) { // Right arrow
+		
+			this.moveRight(distance, delta);
+		}
+
+		else if (this.car_object.userData.movingDirection[3]) { // Down arrow
+
+			this.moveBackwards(distance, delta);
+		}
+
+		else { // If no button is pressed
+
+			this.slowDown(distance, this.getSpeed(), delta);
+		}
+	}
+
+	/*---------------------------------------------------------------------------------------------------------*/
+
+ 	moveForward(distance, delta) {
+
+		'use strict';
+
+		this.car_object.translateX(distance); // Move forward
+
+		if (this.getSpeed() < this.getMaxSpeed()) { // If speed is not max, accelerate until it's max
+
+			this.car_object.userData.speed += this.getAcceleration() * delta;
+		}
+	}
+
+	/*---------------------------------------------------------------------------------------------------------*/
+
+	moveLeft(distance, delta) {
+
+		'use strict';
+
+		this.car_object.rotateY(0.1);  // Turn left
+
+		if (this.isMoving()) {   // If the car is moving, keep it moving
+
+			this.car_object.translateX(distance);
+		}
+	}
+
+	/*---------------------------------------------------------------------------------------------------------*/
+
+	moveRight(distance, delta){
+
+		'use strict';
+
+		this.car_object.rotateY(-0.1); // Turn right
+
+		if (this.isMoving()) { // If the car is moving, keep it moving
+
+			this.car_object.translateX(distance);
+		}
+	}
+
+	/*---------------------------------------------------------------------------------------------------------*/
+
+	moveBackwards(distance, delta){
+
+		'use strict';
+
+		this.car_object.translateX(distance); // Do the same as up arrow, but in the opposite direction
+
+		if (this.getSpeed() < this.getMaxSpeed()) {
+
+			this.car_object.userData.speed -= this.getAcceleration() * delta;
+		}
+	}
+
+	/*---------------------------------------------------------------------------------------------------------*/
+
+	slowDown(distance, speed, delta) {
+
+		'use strict';
+
+		this.car_object.translateX(distance);
+
+		if (this.getSpeed() > 0) { // If the car is moving forward
+				
+			this.car_object.userData.speed -= this.getAcceleration() * delta; // Start slowing down
+
+			if (this.getSpeed() < 0) { // When it reaches negative speed, stop the car
+
+				this.car_object.userData.speed = 0;
+				this.setMovingState(false);
+		 	}
+		}
+
+		else if (this.getSpeed() < 0) { // If the car is moving backward
+		
+			this.car_object.userData.speed += this.getAcceleration() * delta; // Start slowing down in the opposite direction
+
+			if (this.getSpeed() > 0) { // When it reaches positive speed, stop the car
+
+				this.car_object.userData.speed = 0;
+				this.setMovingState(false);
+			}
+		}
+	}
 }
 
 /*-------------------------------------------------------------------------------------------*/
-function createChassis(x, y, z) {
-
-	'use strict';
-
-	var chassis_geometry = new THREE.CubeGeometry(20, 5, 11);
-	var chassis_material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
-	var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
-	chassis.position.set(x, y, z);
-
-	car.add(chassis);
-}
-
-/*------------------------------------------------------------------------------------------*/
-function createHood(x, y, z) {
-
-	'use strict';
-
-	var hood_geometry = new THREE.CubeGeometry(11, 3, 6);
-	var hood_material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-	var hood = new THREE.Mesh(hood_geometry, hood_material);
-	hood.position.set(x, y, z);
-
-	car.add(hood);
-}
-/*-----------------------------------------------------------------------------------------------------*/
-
-function createWindShieldFront(x, y, z) {
-
-	'use strict';
-
-	var windshield_frontGeometry = new THREE.CubeGeometry(0, 2, 5.5);
-	var windshield_frontMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
-	var windshield = new THREE.Mesh(windshield_frontGeometry, windshield_frontMaterial);
-	windshield.position.set(x, y, z);
-
-	car.add(windshield);
-}
-/*----------------------------------------------------------------------------------------------------*/
-
-function createWindShieldSide(x, y, z) {
-
-	'use strict';
-
-	var windshield_sideGeometry = new THREE.CubeGeometry(5.5, 2, 0);
-	var windshield_sideMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
-	var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
-	windshield_side.position.set(x, y, z);
-
-	car.add(windshield_side);
-}
-/*-------------------------------------------------------------------------------------------------------------*/
-
-function createWheel(x, y, z) {
-
-	'use strict';
-
-	var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
-	var wheel_material = new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: true } );
-	var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
-
-	var me = new THREE.Vector3(x, y, 5);
-
-	wheel.position.set(x, y, z);
-
-	wheel.lookAt(me);
-
-	car.add(wheel);
-}
-/*---------------------------------------------------------------------------------------------------*/
-
-function moveCar() {
-
-	var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
-	var distance = car.userData.speed * delta; // speed = distance / time <=> distance = speed * time
-
-	if (car.userData.movingDirection[0]) {  // Left arrow
-		moveLeft(distance, delta);
-
-	}
-
-	else if (car.userData.movingDirection[1]) { // Up arrow
-		moveForward(distance, delta);
-
-	}
-
-	else if (car.userData.movingDirection[2]) { // Right arrow
-		moveRight(distance, delta);
-
-	}
-
-	else if (car.userData.movingDirection[3]) { // Down arrow
-		moveBackwards(distance, delta);
-
-	}
-
-	else { // If no button is pressed
-
-		if (car.userData.speed > 0) { // If the car is moving forward
-			forwardSlowingDown(distance, delta);
-
-		}
-
-		else if (car.userData.speed < 0) { // If the car is moving backward
-			backwardsSlowingDown(distance, delta);
-
-		}
-
-		else { // If the speed is zero
-			car.userData.isMoving = false; // Stop the car
-		}
-	}
-}
-
-/*---------------------------------------------------------------------------------------------------------*/
-
-function moveForward(distance, delta){
-
-	'use strict';
-
-	car.translateX(distance); // Move forward
-
-		if (car.userData.speed < car.userData.maxSpeed) { // If speed is not max, accelerate until it's max
-
-			car.userData.speed += car.userData.acceleration*delta;
-		}
-}
-
-function moveLeft(distance, delta){
-
-	'use strict';
-
-	car.rotateY(0.1);  // Turn left
-
-		if (car.userData.isMoving) {   // If the car is moving, keep it moving
-
-			car.translateX(distance);
-		}
-}
-
-function moveRight(distance, delta){
-
-	'use strict';
-
-	car.rotateY(-0.1); // Turn right
-
-		if (car.userData.isMoving) { // If the car is moving, keep it moving
-
-			car.translateX(distance);
-		}
-}
-
-function moveBackwards(distance, delta){
-
-	'use strict';
-
-	car.translateX(distance); // Do the same as up arrow, but in the opposite direction
-
-		if (car.userData.speed < car.userData.maxSpeed) {
-
-			car.userData.speed -= car.userData.acceleration*delta;
-		}
-}
-
-function forwardSlowingDown(distance, delta){
-
-	'use strict';
-
-	car.translateX(distance);
-
-			car.userData.speed -= car.userData.acceleration*delta; // Start slowing down
-
-			if (car.userData.speed < 0) { // When it reaches negative speed, stop the car
-
-				car.userData.speed = 0;
-				car.userData.isMoving = false;
-			}
-}
-
-function backwardsSlowingDown(distance, delta){
-
-	'use strict';
-
-	car.translateX(distance);
-
-			car.userData.speed += car.userData.acceleration*delta; // Start slowing down in the opposite direction
-
-			if (car.userData.speed > 0) { // When it reaches positive speed, stop the car
-
-				car.userData.speed = 0;
-				car.userData.isMoving = false;
-			}
-}

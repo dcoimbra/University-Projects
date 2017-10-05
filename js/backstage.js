@@ -35,7 +35,7 @@ function createScene() {
 	createButterPackages(-25, 2, 4);
 	createButterPackages(5, 2, -15);
 
-	createCar(0, 6, 0);
+	car = new Car(0, 6, 0);
 
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
@@ -141,22 +141,22 @@ function onKeyDown(e) {
 
 		case 37: //left arrow
 
-			car.userData.movingDirection[0] = true;
+			car.setMovingDirection(0, true);
 			break;
 
 		case 38: //Up arrow
 
-			car.userData.movingDirection[1] = true;
-			car.userData.isMoving = true;
+			car.setMovingDirection(1, true);
+			car.setMovingState(true);
 			break;
 
 		case 39: //Right arrow
-			car.userData.movingDirection[2] = true;
+			car.setMovingDirection(2, true);
 			break;
 
 		case 40: //Down arrow
-			car.userData.movingDirection[3] = true;
-			car.userData.isMoving = true;
+			car.setMovingDirection(3, true);
+			car.setMovingState(true);
 			break;
 
 	}
@@ -170,20 +170,20 @@ function onKeyUp(e) {
 
 		case 37: //left arrow
 
-			car.userData.movingDirection[0] = false;
+			car.setMovingDirection(0, false);
 			break;
 
 		case 38: //Up arrow
 
-			car.userData.movingDirection[1] = false;
+			car.setMovingDirection(1, false);
 			break;
 
 		case 39: //Right arrow
-			car.userData.movingDirection[2] = false;
+			car.setMovingDirection(2, false);
 			break;
 
 		case 40: //Down arrow
-			car.userData.movingDirection[3] = false;
+			car.setMovingDirection(3, false);
 			break;
 
 	}
@@ -195,7 +195,7 @@ function animate() {
 
 	render();
 
-	moveCar();
+	car.move();
 
 	requestAnimationFrame(animate);
 }
@@ -221,18 +221,4 @@ function init() {
 	window.addEventListener('keydown', onKeyDown);
 	window.addEventListener('keyup', onKeyUp);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
