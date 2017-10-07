@@ -123,6 +123,19 @@ class Board:
         for elem in positions:
             self.remove_color(elem)
 
+    def check_victory(self):
+        """determines if the player has won with the current board"""
+        groups = board_find_groups(self.get_board())
+
+        if self.is_empty():
+            return "You won"
+
+        else:
+            if len(groups) == 0:
+                return "You lost"
+            else:
+                return "You can still play"
+
     def get_line(self, index):
         if 0 <= index < self.get_num_lines():
             return self._board[index]
@@ -327,3 +340,22 @@ def board_horizontal_align(board):
             to_erase.insert(0, index)
     for col in to_erase:
         board.erase_column(col)
+
+def play(user_board):
+
+    all_groups = board_find_groups(user_board)
+    play_board = Board(user_board)
+
+    play_board.print_board()
+
+    if len(all_groups) == 0:
+        print("No solution")
+        return
+
+    print()
+
+    while (len(all_groups) > 0):
+        play_board = Board(board_remove_group(play_board.get_board(), all_groups[0]))
+        all_groups = board_find_groups(play_board.get_board())
+        play_board.print_board()
+        print(play_board.check_victory())
