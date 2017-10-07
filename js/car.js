@@ -10,34 +10,34 @@ class Car {
 		this.car_object = new THREE.Object3D();
 
 		this.car_object.userData = { speed: 0,
-					 			     	maxSpeed: 40,
-					 			     	acceleration: 20,
-					 			     	moving: false,
-					 				 		movingDirection: [ false, false, false, false ] // [left, up, right, down]
-							   	   		};
+					 			     maxSpeed: 40,
+					 			     acceleration: 20,
+					 			     moving: false,
+					 		         movingDirection: [ false, false, false, false ] // [left, up, right, down]
+							   	   	};
 
 		this.car_object.position.set(x, y, z);
 
-		this.build();
+		this.build(x, y, z);
 	}
 
 	/*---------------------------------------------------------------------------*/
-	build() {
+	build(x, y, z) {
 
 		'use strict';
 
-		this.createChassis(0, 0.25, 0);
+		this.createChassis(x, y + 0.25, z);
 
-		this.createHood(-4.5, 4.25, 0);
+		this.createHood(x - 4.5, y + 4.25, z);
 
-		this.createWindShieldFront(1.2, 3.7, 0);
-		this.createWindShieldSide(-2.2, 3.7, -3.3); // left
-		this.createWindShieldSide(-2.2, 3.7, 3.3); // right
+		this.createWindShieldFront(x + 1.2, y + 3.7, z);
+		this.createWindShieldSide(x - 2.2, y + 3.7, z - 3.3); // left
+		this.createWindShieldSide(x - 2.2, y + 3.7, z + 3.3); // right
 
-		this.createWheel(-6, -3.5, 6.2);
-		this.createWheel(6, -3.5, 6.2);
-		this.createWheel(-6, -3.5, -6.2);
-		this.createWheel(6, -3.5, -6.2);
+		this.createWheel(x - 6, y - 3.5, z + 6.2);
+		this.createWheel(x + 6, y - 3.5, z + 6.2);
+		this.createWheel(x - 6, y - 3.5, z - 6.2);
+		this.createWheel(x + 6, y - 3.5, z - 6.2);
 
 		scene.add(this.car_object);
 
@@ -50,7 +50,7 @@ class Car {
 
 		'use strict';
 
-		var chassis_geometry = new THREE.CubeGeometry(20, 5, 11);
+		var chassis_geometry = new THREE.BoxGeometry(20, 5, 11);
 		var chassis_material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
 		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
 		chassis.position.set(x, y, z);
@@ -64,7 +64,7 @@ class Car {
 
 		'use strict';
 
-		var hood_geometry = new THREE.CubeGeometry(11, 3, 6);
+		var hood_geometry = new THREE.BoxGeometry(11, 3, 6);
 		var hood_material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
 		hood.position.set(x, y, z);
@@ -78,7 +78,7 @@ class Car {
 
 		'use strict';
 
-		var windshield_frontGeometry = new THREE.CubeGeometry(0, 2, 5.5);
+		var windshield_frontGeometry = new THREE.BoxGeometry(0, 2, 5.5);
 		var windshield_frontMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 		var windshield = new THREE.Mesh(windshield_frontGeometry, windshield_frontMaterial);
 		windshield.position.set(x, y, z);
@@ -92,7 +92,7 @@ class Car {
 
 		'use strict';
 
-		var windshield_sideGeometry = new THREE.CubeGeometry(5.5, 2, 0);
+		var windshield_sideGeometry = new THREE.BoxGeometry(5.5, 2, 0);
 		var windshield_sideMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
 		windshield_side.position.set(x, y, z);
@@ -110,11 +110,7 @@ class Car {
 		var wheel_material = new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: true } );
 		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
 
-		var z_horizon = new THREE.Vector3(x, y, 5);
-
 		wheel.position.set(x, y, z);
-
-		wheel.lookAt(z_horizon);
 
 		this.car_object.add(wheel);
 	}
@@ -129,6 +125,7 @@ class Car {
 
 		var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
 		var distance = this.getDisplacement(delta);
+        var speed = this.getSpeed();
 
 		if (this.car_object.userData.movingDirection[0]) {  // Left arrow
 
@@ -152,7 +149,7 @@ class Car {
 
 		else { // If no button is pressed
 
-			this.slowDown(distance, this.getSpeed(), delta);
+			this.slowDown(distance, speed, delta);
 		}
 	}
 
@@ -179,7 +176,7 @@ class Car {
 		if (this.isMoving()) {   // If the car is moving, keep it moving
 
 			this.car_object.rotateY(0.1);	 // Turn left
-			this.car_object.translateX(distance);
+			this.slowDown(distance, this.getSpeed(), delta);
 		}
 	}
 
@@ -192,7 +189,7 @@ class Car {
 		if (this.isMoving()) { // If the car is moving, keep it moving
 
 			this.car_object.rotateY(-0.1);	// Turn right
-			this.car_object.translateX(distance);
+			this.slowDown(distance, this.getSpeed(), delta);
 		}
 	}
 

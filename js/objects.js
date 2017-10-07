@@ -25,7 +25,7 @@ class ButterPackage {
 
 		'use strict';
 
-		var butterPackage_geometry = new THREE.CubeGeometry(6.5 * 2, 0, 3.5 * 2);
+		var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
 		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
@@ -40,13 +40,14 @@ class ButterPackage {
 /**********************************************Criacao da mesa e suas partes***********************************************/
 
 
-class Table{
+class Table {
 
 	constructor(x, y, z) {
 
 	'use strict';
 
 	this.table_object = new THREE.Object3D();
+
 	var table_material = new THREE.MeshBasicMaterial({ color: 0x007300, wireframe: true });
 
 	this.addTableTop(table_material, 0, 0, 0);
@@ -62,7 +63,7 @@ class Table{
 
 		'use strict';
 
-		var tabletop_geometry = new THREE.CubeGeometry(110, 0, 110);
+		var tabletop_geometry = new THREE.BoxGeometry(110, 3, 110);
 		var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
 		tabletop_mesh.position.set(x, y, z);
 
@@ -152,8 +153,6 @@ function createBorderLine() {
 	border2.translateX(5);
 	border2.translateZ(-2);
 
-	border1.scale.multiplyScalar(1);
-
 	//Criar a border de torus
 	createTorusBorders(border1, curve1);
 	createTorusBorders(border2, curve2);
@@ -164,7 +163,7 @@ function createTorusBorders(obj, line) {
 
 	'use strict';
 
-	var border_Point;
+	var border_point;
 
 	var length = line.getLength();
 
@@ -174,9 +173,9 @@ function createTorusBorders(obj, line) {
 	//getPoint: Returns a vector for point t of the curve where t is between 0 and 1.
 	for (var i = 0; i < 1; i += division) {
 
-		border_Point = line.getPointAt(i);
+		border_point = line.getPointAt(i);
 
-		addBoundTorus(obj, border_Point);
+		addBoundTorus(obj, border_point);
 	}
 }
 
@@ -185,16 +184,16 @@ function addBoundTorus(obj, location) {
 
 	'use strict';
 	//Criação do toro
-	var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 8, 16, Math.PI * 2);
+	var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
 	var torus_material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 	var torus = new THREE.Mesh(torus_geometry, torus_material);
 
 	var above_vector = new THREE.Vector3(location.getComponent(0),
-									     1,
+									     10,
 									     location.getComponent(2));
 
 	torus.position.set(location.getComponent(0),
-					   0.5,
+					   1.75,
 					   location.getComponent(2));
 
 	obj.add(torus);
