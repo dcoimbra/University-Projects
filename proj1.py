@@ -184,7 +184,10 @@ def is_board(board):
 class sg_state:
     """Needed for informed search."""
 
-    def __lt__(self, other):
+    def __init__(self, board):
+        self._board = Board(board)
+
+    def __lt__(self, other_state):
         """ """
         # TODO
 
