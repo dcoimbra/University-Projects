@@ -76,7 +76,9 @@ class Table {
 					height: 110
 					depth: 3*/
 
-		var tabletop_geometry = new THREE.BoxGeometry(110, 3, 110);
+		var tabletop_size = 110;
+
+		var tabletop_geometry = new THREE.BoxGeometry(tabletop_size , 3, tabletop_size);
 		var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
 		tabletop_mesh.position.set(x, y, z);
 

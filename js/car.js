@@ -12,7 +12,6 @@ class Car {
 		this.car_object.userData = { speed: 0,
 					 			     maxSpeed: 40,
 					 			     acceleration: 20,
-					 			     moving: false,
 					 		         movingDirection: [ false, false, false, false ] // [left, up, right, down]
 							   	   };
 
@@ -35,10 +34,10 @@ class Car {
 		this.createWindShieldSide(x - 2.2, y + 3.7, z - 3.3); // left
 		this.createWindShieldSide(x - 2.2, y + 3.7, z + 3.3); // right
 
-		this.createWheel(x - 6, y - 3.5, z + 6.2);
-		this.createWheel(x + 6, y - 3.5, z + 6.2);
-		this.createWheel(x - 6, y - 3.5, z - 6.2);
-		this.createWheel(x + 6, y - 3.5, z - 6.2);
+		this.createWheel(x - 6, y - 3.5, z + 6.2); // back-left
+		this.createWheel(x + 6, y - 3.5, z + 6.2); // front-left
+		this.createWheel(x - 6, y - 3.5, z - 6.2); // back-right
+		this.createWheel(x + 6, y - 3.5, z - 6.2); // front-right
 
 		scene.add(this.car_object);
 
@@ -156,29 +155,34 @@ class Car {
 		var distance = this.getDisplacement(delta);
         var speed = this.getSpeed();
 
-		if (this.car_object.userData.movingDirection[0]) {  // Left arrow
-
-			this.moveLeft(distance, delta);
-		}
-
-		else if (this.car_object.userData.movingDirection[1]) { // Up arrow
+		if (this.car_object.userData.movingDirection[1]) { // Up arrow
 
 			this.moveForward(distance, delta);
-		}
 
-		else if (this.car_object.userData.movingDirection[2]) { // Right arrow
+			if (this.getSpeed() != 0) {
 
-			this.moveRight(distance, delta);
+				this.checkDirection(distance, delta);
+			}
 		}
 
 		else if (this.car_object.userData.movingDirection[3]) { // Down arrow
 
 			this.moveBackwards(distance, delta);
+
+			if (this.getSpeed() != 0) {
+
+				this.checkDirection(distance, delta);
+			}
 		}
 
 		else { // If no button is pressed
 
-			this.slowDown(distance, speed, delta);
+			this.car_object.translateX(distance);
+
+			if (this.getSpeed() != 0) {
+
+				this.slowDown(distance, speed, delta);
+			}
 		}
 	}
 
@@ -198,27 +202,18 @@ class Car {
 
 	/*---------------------------------------------------------------------------------------------------------*/
 
-	moveLeft(distance, delta) {
+	checkDirection(distance, delta) {
 
 		'use strict';
 
-		if (this.isMoving()) {   // If the car is moving, keep it moving
+		if (this.car_object.userData.movingDirection[0]) {  // Left arrow
 
-			this.car_object.rotateY(0.1);	 // Turn left
-			this.slowDown(distance, this.getSpeed(), delta);
+			this.car_object.rotateY(0.05);
 		}
-	}
 
-	/*---------------------------------------------------------------------------------------------------------*/
+		else if (this.car_object.userData.movingDirection[2]) { // Right arrow
 
-	moveRight(distance, delta){
-
-		'use strict';
-
-		if (this.isMoving()) { // If the car is moving, keep it moving
-
-			this.car_object.rotateY(-0.1);	// Turn right
-			this.slowDown(distance, this.getSpeed(), delta);
+			this.car_object.rotateY(-0.05);
 		}
 	}
 
@@ -230,7 +225,7 @@ class Car {
 
 		this.car_object.translateX(distance); // Do the same as up arrow, but in the opposite direction
 
-		if (this.getSpeed() < this.getMaxSpeed()) {
+		if (this.getSpeed() > -this.getMaxSpeed()) {
 
 			this.setSpeed(this.getSpeed() - this.getAcceleration() * delta);
 		}
@@ -242,8 +237,6 @@ class Car {
 
 		'use strict';
 
-		this.car_object.translateX(distance);
-
 		if (this.getSpeed() > 0) { // If the car is moving forward
 
 			this.setSpeed(this.getSpeed() - this.getAcceleration() * delta); // Start slowing down
@@ -251,7 +244,6 @@ class Car {
 			if (this.getSpeed() < 0) { // When it reaches negative speed, stop the car
 
 				this.setSpeed(0);
-				this.setMovingState(false);
 		 	}
 		}
 
@@ -262,9 +254,10 @@ class Car {
 			if (this.getSpeed() > 0) { // When it reaches positive speed, stop the car
 
 				this.setSpeed(0);
-				this.setMovingState(false);
 			}
 		}
+
+		this.checkDirection(distance, delta);
 	}
 /*-------------------------------------------------------------------------------------------*/
 

@@ -79,9 +79,7 @@ function createCamera() {
 	scene.add(camera);
 
 	/*Camera posicionada em vista de topo */
-	camera.position.x = 0;
-	camera.position.y = 25;
-	camera.position.z = 0;
+	camera.position.set(0, 25, 0);
 	camera.lookAt(scene.position);
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
@@ -147,7 +145,6 @@ function onKeyDown(e) {
 
 		case 38: //Up arrow
 			car.setMovingDirection(1, true);
-			car.setMovingState(true);
 			break;
 
 		case 39: //Right arrow
@@ -156,7 +153,6 @@ function onKeyDown(e) {
 
 		case 40: //Down arrow
 			car.setMovingDirection(3, true);
-			car.setMovingState(true);
 			break;
 
 		default:
@@ -217,8 +213,6 @@ function init() {
 
 	createScene();
 	createCamera();
-
-	render();
 
 	//Adicionados eventos, quando resize e keydown
 	window.addEventListener('resize', onResize);
