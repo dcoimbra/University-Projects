@@ -14,7 +14,7 @@ class Car {
 					 			     acceleration: 20,
 					 			     moving: false,
 					 		         movingDirection: [ false, false, false, false ] // [left, up, right, down]
-							   	   	};
+							   	   };
 
 		this.car_object.position.set(x, y, z);
 
@@ -26,6 +26,7 @@ class Car {
 
 		'use strict';
 
+		//Elements are instantiated relative to the car's position
 		this.createChassis(x, y + 0.25, z);
 
 		this.createHood(x - 4.5, y + 4.25, z);
@@ -41,7 +42,8 @@ class Car {
 
 		scene.add(this.car_object);
 
-		this.car_object.scale.multiplyScalar(0.35);
+		//Scale down size of car
+		this.car_object.scale.multiplyScalar(0.2);
 	}
 
 	/*-------------------------------------------------------------------------------------------*/
@@ -49,6 +51,11 @@ class Car {
 	createChassis(x, y, z) {
 
 		'use strict';
+
+		/* Chassis: width: 20  (relative to camera)
+		            height: 11
+		            depth: 5
+		*/
 
 		var chassis_geometry = new THREE.BoxGeometry(20, 5, 11);
 		var chassis_material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
@@ -64,6 +71,11 @@ class Car {
 
 		'use strict';
 
+		/* Hood:    width: 11  (relative to camera)
+		            height: 6
+		            depth: 3
+		*/
+
 		var hood_geometry = new THREE.BoxGeometry(11, 3, 6);
 		var hood_material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
@@ -77,6 +89,11 @@ class Car {
 	createWindShieldFront(x, y, z) {
 
 		'use strict';
+
+		/* Widshield (front): width: 0  (relative to camera)
+		                      height: 5.5
+		                      depth: 2
+		*/
 
 		var windshield_frontGeometry = new THREE.BoxGeometry(0, 2, 5.5);
 		var windshield_frontMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
@@ -92,6 +109,11 @@ class Car {
 
 		'use strict';
 
+		/* Widshield (side):  width: 5.5  (relative to camera)
+		                      height: 0
+		                      depth: 2
+		*/
+
 		var windshield_sideGeometry = new THREE.BoxGeometry(5.5, 2, 0);
 		var windshield_sideMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
@@ -105,6 +127,13 @@ class Car {
 	createWheel(x, y, z) {
 
 		'use strict';
+
+		/* Wheel: radius: 2
+				  tube diameter: 0.6
+				  radial segments: 8
+				  tubular segments: 16
+				  central angle: 2π
+	    */ 
 
 		var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
 		var wheel_material = new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: true } );
