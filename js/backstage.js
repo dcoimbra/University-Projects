@@ -220,7 +220,7 @@ function init() {
 
 	render();
 
-	//Adicionados eventos, quando resize and keydown
+	//Adicionados eventos, quando resize, keydown e keyup
 	window.addEventListener('resize', onResize);
 	window.addEventListener('keydown', onKeyDown);
 	window.addEventListener('keyup', onKeyUp);

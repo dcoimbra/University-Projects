@@ -136,13 +136,6 @@ function createBorderLine() {
 		new THREE.Vector3(-5 * 9, 0.5, 5 * 9),
 	] );
 
-
-	//Junção final da linha curva + vértices do caminho = border1 e border 2
-	//Vertices: The array of vertices holds the position of every vertex in the model.
-	//GetPoints: Returns a set of divisions + 1 points using getPoint( t ).
-	path_geometry1.vertices = curve1.getPoints(100);
-	path_geometry2.vertices = curve2.getPoints(100);
-
 	//Adicionar border1 e border2 à cena
 	scene.add(border1);
 	scene.add(border2);
