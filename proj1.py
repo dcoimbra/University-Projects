@@ -27,6 +27,9 @@ class Group:
     def get_len(self):
         return len(self._positions)
 
+    def is_playable(self):
+        return len(self._positions) > 1
+
 
 # ------------------------------- #
 class Board:
@@ -91,10 +94,10 @@ class Board:
                 res.append(make_pos(line - 1, col))
             if line + 1 < self.get_num_lines():
                 res.append(make_pos(line + 1, col))
-            if col - 1 >= 0:
-                res.append(make_pos(line, col - 1))
             if col + 1 < self.get_num_columns():
                 res.append(make_pos(line, col + 1))
+            if col - 1 >= 0:
+                res.append(make_pos(line, col - 1))
         return res
 
     def under_position(self, pos):
@@ -277,8 +280,7 @@ def board_find_groups(user_board):
         if board.is_empty_position(position) or visited[position]:
             continue
         single_group = board_find_groups_aux(board, position, Group(), [], visited)
-        if single_group.get_len() > 1:
-            all_groups.append(single_group.get_group())
+        all_groups.append(single_group.get_group())
     return all_groups
 
 
@@ -312,6 +314,8 @@ def board_remove_group(user_board, user_group):
     original_board = Board(user_board)
     egroup = Group()
     egroup.set_group(user_group)
+    if not egroup.is_playable():
+        return user_board
     game_board = copy.deepcopy(original_board)
     game_board.remove_group(egroup)
     board_vertical_align(game_board, egroup)
@@ -335,14 +339,13 @@ def vertical_align_aux(board, pos):
 
 def board_horizontal_align(board):
     last_line = board.get_last_line()
-    index = -1
-    to_erase = []
-    for each_color in last_line:
-        index += 1
-        if no_color(each_color):
-            to_erase.insert(0, index)
-    for col in to_erase:
-        board.erase_column(col)
+    to_erase = False
+    for i in range(board.get_num_lines()-1, -1, -1):
+        if color(last_line[i]):
+            to_erase = True
+        elif to_erase:
+            board.erase_column(i)
+
 
 def play(user_board):
 
@@ -357,7 +360,7 @@ def play(user_board):
 
     print()
 
-    while (len(all_groups) > 0):
+    while len(all_groups) > 0:
         play_board = Board(board_remove_group(play_board.get_board(), all_groups[0]))
         all_groups = board_find_groups(play_board.get_board())
         play_board.print_board()
