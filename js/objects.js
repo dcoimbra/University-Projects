@@ -6,7 +6,11 @@ class Orange {
 
 		'use strict';
 
-		var orange_geometry = new THREE.SphereGeometry(4, 23, 13);
+		/* Orange: radius: 4 
+				   width segments: 17
+				   height segments: 13*/
+
+		var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
 		var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true });
 
 		this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
@@ -25,7 +29,12 @@ class ButterPackage {
 
 		'use strict';
 
-		var butterPackage_geometry = new THREE.CubeGeometry(6.5 * 2, 0, 3.5 * 2);
+		/* ButterPackage: width: 13   (relative to camera)
+						  height: 7
+						  depth: 2
+		*/
+
+		var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
 		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
@@ -40,13 +49,14 @@ class ButterPackage {
 /**********************************************Criacao da mesa e suas partes***********************************************/
 
 
-class Table{
+class Table {
 
 	constructor(x, y, z) {
 
 	'use strict';
 
 	this.table_object = new THREE.Object3D();
+
 	var table_material = new THREE.MeshBasicMaterial({ color: 0x007300, wireframe: true });
 
 	this.addTableTop(table_material, 0, 0, 0);
@@ -62,7 +72,13 @@ class Table{
 
 		'use strict';
 
-		var tabletop_geometry = new THREE.CubeGeometry(110, 0, 110);
+		/*TableTop: width: 110   (relative to camera)
+					height: 110
+					depth: 3*/
+
+		var tabletop_size = 110;
+
+		var tabletop_geometry = new THREE.BoxGeometry(tabletop_size , 3, tabletop_size);
 		var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
 		tabletop_mesh.position.set(x, y, z);
 
@@ -135,24 +151,16 @@ function createBorderLine() {
 		new THREE.Vector3(-5 * 9, 0.5, 5 * 9),
 	] );
 
-
-	//Junção final da linha curva + vértices do caminho = border1 e border 2
-	//Vertices: The array of vertices holds the position of every vertex in the model.
-	//GetPoints: Returns a set of divisions + 1 points using getPoint( t ).
-	path_geometry1.vertices = curve1.getPoints(100);
-	path_geometry2.vertices = curve2.getPoints(100);
-
 	//Adicionar border1 e border2 à cena
 	scene.add(border1);
 	scene.add(border2);
 
+	//Posicionar
 	border1.translateX(5);
 	border1.translateZ(-2);
 
 	border2.translateX(5);
 	border2.translateZ(-2);
-
-	border1.scale.multiplyScalar(1);
 
 	//Criar a border de torus
 	createTorusBorders(border1, curve1);
@@ -164,7 +172,7 @@ function createTorusBorders(obj, line) {
 
 	'use strict';
 
-	var border_Point;
+	var border_point;
 
 	var length = line.getLength();
 
@@ -174,9 +182,9 @@ function createTorusBorders(obj, line) {
 	//getPoint: Returns a vector for point t of the curve where t is between 0 and 1.
 	for (var i = 0; i < 1; i += division) {
 
-		border_Point = line.getPointAt(i);
+		border_point = line.getPointAt(i);
 
-		addBoundTorus(obj, border_Point);
+		addBoundTorus(obj, border_point);
 	}
 }
 
@@ -184,17 +192,29 @@ function createTorusBorders(obj, line) {
 function addBoundTorus(obj, location) {
 
 	'use strict';
+	
 	//Criação do toro
-	var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 8, 16, Math.PI * 2);
+
+	/* BoundTorus:
+
+		radius: 0.5
+		tube diameter: 0.25
+		radial segments: 4
+		tubular segments: 8
+		central angle: 2π 
+	*/
+
+	var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
 	var torus_material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 	var torus = new THREE.Mesh(torus_geometry, torus_material);
 
+	//Make torus look to the camera
 	var above_vector = new THREE.Vector3(location.getComponent(0),
-									     1,
+									     10,
 									     location.getComponent(2));
 
 	torus.position.set(location.getComponent(0),
-					   0.5,
+					   1.75,
 					   location.getComponent(2));
 
 	obj.add(torus);

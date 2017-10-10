@@ -1,7 +1,7 @@
  /*********************************************Variaveis globais*************************************************************/
 var camera, scene, renderer;
 
-var car, table;
+var car;
 
 /* tamanho da area visivel */
 var frustumSize;
@@ -17,24 +17,27 @@ function createScene() {
 	'use strict';
 
 	scene = new THREE.Scene();
-	scene.add(new THREE.AxisHelper(10));
 
 	//Posicionamento dos vários objetos
-	table = new Table(0, 0, 0);
+	var table = new Table(0, 0, 0);
 
 	createBorderLine();
 
-	var orange1 = new Orange(-40, 0, 6);
-	var orange2 = new Orange(15, 10, -15);
-	var orange3 = new Orange(35, 15, 5);
+	var orange_height = 5.5;
 
-	var butterPackage1 = new ButterPackage(10, 2, 5);
-	var butterPackage2 = new ButterPackage(45, 2, 15);
-	var butterPackage3 = new ButterPackage(-10, 2, 0);
-	var butterPackage4 = new ButterPackage(-25, 2, 4);
-	var butterPackage5 = new ButterPackage(5, 2, -15);
+	var orange1 = new Orange(-40, orange_height, 6);
+	var orange2 = new Orange(15, orange_height, -15);
+	var orange3 = new Orange(35, orange_height, 5);
 
-	car = new Car(0, 6, 0);
+	var butterPackage_height = 2.5;
+
+	var butterPackage1 = new ButterPackage(10, butterPackage_height, 5);
+	var butterPackage2 = new ButterPackage(45, butterPackage_height, 15);
+	var butterPackage3 = new ButterPackage(-10, butterPackage_height, 0);
+	var butterPackage4 = new ButterPackage(-25, butterPackage_height, 4);
+	var butterPackage5 = new ButterPackage(5, butterPackage_height, -15);
+
+	car = new Car(0, 2.8, 0);
 
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
@@ -49,7 +52,7 @@ function createCamera() {
 
 	frustumSize = 60;
 
-	/*Camera ortogonal inicializada tal como na documentacao do three.js */
+	/*Camera ortogonal inicializada com frustumSize fixo */
 
 	if (window.innerWidth > window.innerHeight) {
 
@@ -76,14 +79,12 @@ function createCamera() {
 	scene.add(camera);
 
 	/*Camera posicionada em vista de topo */
-	camera.position.x = 0;
-	camera.position.y = 25;
-	camera.position.z = 0;
+	camera.position.set(0, 25, 0);
 	camera.lookAt(scene.position);
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
 
-/**********************************************Cricao do render************************************************************/
+/**********************************************Renderizacao************************************************************/
 function render() {
 
 	'use strict';
@@ -141,8 +142,7 @@ function onKeyDown(e) {
 		case 37: //left arrow
 			car.setMovingDirection(0, true);
 			break;
-
-
+			
 		case 39: //Right arrow
 			car.setMovingDirection(2, true);
 			break;
@@ -154,7 +154,6 @@ function onKeyDown(e) {
 
 		case 40: //Down arrow
 			car.setMovingDirection(3, true);
-			car.setMovingState(true);
 			break;
 
 		default:
@@ -216,9 +215,7 @@ function init() {
 	createScene();
 	createCamera();
 
-	render();
-
-	//Adicionados eventos, quando resize and keydown
+	//Adicionados eventos, quando resize e keydown
 	window.addEventListener('resize', onResize);
 	window.addEventListener('keydown', onKeyDown);
 	window.addEventListener('keyup', onKeyUp);
