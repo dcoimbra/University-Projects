@@ -2,7 +2,7 @@
 
 class Orange {
 
-	constructor(x, y, z) {
+	constructor(x, y, z){
 
 		'use strict';
 
@@ -11,14 +11,33 @@ class Orange {
 				   height segments: 13*/
 
 		var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
-		var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true });
+		var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true});
+
 
 		this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
 		this.orange_object.position.set(x, y, z);
 
-		scene.add(this.orange_object);
+		this.orangeStalk(x, y, z);
+
 	}
+
+	orangeStalk(x, y, z) {
+
+		'use strict';
+
+		var stalk_geometry = new THREE.CylinderGeometry(1, 1.1, 20, 32);
+		var stalk_material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
+		var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
+
+		stalk.position.set(x, y, z);
+
+		this.orange_object.add(stalk);
+
+		scene.add(this.orange_object);
+
+	}
+
 }
 
 /*----------------------------------------------------------------------------------------------------------------*/

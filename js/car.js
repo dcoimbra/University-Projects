@@ -161,7 +161,7 @@ class Car {
 
 			if (this.getSpeed() != 0) {
 
-				this.checkDirection(distance, delta);
+				this.checkDirection();
 			}
 		}
 
@@ -171,7 +171,7 @@ class Car {
 
 			if (this.getSpeed() != 0) {
 
-				this.checkDirection(distance, delta);
+				this.checkDirection();
 			}
 		}
 
@@ -202,7 +202,7 @@ class Car {
 
 	/*---------------------------------------------------------------------------------------------------------*/
 
-	checkDirection(distance, delta) {
+	checkDirection() {
 
 		'use strict';
 
@@ -257,7 +257,7 @@ class Car {
 			}
 		}
 
-		this.checkDirection(distance, delta);
+		this.checkDirection();
 	}
 /*-------------------------------------------------------------------------------------------*/
 
