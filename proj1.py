@@ -181,14 +181,14 @@ class sg_state:
     """ """
 
     def __init__(self, board):
-        self._board = board
+        self.board = board
         self._objboard = Board(board)
 
     def __lt__(self, other_state):
         """Needed for informed search."""
         # TODO
 
-    def board(self):
+    def get_board(self):
         return self._objboard
 
 
@@ -205,7 +205,7 @@ class same_game(Problem):
     def actions(self, state):
         """Return the list groups that can be removed in the given
         state."""
-        groups = board_find_groups(state.board().get_board())
+        groups = board_find_groups(state.get_board().get_board())
         groups = list(filter(lambda group: (len(group) > 1), groups))
 
         return groups
@@ -214,7 +214,7 @@ class same_game(Problem):
         """Return the state that results from removing the given
         group from the board. The action must be one of
         self.actions(state)"""
-        return sg_state(board_remove_group(state.board().get_board(), action))
+        return sg_state(board_remove_group(state.get_board().get_board(), action))
 
     def goal_test(self, state):
         """Return True if the state is a goal. The state is
@@ -222,7 +222,7 @@ class same_game(Problem):
         the lower-left position is empty."""
         board_lines = self._board.get_num_lines()
 
-        return state.board().is_empty_position(make_pos(board_lines - 1, 0))
+        return state.get_board().is_empty_position(make_pos(board_lines - 1, 0))
 
     def path_cost(self, c, state1, action, state2):
         """Return the cost of a solution path that arrives at state2 from
@@ -289,7 +289,8 @@ def board_find_groups(user_board):
         if board.is_empty_position(position) or visited[position]:
             continue
         single_group = board_find_groups_aux(board, position, Group(), [], visited)
-        all_groups.append(single_group.get_group())
+        single_group.get_group().sort()
+        all_groups.append(single_group.get_group());
     return all_groups
 
 
