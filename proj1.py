@@ -30,6 +30,9 @@ class Group:
     def is_playable(self):
         return len(self._positions) > 1
 
+    def biggest(self):
+        pass
+
 
 # ------------------------------- #
 class Board:
@@ -151,6 +154,9 @@ class Board:
             line.pop(index)
             line.append(get_no_color())
 
+    def is_equal(self, board):
+        return self._board == board
+
     def print_board(self):
         """
         sends to stdout a graphic representation of a board
@@ -185,14 +191,18 @@ def is_board(board):
 
 # --------------------------- #
 class sg_state:
-    """Needed for informed search."""
+    """ """
 
     def __init__(self, board):
-        self._board = Board(board)
+        self._board = board
+        self._objboard = Board(board)
 
     def __lt__(self, other_state):
-        """ """
+        """Needed for informed search."""
         # TODO
+
+    def board(self):
+        return self._board
 
 
 # ---------------------------- #
@@ -200,22 +210,26 @@ class same_game(Problem):
     """Models a Same Game problem as a satisfaction problem.
     A solution cannot have pieces left on the board."""
 
-    def __init__(self, board, initial):
+    def __init__(self, board):
         """ """
-        super().__init__(initial)
-        self._board = []
+        self._board = board
+        self._goal = []  # TODO
 
     def actions(self, state):
         """ """
-        # TODO
+        g = board_find_groups(state.board().get_board())
+        for group in g:
+            if len(group) == 1:
+                g.remove(group)
+        return g
 
     def result(self, state, action):
         """ """
-        # TODO
+        return board_remove_group(state.board().get_board(), action)
 
     def goal_test(self, state):
         """ """
-        # TODO
+        return state.board().is_equal(self._goal)
 
     def path_cost(self, c, state1, action, state2):
         """ """
@@ -310,7 +324,6 @@ def board_find_groups_aux(board, pos, final_group, rejects, visited):
 
 def board_remove_group(user_board, user_group):
     """ remove o grupo do tabuleiro fazendo a compactacao vertical e horizontal das pecas."""
-    # TODO
     original_board = Board(user_board)
     egroup = Group()
     egroup.set_group(user_group)
@@ -340,7 +353,7 @@ def vertical_align_aux(board, pos):
 def board_horizontal_align(board):
     last_line = board.get_last_line()
     to_erase = False
-    for i in range(board.get_num_lines()-1, -1, -1):
+    for i in range(board.get_num_lines() - 1, -1, -1):
         if color(last_line[i]):
             to_erase = True
         elif to_erase:
@@ -348,7 +361,6 @@ def board_horizontal_align(board):
 
 
 def play(user_board):
-
     all_groups = board_find_groups(user_board)
     play_board = Board(user_board)
 
