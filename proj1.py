@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 from search import *
 from utils import *
 
@@ -30,21 +30,14 @@ class Group:
     def is_playable(self):
         return len(self._positions) > 1
 
-    def biggest(self):
-        pass
-
-
 # ------------------------------- #
 class Board:
     def __init__(self, user_board):
-        self._all_positions = []
-        self._board = []
-        self._size = []
-
         if is_board(user_board):
             self._board = user_board
 
         self._size = [len(user_board), len(user_board[0])]
+        self._all_positions = []
 
         i = 0
         while i < self._size[0]:
@@ -155,22 +148,16 @@ class Board:
             line.append(get_no_color())
 
     def is_equal(self, board):
-        return self._board == board
+        return self._board == board.get_board()
 
-    def print_board(self):
-        """
-        sends to stdout a graphic representation of a board
-        :return:
-        """
-        result = "| "
-        for l in self._board:
-            for i in l:
-                if i == get_no_color():
-                    i = "_"
-                result += str(i) + " "
-            print(result + "|")
-            result = "| "
-        return
+    def empty_board(self):
+
+        board_lines = self.get_num_lines()
+        board_columns = self.get_num_columns()
+
+        empty = [[get_no_color() for column in range(board_columns)] for line in range(board_lines)]
+
+        return empty
 
 
 def is_board(board):
@@ -202,7 +189,7 @@ class sg_state:
         # TODO
 
     def board(self):
-        return self._board
+        return self._objboard
 
 
 # ---------------------------- #
@@ -211,29 +198,37 @@ class same_game(Problem):
     A solution cannot have pieces left on the board."""
 
     def __init__(self, board):
-        """ """
-        self._board = board
-        self._goal = []  # TODO
+        """The constructor specifies the initial state as a board."""
+        Problem.__init__(self, sg_state(board),)
+        self._board = Board(board)
 
     def actions(self, state):
-        """ """
-        g = board_find_groups(state.board().get_board())
-        for group in g:
-            if len(group) == 1:
-                g.remove(group)
-        return g
+        """Return the list groups that can be removed in the given
+        state."""
+        groups = board_find_groups(state.board().get_board())
+        groups = list(filter(lambda group: (len(group) > 1), groups))
+
+        return groups
 
     def result(self, state, action):
-        """ """
-        return board_remove_group(state.board().get_board(), action)
+        """Return the state that results from removing the given
+        group from the board. The action must be one of
+        self.actions(state)"""
+        return sg_state(board_remove_group(state.board().get_board(), action))
 
     def goal_test(self, state):
-        """ """
-        return state.board().is_equal(self._goal)
+        """Return True if the state is a goal. The state is
+        a goal if the board is empty. A board is empty if
+        the lower-left position is empty."""
+        board_lines = self._board.get_num_lines()
+
+        return state.board().is_empty_position(make_pos(board_lines - 1, 0))
 
     def path_cost(self, c, state1, action, state2):
-        """ """
-        # TODO
+        """Return the cost of a solution path that arrives at state2 from
+        state1 via action, assuming cost c to get up to state1. The path doesn't
+        matter, so this method costs 1 for every step in the path."""
+        return c + 1
 
     def h(self, node):
         """Needed for informed search."""
@@ -329,7 +324,7 @@ def board_remove_group(user_board, user_group):
     egroup.set_group(user_group)
     if not egroup.is_playable():
         return user_board
-    game_board = copy.deepcopy(original_board)
+    game_board = deepcopy(original_board)
     game_board.remove_group(egroup)
     board_vertical_align(game_board, egroup)
     board_horizontal_align(game_board)
@@ -358,22 +353,3 @@ def board_horizontal_align(board):
             to_erase = True
         elif to_erase:
             board.erase_column(i)
-
-
-def play(user_board):
-    all_groups = board_find_groups(user_board)
-    play_board = Board(user_board)
-
-    play_board.print_board()
-
-    if len(all_groups) == 0:
-        print("No solution")
-        return
-
-    print()
-
-    while len(all_groups) > 0:
-        play_board = Board(board_remove_group(play_board.get_board(), all_groups[0]))
-        all_groups = board_find_groups(play_board.get_board())
-        play_board.print_board()
-        print(play_board.check_victory())
