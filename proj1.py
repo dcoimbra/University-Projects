@@ -353,7 +353,7 @@ def vertical_align_aux(board, pos):
 def board_horizontal_align(board):
     last_line = board.get_last_line()
     to_erase = False
-    for i in range(board.get_num_lines() - 1, -1, -1):
+    for i in range(board.get_num_columns() - 1, -1, -1):
         if color(last_line[i]):
             to_erase = True
         elif to_erase:
