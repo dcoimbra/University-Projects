@@ -1,3 +1,5 @@
+# 57842 - Filipa Marques   Grupo 01   84708 - David Coimbra
+
 from copy import deepcopy
 from search import *
 from utils import *
