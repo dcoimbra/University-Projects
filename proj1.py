@@ -32,6 +32,7 @@ class Group:
     def is_playable(self):
         return len(self._positions) > 1
 
+
 # ------------------------------- #
 class Board:
     def __init__(self, user_board):
@@ -88,13 +89,13 @@ class Board:
         col = pos_c(pos)
         res = []
         if line <= self.get_num_lines() and col <= self.get_num_columns():
-            if line - 1 >= 0:
+            if line - 1 >= 0:  # left
                 res.append(make_pos(line - 1, col))
-            if line + 1 < self.get_num_lines():
+            if line + 1 < self.get_num_lines():  # right
                 res.append(make_pos(line + 1, col))
-            if col + 1 < self.get_num_columns():
+            if col + 1 < self.get_num_columns():  # up
                 res.append(make_pos(line, col + 1))
-            if col - 1 >= 0:
+            if col - 1 >= 0:  # down
                 res.append(make_pos(line, col - 1))
         return res
 
@@ -111,31 +112,12 @@ class Board:
         self.set_color(pos1, color2)
         self.set_color(pos2, color1)
 
-    def is_empty(self):
-        for position in self._all_positions:
-            if not self.is_empty_position(position):
-                return False
-        return True
-
     def remove_group(self, group):
         """ removes a single group from the board, substituting all positions to the value 0"""
         positions = group.get_group()
 
         for elem in positions:
             self.remove_color(elem)
-
-    def check_victory(self):
-        """determines if the player has won with the current board"""
-        groups = board_find_groups(self.get_board())
-
-        if self.is_empty():
-            return "You won"
-
-        else:
-            if len(groups) == 0:
-                return "You lost"
-            else:
-                return "You can still play"
 
     def get_line(self, index):
         if 0 <= index < self.get_num_lines():
@@ -201,7 +183,7 @@ class same_game(Problem):
 
     def __init__(self, board):
         """The constructor specifies the initial state as a board."""
-        Problem.__init__(self, sg_state(board),)
+        Problem.__init__(self, sg_state(board), )
         self._board = Board(board)
 
     def actions(self, state):
@@ -258,7 +240,7 @@ def color(c):
 # TAI pos
 # Tuplo (l, c)
 def make_pos(l, c):
-    return (l, c)
+    return l, c
 
 
 def pos_l(pos):
@@ -292,7 +274,7 @@ def board_find_groups(user_board):
             continue
         single_group = board_find_groups_aux(board, position, Group(), [], visited)
         single_group.get_group().sort()
-        all_groups.append(single_group.get_group());
+        all_groups.append(single_group.get_group())
     return all_groups
 
 
