@@ -1,8 +1,8 @@
 # 57842 - Filipa Marques   Grupo 01   84708 - David Coimbra
 
 from copy import deepcopy
+from random import randint
 from search import *
-from utils import *
 
 
 # Classes
@@ -36,20 +36,22 @@ class Group:
 # ------------------------------- #
 class Board:
     def __init__(self, user_board):
-        if is_board(user_board):
-            self._board = user_board
+        self._board = user_board
 
         self._size = [len(user_board), len(user_board[0])]
         self._all_positions = []
 
-        i = 0
-        while i < self._size[0]:
-            j = 0
-            while j < self._size[1]:
-                pos = make_pos(i, j)
-                self._all_positions.append(pos)
-                j += 1
-            i += 1
+    def get_positions(self):
+        if not self._all_positions:
+            i = 0
+            while i < self._size[0]:
+                j = 0
+                while j < self._size[1]:
+                    pos = make_pos(i, j)
+                    self._all_positions.append(pos)
+                    j += 1
+                i += 1
+        return self._all_positions
 
     def get_board(self):
         return self._board
@@ -59,9 +61,6 @@ class Board:
 
     def get_num_columns(self):
         return self._size[1]
-
-    def get_positions(self):
-        return self._all_positions
 
     def get_color(self, position):
         return self._board[pos_l(position)][pos_c(position)]
@@ -98,11 +97,6 @@ class Board:
             if col - 1 >= 0:  # down
                 res.append(make_pos(line, col - 1))
         return res
-
-    def under_position(self, pos):
-        if pos_l(pos) + 1 < self.get_num_lines():
-            return make_pos(pos_l(pos) + 1, pos_c(pos))
-        return
 
     def swap_positions(self, pos1, pos2):
         """swaps two positions in the same board"""
@@ -145,12 +139,10 @@ class Board:
 
 
 def is_board(board):
-    board_lines = 0
     board_columns = 0
     for line in board:
         if not isinstance(line, list):
             return False
-        board_lines += 1
         line_size = len(line)
 
         if board_columns == 0:
@@ -166,11 +158,14 @@ class sg_state:
 
     def __init__(self, board):
         self.board = board
+        self._all_groups = []
         self._objboard = Board(board)
 
     def __lt__(self, other_state):
         """Needed for informed search."""
-        # TODO
+        if randint(0, 1):
+            return True
+        return False
 
     def get_board(self):
         return self._objboard
@@ -216,7 +211,8 @@ class same_game(Problem):
 
     def h(self, node):
         """Needed for informed search."""
-        # TODO
+        groups = board_find_groups(node.state.board)
+        return len(groups)
 
 
 # TAIs #
@@ -273,7 +269,6 @@ def board_find_groups(user_board):
         if board.is_empty_position(position) or visited[position]:
             continue
         single_group = board_find_groups_aux(board, position, Group(), [], visited)
-        single_group.get_group().sort()
         all_groups.append(single_group.get_group())
     return all_groups
 
