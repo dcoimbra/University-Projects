@@ -158,8 +158,8 @@ class sg_state:
 
     def __init__(self, board):
         self.board = board
-        self._all_groups = []
         self._objboard = Board(board)
+        self._all_groups = []
 
     def __lt__(self, other_state):
         """Needed for informed search."""
@@ -169,6 +169,11 @@ class sg_state:
 
     def get_board(self):
         return self._objboard
+
+    def get_all_groups(self):
+        if not self._all_groups:
+            self._all_groups = board_find_groups(self.board)
+        return self._all_groups
 
 
 # ---------------------------- #
@@ -184,9 +189,8 @@ class same_game(Problem):
     def actions(self, state):
         """Return the list groups that can be removed in the given
         state."""
-        groups = board_find_groups(state.get_board().get_board())
+        groups = state.get_all_groups()
         groups = list(filter(lambda group: (len(group) > 1), groups))
-
         return groups
 
     def result(self, state, action):
@@ -211,7 +215,7 @@ class same_game(Problem):
 
     def h(self, node):
         """Needed for informed search."""
-        groups = board_find_groups(node.state.board)
+        groups = node.state.get_all_groups()
         return len(groups)
 
 
