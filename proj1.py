@@ -10,6 +10,7 @@ from search import *
 class Group:
     def __init__(self):
         self._positions = []
+        self._len = 0
 
     def get_group(self):
         return self._positions
@@ -27,13 +28,17 @@ class Group:
         return pos in self._positions
 
     def get_len(self):
-        return len(self._positions)
+        if not self._len:
+            self._len = len(self._positions)
+        return self._len
 
     def is_playable(self):
-        return len(self._positions) > 1
+        if not self._len:
+            return self.get_len() > 1
+        return self._len > 1
 
 
-# ------------------------------- #
+# ------------------------------------------- #
 class Board:
     def __init__(self, user_board):
         self._board = user_board
@@ -42,6 +47,7 @@ class Board:
         self._all_positions = []
 
     def get_positions(self):
+        """ returns a list of all positions (tuples) in the board"""
         if not self._all_positions:
             i = 0
             while i < self._size[0]:
@@ -63,6 +69,7 @@ class Board:
         return self._size[1]
 
     def get_color(self, position):
+        """ returns de color of a giver position"""
         return self._board[pos_l(position)][pos_c(position)]
 
     def set_color(self, position, new_color):
@@ -72,6 +79,8 @@ class Board:
         self.set_color(position, get_no_color())
 
     def same_color(self, pos1, pos2):
+        """ returns true if the two given positions have the same color and false otherwise.
+        returns false if any of the positions is empty """
         if (not self.is_empty_position(pos1)) and (not self.is_empty_position(pos2)):
             return self.get_color(pos1) == self.get_color(pos2)
         return False
@@ -80,10 +89,7 @@ class Board:
         return self.get_color(position) == get_no_color()
 
     def adjacent_positions(self, pos):
-        """
-        :param pos: an object of type position
-        :return: a list of the adjacent positions to the given one within this board
-        """
+        """ returns a list of the adjacent positions to the given position within this board """
         line = pos_l(pos)
         col = pos_c(pos)
         res = []
@@ -107,15 +113,11 @@ class Board:
         self.set_color(pos2, color1)
 
     def remove_group(self, group):
-        """ removes a single group from the board, substituting all positions to the value 0"""
+        """ removes a single group from the board, substituting all positions to the value 0 (empty position)"""
         positions = group.get_group()
 
         for elem in positions:
             self.remove_color(elem)
-
-    def get_line(self, index):
-        if 0 <= index < self.get_num_lines():
-            return self._board[index]
 
     def get_last_line(self):
         return self._board[-1]
@@ -125,20 +127,9 @@ class Board:
             line.pop(index)
             line.append(get_no_color())
 
-    def is_equal(self, board):
-        return self._board == board.get_board()
-
-    def empty_board(self):
-
-        board_lines = self.get_num_lines()
-        board_columns = self.get_num_columns()
-
-        empty = [[get_no_color() for column in range(board_columns)] for line in range(board_lines)]
-
-        return empty
-
 
 def is_board(board):
+    """ returns true if the given argument is a list of lists of integers (representing a same game board)"""
     board_columns = 0
     for line in board:
         if not isinstance(line, list):
@@ -152,7 +143,7 @@ def is_board(board):
     return True
 
 
-# --------------------------- #
+# ------------------------------------------- #
 class sg_state:
     """ """
 
@@ -162,12 +153,13 @@ class sg_state:
         self._all_groups = []
 
     def __lt__(self, other_state):
-        """Needed for informed search."""
+        """ Returns the best state between the present one and one other state
+         which have the same heuristic result. """
         if randint(0, 1):
             return True
         return False
 
-    def get_board(self):
+    def get_objboard(self):
         return self._objboard
 
     def get_all_groups(self):
@@ -176,7 +168,7 @@ class sg_state:
         return self._all_groups
 
 
-# ---------------------------- #
+# ------------------------------------------- #
 class same_game(Problem):
     """Models a Same Game problem as a satisfaction problem.
     A solution cannot have pieces left on the board."""
@@ -197,7 +189,7 @@ class same_game(Problem):
         """Return the state that results from removing the given
         group from the board. The action must be one of
         self.actions(state)"""
-        return sg_state(board_remove_group(state.get_board().get_board(), action))
+        return sg_state(board_remove_group(state.get_objboard().get_board(), action))
 
     def goal_test(self, state):
         """Return True if the state is a goal. The state is
@@ -205,7 +197,7 @@ class same_game(Problem):
         the lower-left position is empty."""
         board_lines = self._board.get_num_lines()
 
-        return state.get_board().is_empty_position(make_pos(board_lines - 1, 0))
+        return state.get_objboard().is_empty_position(make_pos(board_lines - 1, 0)) # checks if the lowest left corner is empty
 
     def path_cost(self, c, state1, action, state2):
         """Return the cost of a solution path that arrives at state2 from
@@ -218,7 +210,7 @@ class same_game(Problem):
         groups = node.state.get_all_groups()
         return len(groups)
 
-
+# ------------------------------------------- #
 # TAIs #
 
 
@@ -257,12 +249,10 @@ def upper_position(pos):
     return
 
 
+# ------------------------------------------- #
 # Generic Same Game functions #
 def board_find_groups(user_board):
-    """
-    :param user_board: list of lists containing the colour of each position
-    :return: a list with all colour groups (lists of positions) withing a given board
-    """
+    """ Returns a list with all colour groups (lists of positions) withing a given board """
     board = Board(user_board)
     all_positions = board.get_positions()
     all_groups = []
@@ -278,15 +268,8 @@ def board_find_groups(user_board):
 
 
 def board_find_groups_aux(board, pos, final_group, rejects, visited):
-    """
-    Auxiliary recursive function for board_find_groups
-    :param board: an object of class Board
-    :param pos: a tuple of type position
-    :param final_group: an object of type group (a list of positions)
-    :param rejects: a list of all positions which do not have the same colour as the position in search
-    :param visited:  a list of all searched positions
-    :return: the complete group which the given position is a part of
-    """
+    """ Auxiliary recursive function for board_find_groups:
+     returns a single colour group in the given board """
     visited[pos] = True
     final_group.add_position(pos)
     aux_pos = board.adjacent_positions(pos)
@@ -301,8 +284,10 @@ def board_find_groups_aux(board, pos, final_group, rejects, visited):
     return final_group
 
 
+# ------------------------------------------- #
 def board_remove_group(user_board, user_group):
-    """ remove o grupo do tabuleiro fazendo a compactacao vertical e horizontal das pecas."""
+    """ Returns a new board which results from removing the given group from the given board,
+    including the vertical and horizontal realignment of all pieces in said board."""
     original_board = Board(user_board)
     egroup = Group()
     egroup.set_group(user_group)
@@ -332,7 +317,7 @@ def vertical_align_aux(board, pos):
 def board_horizontal_align(board):
     last_line = board.get_last_line()
     to_erase = False
-    for i in range(board.get_num_columns() - 1, -1, -1):
+    for i in range(board.get_num_columns() - 1, -1, -1):  # starts on rightmost position
         if color(last_line[i]):
             to_erase = True
         elif to_erase:
