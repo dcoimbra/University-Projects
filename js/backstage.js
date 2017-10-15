@@ -170,9 +170,11 @@ function onResize() {
     }
 
     perspectiveCamera.aspect = aspect;
+    car.getCamera().aspect = aspect;
 
     orthographicCamera.updateProjectionMatrix();
     perspectiveCamera.updateProjectionMatrix();
+    car.getCamera().updateProjectionMatrix();
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
