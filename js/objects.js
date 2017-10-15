@@ -18,11 +18,13 @@ class Orange {
 
 		this.orange_object.position.set(x, y, z);
 
-		this.orangeStalk(x, y, z);
+		this.orangeStalk();
+
+        scene.add(this.orange_object);
 
 	}
 
-	orangeStalk(x, y, z) {
+	orangeStalk() {
 
 		'use strict';
 
@@ -30,12 +32,7 @@ class Orange {
 		var stalk_material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
 		var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
-		stalk.position.set(x, y, z);
-
 		this.orange_object.add(stalk);
-
-		scene.add(this.orange_object);
-
 	}
 
 }
@@ -128,46 +125,46 @@ function createBorderLine() {
 	//Criacao dos pontos principais que vão constituir a curva
 	var curve1 = new THREE.CatmullRomCurve3( [
 
-		new THREE.Vector3(-5.9 * 9, 0.5, 4.5 * 9),
-		new THREE.Vector3(-4.9 * 9, 0.5, 4 * 9),
-		new THREE.Vector3(-4.8 * 9, 0.5, 3.8 * 9),
-		new THREE.Vector3(-4.5 * 9, 0.5, 4 * 9),
-		new THREE.Vector3(-4.5 * 8, 0.5, -1 * 10),
-		new THREE.Vector3(-7.2 * 8, 0.5, -1 * 10),
-		new THREE.Vector3(-6 * 8, 0.5, -4 * 10),
-		new THREE.Vector3(-2 * 8, 0.5, -5 * 10),
-		new THREE.Vector3(-1 * 10, 0.5, -3 * 10),
-		new THREE.Vector3(-1 * 10, 0.5, -1),
-		new THREE.Vector3(1 * 10, 0.5, -1),
-		new THREE.Vector3(3 * 10, 0.5, -3 * 10),
-		new THREE.Vector3(4.5 * 10, 0.5, -1 * 10),
-		new THREE.Vector3(2.5 * 10, 0.5, 4 * 10),
-		new THREE.Vector3(2.3 * 10, 0.5, 4.2 * 10),
-		new THREE.Vector3(2 * 10, 0.5, 4.5 * 10),
-		new THREE.Vector3(1.5 * 10, 0.5, 4.8 * 10),
-		new THREE.Vector3(1.5 * 10, 0.5, 4.9 * 10),
-		new THREE.Vector3(-4 * 9, 0.5, 6.1 * 9),
-		new THREE.Vector3(-6 * 9, 0.5, 5.9 * 9),
-		new THREE.Vector3(-6 * 9, 0.5, 5 * 9),
-		new THREE.Vector3(-6 * 9, 0.5, 4.5 * 9),
+		new THREE.Vector3(-53.1, 0.5, 40.5),
+		new THREE.Vector3(-44.1, 0.5, 36),
+		new THREE.Vector3(-43.2, 0.5, 34.2),
+		new THREE.Vector3(-40.5, 0.5, 36),
+		new THREE.Vector3(-36, 0.5, -10),
+		new THREE.Vector3(-57.6, 0.5, -10),
+		new THREE.Vector3(-48, 0.5, -40),
+		new THREE.Vector3(-16, 0.5, -50),
+		new THREE.Vector3(-10, 0.5, -30),
+		new THREE.Vector3(-10, 0.5, -1),
+		new THREE.Vector3(10, 0.5, -1),
+		new THREE.Vector3(30, 0.5, -30),
+		new THREE.Vector3(45, 0.5, -10),
+		new THREE.Vector3(25, 0.5, 40),
+		new THREE.Vector3(23, 0.5, 42),
+		new THREE.Vector3(20, 0.5, 45),
+		new THREE.Vector3(15, 0.5, 48),
+		new THREE.Vector3(15, 0.5, 49),
+		new THREE.Vector3(-36, 0.5, 54.9),
+		new THREE.Vector3(-54, 0.5, 53.1),
+		new THREE.Vector3(-54, 0.5, 45),
+		new THREE.Vector3(-54, 0.5, 40.5),
 	] );
 
 	var curve2 = new THREE.CatmullRomCurve3( [
 
-		new THREE.Vector3(-5 * 9, 0.5, 5 * 9),
-		new THREE.Vector3(-3.5 * 9, 0.5, 4.5 * 9),
-		new THREE.Vector3(-3.5 * 8, 0.5, -2 * 10),
-		new THREE.Vector3(-5.5 * 8, 0.5, -2 * 10),
-		new THREE.Vector3(-6 * 8, 0.5, -2.5 * 10),
-		new THREE.Vector3(-2.5 * 8, 0.5, -4.25 * 10),
-		new THREE.Vector3(-2 * 10, 0.5, -3 * 10),
-		new THREE.Vector3(-1.5 * 10, 0.5, 8),
-		new THREE.Vector3(1.5 * 10, 0.5, 10),
-		new THREE.Vector3(3 * 10, 0.5, -2 * 10),
-		new THREE.Vector3(3.5 * 10, 0.5, -1 * 10),
-		new THREE.Vector3(1 * 10, 0.5, 4 * 10),
-		new THREE.Vector3(-5 * 9, 0.5, 5.25 * 9),
-		new THREE.Vector3(-5 * 9, 0.5, 5 * 9),
+		new THREE.Vector3(-45, 0.5, 45),
+		new THREE.Vector3(-31.5, 0.5, 40.5),
+		new THREE.Vector3(-28, 0.5, -20),
+		new THREE.Vector3(-44, 0.5, -20),
+		new THREE.Vector3(-48, 0.5, -25),
+		new THREE.Vector3(-20, 0.5, -42.5),
+		new THREE.Vector3(-20, 0.5, -30),
+		new THREE.Vector3(-15, 0.5, 8),
+		new THREE.Vector3(15, 0.5, 10),
+		new THREE.Vector3(30, 0.5, -20),
+		new THREE.Vector3(35, 0.5, -10),
+		new THREE.Vector3(10, 0.5, 40),
+		new THREE.Vector3(-45, 0.5, 47.25),
+		new THREE.Vector3(-45, 0.5, 45),
 	] );
 
 	//Adicionar border1 e border2 à cena
