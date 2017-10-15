@@ -1,10 +1,14 @@
  /*********************************************Variaveis globais*************************************************************/
-var camera, scene, renderer;
+var scene, renderer;
+
+var orthographicCamera, perspectiveCamera;
 
 var car;
 
 /* tamanho da area visivel */
 var frustumSize;
+
+var views;
 
 var clock = new THREE.Clock();
 
@@ -44,81 +48,118 @@ function createScene() {
 
 
 /********************************************Criacao da camera************************************************************/
-function createCamera() {
+function createCameras() {
 
-	'use strict';
+    'use strict';
 
-	var aspect = window.innerWidth / window.innerHeight;
-
-	frustumSize = 60;
-
-	/*Camera ortogonal inicializada com frustumSize fixo */
-
-	if (window.innerWidth > window.innerHeight) {
-
-		camera = new THREE.OrthographicCamera(- frustumSize * aspect,
-										        frustumSize * aspect,
-										        frustumSize,
-										      - frustumSize,
-										        1,
-										        1000);
-
-	}
-
-	else {
-
-		camera = new THREE.OrthographicCamera( - frustumSize,
-											     frustumSize,
-											     frustumSize / aspect,
-											   - frustumSize / aspect,
-											     1,
-											     1000);
-	}
-
-
-	scene.add(camera);
-
-	/*Camera posicionada em vista de topo */
-	camera.position.set(0, 25, 0);
-	camera.lookAt(scene.position);
+    createOrtographicCamera(0, 25, 0);
+    createPerspectiveCamera(0, 50, 100);
 }
+
 /*------------------------------------------------------------------------------------------------------------------------*/
+
+function createOrtographicCamera(x, y, z) {
+
+    var aspect = window.innerWidth / window.innerHeight;
+
+    frustumSize = 60;
+
+    /*Camera ortogonal inicializada com frustumSize fixo */
+
+    if (window.innerWidth > window.innerHeight) {
+
+        orthographicCamera = new THREE.OrthographicCamera(- frustumSize * aspect,
+                                                            frustumSize * aspect,
+                                                            frustumSize,
+                                                         -  frustumSize,
+                                                            1,
+                                                            1000);
+
+    }
+
+    else {
+
+        orthographicCamera = new THREE.OrthographicCamera( - frustumSize,
+                                                             frustumSize,
+                                                             frustumSize / aspect,
+                                                           - frustumSize / aspect,
+                                                             1,
+                                                             1000);
+    }
+
+
+    scene.add(orthographicCamera);
+
+    /*Camera posicionada em vista de topo */
+    orthographicCamera.position.set(x, y, z);
+    orthographicCamera.lookAt(scene.position);
+}
+
+ /*------------------------------------------------------------------------------------------------------------------------*/
+
+ function createPerspectiveCamera(x, y, z) {
+
+     var aspect = window.innerWidth / window.innerHeight;
+
+     /* Camara perspetiva inicializada */
+
+     perspectiveCamera = new THREE.PerspectiveCamera( 60, aspect, 1, 1000 );
+
+     scene.add(perspectiveCamera);
+
+     perspectiveCamera.position.set(x, y, z);
+     perspectiveCamera.lookAt(scene.position);
+ }
 
 /**********************************************Renderizacao************************************************************/
 function render() {
 
 	'use strict';
 
-	renderer.render(scene, camera);
+	var orthographic = 0;
+	var perspective = 1;
+	var moving = 2;
+
+	if (views[orthographic]) {
+
+	    renderer.render(scene, orthographicCamera);
+    }
+
+    else if (views[perspective]) {
+
+        renderer.render(scene, perspectiveCamera);
+    }
 }
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /***************************************Detalhes de visualizacao e controlo****************************************/
 
 function onResize() {
 
-	'use strict';
+    'use strict';
 
-	var aspect = window.innerWidth / window.innerHeight;
+    var aspect = window.innerWidth / window.innerHeight;
 
-	renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-	if (window.innerWidth > window.innerHeight) {
+    if (window.innerWidth > window.innerHeight) {
 
-		camera.left   = -  frustumSize * aspect;
-		camera.right  =    frustumSize * aspect;
-		camera.top	  =	   frustumSize;
-		camera.bottom =	-  frustumSize;
-	}
+        orthographicCamera.left = -frustumSize * aspect;
+        orthographicCamera.right = frustumSize * aspect;
+        orthographicCamera.top = frustumSize;
+        orthographicCamera.bottom = -frustumSize;
+    }
 
-	else {
+    else {
+        orthographicCamera.left = -frustumSize;
+        orthographicCamera.right = frustumSize;
+        orthographicCamera.top = frustumSize / aspect;
+        orthographicCamera.bottom = -frustumSize / aspect;
+    }
 
-		camera.left   = -  frustumSize;
-		camera.right  =	   frustumSize;
-		camera.top    =	   frustumSize / aspect;
-		camera.bottom =	-  frustumSize / aspect;
-	}
+    perspectiveCamera.aspect = aspect;
 
-	camera.updateProjectionMatrix();
+    orthographicCamera.updateProjectionMatrix();
+    perspectiveCamera.updateProjectionMatrix();
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
@@ -155,6 +196,14 @@ function onKeyDown(e) {
 		case 40: //Down arrow
 			car.setMovingDirection(3, true);
 			break;
+
+        case 49: //1
+            views = [true, false, false];
+            break;
+
+        case 50: //2
+            views = [false, true, false];
+            break;
 
 		default:
 			break;
@@ -212,8 +261,10 @@ function init() {
 
 	document.body.appendChild(renderer.domElement);
 
+	views = [true, false, false];
+
 	createScene();
-	createCamera();
+	createCameras();
 
 	//Adicionados eventos, quando resize e keydown
 	window.addEventListener('resize', onResize);
