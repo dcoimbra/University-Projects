@@ -129,6 +129,11 @@ function render() {
 
         renderer.render(scene, perspectiveCamera);
     }
+
+    else if (views[moving]) {
+
+		renderer.render(scene, car.getCamera());
+	}
 }
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /***************************************Detalhes de visualizacao e controlo****************************************/
@@ -204,6 +209,10 @@ function onKeyDown(e) {
         case 50: //2
             views = [false, true, false];
             break;
+
+		case 51: //3
+			views = [false, false, true];
+			break;
 
 		default:
 			break;

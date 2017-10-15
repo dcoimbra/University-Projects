@@ -18,13 +18,13 @@ class Orange {
 
 		this.orange_object.position.set(x, y, z);
 
-		this.orangeStalk();
+		this.createOrangeStalk();
 
         scene.add(this.orange_object);
 
 	}
 
-	orangeStalk() {
+	createOrangeStalk() {
 
 		'use strict';
 
@@ -221,7 +221,7 @@ function addBoundTorus(obj, location) {
 	*/
 
 	var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
-	var torus_material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+	var torus_material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
 	var torus = new THREE.Mesh(torus_geometry, torus_material);
 
 	//Make torus look to the camera

@@ -7,7 +7,9 @@ class Car {
 
 		'use strict';
 
-		this.car_object = new THREE.Object3D();
+		var aspect = window.innerWidth / window.innerHeight;
+
+		this.car_object = new THREE.Group();
 
 		this.car_object.userData = { speed: 0,
 					 			     maxSpeed: 40,
@@ -16,6 +18,8 @@ class Car {
 							   	   };
 
 		this.car_object.position.set(x, y, z);
+
+		this.createFollowingCamera(x - 40, y + 40, z);
 
 		this.build(x, y, z);
 	}
@@ -89,7 +93,7 @@ class Car {
 
 		'use strict';
 
-		/* Widshield (front): width: 0  (relative to camera)
+		/* Windshield (front): width: 0  (relative to camera)
 		                      height: 5.5
 		                      depth: 2
 		*/
@@ -144,6 +148,21 @@ class Car {
 	}
 	/*-------------------------------------------------------------------------------------------*/
 
+    createFollowingCamera(x, y, z) {
+
+        var aspect = window.innerWidth / window.innerHeight;
+
+        var followingCamera = new THREE.PerspectiveCamera( 60, aspect, 1, 1000 );
+
+        followingCamera.name = "camera";
+
+        followingCamera.position.set(x, y, z);
+
+        followingCamera.lookAt(this.car_object.position);
+
+        this.car_object.add(followingCamera);
+    }
+    /*-------------------------------------------------------------------------------------------*/
 
 	/*****************************************Moving the car*************************************/
 
@@ -153,13 +172,12 @@ class Car {
 
 		var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
 		var distance = this.getDisplacement(delta);
-        var speed = this.getSpeed();
 
 		if (this.car_object.userData.movingDirection[1]) { // Up arrow
 
 			this.moveForward(distance, delta);
 
-			if (this.getSpeed() != 0) {
+			if (this.getSpeed() !== 0) {
 
 				this.checkDirection();
 			}
@@ -169,7 +187,7 @@ class Car {
 
 			this.moveBackwards(distance, delta);
 
-			if (this.getSpeed() != 0) {
+			if (this.getSpeed() !== 0) {
 
 				this.checkDirection();
 			}
@@ -179,12 +197,12 @@ class Car {
 
 			this.car_object.translateX(distance);
 
-			if (this.getSpeed() != 0) {
+			if (this.getSpeed() !== 0) {
 
-				this.slowDown(distance, speed, delta);
+				this.slowDown(delta);
 			}
 		}
-	}
+    }
 
 	/*---------------------------------------------------------------------------------------------------------*/
 
@@ -233,7 +251,7 @@ class Car {
 
 	/*---------------------------------------------------------------------------------------------------------*/
 
-	slowDown(distance, speed, delta) {
+	slowDown(delta) {
 
 		'use strict';
 
@@ -259,6 +277,7 @@ class Car {
 
 		this.checkDirection();
 	}
+
 /*-------------------------------------------------------------------------------------------*/
 
 /********************************Getters e setters*******************************************/
@@ -305,14 +324,10 @@ class Car {
 		return distance;
 	}
 
-	/*-------------------------------------------------------------------------------------------*/
+	getCamera() {
 
-	isMoving() {
-
-		'use strict';
-
-		return this.car_object.userData.moving;
-	}
+	    return this.car_object.getObjectByName("camera");
+    }
 
 	/*-------------------------------------------------------------------------------------------*/
 
