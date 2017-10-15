@@ -4,6 +4,7 @@ var scene, renderer;
 var orthographicCamera, perspectiveCamera;
 
 var car;
+var oranges = [];
 
 /* tamanho da area visivel */
 var frustumSize;
@@ -32,6 +33,13 @@ function createScene() {
 	var orange1 = new Orange(-40, orange_height, 6);
 	var orange2 = new Orange(15, orange_height, -15);
 	var orange3 = new Orange(35, orange_height, 5);
+
+	oranges.push(orange1);
+	oranges.push(orange2);
+	oranges.push(orange3);
+
+	orange2.setOrangeSpeed(15);
+	orange3.setOrangeSpeed(20);
 
 	var butterPackage_height = 2.5;
 
@@ -255,6 +263,8 @@ function animate() {
 	render();
 
 	car.move();
+
+	moveOranges();
 
 	requestAnimationFrame(animate);
 }
