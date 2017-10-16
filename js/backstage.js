@@ -258,15 +258,27 @@ function onKeyUp(e) {
 	}
 }
 
+function updateOrangeSpeed() {
+
+	for (var i = 0; i < oranges.length; i++) {
+
+		oranges[i].increaseOrangeSpeed(5);
+	}
+}
 /*------------------------------------------------------------------------------------------------------------------*/
 function animate() {
 	'use strict';
 
+    var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
+
 	render();
 
-	car.move();
+	car.move(delta);
 
-	moveOranges();
+    for ( var i = 0; i < oranges.length; i++ ) {
+
+    	oranges[i].move(delta);
+    }
 
 	requestAnimationFrame(animate);
 }
@@ -291,4 +303,6 @@ function init() {
 	window.addEventListener('resize', onResize);
 	window.addEventListener('keydown', onKeyDown);
 	window.addEventListener('keyup', onKeyUp);
+
+    setInterval(updateOrangeSpeed, 5000);
 }

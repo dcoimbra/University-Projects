@@ -19,7 +19,7 @@ class Car {
 
 		this.car_object.position.set(x, y, z);
 
-		this.createFollowingCamera(x - 40, y + 40, z);
+		this.createFollowingCamera(x - 80, y + 80, z);
 
 		this.build(x, y, z);
 	}
@@ -166,11 +166,10 @@ class Car {
 
 	/*****************************************Moving the car*************************************/
 
-	move() {
+	move(delta) {
 
 		'use strict';
 
-		var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
 		var distance = this.getDisplacement(delta);
 
 		if (this.car_object.userData.movingDirection[1]) { // Up arrow

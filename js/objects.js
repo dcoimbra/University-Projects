@@ -2,62 +2,64 @@
 
 class Orange {
 
-	constructor(x, y, z){
+    constructor(x, y, z) {
 
-		'use strict';
+        'use strict';
 
-		/* Orange: radius: 4 
-				   width segments: 17
-				   height segments: 13*/
+        /* Orange: radius: 4
+                   width segments: 17
+                   height segments: 13*/
 
-		var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
-		var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true});
-		this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
+        var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
+        var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true});
+        this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
-		this.orange_object.userData = {speed: 10};
+        this.orange_object.userData = {speed: 10};
 
-		this.orange_object.position.set(x, y, z);
+        this.orange_object.position.set(x, y, z);
 
-		this.createOrangeStalk();
+        this.createOrangeStalk();
 
         scene.add(this.orange_object);
 
-	}
+    }
 
-	createOrangeStalk() {
+    createOrangeStalk() {
 
-		'use strict';
+        'use strict';
 
-		var stalk_geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-		var stalk_material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
-		var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
+        var stalk_geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
+        var stalk_material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
+        var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
-		stalk.position.set(0, 4, 0);
+        stalk.position.set(0, 4, 0);
 
-		this.orange_object.add(stalk);
-	}
+        this.orange_object.add(stalk);
+    }
 
-	setOrangeSpeed(speed){
-		this.orange_object.userData.speed = speed;
-	}
+    increaseOrangeSpeed(speed) {
+        this.orange_object.userData.speed += speed;
+    }
 
-	getOrangeSpeed(){
-		return this.orange_object.userData.speed;
-	}
+    setOrangeSpeed(speed) {
+        this.orange_object.userData.speed = speed;
+    }
 
+    getOrangeSpeed() {
+        return this.orange_object.userData.speed;
+    }
+
+
+    move(delta) {
+
+
+        var orange_speed = this.getOrangeSpeed();
+
+        var distance = orange_speed * delta;
+
+        this.orange_object.translateX(distance);
+    }
 }
-
-	function moveOranges(){
-
-		for(var i = 0; i < 3; i++){
-
-			var orange_speed = oranges[i].getOrangeSpeed();
-			var delta = clock.getDelta();
-			var distance = orange_speed * delta;
-
-			/*oranges[i].translate(distance, 0, 0);*/
-		}
-	}
 /*----------------------------------------------------------------------------------------------------------------*/
 
 class ButterPackage {
