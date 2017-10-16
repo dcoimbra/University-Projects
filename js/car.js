@@ -7,8 +7,6 @@ class Car {
 
 		'use strict';
 
-		var aspect = window.innerWidth / window.innerHeight;
-
 		this.car_object = new THREE.Group();
 
 		this.car_object.userData = { speed: 0,
@@ -43,6 +41,8 @@ class Car {
 		this.createWheel(x - 6, y - 3.5, z - 6.2); // back-right
 		this.createWheel(x + 6, y - 3.5, z - 6.2); // front-right
 
+		this.makeBoundingSphere();
+
 		scene.add(this.car_object);
 
 		//Scale down size of car
@@ -63,6 +63,9 @@ class Car {
 		var chassis_geometry = new THREE.BoxGeometry(20, 5, 11);
 		var chassis_material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
 		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
+
+		chassis.name = "chassis";
+
 		chassis.position.set(x, y, z);
 
 		this.car_object.add(chassis);
@@ -154,7 +157,7 @@ class Car {
 
         var followingCamera = new THREE.PerspectiveCamera( 60, aspect, 1, 1000 );
 
-        followingCamera.name = "camera";
+		followingCamera.name = "camera";
 
         followingCamera.position.set(x, y, z);
 
@@ -278,6 +281,20 @@ class Car {
 	}
 
 /*-------------------------------------------------------------------------------------------*/
+
+	makeBoundingSphere() {
+
+		'use strict';
+
+		var chassis = this.car_object.getObjectByName("chassis");
+
+		var bounding_geometry = new THREE.SphereGeometry(chassis.geometry.parameters.depth + 3.5);
+		var bounding_material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true  });
+
+		var bounding = new THREE.Mesh(bounding_geometry, bounding_material);
+
+		this.car_object.add(bounding);
+	}
 
 /********************************Getters e setters*******************************************/
 	getSpeed() {
