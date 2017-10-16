@@ -278,6 +278,7 @@ function animate() {
     for ( var i = 0; i < oranges.length; i++ ) {
 
     	oranges[i].move(delta);
+
     }
 
 	requestAnimationFrame(animate);

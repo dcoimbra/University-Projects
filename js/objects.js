@@ -57,8 +57,10 @@ class Orange {
 
         var distance = orange_speed * delta;
 
-        this.orange_object.translateX(distance);
-    }
+        this.orange_object.rotateZ(0.02);
+		this.orange_object.position.x += distance;
+
+	}
 }
 
 function updateOrangeSpeed() {
