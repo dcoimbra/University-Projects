@@ -1,7 +1,6 @@
 # 57842 - Filipa Marques   Grupo 01   84708 - David Coimbra
 
 from copy import deepcopy
-from random import randint
 from search import *
 
 
@@ -128,36 +127,26 @@ class Board:
             line.append(get_no_color())
 
 
-def is_board(board):
-    """ returns true if the given argument is a list of lists of integers (representing a same game board)"""
-    board_columns = 0
-    for line in board:
-        if not isinstance(line, list):
-            return False
-        line_size = len(line)
-
-        if board_columns == 0:
-            board_columns = line_size
-        elif board_columns != line_size:
-            return False
-    return True
-
-
 # ------------------------------------------- #
 class sg_state:
-    """ """
+    """ A samegame state, representing a certain state of the board at a given time of play"""
 
     def __init__(self, board):
         self.board = board
         self._objboard = Board(board)
         self._all_groups = []
+        self._all_pieces = 0
 
     def __lt__(self, other_state):
         """ Returns the best state between the present one and one other state
          which have the same heuristic result. """
-        if randint(0, 1):
-            return True
-        return False
+        return self.get_total_pieces() <= other_state.get_total_pieces()
+
+    def get_total_pieces(self):
+        if not self._all_pieces:
+            for group in self.get_all_groups():
+                self._all_pieces += len(group)
+        return self._all_pieces
 
     def get_objboard(self):
         return self._objboard
