@@ -11,10 +11,10 @@ class Orange {
                    height segments: 13*/
 
         var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
-        var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true});
+        var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true, opacity: 0, transparent: false});
         this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
-        this.orange_object.userData = {speed: 10};
+        this.orange_object.userData = {speed: 5, changePos: false};
 
         this.orange_object.position.set(x, y, z);
 
@@ -29,10 +29,12 @@ class Orange {
         'use strict';
 
         var stalk_geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-        var stalk_material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
+        var stalk_material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true, opacity: 0, transparent: false});
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
         stalk.position.set(0, 4, 0);
+
+        stalk.name = 'stalk';
 
         this.orange_object.add(stalk);
     }
@@ -49,17 +51,46 @@ class Orange {
         return this.orange_object.userData.speed;
     }
 
+    setOrangeTransparency(){
+    	this.orange_object.material.transparent = true;
+
+    	var stalk = this.orange_object.getObjectByName('stalk');
+		stalk.material.transparent = true;
+    }
 
     move(delta) {
 
+    	var orange_Xposition = this.orange_object.position.x;
+    	var orange_Zposition = this.orange_object.position.z;
 
-        var orange_speed = this.getOrangeSpeed();
+    	if(orange_Xposition > 55 || orange_Xposition < -55 ||
+			 orange_Zposition> 55 || orange_Zposition < -55){
 
-        var distance = orange_speed * delta;
+			if (this.orange_object.userData.changePos){
 
-        this.orange_object.rotateZ(0.02);
-		this.orange_object.position.x += distance;
+				this.setOrangeTransparency();
+				setInterval(this.changingPos, 5000, this.orange_object);
+				this.orange_object.userData.changePos = false;
+			}
+		}
 
+		else{
+    		this.orange_object.userData.changePos = true;
+			var orange_speed = this.getOrangeSpeed();
+
+			var distance = orange_speed * delta;
+
+			this.orange_object.rotateZ(0.02);
+			this.orange_object.position.x += distance;
+		}
+
+	}
+
+	changingPos(object){
+
+    	object.position.x = randomPos();
+		object.position.z = randomPos();
+		object.material.transparent = false;
 	}
 }
 
@@ -71,6 +102,10 @@ function updateOrangeSpeed() {
 
 		oranges[i].increaseOrangeSpeed(5);
 	}
+}
+
+function randomPos(){
+	return Math.floor((Math.random() * 110) + (-55));
 }
 
 /******************************************************************************************************************/
@@ -155,8 +190,7 @@ function createBorderLine() {
 	var path_material = new THREE.LineBasicMaterial( { color: 0x555555,
 													   linewidth: 3,
 													   opacity: 0,
-													   transparent: true,
-
+													   transparent: true
 												   	 });
 
 	var border1 = new THREE.Line(path_geometry1, path_material);
@@ -276,5 +310,5 @@ function addBoundTorus(obj, location) {
 	//LookAt: Rotates the object to face a point in world space.
 	torus.lookAt(above_vector);
 }
-/*-------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
 /********************************************************************************************************************/
