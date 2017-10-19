@@ -81,8 +81,11 @@ class Orange {
 
 			var distance = orange_speed * delta;
 
-			this.orange_object.rotateZ(0.02);
-			this.orange_object.position.x += distance;
+			this.orange_object.rotateZ(-0.02);
+			this.orange_object.position.x += distance * Math.cos(Math.PI * 0.3);
+			this.orange_object.position.z += distance * Math.sin(Math.PI * 0.3);
+			//this.orange_object.rotateY(randomPos());
+
 		}
 
 	}
@@ -90,8 +93,11 @@ class Orange {
 	//Mudamos a posicao da laranja para uma random
 	changingPos(object){
 
-    	object.position.x = randomPos();
-		object.position.z = randomPos();
+    	object.position.x = randomPos(110, -55);
+		object.position.z = randomPos(110, -55);
+
+		object.rotation.y = randomPos();
+
 		object.material.transparent = false;
 	}
 }
