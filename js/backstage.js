@@ -38,8 +38,8 @@ function createScene() {
 	oranges.push(orange2);
 	oranges.push(orange3);
 
-	orange2.setOrangeSpeed(15);
-	orange3.setOrangeSpeed(20);
+	orange2.setOrangeSpeed(10);
+	orange3.setOrangeSpeed(15);
 
 	var butterPackage_height = 2.5;
 

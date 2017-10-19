@@ -63,6 +63,7 @@ class Orange {
     	var orange_Xposition = this.orange_object.position.x;
     	var orange_Zposition = this.orange_object.position.z;
 
+    	//Se a laranja ultrapassar os limites da table
     	if(orange_Xposition > 55 || orange_Xposition < -55 ||
 			 orange_Zposition> 55 || orange_Zposition < -55){
 
@@ -86,6 +87,7 @@ class Orange {
 
 	}
 
+	//Mudamos a posicao da laranja para uma random
 	changingPos(object){
 
     	object.position.x = randomPos();
@@ -94,6 +96,7 @@ class Orange {
 	}
 }
 
+/*--------------------------------------------------------*/
 function updateOrangeSpeed() {
 
 	'use strict';
@@ -104,6 +107,9 @@ function updateOrangeSpeed() {
 	}
 }
 
+/*--------------------------------------------------------*/
+
+//Funcao que retorna um numero random entre -55 e 110
 function randomPos(){
 	return Math.floor((Math.random() * 110) + (-55));
 }
