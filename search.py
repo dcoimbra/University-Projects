@@ -384,8 +384,13 @@ def bidirectional_search(problem):
 
     return infinity
 
+
 # ______________________________________________________________________________
 # Informed (Heuristic) Search
+def greedy_search(problem, h=None):
+    """f(n) = h(n)"""
+    h = memoize(h or problem.h, 'h')
+    return best_first_graph_search(problem, h)
 
 
 greedy_best_first_graph_search = best_first_graph_search
