@@ -81,24 +81,32 @@ class Orange {
 
 			var distance = orange_speed * delta;
 
+			//Rolamento da laranja (si mesma)
 			this.orange_object.rotateZ(-0.02);
+
+			//Mudanca da posicao da laranja (vai rolar sobre a table)
 			this.orange_object.position.x += distance * Math.cos(Math.PI * 0.3);
 			this.orange_object.position.z += distance * Math.sin(Math.PI * 0.3);
-			//this.orange_object.rotateY(randomPos());
 
 		}
 
 	}
 
-	//Mudamos a posicao da laranja para uma random
+	//Mudamos a laranja de posicao
 	changingPos(object){
 
-    	object.position.x = randomPos(110, -55);
-		object.position.z = randomPos(110, -55);
+    	//Nova posicao da laranja (x, z)
+    	object.position.x = randomPos();
+		object.position.z = randomPos();
 
-		object.rotation.y = randomPos();
+		object.rotation.y +=  Math.cos(Math.PI * 0.5);
 
+
+		//Colocar a laranja e o caule visiveis
 		object.material.transparent = false;
+
+		var stalk = object.getObjectByName('stalk');
+		stalk.material.transparent = false;
 	}
 }
 
@@ -112,10 +120,9 @@ function updateOrangeSpeed() {
 		oranges[i].increaseOrangeSpeed(5);
 	}
 }
-
 /*--------------------------------------------------------*/
 
-//Funcao que retorna um numero random entre -55 e 110
+//Funcao que retorna um numero random entre -55 e 55
 function randomPos(){
 	return Math.floor((Math.random() * 110) + (-55));
 }
