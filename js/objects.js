@@ -116,7 +116,7 @@ class Orange {
     	this.orange_object.position.x = randomPos();
 		this.orange_object.position.z = randomPos();
 
-		this.orange_object.rotateY(Math.cos(Math.PI * 0.5));
+		this.orange_object.rotation.y += (Math.cos(Math.PI * 0.5));
 
 
 		//Colocar a laranja e o caule visiveis
