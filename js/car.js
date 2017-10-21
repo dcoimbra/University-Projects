@@ -167,7 +167,18 @@ class Car {
     }
     /*---------------------------------------------------------------------------------------------------------*/
 
-	/*****************************************Moving the car***************************************************/
+    makeBounding() {
+
+        'use strict';
+
+        var chassis = this.car_object.getObjectByName("chassis");
+
+        this.bounding = new THREE.Sphere(this.car_object.getWorldPosition(), chassis.geometry.parameters.width / 2 + 3.5);
+    }
+
+    /*---------------------------------------------------------------------------------------------------------*/
+
+    /*****************************************Moving the car***************************************************/
 
 	move(delta) {
 
@@ -284,17 +295,6 @@ class Car {
 
 	/*-------------------------------------------------------------------------------------------*/
 
-	makeBounding() {
-
-		'use strict';
-
-		var chassis = this.car_object.getObjectByName("chassis");
-
-		var bounding = new THREE.Sphere(this.car_object.getWorldPosition(), chassis.geometry.parameters.width/2 + 3.5);
-
-		this.bounding = bounding;
-	}
-
 	/********************************Getters e setters*******************************************/
 	getSpeed() {
 
@@ -335,9 +335,9 @@ class Car {
 
 		'use strict';
 
-		var distance = this.getSpeed() * delta; // speed = distance / time <=> distance = speed * time
 
-		return distance;
+		 // speed = distance / time <=> distance = speed * time
+        return this.getSpeed() * delta;
 	}
 
 	getCamera() {
