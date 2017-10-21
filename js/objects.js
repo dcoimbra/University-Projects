@@ -77,16 +77,20 @@ class Orange {
 
 		else{
     		this.orange_object.userData.changePos = true;
-			var orange_speed = this.getOrangeSpeed();
 
+    		var orange_speed = this.getOrangeSpeed();
 			var distance = orange_speed * delta;
+
+			//Mudanca da posicao da laranja (vai rolar sobre a table)
+			// Temos a nossa distancia a ser percorrida mas como queremos que a sua direção tenha um ângulo
+			// vamos ter de calcular as componentes em x e z
+			// x: cos = comp_x / distance <=> comp_x = cos(angulo atual)*distance
+			// z: sin = comp_z / distance <=> comp_z = sin(angulo atual)*distance
+			this.orange_object.position.x += distance * Math.cos(this.orange_object.rotation.y);
+			this.orange_object.position.z += distance * Math.sin(this.orange_object.rotation.y);
 
 			//Rolamento da laranja (si mesma)
 			this.orange_object.rotateZ(-0.02);
-
-			//Mudanca da posicao da laranja (vai rolar sobre a table)
-			this.orange_object.position.x += distance * Math.cos(Math.PI * 0.3);
-			this.orange_object.position.z += distance * Math.sin(Math.PI * 0.3);
 
 		}
 
@@ -95,11 +99,12 @@ class Orange {
 	//Mudamos a laranja de posicao
 	changingPos(object){
 
-    	//Nova posicao da laranja (x, z)
+    	//Nova posicao random da laranja (x, z)
     	object.position.x = randomPos();
 		object.position.z = randomPos();
 
-		object.rotation.y +=  Math.cos(Math.PI * 0.5);
+		//Angulo de rotacao random à volta de y
+		object.rotation.y += 2*Math.PI*Math.random();
 
 
 		//Colocar a laranja e o caule visiveis
