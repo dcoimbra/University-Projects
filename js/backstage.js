@@ -31,16 +31,16 @@ function createScene() {
 
 	var orange_height = 5.5;
 
-	var orange1 = new Orange(-40, orange_height, 6);
-	var orange2 = new Orange(15, orange_height, -15);
-	var orange3 = new Orange(35, orange_height, 5);
+	var orange1 = new Collidable(new Orange(-40, orange_height, 6));
+	var orange2 = new Collidable(new Orange(15, orange_height, -15));
+	var orange3 = new Collidable(new Orange(35, orange_height, 5));
 
 	oranges.push(orange1);
 	oranges.push(orange2);
 	oranges.push(orange3);
 
-	orange2.setOrangeSpeed(10);
-	orange3.setOrangeSpeed(15);
+	orange2.inner_object.setOrangeSpeed(10);
+	orange3.inner_object.setOrangeSpeed(15);
 
 	var butterPackage_height = 2.5;
 
@@ -278,6 +278,21 @@ function checkCollision() {
 
 		butter_packages[i].inner_object.butterPackage_object.material.wireframe = !butter_packages[i].collisionSphere(car);
 	}
+
+	for (var j = 0; j < oranges.length; j++) {
+
+	    oranges[j].inner_object.orange_object.material.wireframe = !oranges[j].collisionSphere(car);
+    }
+}
+
+function update(delta) {
+
+    car.inner_object.move(delta);
+
+    for ( var i = 0; i < oranges.length; i++ ) {
+
+        oranges[i].inner_object.move(delta);
+    }
 }
 
 /********************************************Animation**************************************************************/
@@ -289,13 +304,7 @@ function animate() {
 
 	render();
 
-	car.inner_object.move(delta);
-
-    for ( var i = 0; i < oranges.length; i++ ) {
-
-    	oranges[i].move(delta);
-
-    }
+	update(delta);
 
     checkCollision();
 

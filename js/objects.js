@@ -37,6 +37,8 @@ class Orange {
 
         this.createOrangeStalk();
 
+        this.makeBounding();
+
         scene.add(this.orange_object);
 
     }
@@ -54,6 +56,13 @@ class Orange {
         stalk.name = 'stalk';
 
         this.orange_object.add(stalk);
+    }
+
+    makeBounding() {
+
+        'use strict';
+
+        this.bounding = new THREE.Sphere(this.orange_object.getWorldPosition(), this.orange_object.geometry.parameters.radius + 2);
     }
 
     increaseOrangeSpeed(speed) {
@@ -111,6 +120,7 @@ class Orange {
 
 		}
 
+		this.bounding.center = this.orange_object.getWorldPosition();
 	}
 
 	//Mudamos a laranja de posicao
@@ -138,7 +148,7 @@ function updateOrangeSpeed() {
 
 	for (var i = 0; i < oranges.length; i++) {
 
-		oranges[i].increaseOrangeSpeed(5);
+		oranges[i].inner_object.increaseOrangeSpeed(5);
 	}
 }
 /*--------------------------------------------------------*/
