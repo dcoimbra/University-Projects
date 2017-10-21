@@ -1,3 +1,20 @@
+class Collidable {
+
+	constructor(obj) {
+
+		'use strict';
+
+		this.inner_object = obj;
+	}
+
+	collisionSphere(other_collidable) {
+
+        var radius = this.inner_object.bounding.radius;
+
+        return other_collidable.inner_object.bounding.center.distanceToSquared( this.inner_object.bounding.center ) <= ( radius * radius );
+	}
+}
+
 /**************************Classe das laranjas****************************************************/
 
 class Orange {
@@ -70,7 +87,7 @@ class Orange {
 			if (this.orange_object.userData.changePos){
 
 				this.setOrangeTransparency();
-				setInterval(this.changingPos, 5000, this.orange_object);
+				setInterval(this.changingPos(), 5000, this.orange_object);
 				this.orange_object.userData.changePos = false;
 			}
 		}
@@ -85,27 +102,27 @@ class Orange {
 			this.orange_object.rotateZ(-0.02);
 
 			//Mudanca da posicao da laranja (vai rolar sobre a table)
-			this.orange_object.position.x += distance * Math.cos(Math.PI * 0.3);
-			this.orange_object.position.z += distance * Math.sin(Math.PI * 0.3);
+			this.orange_object.position.x += (distance * Math.cos(Math.PI * 0.3));
+			this.orange_object.position.z += (distance * Math.sin(Math.PI * 0.3));
 
 		}
 
 	}
 
 	//Mudamos a laranja de posicao
-	changingPos(object){
+	changingPos(){
 
     	//Nova posicao da laranja (x, z)
-    	object.position.x = randomPos();
-		object.position.z = randomPos();
+    	this.orange_object.position.x = randomPos();
+		this.orange_object.position.z = randomPos();
 
-		object.rotation.y +=  Math.cos(Math.PI * 0.5);
+		this.orange_object.rotateY(Math.cos(Math.PI * 0.5));
 
 
 		//Colocar a laranja e o caule visiveis
-		object.material.transparent = false;
+		this.orange_object.material.transparent = false;
 
-		var stalk = object.getObjectByName('stalk');
+		var stalk = this.orange_object.getObjectByName('stalk');
 		stalk.material.transparent = false;
 	}
 }
@@ -148,10 +165,19 @@ class ButterPackage {
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
-		this.butterPackage_object.position.set(x, y, z);
-
 		scene.add(this.butterPackage_object);
+
+        this.butterPackage_object.position.set(x, y, z);
+
+		this.createBounding();
 	}
+
+	createBounding() {
+
+        var bounding = new THREE.Sphere(this.butterPackage_object.position, this.butterPackage_object.geometry.parameters.width/2 + 1.8);
+
+        this.bounding = bounding;
+    }
 }
 /*******************************************************************************************************************/
 
