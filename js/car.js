@@ -335,9 +335,7 @@ class Car {
 
 		'use strict';
 
-		var distance = this.getSpeed() * delta; // speed = distance / time <=> distance = speed * time
-
-		return distance;
+		return this.getSpeed() * delta; // speed = distance / time <=> distance = speed * time;
 	}
 
 	getCamera() {
