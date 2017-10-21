@@ -7,7 +7,7 @@ class Car {
 
 		'use strict';
 
-		this.car_object = new THREE.Group();
+		this.car_object = new THREE.Object3D();
 
 		this.car_object.userData = { speed: 0,
 					 			     maxSpeed: 40,
@@ -16,8 +16,6 @@ class Car {
 							   	   };
 
 		this.car_object.position.set(x, y, z);
-
-		this.createFollowingCamera(x - 80, y + 80, z);
 
 		this.build(x, y, z);
 	}
@@ -28,20 +26,22 @@ class Car {
 		'use strict';
 
 		//Elements are instantiated relative to the car's position
-		this.createChassis(x, y + 0.25, z);
+		this.createChassis(0, 0.25, 0);
 
-		this.createHood(x - 4.5, y + 4.25, z);
+		this.createHood( -4.5, 4.25, 0);
 
-		this.createWindShieldFront(x + 1.2, y + 3.7, z);
-		this.createWindShieldSide(x - 2.2, y + 3.7, z - 3.3); // left
-		this.createWindShieldSide(x - 2.2, y + 3.7, z + 3.3); // right
+		this.createWindShieldFront( +1.2,  +3.7, 0);
+		this.createWindShieldSide( -2.2,  +3.7,  -3.3); // left
+		this.createWindShieldSide( -2.2,  +3.7,  +3.3); // right
 
-		this.createWheel(x - 6, y - 3.5, z + 6.2); // back-left
-		this.createWheel(x + 6, y - 3.5, z + 6.2); // front-left
-		this.createWheel(x - 6, y - 3.5, z - 6.2); // back-right
-		this.createWheel(x + 6, y - 3.5, z - 6.2); // front-right
+		this.createWheel( -6,  -3.5,  6.2); // back-left
+		this.createWheel( 6, -3.5, 6.2); // front-left
+		this.createWheel( -6,  -3.5, -6.2); // back-right
+		this.createWheel( 6,  -3.5,  -6.2); // front-right
 
-		this.makeBoundingSphere();
+		this.makeBounding();
+
+        this.createFollowingCamera(-80, 80, 0);
 
 		scene.add(this.car_object);
 
@@ -66,9 +66,8 @@ class Car {
 
 		chassis.name = "chassis";
 
-		chassis.position.set(x, y, z);
-
 		this.car_object.add(chassis);
+        chassis.position.set(x, y, z);
 	}
 
 	/*----------------------------------------------------------------------------------------------------------*/
@@ -85,9 +84,9 @@ class Car {
 		var hood_geometry = new THREE.BoxGeometry(11, 3, 6);
 		var hood_material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
-		hood.position.set(x, y, z);
 
 		this.car_object.add(hood);
+        hood.position.set(x, y, z);
 	}
 
 	/*-----------------------------------------------------------------------------------------------------------*/
@@ -104,9 +103,9 @@ class Car {
 		var windshield_frontGeometry = new THREE.BoxGeometry(0, 2, 5.5);
 		var windshield_frontMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 		var windshield = new THREE.Mesh(windshield_frontGeometry, windshield_frontMaterial);
-		windshield.position.set(x, y, z);
 
 		this.car_object.add(windshield);
+        windshield.position.set(x, y, z);
 	}
 
 	/*------------------------------------------------------------------------------------------------------*/
@@ -123,9 +122,9 @@ class Car {
 		var windshield_sideGeometry = new THREE.BoxGeometry(5.5, 2, 0);
 		var windshield_sideMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
-		windshield_side.position.set(x, y, z);
 
 		this.car_object.add(windshield_side);
+        windshield_side.position.set(x, y, z);
 	}
 
 	/*---------------------------------------------------------------------------------------------------------*/
@@ -139,15 +138,14 @@ class Car {
 				  radial segments: 8
 				  tubular segments: 16
 				  central angle: 2π
-	    */ 
+	    */
 
 		var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
 		var wheel_material = new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: true } );
 		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
 
-		wheel.position.set(x, y, z);
-
 		this.car_object.add(wheel);
+        wheel.position.set(x, y, z);
 	}
 	/*----------------------------------------------------------------------------------------------------------*/
 
@@ -159,11 +157,13 @@ class Car {
 
 		followingCamera.name = "camera";
 
+
+        this.car_object.add(followingCamera);
+
         followingCamera.position.set(x, y, z);
 
         followingCamera.lookAt(this.car_object.position);
 
-        this.car_object.add(followingCamera);
     }
     /*---------------------------------------------------------------------------------------------------------*/
 
@@ -204,6 +204,8 @@ class Car {
 				this.slowDown(delta);
 			}
 		}
+
+		this.bounding.center = this.car_object.getWorldPosition();
     }
 
 	/*---------------------------------------------------------------------------------------------------------*/
@@ -282,20 +284,16 @@ class Car {
 
 	/*-------------------------------------------------------------------------------------------*/
 
-	makeBoundingSphere() {
+	makeBounding() {
 
 		'use strict';
 
 		var chassis = this.car_object.getObjectByName("chassis");
 
-		var bounding_geometry = new THREE.SphereGeometry(chassis.geometry.parameters.depth + 3.5);
-		var bounding_material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true  });
+		var bounding = new THREE.Sphere(this.car_object.getWorldPosition(), chassis.geometry.parameters.width/2 + 3.5);
 
-		var bounding = new THREE.Mesh(bounding_geometry, bounding_material);
-
-		this.car_object.add(bounding);
+		this.bounding = bounding;
 	}
-
 
 	/********************************Getters e setters*******************************************/
 	getSpeed() {

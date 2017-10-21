@@ -1,3 +1,20 @@
+class Collidable {
+
+	constructor(obj) {
+
+		'use strict';
+
+		this.inner_object = obj;
+	}
+
+	collisionSphere(other_collidable) {
+
+        var radius = this.inner_object.bounding.radius;
+
+        return other_collidable.inner_object.bounding.center.distanceToSquared( this.inner_object.bounding.center ) <= ( radius * radius );
+	}
+}
+
 /**************************Classe das laranjas****************************************************/
 
 class Orange {
@@ -70,7 +87,7 @@ class Orange {
 			if (this.orange_object.userData.changePos){
 
 				this.setOrangeTransparency();
-				setInterval(this.changingPos, 5000, this.orange_object);
+				setInterval(this.changingPos(), 5000, this.orange_object);
 				this.orange_object.userData.changePos = false;
 			}
 		}
@@ -97,20 +114,19 @@ class Orange {
 	}
 
 	//Mudamos a laranja de posicao
-	changingPos(object){
+	changingPos(){
 
     	//Nova posicao random da laranja (x, z)
-    	object.position.x = randomPos();
-		object.position.z = randomPos();
+    	this.orange_object.position.x = randomPos();
+		this.orange_object.position.z = randomPos();
 
 		//Angulo de rotacao random à volta de y
-		object.rotation.y += 2*Math.PI*Math.random();
-
+		this.orange_object.rotation.y += 2*Math.PI*Math.random();
 
 		//Colocar a laranja e o caule visiveis
-		object.material.transparent = false;
+		this.orange_object.material.transparent = false;
 
-		var stalk = object.getObjectByName('stalk');
+		var stalk = this.orange_object.getObjectByName('stalk');
 		stalk.material.transparent = false;
 	}
 }
@@ -153,10 +169,19 @@ class ButterPackage {
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
-		this.butterPackage_object.position.set(x, y, z);
-
 		scene.add(this.butterPackage_object);
+
+        this.butterPackage_object.position.set(x, y, z);
+
+		this.createBounding();
 	}
+
+	createBounding() {
+
+        var bounding = new THREE.Sphere(this.butterPackage_object.position, this.butterPackage_object.geometry.parameters.width/2 + 1.8);
+
+        this.bounding = bounding;
+    }
 }
 /*******************************************************************************************************************/
 
@@ -244,7 +269,7 @@ function createBorderLine() {
 		new THREE.Vector3(-36, 0.5, 54.9),
 		new THREE.Vector3(-54, 0.5, 53.1),
 		new THREE.Vector3(-54, 0.5, 45),
-		new THREE.Vector3(-54, 0.5, 40.5),
+		new THREE.Vector3(-54, 0.5, 40.5)
 	] );
 
 	var curve2 = new THREE.CatmullRomCurve3( [
@@ -262,7 +287,7 @@ function createBorderLine() {
 		new THREE.Vector3(35, 0.5, -10),
 		new THREE.Vector3(10, 0.5, 40),
 		new THREE.Vector3(-45, 0.5, 47.25),
-		new THREE.Vector3(-45, 0.5, 45),
+		new THREE.Vector3(-45, 0.5, 45)
 	] );
 
 	//Adicionar border1 e border2 à cena

@@ -5,6 +5,7 @@ var orthographicCamera, perspectiveCamera;
 
 var car;
 var oranges = [];
+var butter_packages = [];
 
 /* tamanho da area visivel */
 var frustumSize;
@@ -43,13 +44,20 @@ function createScene() {
 
 	var butterPackage_height = 2.5;
 
-	var butterPackage1 = new ButterPackage(10, butterPackage_height, 5);
-	var butterPackage2 = new ButterPackage(45, butterPackage_height, 15);
-	var butterPackage3 = new ButterPackage(-10, butterPackage_height, 0);
-	var butterPackage4 = new ButterPackage(-25, butterPackage_height, 4);
-	var butterPackage5 = new ButterPackage(5, butterPackage_height, -15);
+	var butterPackage1 = new Collidable(new ButterPackage(10, butterPackage_height, 5));
+	var butterPackage2 = new Collidable(new ButterPackage(45, butterPackage_height, 15));
+	var butterPackage3 = new Collidable(new ButterPackage(-10, butterPackage_height, 0));
+	var butterPackage4 = new Collidable(new ButterPackage(-25, butterPackage_height, 4));
+	var butterPackage5 = new Collidable(new ButterPackage(5, butterPackage_height, -15));
 
-	car = new Car(0, 2.8, 0);
+    butter_packages.push(butterPackage1);
+    butter_packages.push(butterPackage2);
+    butter_packages.push(butterPackage3);
+    butter_packages.push(butterPackage4);
+    butter_packages.push(butterPackage5);
+
+
+    car = new Collidable(new Car(0, 2.8, 0));
 
 }
 /********************************************************************************************************************/
@@ -141,7 +149,7 @@ function render() {
 
     else if (views[moving]) {
 
-		renderer.render(scene, car.getCamera());
+		renderer.render(scene, car.inner_object.getCamera());
 	}
 }
 
@@ -174,11 +182,11 @@ function onResize() {
     }
 
     perspectiveCamera.aspect = aspect;
-    car.getCamera().aspect = aspect;
+    car.inner_object.getCamera().aspect = aspect;
 
     orthographicCamera.updateProjectionMatrix();
     perspectiveCamera.updateProjectionMatrix();
-    car.getCamera().updateProjectionMatrix();
+    car.inner_object.getCamera().updateProjectionMatrix();
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
@@ -200,20 +208,20 @@ function onKeyDown(e) {
 			break;
 
 		case 37: //left arrow
-			car.setMovingDirection(0, true);
+			car.inner_object.setMovingDirection(0, true);
 			break;
 			
 		case 39: //Right arrow
-			car.setMovingDirection(2, true);
+			car.inner_object.setMovingDirection(2, true);
 			break;
 
 		case 38: //Up arrow
-			car.setMovingDirection(1, true);
-			car.setMovingState(true);
+			car.inner_object.setMovingDirection(1, true);
+			car.inner_object.setMovingState(true);
 			break;
 
 		case 40: //Down arrow
-			car.setMovingDirection(3, true);
+			car.inner_object.setMovingDirection(3, true);
 			break;
 
         case 49: //1
@@ -241,19 +249,19 @@ function onKeyUp(e) {
 	switch (e.keyCode) {
 
 		case 37: //left arrow
-			car.setMovingDirection(0, false);
+			car.inner_object.setMovingDirection(0, false);
 			break;
 
 		case 39: //Right arrow
-			car.setMovingDirection(2, false);
+			car.inner_object.setMovingDirection(2, false);
 			break;
 
 		case 38: //Up arrow
-			car.setMovingDirection(1, false);
+			car.inner_object.setMovingDirection(1, false);
 			break;
 
 		case 40: //Down arrow
-			car.setMovingDirection(3, false);
+			car.inner_object.setMovingDirection(3, false);
 			break;
 
 		default:
@@ -264,6 +272,14 @@ function onKeyUp(e) {
 
 /*******************************************************************************************************************/
 
+function checkCollision() {
+
+	for (var i = 0; i < butter_packages.length; i++) {
+
+		butter_packages[i].inner_object.butterPackage_object.material.wireframe = !butter_packages[i].collisionSphere(car);
+	}
+}
+
 /********************************************Animation**************************************************************/
 
 function animate() {
@@ -273,13 +289,15 @@ function animate() {
 
 	render();
 
-	car.move(delta);
+	car.inner_object.move(delta);
 
     for ( var i = 0; i < oranges.length; i++ ) {
 
     	oranges[i].move(delta);
 
     }
+
+    checkCollision();
 
 	requestAnimationFrame(animate);
 }
