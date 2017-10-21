@@ -272,17 +272,35 @@ function onKeyUp(e) {
 
 /*******************************************************************************************************************/
 
-function checkCollision() {
+function checkCollision(posX, posY, posZ) {
 
-	for (var i = 0; i < butter_packages.length; i++) {
+	for (var i = 0; i < oranges.length; i++) {
 
-		butter_packages[i].inner_object.butterPackage_object.material.wireframe = !butter_packages[i].collisionSphere(car);
+		if (oranges[i].collisionSphere(car)) {
+			car.inner_object.setSpeed(0);
+			car.inner_object.car_object.position.set(0, 2.8, 0); //car's initial position
+			
+			var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
+									     car.inner_object.car_object.position.y,
+									     car.inner_object.car_object.position.z);
+
+			car.inner_object.car_object.lookAt(initial_vector);
+
+		}
 	}
 
-	for (var j = 0; j < oranges.length; j++) {
+	for (var j = 0; j < butter_packages.length; j++) {
 
-	    oranges[j].inner_object.orange_object.material.wireframe = !oranges[j].collisionSphere(car);
-    }
+		butter_packages[j].inner_object.butterPackage_object.material.wireframe = !butter_packages[j].collisionSphere(car)	
+
+		if (butter_packages[j].collisionSphere(car)) {
+
+			car.inner_object.setSpeed(0);
+			car.inner_object.car_object.position.set(posX, posY, posZ);
+
+		}
+	
+	}
 }
 
 function update(delta) {
@@ -304,9 +322,13 @@ function animate() {
 
 	render();
 
+	var carX = car.inner_object.car_object.position.x;
+	var carY = car.inner_object.car_object.position.y;
+	var carZ = car.inner_object.car_object.position.z;
+
 	update(delta);
 
-    checkCollision();
+    checkCollision(carX, carY, carZ);
 
 	requestAnimationFrame(animate);
 }
