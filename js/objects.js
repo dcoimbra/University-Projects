@@ -9,9 +9,9 @@ class Collidable {
 
 	collisionSphere(other_collidable) {
 
-        var radius = this.inner_object.bounding.radius;
+        var radiusSum = this.inner_object.bounding.radius + other_collidable.inner_object.bounding.radius;
 
-        return other_collidable.inner_object.bounding.center.distanceToSquared( this.inner_object.bounding.center ) <= ( radius * radius );
+        return other_collidable.inner_object.bounding.center.distanceToSquared( this.inner_object.bounding.center ) <= ( radiusSum * radiusSum );
 	}
 }
 
@@ -37,9 +37,9 @@ class Orange {
 
         this.createOrangeStalk();
 
-        this.makeBounding();
-
         scene.add(this.orange_object);
+
+        this.makeBounding();
 
     }
 
@@ -62,7 +62,7 @@ class Orange {
 
         'use strict';
 
-        this.bounding = new THREE.Sphere(this.orange_object.getWorldPosition(), this.orange_object.geometry.parameters.radius + 2);
+        this.bounding = new THREE.Sphere(this.orange_object.getWorldPosition(), this.orange_object.geometry.parameters.radius);
     }
 
     increaseOrangeSpeed(speed) {
@@ -183,18 +183,62 @@ class ButterPackage {
 
         this.butterPackage_object.position.set(x, y, z);
 
-		this.createBounding();
+		this.makeBounding();
 	}
 
-	createBounding() {
+	makeBounding() {
 
-        var bounding = new THREE.Sphere(this.butterPackage_object.position, this.butterPackage_object.geometry.parameters.width/2 + 1.8);
+        var bounding = new THREE.Sphere(this.butterPackage_object.position, this.butterPackage_object.geometry.parameters.width/2 + 0.25);
 
         this.bounding = bounding;
     }
 }
 /*******************************************************************************************************************/
 
+class BorderTorus {
+
+    /* BorderTorus:
+
+        radius: 0.5
+        tube diameter: 0.25
+        radial segments: 4
+        tubular segments: 8
+        central angle: 2π
+    */
+
+    constructor(border, location) {
+
+        var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
+        var torus_material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+
+        this.torus_object = new THREE.Mesh(torus_geometry, torus_material);
+
+        this.torus_object.position.set(location.getComponent(0),
+                                       1.75,
+                                       location.getComponent(2));
+
+        //Make torus look up
+        var above_vector = new THREE.Vector3(this.torus_object.getWorldPosition().getComponent(0),
+											10,
+            								this.torus_object.getWorldPosition().getComponent(2));
+
+        //LookAt: Rotates the object to face a point in world space.
+        this.torus_object.lookAt(above_vector);
+
+        border.add(this.torus_object);
+
+        this.makeBounding();
+    }
+
+    makeBounding() {
+
+       var torus_position = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
+			 						           1.75,
+            						          (this.torus_object.position.getComponent(2) - 2));
+
+        this.bounding = new THREE.Sphere(torus_position, this.torus_object.geometry.parameters.radius + this.torus_object.geometry.parameters.tube);
+    }
+}
 
 /**********************************************Criacao da mesa e suas partes******************************************/
 
@@ -203,18 +247,18 @@ class Table {
 
 	constructor(x, y, z) {
 
-	'use strict';
+	    'use strict';
 
-	this.table_object = new THREE.Object3D();
+	    this.table_object = new THREE.Object3D();
 
-	var table_material = new THREE.MeshBasicMaterial({ color: 0x007300, wireframe: true });
+	    var table_material = new THREE.MeshBasicMaterial({ color: 0x007300, wireframe: true });
 
-	this.addTableTop(table_material, 0, 0, 0);
+	    this.addTableTop(table_material, 0, 0, 0);
 
-	scene.add(this.table_object);
+	    scene.add(this.table_object);
 
-	//Posicionamento da mesa
-	this.table_object.position.set(x, y, z);
+	    //Posicionamento da mesa
+	    this.table_object.position.set(x, y, z);
 	}
 
 /*-------------------------------------------------------------------------------------------------------------------*/
@@ -254,6 +298,9 @@ function createBorderLine() {
 
 	var border1 = new THREE.Line(path_geometry1, path_material);
 	var border2 = new THREE.Line(path_geometry2, path_material);
+
+	border1.userData = { torii: [] };
+    border2.userData = { torii: [] };
 
 	//Criacao dos pontos principais que vão constituir a curva
 	var curve1 = new THREE.CatmullRomCurve3( [
@@ -304,16 +351,18 @@ function createBorderLine() {
 	scene.add(border1);
 	scene.add(border2);
 
-	//Posicionar
-	border1.translateX(5);
-	border1.translateZ(-2);
-
-	border2.translateX(5);
-	border2.translateZ(-2);
-
+	border1.position.x += 5;
+	border1.position.z += -2;
+    border2.position.x += 5;
+    border2.position.z += -2;
+	
 	//Criar a border de torus
 	createTorusBorders(border1, curve1);
 	createTorusBorders(border2, curve2);
+
+    
+    border_lines.push(border1);
+    border_lines.push(border2);
 }
 
 /*-----------------------------------------------------------------------------------------------------------*/
@@ -333,41 +382,10 @@ function createTorusBorders(obj, line) {
 
 		border_point = line.getPointAt(i);
 
-		addBoundTorus(obj, border_point);
+		var torus = new Collidable(new BorderTorus(obj, border_point));
+		obj.userData.torii.push(torus);
 	}
 }
 
 /*------------------------------------------------------------------------------------------------------*/
-function addBoundTorus(obj, location) {
-
-	'use strict';
-
-	/* BoundTorus:
-
-		radius: 0.5
-		tube diameter: 0.25
-		radial segments: 4
-		tubular segments: 8
-		central angle: 2π 
-	*/
-
-	var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
-	var torus_material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
-	var torus = new THREE.Mesh(torus_geometry, torus_material);
-
-	//Make torus look to the camera
-	var above_vector = new THREE.Vector3(location.getComponent(0),
-									     10,
-									     location.getComponent(2));
-
-	torus.position.set(location.getComponent(0),
-					   1.75,
-					   location.getComponent(2));
-
-	obj.add(torus);
-
-	//LookAt: Rotates the object to face a point in world space.
-	torus.lookAt(above_vector);
-}
-/*--------------------------------------------------------------------------------------------------------------*/
 /********************************************************************************************************************/

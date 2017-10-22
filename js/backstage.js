@@ -6,6 +6,7 @@ var orthographicCamera, perspectiveCamera;
 var car;
 var oranges = [];
 var butter_packages = [];
+var border_lines = [];
 
 /* tamanho da area visivel */
 var frustumSize;
@@ -29,7 +30,7 @@ function createScene() {
 
 	createBorderLine();
 
-	var orange_height = 5.5;
+	/*var orange_height = 5.5;
 
 	var orange1 = new Collidable(new Orange(-40, orange_height, 6));
 	var orange2 = new Collidable(new Orange(15, orange_height, -15));
@@ -40,7 +41,7 @@ function createScene() {
 	oranges.push(orange3);
 
 	orange2.inner_object.setOrangeSpeed(10);
-	orange3.inner_object.setOrangeSpeed(15);
+	orange3.inner_object.setOrangeSpeed(15);*/
 
 	var butterPackage_height = 2.5;
 
@@ -277,7 +278,8 @@ function checkCollision(posX, posY, posZ) {
 	for (var i = 0; i < oranges.length; i++) {
 
 		if (oranges[i].collisionSphere(car)) {
-			car.inner_object.setSpeed(0);
+
+		    car.inner_object.setSpeed(0);
 			car.inner_object.car_object.position.set(0, 2.8, 0); //car's initial position
 			
 			var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
@@ -285,22 +287,24 @@ function checkCollision(posX, posY, posZ) {
 									     car.inner_object.car_object.position.z);
 
 			car.inner_object.car_object.lookAt(initial_vector);
-
 		}
 	}
 
 	for (var j = 0; j < butter_packages.length; j++) {
 
-		butter_packages[j].inner_object.butterPackage_object.material.wireframe = !butter_packages[j].collisionSphere(car)	
-
 		if (butter_packages[j].collisionSphere(car)) {
 
-			car.inner_object.setSpeed(0);
-			car.inner_object.car_object.position.set(posX, posY, posZ);
-
-		}
-	
+            car.inner_object.setSpeed(0);
+            car.inner_object.car_object.position.set(posX, posY, posZ);
+        }
 	}
+
+	var torii = border_lines[0].userData.torii.concat(border_lines[1].userData.torii);
+
+	for (var k = 0; k < torii.length; k++) {
+
+        torii[k].inner_object.torus_object.material.wireframe = !car.collisionSphere(torii[k]);
+    }
 }
 
 function update(delta) {

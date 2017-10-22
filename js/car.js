@@ -17,11 +17,11 @@ class Car {
 
 		this.car_object.position.set(x, y, z);
 
-		this.build(x, y, z);
+		this.build();
 	}
 
 	/*----------------------------------------------------------------------------------------------------------*/
-	build(x, y, z) {
+	build() {
 
 		'use strict';
 
@@ -30,18 +30,18 @@ class Car {
 
 		this.createHood( -4.5, 4.25, 0);
 
-		this.createWindShieldFront( +1.2,  +3.7, 0);
-		this.createWindShieldSide( -2.2,  +3.7,  -3.3); // left
-		this.createWindShieldSide( -2.2,  +3.7,  +3.3); // right
+		this.createWindShieldFront( 1.2,  +3.7, 0);
+		this.createWindShieldSide( -2.2,  3.7,  -3.3); // left
+		this.createWindShieldSide( -2.2,  3.7,  3.3); // right
 
 		this.createWheel( -6,  -3.5,  6.2); // back-left
 		this.createWheel( 6, -3.5, 6.2); // front-left
 		this.createWheel( -6,  -3.5, -6.2); // back-right
 		this.createWheel( 6,  -3.5,  -6.2); // front-right
 
-		this.makeBounding();
-
         this.createFollowingCamera(-80, 80, 0);
+
+        this.makeBounding();
 
 		scene.add(this.car_object);
 
@@ -173,7 +173,13 @@ class Car {
 
         var chassis = this.car_object.getObjectByName("chassis");
 
-        this.bounding = new THREE.Sphere(this.car_object.getWorldPosition(), chassis.geometry.parameters.width / 2 + 3.5);
+        var bounding_geometry = new THREE.SphereGeometry(chassis.geometry.parameters.width/2);
+        var bounding_material = new THREE.MeshBasicMaterial( { color: 0x123456, wireframe: true });
+        var bounding_mesh = new THREE.Mesh(bounding_geometry, bounding_material);
+
+        this.car_object.add(bounding_mesh);
+
+        this.bounding = new THREE.Sphere(this.car_object.position, chassis.geometry.parameters.width*0.2/2);
     }
 
     /*---------------------------------------------------------------------------------------------------------*/
@@ -216,7 +222,7 @@ class Car {
 			}
 		}
 
-		this.bounding.center = this.car_object.getWorldPosition();
+        this.bounding.center = this.car_object.position;
     }
 
 	/*---------------------------------------------------------------------------------------------------------*/
