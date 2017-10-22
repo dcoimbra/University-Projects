@@ -233,15 +233,21 @@ class BorderTorus {
 
     move(direction, speed, delta) {
 
-    	this.torus_object.translateOnAxis(direction, speed * delta);
+        if (speed < 0) {
+
+            speed = -speed;
+        }
+
+        var displacement = speed * delta;
+
+        this.torus_object.position.x += direction.x * displacement;
+        this.torus_object.position.z += direction.z * displacement;
 
     	/* mover bounding sphere para a nova posição */
 
-		var torus_position = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
-            								    1.75,
-											   (this.torus_object.position.getComponent(2) - 2));
-
-        this.bounding.center = torus_position;
+        this.bounding.center = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
+                                                  1.75,
+                                                 (this.torus_object.position.getComponent(2) - 2));
 	}
 
     makeBounding() {
