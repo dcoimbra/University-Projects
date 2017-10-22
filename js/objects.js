@@ -7,6 +7,7 @@ class Collidable {
 		this.inner_object = obj;
 	}
 
+
 	collisionSphere(other_collidable) {
 
         var radiusSum = this.inner_object.bounding.radius + other_collidable.inner_object.bounding.radius;
@@ -230,6 +231,19 @@ class BorderTorus {
         this.makeBounding();
     }
 
+    move(direction, speed, delta) {
+
+    	this.torus_object.translateOnAxis(direction, speed * delta);
+
+    	/* mover bounding sphere para a nova posição */
+
+		var torus_position = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
+            								    1.75,
+											   (this.torus_object.position.getComponent(2) - 2));
+
+        this.bounding.center = torus_position;
+	}
+
     makeBounding() {
 
        var torus_position = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
@@ -377,7 +391,7 @@ function createTorusBorders(obj, line) {
 	var division = length / 40000;
 
 	//Adiciona toros ao longo da linha
-	//getPoint: Returns a vector for point t of the curve where t is between 0 and 1.
+	//getPointAt: Returns a vector for point t of the curve where t is between 0 and 1.
 	for (var i = 0; i < 1; i += division) {
 
 		border_point = line.getPointAt(i);

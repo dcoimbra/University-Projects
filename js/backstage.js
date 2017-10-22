@@ -77,6 +77,8 @@ function createCameras() {
 
 function createOrtographicCamera(x, y, z) {
 
+	'use strict';
+
     var aspect = window.innerWidth / window.innerHeight;
 
     frustumSize = 60;
@@ -115,6 +117,8 @@ function createOrtographicCamera(x, y, z) {
  /*-----------------------------------------------------------------------------------------------------------------*/
 
  function createPerspectiveCamera(x, y, z) {
+
+ 	'use strict';
 
      var aspect = window.innerWidth / window.innerHeight;
 
@@ -273,10 +277,18 @@ function onKeyUp(e) {
 
 /*******************************************************************************************************************/
 
-function checkCollision(posX, posY, posZ) {
+/* verificar colisões */
+function checkCollision(posX, posY, posZ, delta) {
 
+	'use strict';
+
+	/* concatena todos os toros existentes */
+    var torii = border_lines[0].userData.torii.concat(border_lines[1].userData.torii);
+
+    /* colisão entre laranjas e carro */
 	for (var i = 0; i < oranges.length; i++) {
 
+		/* se há colisão, colocar o carro na posicao inicial */
 		if (oranges[i].collisionSphere(car)) {
 
 		    car.inner_object.setSpeed(0);
@@ -290,23 +302,48 @@ function checkCollision(posX, posY, posZ) {
 		}
 	}
 
+	/* colisão entre manteigas e carro */
 	for (var j = 0; j < butter_packages.length; j++) {
 
 		if (butter_packages[j].collisionSphere(car)) {
+
+			/* se há colisão, colocar o carro na posição em que
+				estava imediatamente antes */
 
             car.inner_object.setSpeed(0);
             car.inner_object.car_object.position.set(posX, posY, posZ);
         }
 	}
 
-	var torii = border_lines[0].userData.torii.concat(border_lines[1].userData.torii);
-
 	for (var k = 0; k < torii.length; k++) {
 
-        torii[k].inner_object.torus_object.material.wireframe = !car.collisionSphere(torii[k]);
+		/* se houve uma colisão entre o carro e o toro, determina a direção do vetor entre eles
+			e faz uma translação no eixo representado por esse vetor.
+
+			//TODO: Corrigir bug em que a direção tem componente vertical
+			//TODO: Programar colisões entre toros
+		 */
+        if (car.collisionSphere(torii[k])) {
+
+			var torus_position = new THREE.Vector3((torii[k].inner_object.torus_object.position.x + 5),
+            								    	1.75,
+										       		(torii[k].inner_object.torus_object.position.z - 2));
+
+			var car_position = new THREE.Vector3(car.inner_object.car_object.position.x,
+													1.75,
+													car.inner_object.car_object.position.z);
+
+
+			var collision_direction = torus_position.sub(car_position);
+			collision_direction.normalize();
+
+			torii[k].inner_object.move(collision_direction, car.inner_object.getSpeed(), delta);
+		}
     }
 }
 
+
+/* atualizar posicao dos objectos */
 function update(delta) {
 
     car.inner_object.move(delta);
@@ -326,13 +363,15 @@ function animate() {
 
 	render();
 
+	/*guardar posicao inicial do carro*/
+
 	var carX = car.inner_object.car_object.position.x;
 	var carY = car.inner_object.car_object.position.y;
 	var carZ = car.inner_object.car_object.position.z;
 
 	update(delta);
 
-    checkCollision(carX, carY, carZ);
+    checkCollision(carX, carY, carZ, delta);
 
 	requestAnimationFrame(animate);
 }
@@ -355,7 +394,7 @@ function init() {
 	createScene();
 	createCameras();
 
-	//Adicionados eventos, quando resize e keydown
+	//Adicionados eventos, quando resize, keydown e keyup
 	window.addEventListener('resize', onResize);
 	window.addEventListener('keydown', onKeyDown);
 	window.addEventListener('keyup', onKeyUp);

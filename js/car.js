@@ -173,12 +173,6 @@ class Car {
 
         var chassis = this.car_object.getObjectByName("chassis");
 
-        var bounding_geometry = new THREE.SphereGeometry(chassis.geometry.parameters.width/2);
-        var bounding_material = new THREE.MeshBasicMaterial( { color: 0x123456, wireframe: true });
-        var bounding_mesh = new THREE.Mesh(bounding_geometry, bounding_material);
-
-        this.car_object.add(bounding_mesh);
-
         this.bounding = new THREE.Sphere(this.car_object.position, chassis.geometry.parameters.width*0.2/2);
     }
 
