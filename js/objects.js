@@ -72,12 +72,12 @@ class Orange {
         this.orange_object.userData.speed += speed;
     }
 
-    setOrangeSpeed(speed) {
-        this.orange_object.userData.speed = speed;
-    }
-
     getOrangeSpeed() {
         return this.orange_object.userData.speed;
+    }
+
+    setOrangeSpeed(speed) {
+        this.orange_object.userData.speed = speed;
     }
 
     setOrangeTransparency(){
@@ -99,7 +99,7 @@ class Orange {
 			if (this.orange_object.userData.changePos){
 
 				this.setOrangeTransparency();
-				setTimeout(this.changingPos, 4000, this.orange_object);
+				setTimeout(this.changingPos(), 4000, this.orange_object);
 				this.orange_object.userData.changePos = false;
 			}
 		}
@@ -129,20 +129,20 @@ class Orange {
 	}
 
 	//Mudamos a laranja de posicao
-	changingPos(object){
+	changingPos(){
 
     	//Nova posicao random da laranja (x, z)
-    	object.position.x = randomPos();
-		object.position.z = randomPos();
-		object.userData.speed = Math.random()*10;
+    	this.orange_object.position.x = randomPos();
+		this.orange_object.position.z = randomPos();
+		this.orange_object.userData.speed = Math.random()*10;
 
 		//Angulo de rotacao random à volta de y
-		object.rotation.y += 2*Math.PI*Math.random();
+		this.orange_object.rotation.y += 2*Math.PI*Math.random();
 
 		//Colocar a laranja e o caule visiveis
-		object.material.transparent = false;
+		this.orange_object.material.transparent = false;
 
-		var stalk = object.getObjectByName('stalk');
+		var stalk = this.orange_object.getObjectByName('stalk');
 		stalk.material.transparent = false;
 	}
 }
@@ -266,7 +266,7 @@ class BorderTorus {
 
 
             /* desacelerar o toro */
-            this.torus_object.userData.speed -= (10 * delta);
+            this.torus_object.userData.speed -= (20 * delta);
 
             if (this.torus_object.userData.speed < 0) {
 
@@ -335,10 +335,8 @@ function createBorderLine() {
 	var path_geometry2 = new THREE.Geometry();
 
 
-	var path_material = new THREE.LineBasicMaterial( { color: 0x555555,
+	var path_material = new THREE.LineBasicMaterial( { color: 0xaaaaaa,
 													   linewidth: 3,
-													   opacity: 0,
-													   transparent: true
 												   	 });
 
 	var border1 = new THREE.Line(path_geometry1, path_material);
@@ -392,6 +390,9 @@ function createBorderLine() {
 		new THREE.Vector3(-45, 0.5, 45)
 	] );
 
+    path_geometry1.vertices = curve1.getPoints( 100 );
+    path_geometry2.vertices = curve2.getPoints( 100 );
+
 	//Adicionar border1 e border2 à cena
 	scene.add(border1);
 	scene.add(border2);
@@ -405,7 +406,7 @@ function createBorderLine() {
 	createTorusBorders(border1, curve1);
 	createTorusBorders(border2, curve2);
 
-    
+
     border_lines.push(border1);
     border_lines.push(border2);
 }

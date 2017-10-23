@@ -30,7 +30,7 @@ function createScene() {
 
 	createBorderLine();
 
-	/*var orange_height = 5.5;
+	var orange_height = 5.5;
 
 	var orange1 = new Collidable(new Orange(-40, orange_height, 6));
 	var orange2 = new Collidable(new Orange(15, orange_height, -15));
@@ -41,7 +41,7 @@ function createScene() {
 	oranges.push(orange3);
 
 	orange2.inner_object.setOrangeSpeed(10);
-	orange3.inner_object.setOrangeSpeed(15); */
+	orange3.inner_object.setOrangeSpeed(15);
 
 	var butterPackage_height = 2.5;
 
@@ -343,7 +343,7 @@ function checkCollision(posX, posY, posZ, delta) {
 
         if (car.collisionSphere(toruses[k])) {
 
-            toruses[k].inner_object.torus_object.userData.speed = Math.abs(car.inner_object.getSpeed()) - 2;
+            toruses[k].inner_object.torus_object.userData.speed = Math.abs(car.inner_object.getSpeed());
 
             toruses[k].inner_object.torus_object.userData.car_collision_direction = torus_position.sub(car_position);
             toruses[k].inner_object.torus_object.userData.car_collision_direction.normalize();
