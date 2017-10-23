@@ -34,22 +34,22 @@ function createScene() {
 
 	var orange1 = new Collidable(new Orange(-40, orange_height, 6));
 	var orange2 = new Collidable(new Orange(15, orange_height, -15));
-	var orange3 = new Collidable(new Orange(35, orange_height, 5));*/
+	var orange3 = new Collidable(new Orange(35, orange_height, 5));
 
 	oranges.push(orange1);
 	oranges.push(orange2);
 	oranges.push(orange3);
 
 	orange2.inner_object.setOrangeSpeed(10);
-	orange3.inner_object.setOrangeSpeed(15);
+	orange3.inner_object.setOrangeSpeed(15); */
 
 	var butterPackage_height = 2.5;
 
-	var butterPackage1 = new Collidable(new ButterPackage(10, butterPackage_height, 5));
-	var butterPackage2 = new Collidable(new ButterPackage(45, butterPackage_height, 15));
-	var butterPackage3 = new Collidable(new ButterPackage(-10, butterPackage_height, 0));
-	var butterPackage4 = new Collidable(new ButterPackage(-25, butterPackage_height, 4));
-	var butterPackage5 = new Collidable(new ButterPackage(5, butterPackage_height, -15));
+    var butterPackage1 = new Collidable(new ButterPackage(17, butterPackage_height, 10));
+    var butterPackage2 = new Collidable(new ButterPackage(47, butterPackage_height, 16));
+    var butterPackage3 = new Collidable(new ButterPackage(-39, butterPackage_height, -48.5));
+    var butterPackage4 = new Collidable(new ButterPackage(-33, butterPackage_height, 4.7));
+    var butterPackage5 = new Collidable(new ButterPackage(36, butterPackage_height, -35));
 
     butter_packages.push(butterPackage1);
     butter_packages.push(butterPackage2);
@@ -57,8 +57,13 @@ function createScene() {
     butter_packages.push(butterPackage4);
     butter_packages.push(butterPackage5);
 
+    butter_packages[0].inner_object.butterPackage_object.rotateY( 5 * Math.PI / 3 );
+    butter_packages[1].inner_object.butterPackage_object.rotateY( 6.2 * Math.PI / 3 );
+    butter_packages[2].inner_object.butterPackage_object.rotateY( 5.9 * Math.PI / 3 );
+    butter_packages[4].inner_object.butterPackage_object.rotateY( Math.PI / 2 );
 
     car = new Collidable(new Car(0, 2.8, 0));
+    car.inner_object.car_object.translateZ(5);
 
 }
 /********************************************************************************************************************/
@@ -283,7 +288,12 @@ function checkCollision(posX, posY, posZ, delta) {
 	'use strict';
 
 	/* concatena todos os toros existentes */
-    var torii = border_lines[0].userData.torii.concat(border_lines[1].userData.torii);
+    var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
+
+    var torus_position;
+    var car_position;
+    var otherTorus_position;
+
 
     /* colisão entre laranjas e carro */
 	for (var i = 0; i < oranges.length; i++) {
@@ -292,7 +302,7 @@ function checkCollision(posX, posY, posZ, delta) {
 		if (oranges[i].collisionSphere(car)) {
 
 		    car.inner_object.setSpeed(0);
-			car.inner_object.car_object.position.set(0, 2.8, 0); //car's initial position
+			car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
 			
 			var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
 									     car.inner_object.car_object.position.y,
@@ -315,29 +325,47 @@ function checkCollision(posX, posY, posZ, delta) {
         }
 	}
 
-	for (var k = 0; k < torii.length; k++) {
+	/* colisão entre o carro e os toros */
+	for (var k = 0; k < toruses.length; k++) {
 
 		/* se houve uma colisão entre o carro e o toro, determina a direção do vetor entre eles
-			e faz uma translação no eixo representado por esse vetor.
-
-			//TODO: Corrigir bug em que a direção tem componente vertical
-			//TODO: Programar colisões entre toros
+			e altera a sua velocidade para ser igual à do carro.
 		 */
-        if (car.collisionSphere(torii[k])) {
 
-			var torus_position = new THREE.Vector3((torii[k].inner_object.torus_object.position.x + 5),
-            								    	1.75,
-										       		(torii[k].inner_object.torus_object.position.z - 2));
+        torus_position = new THREE.Vector3((toruses[k].inner_object.torus_object.position.x + 5),
+                                                1.75,
+                                                (toruses[k].inner_object.torus_object.position.z - 2));
 
-			var car_position = new THREE.Vector3(car.inner_object.car_object.position.x,
-													1.75,
-													car.inner_object.car_object.position.z);
+        car_position = new THREE.Vector3(car.inner_object.car_object.position.x,
+                                            1.75,
+                                            car.inner_object.car_object.position.z);
 
 
-			var collision_direction = torus_position.sub(car_position);
-			collision_direction.normalize();
+        if (car.collisionSphere(toruses[k])) {
 
-			torii[k].inner_object.move(collision_direction, car.inner_object.getSpeed(), delta);
+            toruses[k].inner_object.torus_object.userData.speed = Math.abs(car.inner_object.getSpeed()) - 2;
+
+            toruses[k].inner_object.torus_object.userData.car_collision_direction = torus_position.sub(car_position);
+            toruses[k].inner_object.torus_object.userData.car_collision_direction.normalize();
+		}
+
+		/* procedimento semelhante para as colisóes entre toros */
+		for (var l = 0; l < toruses.length; l++) {
+
+        	if ( k !== l && toruses[l].collisionSphere(toruses[k])) {
+
+        		if (toruses[k].inner_object.torus_object.userData.speed !== 0) {
+
+                    toruses[l].inner_object.torus_object.userData.speed = toruses[k].inner_object.torus_object.userData.speed;
+
+                    otherTorus_position = new THREE.Vector3((toruses[l].inner_object.torus_object.position.x + 5),
+                        1.75,
+                        (toruses[l].inner_object.torus_object.position.z - 2));
+
+                    toruses[l].inner_object.torus_object.userData.torus_collision_direction = otherTorus_position.sub(torus_position);
+                    toruses[l].inner_object.torus_object.userData.torus_collision_direction.normalize();
+                }
+            }
 		}
     }
 }
@@ -351,6 +379,13 @@ function update(delta) {
     for ( var i = 0; i < oranges.length; i++ ) {
 
         oranges[i].inner_object.move(delta);
+    }
+
+    var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
+
+    for (var m = 0; m < toruses.length; m++) {
+
+        toruses[m].inner_object.move(delta);
     }
 }
 
