@@ -10,6 +10,8 @@ class Collidable {
 
 	collisionSphere(other_collidable) {
 
+	    'use strict';
+
         var radiusSum = this.inner_object.bounding.radius + other_collidable.inner_object.bounding.radius;
 
         return other_collidable.inner_object.bounding.center.distanceToSquared( this.inner_object.bounding.center ) <= ( radiusSum * radiusSum );
@@ -189,9 +191,7 @@ class ButterPackage {
 
 	makeBounding() {
 
-        var bounding = new THREE.Sphere(this.butterPackage_object.position, this.butterPackage_object.geometry.parameters.width/2 + 0.25);
-
-        this.bounding = bounding;
+        this.bounding = new THREE.Sphere(this.butterPackage_object.position, this.butterPackage_object.geometry.parameters.width / 2 + 0.25);
     }
 }
 /*******************************************************************************************************************/
@@ -209,10 +209,17 @@ class BorderTorus {
 
     constructor(border, location) {
 
+        'use strict';
+
         var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
         var torus_material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
 
         this.torus_object = new THREE.Mesh(torus_geometry, torus_material);
+
+        this.torus_object.userData = { speed: 0,
+                                       car_collision_direction: new THREE.Vector3(0, 0, 0),
+                                       torus_collision_direction: new THREE.Vector3(0, 0, 0)
+                                     };
 
         this.torus_object.position.set(location.getComponent(0),
                                        1.75,
@@ -231,23 +238,38 @@ class BorderTorus {
         this.makeBounding();
     }
 
-    move(direction, speed, delta) {
+    move(delta) {
 
-        if (speed < 0) {
+        'use strict';
 
-            speed = -speed;
+        var speed = this.torus_object.userData.speed;
+
+        if (speed > 0) {
+
+            var displacement = speed * delta;
+
+            /* transformar o vetor nas coordenadas do toro para as coordenadas do mundo e aplicar a translação */
+            this.torus_object.position.x += this.torus_object.userData.car_collision_direction.x * displacement;
+            this.torus_object.position.z += this.torus_object.userData.car_collision_direction.z * displacement;
+
+            this.torus_object.position.x += this.torus_object.userData.torus_collision_direction.x * displacement;
+            this.torus_object.position.z += this.torus_object.userData.torus_collision_direction.z * displacement;
+
+            /* mover bounding sphere para a nova posição */
+
+            this.bounding.center = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
+                                                      1.75,
+                                                      (this.torus_object.position.getComponent(2) - 2));
+
+
+            /* desacelerar o toro */
+            this.torus_object.userData.speed -= (10 * delta);
+
+            if (this.torus_object.userData.speed < 0) {
+
+                this.torus_object.userData.speed = 0;
+			}
         }
-
-        var displacement = speed * delta;
-
-        this.torus_object.position.x += direction.x * displacement;
-        this.torus_object.position.z += direction.z * displacement;
-
-    	/* mover bounding sphere para a nova posição */
-
-        this.bounding.center = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
-                                                  1.75,
-                                                 (this.torus_object.position.getComponent(2) - 2));
 	}
 
     makeBounding() {
@@ -319,8 +341,8 @@ function createBorderLine() {
 	var border1 = new THREE.Line(path_geometry1, path_material);
 	var border2 = new THREE.Line(path_geometry2, path_material);
 
-	border1.userData = { torii: [] };
-    border2.userData = { torii: [] };
+	border1.userData = { toruses: [] };
+    border2.userData = { toruses: [] };
 
 	//Criacao dos pontos principais que vão constituir a curva
 	var curve1 = new THREE.CatmullRomCurve3( [
@@ -403,7 +425,7 @@ function createTorusBorders(obj, line) {
 		border_point = line.getPointAt(i);
 
 		var torus = new Collidable(new BorderTorus(obj, border_point));
-		obj.userData.torii.push(torus);
+		obj.userData.toruses.push(torus);
 	}
 }
 
