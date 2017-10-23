@@ -97,7 +97,7 @@ class Orange {
 			if (this.orange_object.userData.changePos){
 
 				this.setOrangeTransparency();
-				setInterval(this.changingPos(), 5000, this.orange_object);
+				setTimeout(this.changingPos, 4000, this.orange_object);
 				this.orange_object.userData.changePos = false;
 			}
 		}
@@ -113,11 +113,13 @@ class Orange {
 			// vamos ter de calcular as componentes em x e z
 			// x: cos = comp_x / distance <=> comp_x = cos(angulo atual)*distance
 			// z: sin = comp_z / distance <=> comp_z = sin(angulo atual)*distance
+
 			this.orange_object.position.x += distance * Math.cos(this.orange_object.rotation.y);
 			this.orange_object.position.z += distance * Math.sin(this.orange_object.rotation.y);
 
 			//Rolamento da laranja (si mesma)
 			this.orange_object.rotateZ(-0.02);
+
 
 		}
 
@@ -125,19 +127,20 @@ class Orange {
 	}
 
 	//Mudamos a laranja de posicao
-	changingPos(){
+	changingPos(object){
 
     	//Nova posicao random da laranja (x, z)
-    	this.orange_object.position.x = randomPos();
-		this.orange_object.position.z = randomPos();
+    	object.position.x = randomPos();
+		object.position.z = randomPos();
+		object.userData.speed = Math.random()*10;
 
 		//Angulo de rotacao random à volta de y
-		this.orange_object.rotation.y += 2*Math.PI*Math.random();
+		object.rotation.y += 2*Math.PI*Math.random();
 
 		//Colocar a laranja e o caule visiveis
-		this.orange_object.material.transparent = false;
+		object.material.transparent = false;
 
-		var stalk = this.orange_object.getObjectByName('stalk');
+		var stalk = object.getObjectByName('stalk');
 		stalk.material.transparent = false;
 	}
 }

@@ -34,14 +34,14 @@ function createScene() {
 
 	var orange1 = new Collidable(new Orange(-40, orange_height, 6));
 	var orange2 = new Collidable(new Orange(15, orange_height, -15));
-	var orange3 = new Collidable(new Orange(35, orange_height, 5));
+	var orange3 = new Collidable(new Orange(35, orange_height, 5));*/
 
 	oranges.push(orange1);
 	oranges.push(orange2);
 	oranges.push(orange3);
 
 	orange2.inner_object.setOrangeSpeed(10);
-	orange3.inner_object.setOrangeSpeed(15);*/
+	orange3.inner_object.setOrangeSpeed(15);
 
 	var butterPackage_height = 2.5;
 
