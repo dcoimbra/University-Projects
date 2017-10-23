@@ -283,7 +283,7 @@ function onKeyUp(e) {
 /*******************************************************************************************************************/
 
 /* verificar colisões */
-function checkCollision(posX, posY, posZ, delta) {
+function checkCollision(posX, posY, posZ) {
 
 	'use strict';
 
@@ -343,9 +343,11 @@ function checkCollision(posX, posY, posZ, delta) {
 
         if (car.collisionSphere(toruses[k])) {
 
+			/* se há colisão, a velocidade do toro fica igual à velocidade do carro */
             toruses[k].inner_object.torus_object.userData.speed = Math.abs(car.inner_object.getSpeed());
 
-            toruses[k].inner_object.torus_object.userData.car_collision_direction = torus_position.sub(car_position);
+            /* determina a direção do vetor entre os dois objectos */
+            toruses[k].inner_object.torus_object.userData.car_collision_direction = torus_position.sub(car_position); //direção da colisão
             toruses[k].inner_object.torus_object.userData.car_collision_direction.normalize();
 		}
 
@@ -356,6 +358,7 @@ function checkCollision(posX, posY, posZ, delta) {
 
         		if (toruses[k].inner_object.torus_object.userData.speed !== 0) {
 
+        			//velocidade do toro atingido fica igual à do toro que o atingiu
                     toruses[l].inner_object.torus_object.userData.speed = toruses[k].inner_object.torus_object.userData.speed;
 
                     otherTorus_position = new THREE.Vector3((toruses[l].inner_object.torus_object.position.x + 5),

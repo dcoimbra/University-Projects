@@ -192,7 +192,7 @@ class Car {
 
 			if (this.getSpeed() !== 0) {
 
-				this.checkDirection();
+				this.checkDirection(0);
 			}
 		}
 
@@ -202,7 +202,7 @@ class Car {
 
 			if (this.getSpeed() !== 0) {
 
-				this.checkDirection();
+				this.checkDirection(1);
 			}
 		}
 
@@ -235,18 +235,34 @@ class Car {
 
 	/*---------------------------------------------------------------------------------------------------------*/
 
-	checkDirection() {
+	checkDirection(backward) {
 
 		'use strict';
 
 		if (this.car_object.userData.movingDirection[0]) {  // Left arrow
 
-			this.car_object.rotateY(0.05);
+			if (backward) {
+
+				this.car_object.rotateY(-0.05);
+            }
+
+            else {
+
+                this.car_object.rotateY(0.05);
+            }
 		}
 
 		else if (this.car_object.userData.movingDirection[2]) { // Right arrow
 
-			this.car_object.rotateY(-0.05);
+            if (backward) {
+
+                this.car_object.rotateY(0.05);
+            }
+
+            else {
+
+                this.car_object.rotateY(-0.05);
+            }
 		}
 	}
 

@@ -14,6 +14,7 @@ class Collidable {
 
         var radiusSum = this.inner_object.bounding.radius + other_collidable.inner_object.bounding.radius;
 
+		//distancia dos centros < soma dos raios --> colisão
         return other_collidable.inner_object.bounding.center.distanceToSquared( this.inner_object.bounding.center ) <= ( radiusSum * radiusSum );
 	}
 }
@@ -64,7 +65,7 @@ class Orange {
     makeBounding() {
 
         'use strict';
-
+											//center                               //radius
         this.bounding = new THREE.Sphere(this.orange_object.getWorldPosition(), this.orange_object.geometry.parameters.radius);
     }
 
@@ -120,9 +121,7 @@ class Orange {
 			this.orange_object.position.z += distance * Math.sin(this.orange_object.rotation.y);
 
 			//Rolamento da laranja (si mesma)
-			this.orange_object.rotateZ(-0.02);
-
-
+			this.orange_object.rotation.z += (-0.02);
 		}
 
 		this.bounding.center = this.orange_object.getWorldPosition();
@@ -136,8 +135,9 @@ class Orange {
 		object.position.z = randomPos();
 		object.userData.speed = (Math.random()*10);
 
+
 		//Angulo de rotacao random à volta de y
-		object.rotation.y += 2*Math.PI*Math.random();
+		object.rotation.y += (2*Math.PI*Math.random());
 
 		//Colocar a laranja e o caule visiveis
 		object.material.transparent = false;
