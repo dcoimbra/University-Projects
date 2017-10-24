@@ -32,7 +32,9 @@ class Orange {
                    height segments: 13*/
 
         var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
-        var orange_material = new THREE.MeshBasicMaterial({color: 0xe49600, wireframe: true, opacity: 0, transparent: false});
+
+        var orange_material = new THREE.MeshLambertMaterial({color: 0xe49600, wireframe: true, opacity: 0, transparent: false});
+
         this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
         this.orange_object.userData = {speed: 5, changePos: false};
@@ -52,7 +54,7 @@ class Orange {
         'use strict';
 
         var stalk_geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-        var stalk_material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true, opacity: 0, transparent: false});
+        var stalk_material = new THREE.MeshLambertMaterial({color: 0x00ff00, wireframe: true, opacity: 0, transparent: false});
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
         stalk.position.set(0, 4, 0);
@@ -181,7 +183,7 @@ class ButterPackage {
 		*/
 
 		var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
-		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
+		var butterPackage_material = new THREE.MeshLambertMaterial({ color: 0x00bfff, wireframe: true });
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
@@ -215,7 +217,7 @@ class BorderTorus {
         'use strict';
 
         var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
-        var torus_material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+        var torus_material = new THREE.MeshLambertMaterial({color: 0xff0000, wireframe: true});
 
         this.torus_object = new THREE.Mesh(torus_geometry, torus_material);
 
@@ -296,7 +298,7 @@ class Table {
 
 	    this.table_object = new THREE.Object3D();
 
-	    var table_material = new THREE.MeshBasicMaterial({ color: 0x007300, wireframe: true });
+	    var table_material = new THREE.MeshLambertMaterial({ color: 0x007300, wireframe: true });
 
 	    this.addTableTop(table_material, 0, 0, 0);
 

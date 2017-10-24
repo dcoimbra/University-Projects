@@ -3,6 +3,8 @@ var scene, renderer;
 
 var orthographicCamera, perspectiveCamera;
 
+var global_light;
+
 var car;
 var oranges = [];
 var butter_packages = [];
@@ -25,25 +27,37 @@ function createScene() {
 
 	scene = new THREE.Scene();
 
-	//Posicionamento dos vários objetos
-	var table = new Table(0, 0, 0);
+	createSceneElements();
 
-	createBorderLine();
+}
+/********************************************************************************************************************/
 
-	var orange_height = 5.5;
+function createLights() {
 
-	var orange1 = new Collidable(new Orange(-40, orange_height, 6));
-	var orange2 = new Collidable(new Orange(15, orange_height, -15));
-	var orange3 = new Collidable(new Orange(35, orange_height, 5));
+    global_light = new GlobalLight(0xffffff, 1);
+}
 
-	oranges.push(orange1);
-	oranges.push(orange2);
-	oranges.push(orange3);
+function createSceneElements() {
 
-	orange2.inner_object.setOrangeSpeed(10);
-	orange3.inner_object.setOrangeSpeed(15);
+    //Posicionamento dos vários objetos
+    var table = new Table(0, 0, 0);
 
-	var butterPackage_height = 2.5;
+    createBorderLine();
+
+    var orange_height = 5.5;
+
+    var orange1 = new Collidable(new Orange(-40, orange_height, 6));
+    var orange2 = new Collidable(new Orange(15, orange_height, -15));
+    var orange3 = new Collidable(new Orange(35, orange_height, 5));
+
+    oranges.push(orange1);
+    oranges.push(orange2);
+    oranges.push(orange3);
+
+    orange2.inner_object.setOrangeSpeed(10);
+    orange3.inner_object.setOrangeSpeed(15);
+
+    var butterPackage_height = 2.5;
 
     var butterPackage1 = new Collidable(new ButterPackage(17, butterPackage_height, 10));
     var butterPackage2 = new Collidable(new ButterPackage(47, butterPackage_height, 16));
@@ -64,9 +78,7 @@ function createScene() {
 
     car = new Collidable(new Car(0, 2.8, 0));
     car.inner_object.car_object.translateZ(5);
-
 }
-/********************************************************************************************************************/
 
 
 /********************************************Criacao das cameras******************************************************/
@@ -206,17 +218,6 @@ function onKeyDown(e) {
 
 	switch (e.keyCode) {
 
-		case 65: //A
-		case 97: //a
-
-			scene.traverse(function (node) {
-
-				if (node instanceof THREE.Mesh) {
-					node.material.wireframe = !node.material.wireframe;
-				}
-			});
-			break;
-
 		case 37: //left arrow
 			car.inner_object.setMovingDirection(0, true);
 			break;
@@ -245,6 +246,20 @@ function onKeyDown(e) {
 		case 51: //3
 			views = [false, false, true];
 			break;
+
+        case 65: //A
+
+            scene.traverse(function (node) {
+
+                if (node instanceof THREE.Mesh) {
+                    node.material.wireframe = !node.material.wireframe;
+                }
+            });
+            break;
+
+        case 78: //N
+            global_light.flick();
+            break;
 
 		default:
 			break;
@@ -377,6 +392,8 @@ function checkCollision(posX, posY, posZ) {
 /* atualizar posicao dos objectos */
 function update(delta) {
 
+    'use strict';
+
     car.inner_object.move(delta);
 
     for ( var i = 0; i < oranges.length; i++ ) {
@@ -431,6 +448,7 @@ function init() {
 
 	createScene();
 	createCameras();
+	createLights();
 
 	//Adicionados eventos, quando resize, keydown e keyup
 	window.addEventListener('resize', onResize);
