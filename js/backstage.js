@@ -3,7 +3,8 @@ var scene, renderer;
 
 var orthographicCamera, perspectiveCamera;
 
-var global_light;
+var sun;
+var candles = [];
 
 var car;
 var oranges = [];
@@ -28,14 +29,8 @@ function createScene() {
 	scene = new THREE.Scene();
 
 	createSceneElements();
-
 }
 /********************************************************************************************************************/
-
-function createLights() {
-
-    global_light = new GlobalLight(0xffffff, 1);
-}
 
 function createSceneElements() {
 
@@ -79,6 +74,25 @@ function createSceneElements() {
     car = new Collidable(new Car(0, 2.8, 0));
     car.inner_object.car_object.translateZ(5);
 }
+
+ function createLights() {
+
+     sun = new Sun(0xffffff, 1);
+
+     candle1 = new Candle(5, 3.6, -5);
+     candle2 = new Candle(36, 3.6, -15);
+     candle3 = new Candle(10, 3.6, 35);
+     candle4 = new Candle(-35, 3.6, 44);
+     candle5 = new Candle(-17, 3.6, 0);
+     candle6 = new Candle(-25, 3.6, -35);
+
+     candles.push(candle1)
+     candles.push(candle2);
+     candles.push(candle3);
+     candles.push(candle4);
+     candles.push(candle5);
+     candles.push(candle6);
+ }
 
 
 /********************************************Criacao das cameras******************************************************/
@@ -257,8 +271,12 @@ function onKeyDown(e) {
             });
             break;
 
+        case 67: //C
+            flickCandles();
+            break;
+
         case 78: //N
-            global_light.flick();
+            sun.flick();
             break;
 
 		default:
@@ -293,6 +311,14 @@ function onKeyUp(e) {
 			break;
 
 	}
+}
+
+function flickCandles() {
+
+    for (var i = 0; i < candles.length; i++) {
+
+        candles[i].flick();
+    }
 }
 
 /*******************************************************************************************************************/
@@ -396,7 +422,7 @@ function update(delta) {
 
     car.inner_object.move(delta);
 
-    for ( var i = 0; i < oranges.length; i++ ) {
+   for ( var i = 0; i < oranges.length; i++ ) {
 
         oranges[i].inner_object.move(delta);
     }
