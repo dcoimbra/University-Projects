@@ -79,12 +79,12 @@ function createSceneElements() {
 
      sun = new Sun(0xffffff, 1);
 
-     candle1 = new Candle(5, 3.6, -5);
-     candle2 = new Candle(36, 3.6, -15);
-     candle3 = new Candle(10, 3.6, 35);
-     candle4 = new Candle(-35, 3.6, 44);
-     candle5 = new Candle(-17, 3.6, 0);
-     candle6 = new Candle(-25, 3.6, -35);
+     candle1 = new Candle(5, 2.3, -5);
+     candle2 = new Candle(36, 2.3, -15);
+     candle3 = new Candle(10, 2.3, 35);
+     candle4 = new Candle(-35, 2.3, 44);
+     candle5 = new Candle(-17, 2.3, 0);
+     candle6 = new Candle(-25, 2.3, -35);
 
      candles.push(candle1)
      candles.push(candle2);

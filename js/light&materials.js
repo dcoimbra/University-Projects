@@ -21,7 +21,7 @@ class Candle {
 
     constructor(x, y, z) {
 
-        this.candle_object = new THREE.PointLight( 0xffffff, 7, 250, 2);
+        this.candle_object = new THREE.PointLight( 0xffffff, 5, 250, 2);
 
         this.candle_object.position.set(x, y, z);
 
