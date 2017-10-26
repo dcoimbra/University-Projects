@@ -1,3 +1,4 @@
+/***************************************Classe das colisoes**********************************************************/
 class Collidable {
 
 	constructor(obj) {
@@ -7,19 +8,20 @@ class Collidable {
 		this.inner_object = obj;
 	}
 
-
+	/*---------------------------------------------------------------------------------------------------------------*/
 	collisionSphere(other_collidable) {
 
 	    'use strict';
 
         var radiusSum = this.inner_object.bounding.radius + other_collidable.inner_object.bounding.radius;
+        var object_center = this.inner_object.bounding.center;
 
 		//distancia dos centros < soma dos raios --> colisão
-        return other_collidable.inner_object.bounding.center.distanceToSquared( this.inner_object.bounding.center ) <= ( radiusSum * radiusSum );
+        return other_collidable.inner_object.bounding.center.distanceToSquared(object_center) <= ( radiusSum * radiusSum );
 	}
 }
 
-/**************************Classe das laranjas****************************************************/
+/********************************************Classe das laranjas****************************************************/
 
 class Orange {
 
@@ -33,7 +35,10 @@ class Orange {
 
         var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
 
-        var orange_material = new THREE.MeshPhongMaterial({color: 0xe49600, wireframe: true, opacity: 0, transparent: false});
+        var orange_material = new THREE.MeshPhongMaterial({color: 0xe49600,
+															wireframe: true,
+															opacity: 0,
+															transparent: false});
 
         this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
@@ -48,13 +53,17 @@ class Orange {
         this.makeBounding();
 
     }
-
+	/*--------------------------------------------------------------------------------------------------------------*/
+    //Criação do caule da laranja
     createOrangeStalk() {
 
         'use strict';
 
         var stalk_geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-        var stalk_material = new THREE.MeshPhongMaterial({color: 0x00ff00, wireframe: true, opacity: 0, transparent: false});
+        var stalk_material = new THREE.MeshPhongMaterial({color: 0x00ff00,
+															wireframe: true,
+															opacity: 0,
+															transparent: false});
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
         stalk.position.set(0, 4, 0);
@@ -67,19 +76,24 @@ class Orange {
     makeBounding() {
 
         'use strict';
-											//center                               //radius
-        this.bounding = new THREE.Sphere(this.orange_object.getWorldPosition(), this.orange_object.geometry.parameters.radius);
+        var orange_radius = this.orange_object.geometry.parameters.radius;
+        var orange_center = this.orange_object.getWorldPosition();
+
+        this.bounding = new THREE.Sphere(orange_center, orange_radius );
     }
 
     increaseOrangeSpeed(speed) {
+    	'use strict';
         this.orange_object.userData.speed += speed;
     }
 
     getOrangeSpeed() {
+    	'use strict';
         return this.orange_object.userData.speed;
     }
 
     setOrangeSpeed(speed) {
+    	'use strict';
         this.orange_object.userData.speed = speed;
     }
 
@@ -89,6 +103,7 @@ class Orange {
 	}
 
     setOrangeTransparency(){
+    	'use strict';
     	this.orange_object.material.transparent = true;
 
     	var stalk = this.orange_object.getObjectByName('stalk');
@@ -96,6 +111,7 @@ class Orange {
     }
 
     move(delta) {
+    	'use strict';
 
     	var orange_Xposition = this.orange_object.position.x;
     	var orange_Zposition = this.orange_object.position.z;
@@ -123,12 +139,11 @@ class Orange {
 			// vamos ter de calcular as componentes em x e z
 			// x: cos = comp_x / distance <=> comp_x = cos(angulo atual)*distance
 			// z: sin = comp_z / distance <=> comp_z = sin(angulo atual)*distance
-
 			this.orange_object.position.x += distance * Math.cos(this.orange_object.rotation.y);
 			this.orange_object.position.z += distance * Math.sin(this.orange_object.rotation.y);
 
 			//Rolamento da laranja (si mesma)
-			this.orange_object.rotation.z += (-0.02);
+			this.orange_object.rotateZ(-0.01);
 		}
 
 		this.bounding.center = this.orange_object.getWorldPosition();
@@ -196,15 +211,43 @@ class ButterPackage {
 
         this.butterPackage_object.position.set(x, y, z);
 
+
+
+		/*var geometry = new THREE.BufferGeometry();
+
+		// create a simple square shape. We duplicate the top left and bottom right
+		// vertices because each vertex needs to appear once per triangle.
+		var vertices = new Float32Array( [
+			-1.0, -1.0,  1.0,
+			1.0, -1.0,  1.0,
+			1.0,  1.0,  1.0,
+
+			1.0,  1.0,  1.0,
+			-1.0,  1.0,  1.0,
+			-1.0, -1.0,  1.0
+		] );
+
+		// itemSize = 3 because there are 3 values (components) per vertex
+		geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+		var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+		this.butterPackage_object = new THREE.Mesh( geometry, material );
+
+		this.butterPackage_object.position.set(0, 0, 0);*/
+
 		this.makeBounding();
 	}
 
 	makeBounding() {
+		'use strict';
 
-        this.bounding = new THREE.Sphere(this.butterPackage_object.position, this.butterPackage_object.geometry.parameters.width / 2 + 0.25);
+		var butterPackage_width = this.butterPackage_object.geometry.parameters.width;
+
+        this.bounding = new THREE.Sphere(this.butterPackage_object.position, butterPackage_width / 2 + 0.25);
     }
 }
 /*******************************************************************************************************************/
+
+/******************************************* Classe dos torus da pista**********************************************/
 
 class BorderTorus {
 
@@ -247,7 +290,7 @@ class BorderTorus {
 
         this.makeBounding();
     }
-
+	/*---------------------------------------------------------------------------------------------------------------*/
     move(delta) {
 
         'use strict';
@@ -282,14 +325,19 @@ class BorderTorus {
         }
 	}
 
+	/*-------------------------------------------------------------------------------------------------------------*/
     makeBounding() {
 
        var torus_position = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
 			 						           1.75,
             						          (this.torus_object.position.getComponent(2) - 2));
 
-        this.bounding = new THREE.Sphere(torus_position, this.torus_object.geometry.parameters.radius + this.torus_object.geometry.parameters.tube);
+       var torus_radius = this.torus_object.geometry.parameters.radius;
+       var torus_tube = this.torus_object.geometry.parameters.tube;
+
+       this.bounding = new THREE.Sphere(torus_position, torus_radius + torus_tube);
     }
+    /*-------------------------------------------------------------------------------------------------------------*/
 }
 
 /**********************************************Criacao da mesa e suas partes******************************************/
@@ -313,7 +361,7 @@ class Table {
 	    this.table_object.position.set(x, y, z);
 	}
 
-/*-------------------------------------------------------------------------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------------------------------------*/
 	addTableTop(material, x, y, z) {
 
 		'use strict';
@@ -343,7 +391,7 @@ function createBorderLine() {
 
 
 	var path_material = new THREE.LineBasicMaterial( { color: 0xaaaaaa,
-													   linewidth: 3,
+													   linewidth: 3
 												   	 });
 
 	var border1 = new THREE.Line(path_geometry1, path_material);

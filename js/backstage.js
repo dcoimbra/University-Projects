@@ -1,12 +1,18 @@
  /*********************************************Variaveis globais*****************************************************/
 var scene, renderer;
 
+//Câmeras
 var orthographicCamera, perspectiveCamera;
 
+//Light
 var sun;
 var candles = [];
 
+<<<<<<< HEAD
 var table;
+=======
+//Objetos
+>>>>>>> c1cd6713a83b4b8fae43c676a8347d600a064cd7
 var car;
 var oranges = [];
 var butter_packages = [];
@@ -34,9 +40,10 @@ function createScene() {
 
 	createSceneElements();
 }
-/********************************************************************************************************************/
+/*------------------------------------------------------------------------------------------------------------------*/
 
 function createSceneElements() {
+	'use strict';
 
     //Posicionamento dos vários objetos
     table = new Table(0, 0, 0);
@@ -78,19 +85,29 @@ function createSceneElements() {
     car = new Collidable(new Car(0, 2.8, 0));
     car.inner_object.car_object.translateZ(5);
 }
-
+/*------------------------------------------------------------------------------------------------------------------*/
  function createLights() {
+	'use strict';
 
      'use strict';
 
      sun = new Sun(0xffffff, 1);
 
+<<<<<<< HEAD
     var candle1 = new Candle(5, 2.3, -5);
     var candle2 = new Candle(36, 2.3, -15);
     var candle3 = new Candle(10, 2.3, 35);
     var candle4 = new Candle(-35, 2.3, 44);
     var candle5 = new Candle(-17, 2.3, 0);
     var candle6 = new Candle(-25, 2.3, -35);
+=======
+     var candle1 = new Candle(5, 2.3, -5);
+     var candle2 = new Candle(36, 2.3, -15);
+     var candle3 = new Candle(10, 2.3, 35);
+     var candle4 = new Candle(-35, 2.3, 44);
+     var candle5 = new Candle(-17, 2.3, 0);
+     var candle6 = new Candle(-25, 2.3, -35);
+>>>>>>> c1cd6713a83b4b8fae43c676a8347d600a064cd7
 
      candles.push(candle1);
      candles.push(candle2);
@@ -99,7 +116,7 @@ function createSceneElements() {
      candles.push(candle5);
      candles.push(candle6);
  }
-
+/********************************************************************************************************************/
 
 /********************************************Criacao das cameras******************************************************/
 function createCameras() {
@@ -198,7 +215,7 @@ function render() {
 /*****************************************************************************************************************/
 
 
-/***************************************Detalhes de visualizacao e controlo****************************************/
+/***************************************Detalhes de visualizacao***************************************************/
 
 function onResize() {
 
@@ -232,6 +249,108 @@ function onResize() {
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
+
+/*************************************Verificacao de colisoes********************************************************/
+
+ /* verificar colisões */
+ function checkCollision(posX, posY, posZ) {
+
+	 'use strict';
+
+	 /* concatena todos os toros existentes */
+	 var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
+
+	 var torus_position;
+	 var car_position;
+	 var otherTorus_position;
+
+
+	 /* colisão entre laranjas e carro */
+	carOrangesCollision();
+
+	 /* colisão entre manteigas e carro */
+	 for (var j = 0; j < butter_packages.length; j++) {
+
+		 if (butter_packages[j].collisionSphere(car)) {
+
+			 /* se há colisão, colocar o carro na posição em que
+				 estava imediatamente antes */
+
+			 car.inner_object.setSpeed(0);
+			 car.inner_object.car_object.position.set(posX, posY, posZ);
+		 }
+	 }
+
+	 /* colisão entre o carro e os toros */
+	 for (var k = 0; k < toruses.length; k++) {
+
+		 /* se houve uma colisão entre o carro e o toro, determina a direção do vetor entre eles
+			 e altera a sua velocidade para ser igual à do carro.*/
+
+		 torus_position = new THREE.Vector3((toruses[k].inner_object.torus_object.position.x + 5),
+			 1.75,
+			 (toruses[k].inner_object.torus_object.position.z - 2));
+
+		 car_position = new THREE.Vector3(car.inner_object.car_object.position.x,
+			 1.75,
+			 car.inner_object.car_object.position.z);
+
+
+		 if (car.collisionSphere(toruses[k])) {
+
+			 /* se há colisão, a velocidade do toro fica igual à velocidade do carro */
+			 toruses[k].inner_object.torus_object.userData.speed = Math.abs(car.inner_object.getSpeed());
+
+			 /* determina a direção do vetor entre os dois objectos */
+			 toruses[k].inner_object.torus_object.userData.car_collision_direction = torus_position.sub(car_position); //direção da colisão
+			 toruses[k].inner_object.torus_object.userData.car_collision_direction.normalize();
+		 }
+
+		 /* procedimento semelhante para as colisóes entre toros */
+		 for (var l = 0; l < toruses.length; l++) {
+
+			 if ( k !== l && toruses[l].collisionSphere(toruses[k])) {
+
+				 if (toruses[k].inner_object.torus_object.userData.speed !== 0) {
+
+					 //velocidade do toro atingido fica igual à do toro que o atingiu
+					 toruses[l].inner_object.torus_object.userData.speed = toruses[k].inner_object.torus_object.userData.speed;
+
+					 otherTorus_position = new THREE.Vector3((toruses[l].inner_object.torus_object.position.x + 5),
+						 1.75,
+						 (toruses[l].inner_object.torus_object.position.z - 2));
+
+					 toruses[l].inner_object.torus_object.userData.torus_collision_direction = otherTorus_position.sub(torus_position);
+					 toruses[l].inner_object.torus_object.userData.torus_collision_direction.normalize();
+				 }
+			 }
+		 }
+	 }
+ }
+
+ /*------------------------------------------------------------------------------------------------------------------*/
+ function carOrangesCollision(){
+
+ 	for (var i = 0; i < oranges.length; i++) {
+
+		 /* se há colisão, colocar o carro na posicao inicial */
+		 if (oranges[i].collisionSphere(car)) {
+
+			 car.inner_object.setSpeed(0);
+			 car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
+
+			 var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
+				 car.inner_object.car_object.position.y,
+				 car.inner_object.car_object.position.z);
+
+			 car.inner_object.car_object.lookAt(initial_vector);
+		 }
+	 }
+ }
+
+ /********************************************************************************************************************/
+
+ /*************************************Detalhes de controlo***********************************************************/
 function onKeyDown(e) {
 
 	'use strict';
@@ -322,100 +441,21 @@ function onKeyUp(e) {
 
 	}
 }
+<<<<<<< HEAD
+=======
+/*-------------------------------------------------------------------------------------------------------------------*/
+function flickCandles() {
+
+    for (var i = 0; i < candles.length; i++) {
+
+        candles[i].flick();
+    }
+}
+>>>>>>> c1cd6713a83b4b8fae43c676a8347d600a064cd7
 
 /*******************************************************************************************************************/
 
-/* verificar colisões */
-function checkCollision(posX, posY, posZ) {
-
-	'use strict';
-
-	/* concatena todos os toros existentes */
-    var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
-
-    var torus_position;
-    var car_position;
-    var otherTorus_position;
-
-
-    /* colisão entre laranjas e carro */
-	for (var i = 0; i < oranges.length; i++) {
-
-		/* se há colisão, colocar o carro na posicao inicial */
-		if (oranges[i].collisionSphere(car)) {
-
-		    car.inner_object.setSpeed(0);
-			car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
-			
-			var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
-									     car.inner_object.car_object.position.y,
-									     car.inner_object.car_object.position.z);
-
-			car.inner_object.car_object.lookAt(initial_vector);
-		}
-	}
-
-	/* colisão entre manteigas e carro */
-	for (var j = 0; j < butter_packages.length; j++) {
-
-		if (butter_packages[j].collisionSphere(car)) {
-
-			/* se há colisão, colocar o carro na posição em que
-				estava imediatamente antes */
-
-            car.inner_object.setSpeed(0);
-            car.inner_object.car_object.position.set(posX, posY, posZ);
-        }
-	}
-
-	/* colisão entre o carro e os toros */
-	for (var k = 0; k < toruses.length; k++) {
-
-		/* se houve uma colisão entre o carro e o toro, determina a direção do vetor entre eles
-			e altera a sua velocidade para ser igual à do carro.
-		 */
-
-        torus_position = new THREE.Vector3((toruses[k].inner_object.torus_object.position.x + 5),
-                                                1.75,
-                                                (toruses[k].inner_object.torus_object.position.z - 2));
-
-        car_position = new THREE.Vector3(car.inner_object.car_object.position.x,
-                                            1.75,
-                                            car.inner_object.car_object.position.z);
-
-
-        if (car.collisionSphere(toruses[k])) {
-
-			/* se há colisão, a velocidade do toro fica igual à velocidade do carro */
-            toruses[k].inner_object.torus_object.userData.speed = Math.abs(car.inner_object.getSpeed());
-
-            /* determina a direção do vetor entre os dois objectos */
-            toruses[k].inner_object.torus_object.userData.car_collision_direction = torus_position.sub(car_position); //direção da colisão
-            toruses[k].inner_object.torus_object.userData.car_collision_direction.normalize();
-		}
-
-		/* procedimento semelhante para as colisóes entre toros */
-		for (var l = 0; l < toruses.length; l++) {
-
-        	if ( k !== l && toruses[l].collisionSphere(toruses[k])) {
-
-        		if (toruses[k].inner_object.torus_object.userData.speed !== 0) {
-
-        			//velocidade do toro atingido fica igual à do toro que o atingiu
-                    toruses[l].inner_object.torus_object.userData.speed = toruses[k].inner_object.torus_object.userData.speed;
-
-                    otherTorus_position = new THREE.Vector3((toruses[l].inner_object.torus_object.position.x + 5),
-                        1.75,
-                        (toruses[l].inner_object.torus_object.position.z - 2));
-
-                    toruses[l].inner_object.torus_object.userData.torus_collision_direction = otherTorus_position.sub(torus_position);
-                    toruses[l].inner_object.torus_object.userData.torus_collision_direction.normalize();
-                }
-            }
-		}
-    }
-}
-
+/**********************************************Updates*************************************************************/
 
 /* atualizar posicao dos objectos */
 function update(delta) {
@@ -424,17 +464,29 @@ function update(delta) {
 
     car.inner_object.move(delta);
 
-   for ( var i = 0; i < oranges.length; i++ ) {
+    moveOranges(delta);
+    moveToruses(delta);
 
-        oranges[i].inner_object.move(delta);
-    }
+}
+/*------------------------------------------------------------------------------------------------------------------*/
+function moveOranges(delta){
+	'use strict';
 
-    var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
+	for ( var i = 0; i < oranges.length; i++ ) {
 
-    for (var m = 0; m < toruses.length; m++) {
+		oranges[i].inner_object.move(delta);
+	}
+}
+/*------------------------------------------------------------------------------------------------------------------*/
+function moveToruses(delta){
+	'use strict';
 
-        toruses[m].inner_object.move(delta);
-    }
+	var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
+
+	for (var m = 0; m < toruses.length; m++) {
+
+		toruses[m].inner_object.move(delta);
+	}
 }
 
 /********************************************Animation**************************************************************/
@@ -447,7 +499,6 @@ function animate() {
 	render();
 
 	/*guardar posicao inicial do carro*/
-
 	var carX = car.inner_object.car_object.position.x;
 	var carY = car.inner_object.car_object.position.y;
 	var carZ = car.inner_object.car_object.position.z;
