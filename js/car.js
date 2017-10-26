@@ -61,7 +61,7 @@ class Car {
 		*/
 
 		var chassis_geometry = new THREE.BoxGeometry(20, 5, 11);
-		var chassis_material = new THREE.MeshLambertMaterial({ color: 0x0000ff, wireframe: true });
+		var chassis_material = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: true });
 		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
 
 		chassis.name = "chassis";
@@ -82,7 +82,7 @@ class Car {
 		*/
 
 		var hood_geometry = new THREE.BoxGeometry(11, 3, 6);
-		var hood_material = new THREE.MeshLambertMaterial({ color: 0xff0000, wireframe: true });
+		var hood_material = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true });
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
 
 		this.car_object.add(hood);
@@ -101,7 +101,7 @@ class Car {
 		*/
 
 		var windshield_frontGeometry = new THREE.BoxGeometry(0, 2, 5.5);
-		var windshield_frontMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff, wireframe: true });
+		var windshield_frontMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
 		var windshield = new THREE.Mesh(windshield_frontGeometry, windshield_frontMaterial);
 
 		this.car_object.add(windshield);
@@ -120,7 +120,7 @@ class Car {
 		*/
 
 		var windshield_sideGeometry = new THREE.BoxGeometry(5.5, 2, 0);
-		var windshield_sideMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff, wireframe: true });
+		var windshield_sideMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
 		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
 
 		this.car_object.add(windshield_side);
@@ -141,7 +141,7 @@ class Car {
 	    */
 
 		var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
-		var wheel_material = new THREE.MeshLambertMaterial( { color: 0x333333, wireframe: true } );
+		var wheel_material = new THREE.MeshPhongMaterial( { color: 0x333333, wireframe: true } );
 		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
 
 		this.car_object.add(wheel);

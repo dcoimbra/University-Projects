@@ -6,10 +6,14 @@ var orthographicCamera, perspectiveCamera;
 var sun;
 var candles = [];
 
+var table;
 var car;
 var oranges = [];
 var butter_packages = [];
 var border_lines = [];
+
+var lighting_on = true;
+var phong_shading = true;
 
 /* tamanho da area visivel */
 var frustumSize;
@@ -35,7 +39,7 @@ function createScene() {
 function createSceneElements() {
 
     //Posicionamento dos vários objetos
-    var table = new Table(0, 0, 0);
+    table = new Table(0, 0, 0);
 
     createBorderLine();
 
@@ -77,16 +81,18 @@ function createSceneElements() {
 
  function createLights() {
 
+     'use strict';
+
      sun = new Sun(0xffffff, 1);
 
-     candle1 = new Candle(5, 2.3, -5);
-     candle2 = new Candle(36, 2.3, -15);
-     candle3 = new Candle(10, 2.3, 35);
-     candle4 = new Candle(-35, 2.3, 44);
-     candle5 = new Candle(-17, 2.3, 0);
-     candle6 = new Candle(-25, 2.3, -35);
+    var candle1 = new Candle(5, 2.3, -5);
+    var candle2 = new Candle(36, 2.3, -15);
+    var candle3 = new Candle(10, 2.3, 35);
+    var candle4 = new Candle(-35, 2.3, 44);
+    var candle5 = new Candle(-17, 2.3, 0);
+    var candle6 = new Candle(-25, 2.3, -35);
 
-     candles.push(candle1)
+     candles.push(candle1);
      candles.push(candle2);
      candles.push(candle3);
      candles.push(candle4);
@@ -275,6 +281,10 @@ function onKeyDown(e) {
             flickCandles();
             break;
 
+        case 76: //L
+           toggleLighting();
+           break;
+
         case 78: //N
             sun.flick();
             break;
@@ -311,14 +321,6 @@ function onKeyUp(e) {
 			break;
 
 	}
-}
-
-function flickCandles() {
-
-    for (var i = 0; i < candles.length; i++) {
-
-        candles[i].flick();
-    }
 }
 
 /*******************************************************************************************************************/

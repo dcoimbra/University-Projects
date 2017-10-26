@@ -83,6 +83,11 @@ class Orange {
         this.orange_object.userData.speed = speed;
     }
 
+    getStalk() {
+
+    	return this.orange_object.getObjectByName('stalk');
+	}
+
     setOrangeTransparency(){
     	this.orange_object.material.transparent = true;
 
