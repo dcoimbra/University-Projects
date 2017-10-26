@@ -8,11 +8,9 @@ var orthographicCamera, perspectiveCamera;
 var sun;
 var candles = [];
 
-<<<<<<< HEAD
-var table;
-=======
 //Objetos
->>>>>>> c1cd6713a83b4b8fae43c676a8347d600a064cd7
+
+var table;
 var car;
 var oranges = [];
 var butter_packages = [];
@@ -86,28 +84,18 @@ function createSceneElements() {
     car.inner_object.car_object.translateZ(5);
 }
 /*------------------------------------------------------------------------------------------------------------------*/
- function createLights() {
-	'use strict';
+function createLights() {
 
-     'use strict';
+    'use strict';
 
      sun = new Sun(0xffffff, 1);
 
-<<<<<<< HEAD
-    var candle1 = new Candle(5, 2.3, -5);
-    var candle2 = new Candle(36, 2.3, -15);
-    var candle3 = new Candle(10, 2.3, 35);
-    var candle4 = new Candle(-35, 2.3, 44);
-    var candle5 = new Candle(-17, 2.3, 0);
-    var candle6 = new Candle(-25, 2.3, -35);
-=======
      var candle1 = new Candle(5, 2.3, -5);
      var candle2 = new Candle(36, 2.3, -15);
      var candle3 = new Candle(10, 2.3, 35);
      var candle4 = new Candle(-35, 2.3, 44);
      var candle5 = new Candle(-17, 2.3, 0);
      var candle6 = new Candle(-25, 2.3, -35);
->>>>>>> c1cd6713a83b4b8fae43c676a8347d600a064cd7
 
      candles.push(candle1);
      candles.push(candle2);
@@ -441,8 +429,7 @@ function onKeyUp(e) {
 
 	}
 }
-<<<<<<< HEAD
-=======
+
 /*-------------------------------------------------------------------------------------------------------------------*/
 function flickCandles() {
 
@@ -451,7 +438,6 @@ function flickCandles() {
         candles[i].flick();
     }
 }
->>>>>>> c1cd6713a83b4b8fae43c676a8347d600a064cd7
 
 /*******************************************************************************************************************/
 
