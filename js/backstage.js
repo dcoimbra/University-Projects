@@ -1,11 +1,14 @@
  /*********************************************Variaveis globais*****************************************************/
 var scene, renderer;
 
+//Câmeras
 var orthographicCamera, perspectiveCamera;
 
+//Light
 var sun;
 var candles = [];
 
+//Objetos
 var car;
 var oranges = [];
 var butter_packages = [];
@@ -30,7 +33,7 @@ function createScene() {
 
 	createSceneElements();
 }
-/********************************************************************************************************************/
+/*------------------------------------------------------------------------------------------------------------------*/
 
 function createSceneElements() {
 	'use strict';
@@ -75,7 +78,7 @@ function createSceneElements() {
     car = new Collidable(new Car(0, 2.8, 0));
     car.inner_object.car_object.translateZ(5);
 }
-
+/*------------------------------------------------------------------------------------------------------------------*/
  function createLights() {
 	'use strict';
 
@@ -95,7 +98,7 @@ function createSceneElements() {
      candles.push(candle5);
      candles.push(candle6);
  }
-
+/********************************************************************************************************************/
 
 /********************************************Criacao das cameras******************************************************/
 function createCameras() {
@@ -245,21 +248,7 @@ function onResize() {
 
 
 	 /* colisão entre laranjas e carro */
-	 for (var i = 0; i < oranges.length; i++) {
-
-		 /* se há colisão, colocar o carro na posicao inicial */
-		 if (oranges[i].collisionSphere(car)) {
-
-			 car.inner_object.setSpeed(0);
-			 car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
-
-			 var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
-				 car.inner_object.car_object.position.y,
-				 car.inner_object.car_object.position.z);
-
-			 car.inner_object.car_object.lookAt(initial_vector);
-		 }
-	 }
+	carOrangesCollision();
 
 	 /* colisão entre manteigas e carro */
 	 for (var j = 0; j < butter_packages.length; j++) {
@@ -278,8 +267,7 @@ function onResize() {
 	 for (var k = 0; k < toruses.length; k++) {
 
 		 /* se houve uma colisão entre o carro e o toro, determina a direção do vetor entre eles
-			 e altera a sua velocidade para ser igual à do carro.
-		  */
+			 e altera a sua velocidade para ser igual à do carro.*/
 
 		 torus_position = new THREE.Vector3((toruses[k].inner_object.torus_object.position.x + 5),
 			 1.75,
@@ -318,6 +306,26 @@ function onResize() {
 					 toruses[l].inner_object.torus_object.userData.torus_collision_direction.normalize();
 				 }
 			 }
+		 }
+	 }
+ }
+
+ /*------------------------------------------------------------------------------------------------------------------*/
+ function carOrangesCollision(){
+
+ 	for (var i = 0; i < oranges.length; i++) {
+
+		 /* se há colisão, colocar o carro na posicao inicial */
+		 if (oranges[i].collisionSphere(car)) {
+
+			 car.inner_object.setSpeed(0);
+			 car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
+
+			 var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
+				 car.inner_object.car_object.position.y,
+				 car.inner_object.car_object.position.z);
+
+			 car.inner_object.car_object.lookAt(initial_vector);
 		 }
 	 }
  }
@@ -411,7 +419,7 @@ function onKeyUp(e) {
 
 	}
 }
-
+/*-------------------------------------------------------------------------------------------------------------------*/
 function flickCandles() {
 
     for (var i = 0; i < candles.length; i++) {
@@ -424,7 +432,6 @@ function flickCandles() {
 
 /**********************************************Updates*************************************************************/
 
-
 /* atualizar posicao dos objectos */
 function update(delta) {
 
@@ -432,17 +439,29 @@ function update(delta) {
 
     car.inner_object.move(delta);
 
-   for ( var i = 0; i < oranges.length; i++ ) {
+    moveOranges(delta);
+    moveToruses(delta);
 
-        oranges[i].inner_object.move(delta);
-    }
+}
+/*------------------------------------------------------------------------------------------------------------------*/
+function moveOranges(delta){
+	'use strict';
 
-    var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
+	for ( var i = 0; i < oranges.length; i++ ) {
 
-    for (var m = 0; m < toruses.length; m++) {
+		oranges[i].inner_object.move(delta);
+	}
+}
+/*------------------------------------------------------------------------------------------------------------------*/
+function moveToruses(delta){
+	'use strict';
 
-        toruses[m].inner_object.move(delta);
-    }
+	var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
+
+	for (var m = 0; m < toruses.length; m++) {
+
+		toruses[m].inner_object.move(delta);
+	}
 }
 
 /********************************************Animation**************************************************************/
@@ -455,7 +474,6 @@ function animate() {
 	render();
 
 	/*guardar posicao inicial do carro*/
-
 	var carX = car.inner_object.car_object.position.x;
 	var carY = car.inner_object.car_object.position.y;
 	var carZ = car.inner_object.car_object.position.z;
