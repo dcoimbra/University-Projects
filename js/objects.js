@@ -118,12 +118,11 @@ class Orange {
 			// vamos ter de calcular as componentes em x e z
 			// x: cos = comp_x / distance <=> comp_x = cos(angulo atual)*distance
 			// z: sin = comp_z / distance <=> comp_z = sin(angulo atual)*distance
-
 			this.orange_object.position.x += distance * Math.cos(this.orange_object.rotation.y);
 			this.orange_object.position.z += distance * Math.sin(this.orange_object.rotation.y);
 
 			//Rolamento da laranja (si mesma)
-			this.orange_object.rotation.z += (-0.02);
+			this.orange_object.rotateZ(-0.01);
 		}
 
 		this.bounding.center = this.orange_object.getWorldPosition();
@@ -190,6 +189,29 @@ class ButterPackage {
 		scene.add(this.butterPackage_object);
 
         this.butterPackage_object.position.set(x, y, z);
+
+
+
+		/*var geometry = new THREE.BufferGeometry();
+
+		// create a simple square shape. We duplicate the top left and bottom right
+		// vertices because each vertex needs to appear once per triangle.
+		var vertices = new Float32Array( [
+			-1.0, -1.0,  1.0,
+			1.0, -1.0,  1.0,
+			1.0,  1.0,  1.0,
+
+			1.0,  1.0,  1.0,
+			-1.0,  1.0,  1.0,
+			-1.0, -1.0,  1.0
+		] );
+
+		// itemSize = 3 because there are 3 values (components) per vertex
+		geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+		var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+		this.butterPackage_object = new THREE.Mesh( geometry, material );
+
+		this.butterPackage_object.position.set(0, 0, 0);*/
 
 		this.makeBounding();
 	}
