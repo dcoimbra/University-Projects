@@ -3,7 +3,8 @@ var scene, renderer;
 
 var orthographicCamera, perspectiveCamera;
 
-var global_light;
+var sun;
+var candles = [];
 
 var car;
 var oranges = [];
@@ -28,16 +29,11 @@ function createScene() {
 	scene = new THREE.Scene();
 
 	createSceneElements();
-
 }
 /********************************************************************************************************************/
 
-function createLights() {
-
-    global_light = new GlobalLight(0xffffff, 1);
-}
-
 function createSceneElements() {
+	'use strict';
 
     //Posicionamento dos vários objetos
     var table = new Table(0, 0, 0);
@@ -79,6 +75,26 @@ function createSceneElements() {
     car = new Collidable(new Car(0, 2.8, 0));
     car.inner_object.car_object.translateZ(5);
 }
+
+ function createLights() {
+	'use strict';
+
+     sun = new Sun(0xffffff, 1);
+
+     var candle1 = new Candle(5, 2.3, -5);
+     var candle2 = new Candle(36, 2.3, -15);
+     var candle3 = new Candle(10, 2.3, 35);
+     var candle4 = new Candle(-35, 2.3, 44);
+     var candle5 = new Candle(-17, 2.3, 0);
+     var candle6 = new Candle(-25, 2.3, -35);
+
+     candles.push(candle1);
+     candles.push(candle2);
+     candles.push(candle3);
+     candles.push(candle4);
+     candles.push(candle5);
+     candles.push(candle6);
+ }
 
 
 /********************************************Criacao das cameras******************************************************/
@@ -354,8 +370,12 @@ function onKeyDown(e) {
             });
             break;
 
+        case 67: //C
+            flickCandles();
+            break;
+
         case 78: //N
-            global_light.flick();
+            sun.flick();
             break;
 
 		default:
@@ -392,6 +412,14 @@ function onKeyUp(e) {
 	}
 }
 
+function flickCandles() {
+
+    for (var i = 0; i < candles.length; i++) {
+
+        candles[i].flick();
+    }
+}
+
 /*******************************************************************************************************************/
 
 /**********************************************Updates*************************************************************/
@@ -404,7 +432,7 @@ function update(delta) {
 
     car.inner_object.move(delta);
 
-    for ( var i = 0; i < oranges.length; i++ ) {
+   for ( var i = 0; i < oranges.length; i++ ) {
 
         oranges[i].inner_object.move(delta);
     }

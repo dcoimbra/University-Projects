@@ -1,3 +1,4 @@
+/***************************************Classe das colisoes**********************************************************/
 class Collidable {
 
 	constructor(obj) {
@@ -7,19 +8,20 @@ class Collidable {
 		this.inner_object = obj;
 	}
 
-
+	/*---------------------------------------------------------------------------------------------------------------*/
 	collisionSphere(other_collidable) {
 
 	    'use strict';
 
         var radiusSum = this.inner_object.bounding.radius + other_collidable.inner_object.bounding.radius;
+        var object_center = this.inner_object.bounding.center;
 
 		//distancia dos centros < soma dos raios --> colisão
-        return other_collidable.inner_object.bounding.center.distanceToSquared( this.inner_object.bounding.center ) <= ( radiusSum * radiusSum );
+        return other_collidable.inner_object.bounding.center.distanceToSquared(object_center) <= ( radiusSum * radiusSum );
 	}
 }
 
-/**************************Classe das laranjas****************************************************/
+/********************************************Classe das laranjas****************************************************/
 
 class Orange {
 
@@ -33,7 +35,10 @@ class Orange {
 
         var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
 
-        var orange_material = new THREE.MeshLambertMaterial({color: 0xe49600, wireframe: true, opacity: 0, transparent: false});
+        var orange_material = new THREE.MeshPhongMaterial({color: 0xe49600,
+															wireframe: true,
+															opacity: 0,
+															transparent: false});
 
         this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
@@ -48,13 +53,17 @@ class Orange {
         this.makeBounding();
 
     }
-
+	/*--------------------------------------------------------------------------------------------------------------*/
+    //Criação do caule da laranja
     createOrangeStalk() {
 
         'use strict';
 
         var stalk_geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-        var stalk_material = new THREE.MeshLambertMaterial({color: 0x00ff00, wireframe: true, opacity: 0, transparent: false});
+        var stalk_material = new THREE.MeshPhongMaterial({color: 0x00ff00,
+															wireframe: true,
+															opacity: 0,
+															transparent: false});
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
         stalk.position.set(0, 4, 0);
@@ -67,23 +76,29 @@ class Orange {
     makeBounding() {
 
         'use strict';
-											//center                               //radius
-        this.bounding = new THREE.Sphere(this.orange_object.getWorldPosition(), this.orange_object.geometry.parameters.radius);
+        var orange_radius = this.orange_object.geometry.parameters.radius;
+        var orange_center = this.orange_object.getWorldPosition();
+
+        this.bounding = new THREE.Sphere(orange_center, orange_radius );
     }
 
     increaseOrangeSpeed(speed) {
+    	'use strict';
         this.orange_object.userData.speed += speed;
     }
 
     getOrangeSpeed() {
+    	'use strict';
         return this.orange_object.userData.speed;
     }
 
     setOrangeSpeed(speed) {
+    	'use strict';
         this.orange_object.userData.speed = speed;
     }
 
     setOrangeTransparency(){
+    	'use strict';
     	this.orange_object.material.transparent = true;
 
     	var stalk = this.orange_object.getObjectByName('stalk');
@@ -91,6 +106,7 @@ class Orange {
     }
 
     move(delta) {
+    	'use strict';
 
     	var orange_Xposition = this.orange_object.position.x;
     	var orange_Zposition = this.orange_object.position.z;
@@ -182,7 +198,7 @@ class ButterPackage {
 		*/
 
 		var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
-		var butterPackage_material = new THREE.MeshLambertMaterial({ color: 0x00bfff, wireframe: true });
+		var butterPackage_material = new THREE.MeshPhongMaterial({ color: 0x00bfff, wireframe: true });
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
@@ -217,11 +233,16 @@ class ButterPackage {
 	}
 
 	makeBounding() {
+		'use strict';
 
-        this.bounding = new THREE.Sphere(this.butterPackage_object.position, this.butterPackage_object.geometry.parameters.width / 2 + 0.25);
+		var butterPackage_width = this.butterPackage_object.geometry.parameters.width;
+
+        this.bounding = new THREE.Sphere(this.butterPackage_object.position, butterPackage_width / 2 + 0.25);
     }
 }
 /*******************************************************************************************************************/
+
+/******************************************* Classe dos torus da pista**********************************************/
 
 class BorderTorus {
 
@@ -239,7 +260,7 @@ class BorderTorus {
         'use strict';
 
         var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
-        var torus_material = new THREE.MeshLambertMaterial({color: 0xff0000, wireframe: true});
+        var torus_material = new THREE.MeshPhongMaterial({color: 0xff0000, wireframe: true});
 
         this.torus_object = new THREE.Mesh(torus_geometry, torus_material);
 
@@ -264,7 +285,7 @@ class BorderTorus {
 
         this.makeBounding();
     }
-
+	/*---------------------------------------------------------------------------------------------------------------*/
     move(delta) {
 
         'use strict';
@@ -299,14 +320,19 @@ class BorderTorus {
         }
 	}
 
+	/*-------------------------------------------------------------------------------------------------------------*/
     makeBounding() {
 
        var torus_position = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
 			 						           1.75,
             						          (this.torus_object.position.getComponent(2) - 2));
 
-        this.bounding = new THREE.Sphere(torus_position, this.torus_object.geometry.parameters.radius + this.torus_object.geometry.parameters.tube);
+       var torus_radius = this.torus_object.geometry.parameters.radius;
+       var torus_tube = this.torus_object.geometry.parameters.tube;
+
+       this.bounding = new THREE.Sphere(torus_position, torus_radius + torus_tube);
     }
+    /*-------------------------------------------------------------------------------------------------------------*/
 }
 
 /**********************************************Criacao da mesa e suas partes******************************************/
@@ -320,7 +346,7 @@ class Table {
 
 	    this.table_object = new THREE.Object3D();
 
-	    var table_material = new THREE.MeshLambertMaterial({ color: 0x007300, wireframe: true });
+	    var table_material = new THREE.MeshPhongMaterial({ color: 0x007300, wireframe: true });
 
 	    this.addTableTop(table_material, 0, 0, 0);
 
@@ -330,7 +356,7 @@ class Table {
 	    this.table_object.position.set(x, y, z);
 	}
 
-/*-------------------------------------------------------------------------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------------------------------------*/
 	addTableTop(material, x, y, z) {
 
 		'use strict';
@@ -360,7 +386,7 @@ function createBorderLine() {
 
 
 	var path_material = new THREE.LineBasicMaterial( { color: 0xaaaaaa,
-													   linewidth: 3,
+													   linewidth: 3
 												   	 });
 
 	var border1 = new THREE.Line(path_geometry1, path_material);
