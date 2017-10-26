@@ -388,9 +388,15 @@ function onKeyDown(e) {
             flickCandles();
             break;
 
+        case 71: //G
+            phong_shading = !phong_shading;
+            scene.traverse(toggleShading);
+            break;
+
         case 76: //L
-           toggleLighting();
-           break;
+            lighting_on = !lighting_on;
+            scene.traverse(toggleLighting);
+            break;
 
         case 78: //N
             sun.flick();
@@ -431,13 +437,6 @@ function onKeyUp(e) {
 }
 
 /*-------------------------------------------------------------------------------------------------------------------*/
-function flickCandles() {
-
-    for (var i = 0; i < candles.length; i++) {
-
-        candles[i].flick();
-    }
-}
 
 /*******************************************************************************************************************/
 
