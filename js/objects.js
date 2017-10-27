@@ -106,7 +106,7 @@ class Orange {
     	'use strict';
     	this.orange_object.material.transparent = true;
 
-    	var stalk = this.orange_object.getObjectByName('stalk');
+    	var stalk = this.getStalk();
 		stalk.material.transparent = true;
     }
 
@@ -165,7 +165,7 @@ class Orange {
 		//Colocar a laranja e o caule visiveis
 		object.material.transparent = false;
 
-		var stalk = object.getObjectByName('stalk');
+		var stalk = object.getStalk();
 		stalk.material.transparent = false;
 	}
 }

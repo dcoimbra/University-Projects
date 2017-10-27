@@ -19,7 +19,7 @@ class Sun {
         this.sun_object.visible = !this.sun_object.visible;
     }
 }
-
+/*********************************************************************************************************************/
 //Iluminacao pontual
 class Candle {
 
@@ -38,6 +38,7 @@ class Candle {
         scene.add(this.flame);
     }
 
+    /*-------------------------------------------------------------------------------------------------------------*/
     flick() {
 
         'use strict';
@@ -46,8 +47,10 @@ class Candle {
         this.flame.visible = !this.flame.visible;
     }
 }
-
+/*---------------------------------------------------------------------------------------------------------------*/
 function flickCandles() {
+
+    'use strict';
 
     for (var i = 0; i < candles.length; i++) {
 
@@ -55,93 +58,69 @@ function flickCandles() {
     }
 }
 
-function toggleLighting() {
+/*----------------------------------------------------------------------------------------------------------------*/
+function toggleShading(node) {
 
-    var table_elements = table.table_object.children;
-    var car_elements = car.inner_object.car_object.children;
-    var toruses = border_lines[0].userData.toruses.concat(border_lines[1].userData.toruses);
-
-    var car_child;
+    'use strict';
 
     if (lighting_on) {
 
-        lighting_on = false;
+        if (node instanceof THREE.Mesh && !(node instanceof THREE.PointLightHelper) && !(node instanceof THREE.Line)) {
 
-        table_elements[0].material = new THREE.MeshBasicMaterial( { color: table_elements[0].material.color,
-                                                                    wireframe: table_elements[0].material.wireframe} );
+            var new_material;
 
-        for (car_child = 0; car_child < car_elements.length - 1; car_child++) {
+            var parameters = {
+                color: node.material.color,
+                wireframe: node.material.wireframe,
+                transparent: node.material.transparent,
+                opacity: node.material.opacity
+            };
 
-            car_elements[car_child].material = new THREE.MeshBasicMaterial( { color: car_elements[car_child].material.color,
-                                                                              wireframe: car_elements[car_child].material.wireframe } );
-        }
+            if (phong_shading) {
 
-        for (var i = 0; i < oranges.length; i++) {
+                new_material = new THREE.MeshPhongMaterial(parameters);
+            }
 
-            oranges[i].inner_object.orange_object.material = new THREE.MeshBasicMaterial( { color: oranges[i].inner_object.orange_object.material.color,
-                                                                                            wireframe: oranges[i].inner_object.orange_object.material.wireframe,
-                                                                                            opacity : 0,
-                                                                                            transparent: oranges[i].inner_object.orange_object.material.transparent } );
+            else {
 
-            var stalk = oranges[i].inner_object.getStalk();
+                new_material = new THREE.MeshLambertMaterial(parameters);
+            }
 
-            stalk.material =  new THREE.MeshBasicMaterial( { color: stalk.material.color,
-                                                             wireframe: stalk.material.wireframe,
-                                                             opacity : 0,
-                                                             transparent: stalk.material.transparent } );
-        }
-
-        for (var j = 0; j < butter_packages.length; j++) {
-
-            butter_packages[j].inner_object.butterPackage_object.material = new THREE.MeshBasicMaterial( { color: butter_packages[j].inner_object.butterPackage_object.material.color,
-                                                                                                           wireframe: butter_packages[j].inner_object.butterPackage_object.material.wireframe } );
-        }
-
-        for (var k = 0; k < toruses.length; k++) {
-
-            toruses[k].inner_object.torus_object.material = new THREE.MeshBasicMaterial( { color: toruses[k].inner_object.torus_object.material.color,
-                                                                                           wireframe: toruses[k].inner_object.torus_object.material.wireframe } );
-        }
-    }
-
-    else {
-
-        lighting_on = true;
-
-        table_elements[0].material = new THREE.MeshPhongMaterial({ color: table_elements[0].material.color,
-                                                                   wireframe: table_elements[0].material.wireframe});
-
-        for (car_child = 0; car_child < car_elements.length - 1; car_child++) {
-
-            car_elements[car_child].material = new THREE.MeshPhongMaterial( { color: car_elements[car_child].material.color,
-                                                                              wireframe: car_elements[car_child].material.wireframe } );
-        }
-
-        for (var i = 0; i < oranges.length; i++) {
-
-            oranges[i].inner_object.orange_object.material = new THREE.MeshPhongMaterial( { color: oranges[i].inner_object.orange_object.material.color,
-                                                                                            wireframe: oranges[i].inner_object.orange_object.material.wireframe,
-                                                                                            opacity : 0,
-                                                                                            transparent: oranges[i].inner_object.orange_object.material.transparent } );
-
-            var stalk = oranges[i].inner_object.getStalk();
-
-            stalk.material =  new THREE.MeshPhongMaterial( { color: stalk.material.color,
-                                                             wireframe: stalk.material.wireframe,
-                                                             opacity : 0,
-                                                             transparent: stalk.material.transparent } );
-        }
-
-        for (var j = 0; j < butter_packages.length; j++) {
-
-            butter_packages[j].inner_object.butterPackage_object.material =  new THREE.MeshPhongMaterial( { color: butter_packages[j].inner_object.butterPackage_object.material.color,
-                                                                                                            wireframe: butter_packages[j].inner_object.butterPackage_object.material.wireframe } );
-        }
-
-        for (var k = 0; k < toruses.length; k++) {
-
-            toruses[k].inner_object.torus_object.material = new THREE.MeshPhongMaterial( { color: toruses[k].inner_object.torus_object.material.color,
-                                                                                           wireframe: toruses[k].inner_object.torus_object.material.wireframe } );
+            node.material = new_material;
         }
     }
 }
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+function toggleLighting(node) {
+
+    'use strict';
+
+    if (node instanceof THREE.Mesh && !(node instanceof THREE.PointLightHelper) && !(node instanceof THREE.Line)) {
+
+        var new_material;
+
+        var parameters = {
+            color: node.material.color,
+            wireframe: node.material.wireframe,
+            transparent: node.material.transparent,
+            opacity: node.material.opacity
+        };
+
+        if (node.material instanceof THREE.MeshPhongMaterial || node.material instanceof THREE.MeshLambertMaterial) {
+
+            /* se o material é sombreado, cria um básico com os mesmos paramentros */
+
+            new_material = new THREE.MeshBasicMaterial(parameters);
+            node.material = new_material;
+        }
+
+        else if (node.material instanceof THREE.MeshBasicMaterial) {
+
+            /*se o material é básico, determina qual o sombreado que deve criar */
+
+            toggleShading(node);
+        }
+    }
+}
+/**********************************************************************************************************************/
