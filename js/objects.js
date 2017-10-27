@@ -13,11 +13,11 @@ class Collidable {
 
 	    'use strict';
 
-        var radiusSum = this.inner_object.bounding.radius + other_collidable.inner_object.bounding.radius;
-        var object_center = this.inner_object.bounding.center;
+        //var radiusSum = this.inner_object.bounding.radius + other_collidable.inner_object.bounding.radius;
+       // var object_center = this.inner_object.bounding.center;
 
 		//distancia dos centros < soma dos raios --> colisão
-        return other_collidable.inner_object.bounding.center.distanceToSquared(object_center) <= ( radiusSum * radiusSum );
+       // return other_collidable.inner_object.bounding.center.distanceToSquared(object_center) <= ( radiusSum * radiusSum );
 	}
 }
 
@@ -98,7 +98,7 @@ class Orange {
     }
 
     getStalk() {
-
+		'use strict';
     	return this.orange_object.getObjectByName('stalk');
 	}
 
@@ -151,6 +151,7 @@ class Orange {
 
 	//Mudamos a laranja de posicao
 	changingPos(object) {
+		'use strict';
 
     	//Nova posicao random da laranja (x, z)
     	object.position.x = randomPos();
@@ -202,37 +203,79 @@ class ButterPackage {
 						  depth: 2
 		*/
 
-		var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
+		//var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
 		var butterPackage_material = new THREE.MeshPhongMaterial({ color: 0x00bfff, wireframe: true });
 
-		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+		/*this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
 		scene.add(this.butterPackage_object);
 
-        this.butterPackage_object.position.set(x, y, z);
+        this.butterPackage_object.position.set(x, y, z);*/
+
+		var butterPackage = new THREE.Object3D();
+
+		// Create the custom mesh.
+		var butterPackage_geometry = new THREE.Geometry();
+
+		// The vertexes
+		butterPackage_geometry.vertices = [
+
+			// bottom base ones
+			new THREE.Vector3(0, 0, 5), //index 0
+			new THREE.Vector3(5, 0, 5), //index 1
+			new THREE.Vector3(0, 13, 5),//index 2
+			new THREE.Vector3(5, 13, 5), //index 3
+
+			// top base vertexes
+			new THREE.Vector3(0, 0, 0), //index 4
+			new THREE.Vector3(5, 0, 0), //index 5
+			new THREE.Vector3(0, 13, 0),//index 6
+			new THREE.Vector3(5, 13, 0) //index 7
 
 
+		];
 
-		/*var geometry = new THREE.BufferGeometry();
+		// The faces
+		// Array of faces.
+		// The array of faces describe how each vertex in the model is connected to form faces.
+		// Additionally it holds information about face and vertex normals and colors
+		butterPackage_geometry.faces = [
+			// bottom base face
+			new THREE.Face3(0, 1, 2),
+			new THREE.Face3(1, 2, 3),
 
-		// create a simple square shape. We duplicate the top left and bottom right
-		// vertices because each vertex needs to appear once per triangle.
-		var vertices = new Float32Array( [
-			-1.0, -1.0,  1.0,
-			1.0, -1.0,  1.0,
-			1.0,  1.0,  1.0,
+			//Left face
+			new THREE.Face3(0, 1, 4),
+			new THREE.Face3(2, 4, 5),
 
-			1.0,  1.0,  1.0,
-			-1.0,  1.0,  1.0,
-			-1.0, -1.0,  1.0
-		] );
+			//Right face
+			new THREE.Face3(2, 3, 7),
+			new THREE.Face3(6, 7, 2),
 
-		// itemSize = 3 because there are 3 values (components) per vertex
-		geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-		var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-		this.butterPackage_object = new THREE.Mesh( geometry, material );
+			//Top face
+			new THREE.Face3(4, 5, 6),
+			new THREE.Face3(5, 6, 7),
 
-		this.butterPackage_object.position.set(0, 0, 0);*/
+			//Front face
+			new THREE.Face3(1, 5, 7),
+			new THREE.Face3(0, 2, 7),
+
+			//Back face
+			new THREE.Face3(0, 4, 6),
+			new THREE.Face3(4, 6, 2)
+
+		];
+		// Compute face normals
+		butterPackage_geometry.computeFaceNormals();
+		butterPackage_geometry.computeVertexNormals();
+
+		// Create the mesh for the body.
+		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+
+		butterPackage.add(this.butterPackage_object);
+
+		scene.add(butterPackage);
+		butterPackage.position.set(x, y, z);
 
 		this.makeBounding();
 	}
@@ -240,9 +283,9 @@ class ButterPackage {
 	makeBounding() {
 		'use strict';
 
-		var butterPackage_width = this.butterPackage_object.geometry.parameters.width;
+		//var butterPackage_width = this.butterPackage_object.geometry.parameters.width;
 
-        this.bounding = new THREE.Sphere(this.butterPackage_object.position, butterPackage_width / 2 + 0.25);
+        //this.bounding = new THREE.Sphere(this.butterPackage_object.position, butterPackage_width / 2 + 0.25);
     }
 }
 /*******************************************************************************************************************/
@@ -327,6 +370,7 @@ class BorderTorus {
 
 	/*-------------------------------------------------------------------------------------------------------------*/
     makeBounding() {
+		'use strict';
 
        var torus_position = new THREE.Vector3((this.torus_object.position.getComponent(0) + 5),
 			 						           1.75,

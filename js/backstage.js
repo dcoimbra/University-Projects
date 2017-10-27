@@ -308,6 +308,7 @@ function onResize() {
 
  /*------------------------------------------------------------------------------------------------------------------*/
  function carOrangesCollision(){
+	'use strict';
 
  	for (var i = 0; i < oranges.length; i++) {
 
@@ -327,6 +328,7 @@ function onResize() {
  }
 /*---------------------------------------------------------------------------------------------------------*/
  function carButterPackagesCollision(){
+	'use strict';
 
  	for (var j = 0; j < butter_packages.length; j++) {
 
@@ -437,7 +439,7 @@ function onKeyUp(e) {
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 function flickCandles() {
-
+	'use strict';
     for (var i = 0; i < candles.length; i++) {
 
         candles[i].flick();
