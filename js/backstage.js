@@ -257,17 +257,7 @@ function onResize() {
 	carOrangesCollision();
 
 	 /* colisão entre manteigas e carro */
-	 for (var j = 0; j < butter_packages.length; j++) {
-
-		 if (butter_packages[j].collisionSphere(car)) {
-
-			 /* se há colisão, colocar o carro na posição em que
-				 estava imediatamente antes */
-
-			 car.inner_object.setSpeed(0);
-			 car.inner_object.car_object.position.set(posX, posY, posZ);
-		 }
-	 }
+	carButterPackagesCollision();
 
 	 /* colisão entre o carro e os toros */
 	 for (var k = 0; k < toruses.length; k++) {
@@ -332,6 +322,21 @@ function onResize() {
 				 car.inner_object.car_object.position.z);
 
 			 car.inner_object.car_object.lookAt(initial_vector);
+		 }
+	 }
+ }
+/*---------------------------------------------------------------------------------------------------------*/
+ function carButterPackagesCollision(){
+
+ 	for (var j = 0; j < butter_packages.length; j++) {
+
+		 if (butter_packages[j].collisionSphere(car)) {
+
+			 /* se há colisão, colocar o carro na posição em que
+				 estava imediatamente antes */
+
+			 car.inner_object.setSpeed(0);
+			 car.inner_object.car_object.position.set(posX, posY, posZ);
 		 }
 	 }
  }
@@ -473,7 +478,7 @@ function moveToruses(delta){
 		toruses[m].inner_object.move(delta);
 	}
 }
-
+/*******************************************************************************************************************/
 /********************************************Animation**************************************************************/
 
 function animate() {
