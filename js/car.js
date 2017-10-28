@@ -26,7 +26,7 @@ class Car {
 		'use strict';
 
 		//Elements are instantiated relative to the car's position
-		this.createChassis(0, 0.25, 0);
+		this.createChassis(-10, -5, 5);
 
 		this.createHood( -4.5, 4.25, 0);
 
@@ -55,14 +55,12 @@ class Car {
 
 		'use strict';
 
-		/* Chassis: width: 20  (relative to camera)
-		            height: 11
+		/* Chassis: width: 13  (relative to camera)
+		            height: 5
 		            depth: 5
 		*/
 
-		//var chassis_geometry = new THREE.BoxGeometry(20, 5, 11);
-		var chassis_material = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: true });
-		//var chassis = new THREE.Mesh(chassis_geometry, chassis_material);*/
+		var chassis_material = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: true })
 
 		// Create the custom mesh.
 		var chassis_geometry = new THREE.Geometry();
@@ -72,22 +70,22 @@ class Car {
 
 			// bottom base ones
 			new THREE.Vector3(0, 0, 0), //index 0
-			new THREE.Vector3(5, 0, 0), //index 1
-			new THREE.Vector3(0, 0, 13),//index 2
-			new THREE.Vector3(5, 0, 13), //index 3
+			new THREE.Vector3(10, 0, 0), //index 1
+			new THREE.Vector3(0, 0, 20),//index 2
+			new THREE.Vector3(10, 0, 20), //index 3
 
 			// top base vertexes
 			new THREE.Vector3(0, 5, 0), //index 4
-			new THREE.Vector3(5, 5, 0), //index 5
-			new THREE.Vector3(0, 5, 13),//index 6
-			new THREE.Vector3(5, 5, 13), //index 7
+			new THREE.Vector3(10, 5, 0), //index 5
+			new THREE.Vector3(0, 5, 20),//index 6
+			new THREE.Vector3(10, 5, 20), //index 7
 
 			//center vertexes
-			new THREE.Vector3(2.5, 0, 6.5), //bottom index 8
-			new THREE.Vector3(2.5, 5, 6.5),	//top index 9
-			new THREE.Vector3(2.5, 2.5, 0),	//left index 10
-			new THREE.Vector3(2.5, 2.5, 13), //right index 11
-			new THREE.Vector3(5, 2.5, 6.5)	//front index 12
+			new THREE.Vector3(5, 0, 10), //bottom index 8
+			new THREE.Vector3(5, 5, 10),	//top index 9
+			new THREE.Vector3(5, 2.5, 0),	//left index 10
+			new THREE.Vector3(5, 2.5, 20), //right index 11
+			new THREE.Vector3(5, 2.5, 10)	//front index 12
 
 		];
 
@@ -145,6 +143,7 @@ class Car {
 
 		this.car_object.add(chassis);
         chassis.position.set(x, y, z);
+		chassis.rotateY(Math.PI/2);
 	}
 
 	/*----------------------------------------------------------------------------------------------------------*/
@@ -158,12 +157,12 @@ class Car {
 		            depth: 3
 		*/
 
-		var hood_geometry = new THREE.BoxGeometry(11, 3, 6);
+		/*var hood_geometry = new THREE.BoxGeometry(11, 3, 6);
 		var hood_material = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true });
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
 
 		this.car_object.add(hood);
-        hood.position.set(x, y, z);
+        hood.position.set(x, y, z);*/
 	}
 
 	/*-----------------------------------------------------------------------------------------------------------*/
