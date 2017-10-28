@@ -60,10 +60,87 @@ class Car {
 		            depth: 5
 		*/
 
-		var chassis_geometry = new THREE.BoxGeometry(20, 5, 11);
+		//var chassis_geometry = new THREE.BoxGeometry(20, 5, 11);
 		var chassis_material = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: true });
-		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
+		//var chassis = new THREE.Mesh(chassis_geometry, chassis_material);*/
 
+		// Create the custom mesh.
+		var chassis_geometry = new THREE.Geometry();
+
+		// The vertexes
+		chassis_geometry.vertices = [
+
+			// bottom base ones
+			new THREE.Vector3(0, 0, 0), //index 0
+			new THREE.Vector3(5, 0, 0), //index 1
+			new THREE.Vector3(0, 0, 13),//index 2
+			new THREE.Vector3(5, 0, 13), //index 3
+
+			// top base vertexes
+			new THREE.Vector3(0, 5, 0), //index 4
+			new THREE.Vector3(5, 5, 0), //index 5
+			new THREE.Vector3(0, 5, 13),//index 6
+			new THREE.Vector3(5, 5, 13), //index 7
+
+			//center vertexes
+			new THREE.Vector3(2.5, 0, 6.5), //bottom index 8
+			new THREE.Vector3(2.5, 5, 6.5),	//top index 9
+			new THREE.Vector3(2.5, 2.5, 0),	//left index 10
+			new THREE.Vector3(2.5, 2.5, 13), //right index 11
+			new THREE.Vector3(5, 2.5, 6.5)	//front index 12
+
+		];
+
+		// The faces
+		// Array of faces.
+		// The array of faces describe how each vertex in the model is connected to form faces.
+		// Additionally it holds information about face and vertex normals and colors
+		chassis_geometry.faces = [
+
+			// bottom base face
+			new THREE.Face3(0, 8, 1),
+			new THREE.Face3(1, 8, 3),
+			new THREE.Face3(3, 8, 2),
+			new THREE.Face3(2, 8, 0),
+
+			//Right face
+			new THREE.Face3(7, 11, 3),
+			new THREE.Face3(3, 11, 2),
+			new THREE.Face3(2, 11, 6),
+			new THREE.Face3(6, 11, 7),
+
+			//Top base
+			new THREE.Face3(4, 9, 5),
+			new THREE.Face3(5, 9, 7),
+			new THREE.Face3(7, 9, 6),
+			new THREE.Face3(6, 9, 4),
+
+
+			//Left face
+			new THREE.Face3(4, 10, 0),
+			new THREE.Face3(0, 10, 1),
+			new THREE.Face3(1, 10, 5),
+			new THREE.Face3(5, 10, 4),
+
+
+			//Front face
+			new THREE.Face3(5, 12, 1),
+			new THREE.Face3(1, 12, 3),
+			new THREE.Face3(3, 12, 7),
+			new THREE.Face3(7, 12, 5),
+
+
+			//Back face
+			new THREE.Face3(0, 2, 6),
+			new THREE.Face3(6, 4, 0)
+
+		];
+		// Compute face normals
+		chassis_geometry.computeFaceNormals();
+		chassis_geometry.computeVertexNormals();
+
+		// Create the mesh for the body.
+		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
 		chassis.name = "chassis";
 
 		this.car_object.add(chassis);
@@ -172,8 +249,9 @@ class Car {
         'use strict';
 
         var chassis = this.car_object.getObjectByName("chassis");
+        var chassis_width = 13;
 
-        this.bounding = new THREE.Sphere(this.car_object.position, chassis.geometry.parameters.width*0.2/2);
+        this.bounding = new THREE.Sphere(this.car_object.position, chassis_width*0.2/2);
     }
 
     /*---------------------------------------------------------------------------------------------------------*/
