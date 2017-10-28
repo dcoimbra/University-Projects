@@ -97,16 +97,11 @@ class Orange {
         this.orange_object.userData.speed = speed;
     }
 
-    getStalk() {
-		'use strict';
-    	return this.orange_object.getObjectByName('stalk');
-	}
-
     setOrangeTransparency(){
     	'use strict';
     	this.orange_object.material.transparent = true;
 
-    	var stalk = this.getStalk();
+    	var stalk = this.orange_object.getObjectByName('stalk');
 		stalk.material.transparent = true;
     }
 
@@ -165,7 +160,7 @@ class Orange {
 		//Colocar a laranja e o caule visiveis
 		object.material.transparent = false;
 
-		var stalk = object.getStalk();
+		var stalk = object.getObjectByName('stalk');
 		stalk.material.transparent = false;
 	}
 }
@@ -221,16 +216,16 @@ class ButterPackage {
 		butterPackage_geometry.vertices = [
 
 			// bottom base ones
-			new THREE.Vector3(0, 0, 5), //index 0
-			new THREE.Vector3(5, 0, 5), //index 1
-			new THREE.Vector3(0, 13, 5),//index 2
-			new THREE.Vector3(5, 13, 5), //index 3
+			new THREE.Vector3(0, 0, 0), //index 0
+			new THREE.Vector3(5, 0, 0), //index 1
+			new THREE.Vector3(0, 0, 13),//index 2
+			new THREE.Vector3(5, 0, 13), //index 3
 
 			// top base vertexes
-			new THREE.Vector3(0, 0, 0), //index 4
-			new THREE.Vector3(5, 0, 0), //index 5
-			new THREE.Vector3(0, 13, 0),//index 6
-			new THREE.Vector3(5, 13, 0) //index 7
+			new THREE.Vector3(0, 5, 0), //index 4
+			new THREE.Vector3(5, 5, 0), //index 5
+			new THREE.Vector3(0, 5, 13),//index 6
+			new THREE.Vector3(5, 5, 13) //index 7
 
 
 		];
@@ -246,11 +241,11 @@ class ButterPackage {
 
 			//Left face
 			new THREE.Face3(0, 1, 4),
-			new THREE.Face3(2, 4, 5),
+			new THREE.Face3(1, 4, 5),
 
 			//Right face
-			new THREE.Face3(2, 3, 7),
-			new THREE.Face3(6, 7, 2),
+			new THREE.Face3(2, 3, 6),
+			new THREE.Face3(6, 7, 3),
 
 			//Top face
 			new THREE.Face3(4, 5, 6),
@@ -258,11 +253,11 @@ class ButterPackage {
 
 			//Front face
 			new THREE.Face3(1, 5, 7),
-			new THREE.Face3(0, 2, 7),
+			new THREE.Face3(1, 3, 7),
 
 			//Back face
 			new THREE.Face3(0, 4, 6),
-			new THREE.Face3(4, 6, 2)
+			new THREE.Face3(0, 6, 2)
 
 		];
 		// Compute face normals
