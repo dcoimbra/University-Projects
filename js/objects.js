@@ -200,7 +200,6 @@ class ButterPackage {
 
 		var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
 		var butterPackage_material = new THREE.MeshPhongMaterial({ color: 0x00bfff, wireframe: true });
-		var butterPackage_material = new THREE.MeshBasicMaterial({ color: 0x00bfff, wireframe: true });
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
