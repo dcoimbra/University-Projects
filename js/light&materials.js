@@ -109,7 +109,7 @@ function toggleLighting(node) {
 
         if (node.material instanceof THREE.MeshPhongMaterial || node.material instanceof THREE.MeshLambertMaterial) {
 
-            /* se o material é sombreado, cria um básico com os mesmos paramentros */
+            /* se o material é sombreado, cria um básico com os mesmos parametros */
 
             new_material = new THREE.MeshBasicMaterial(parameters);
             node.material = new_material;

@@ -10,7 +10,6 @@ var candles = [];
 
 //Objetos
 
-var table;
 var car;
 var oranges = [];
 var butter_packages = [];
@@ -44,7 +43,7 @@ function createSceneElements() {
 	'use strict';
 
     //Posicionamento dos vários objetos
-    table = new Table(0, 0, 0);
+   var table = new Table(0, 0, 0);
 
     createBorderLine();
 
@@ -257,7 +256,7 @@ function onResize() {
 	carOrangesCollision();
 
 	 /* colisão entre manteigas e carro */
-	carButterPackagesCollision();
+	carButterPackagesCollision(posX, posY, posZ);
 
 	 /* colisão entre o carro e os toros */
 	 for (var k = 0; k < toruses.length; k++) {
@@ -327,7 +326,7 @@ function onResize() {
 	 }
  }
 /*---------------------------------------------------------------------------------------------------------*/
- function carButterPackagesCollision(){
+ function carButterPackagesCollision(posX, posY, posZ){
 	'use strict';
 
  	for (var j = 0; j < butter_packages.length; j++) {
