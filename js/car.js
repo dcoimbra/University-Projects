@@ -152,9 +152,9 @@ class Car {
 
 		'use strict';
 
-		/* Hood:    width: 11  (relative to camera)
-		            height: 6
-		            depth: 3
+		/* Hood:    width: 10 (relative to camera)
+		            height: 5
+		            depth: 6
 		*/
 
 
@@ -173,10 +173,10 @@ class Car {
 			new THREE.Vector3(6, 0, 10), //index 3
 
 			// top base vertexes
-			new THREE.Vector3(0, 5, 0), //index 4
-			new THREE.Vector3(6, 5, 0), //index 5
-			new THREE.Vector3(0, 5, 10),//index 6
-			new THREE.Vector3(6, 5, 10), //index 7
+			new THREE.Vector3(0, 5, 3), //index 4
+			new THREE.Vector3(6, 5, 3), //index 5
+			new THREE.Vector3(0, 5, 7),//index 6
+			new THREE.Vector3(6, 5, 7), //index 7
 
 			//center vertexes
 			new THREE.Vector3(6, 0, 5), //bottom index 8
