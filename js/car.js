@@ -28,11 +28,11 @@ class Car {
 		//Elements are instantiated relative to the car's position
 		this.createChassis(-10, -5, 5);
 
-		this.createHood( -4.5, 4.25, 0);
+		this.createHood( -9.7, 0, 3);
 
-		this.createWindShieldFront( 1.2,  +3.7, 0);
-		this.createWindShieldSide( -2.2,  3.7,  -3.3); // left
-		this.createWindShieldSide( -2.2,  3.7,  3.3); // right
+		this.createWindShieldFront( 0,  +3.7, 0);
+		this.createWindShieldSide( -4.5,  2.7,  -3.3); // left
+		this.createWindShieldSide( -4.5,  2.7,  3.3); // right
 
 		this.createWheel( -6,  -3.5,  6.2); // back-left
 		this.createWheel( 6, -3.5, 6.2); // front-left
@@ -157,12 +157,92 @@ class Car {
 		            depth: 3
 		*/
 
-		/*var hood_geometry = new THREE.BoxGeometry(11, 3, 6);
+
+
 		var hood_material = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true });
+
+		// Create the custom mesh.
+		var hood_geometry = new THREE.Geometry();
+
+		hood_geometry.vertices = [
+
+			// bottom base ones
+			new THREE.Vector3(0, 0, 0), //index 0
+			new THREE.Vector3(6, 0, 0), //index 1
+			new THREE.Vector3(0, 0, 10),//index 2
+			new THREE.Vector3(6, 0, 10), //index 3
+
+			// top base vertexes
+			new THREE.Vector3(0, 5, 0), //index 4
+			new THREE.Vector3(6, 5, 0), //index 5
+			new THREE.Vector3(0, 5, 10),//index 6
+			new THREE.Vector3(6, 5, 10), //index 7
+
+			//center vertexes
+			new THREE.Vector3(6, 0, 5), //bottom index 8
+			new THREE.Vector3(6, 5, 5),	//top index 9
+			new THREE.Vector3(3.5, 2.5, 0),	//left index 10
+			new THREE.Vector3(3.5, 2.5, 10), //right index 11
+			new THREE.Vector3(6, 2.5, 10)	//front index 12
+
+		];
+
+		// The faces
+		// Array of faces.
+		// The array of faces describe how each vertex in the model is connected to form faces.
+		// Additionally it holds information about face and vertex normals and colors
+		hood_geometry.faces = [
+
+			// bottom base face
+			new THREE.Face3(0, 8, 1),
+			new THREE.Face3(1, 8, 3),
+			new THREE.Face3(3, 8, 2),
+			new THREE.Face3(2, 8, 0),
+
+			//Right face
+			new THREE.Face3(7, 11, 3),
+			new THREE.Face3(3, 11, 2),
+			new THREE.Face3(2, 11, 6),
+			new THREE.Face3(6, 11, 7),
+
+			//Top base
+			new THREE.Face3(4, 9, 5),
+			new THREE.Face3(5, 9, 7),
+			new THREE.Face3(7, 9, 6),
+			new THREE.Face3(6, 9, 4),
+
+
+			//Left face
+			new THREE.Face3(4, 10, 0),
+			new THREE.Face3(0, 10, 1),
+			new THREE.Face3(1, 10, 5),
+			new THREE.Face3(5, 10, 4),
+
+
+			//Front face
+			new THREE.Face3(5, 12, 1),
+			new THREE.Face3(1, 12, 3),
+			new THREE.Face3(3, 12, 7),
+			new THREE.Face3(7, 12, 5),
+
+
+			//Back face
+			new THREE.Face3(0, 2, 6),
+			new THREE.Face3(6, 4, 0)
+
+		];
+
+		// Compute face normals
+		hood_geometry.computeFaceNormals();
+		hood_geometry.computeVertexNormals();
+
+		// Create the mesh for the body.
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
+		hood.name = "hood";
 
 		this.car_object.add(hood);
-        hood.position.set(x, y, z);*/
+		hood.position.set(x, y, z);
+		hood.rotateY(Math.PI/2);
 	}
 
 	/*-----------------------------------------------------------------------------------------------------------*/
