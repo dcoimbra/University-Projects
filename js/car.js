@@ -34,12 +34,12 @@ class Car {
 		this.createWindShieldSide( -4.5,  2.7,  -3.3); // left
 		this.createWindShieldSide( -4.5,  2.7,  3.3); // right
 
-		this.createWheel( -6,  -3.5,  6.2); // back-left
-		this.createWheel( 6, -3.5, 6.2); // front-left
-		this.createWheel( -6,  -3.5, -6.2); // back-right
-		this.createWheel( 6,  -3.5,  -6.2); // front-right
+		this.createWheel( -8,  -6.5,  6.1); // back-left
+		this.createWheel( 4, -6.5, 6.1); // front-left
+		this.createWheel( -8,  -6.5, -6.1); // back-right
+		this.createWheel( 4,  -6.5,  -6.1); // front-right
 
-        this.createFollowingCamera(-80, 80, 0);
+        this.createFollowingCamera(0, 10, 20);
 
         this.makeBounding();
 
@@ -179,11 +179,11 @@ class Car {
 			new THREE.Vector3(6, 5, 7), //index 7
 
 			//center vertexes
-			new THREE.Vector3(6, 0, 5), //bottom index 8
-			new THREE.Vector3(6, 5, 5),	//top index 9
-			new THREE.Vector3(3.5, 2.5, 0),	//left index 10
-			new THREE.Vector3(3.5, 2.5, 10), //right index 11
-			new THREE.Vector3(6, 2.5, 10)	//front index 12
+			new THREE.Vector3(6, 0, 5), 		//bottom index 8
+			new THREE.Vector3(6, 5, 5),			//top index 9
+			new THREE.Vector3(3.5, 2.5, 0),		//left index 10
+			new THREE.Vector3(3.5, 2.5, 10), 	//right index 11
+			new THREE.Vector3(6, 2.5, 10)		//front index 12
 
 		];
 
@@ -296,12 +296,115 @@ class Car {
 				  central angle: 2π
 	    */
 
-		var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
-		var wheel_material = new THREE.MeshPhongMaterial( { color: 0x333333, wireframe: true } );
+		/*var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
+
 		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
 
 		this.car_object.add(wheel);
-        wheel.position.set(x, y, z);
+        wheel.position.set(x, y, z);*/
+
+		var wheel_material = new THREE.MeshPhongMaterial( { color: 0x333333, wireframe: true } );
+
+		// Create the custom mesh.
+		var wheel_geometry = new THREE.Geometry();
+
+		wheel_geometry.vertices = [
+
+			// front ones
+			new THREE.Vector3(0.5, 3.46, 1), 	//index 0
+			new THREE.Vector3(0.5, 3.46, 3), 	//index 1
+			new THREE.Vector3(0.5, 1.73, 4),	//index 2
+			new THREE.Vector3(0.5, 0, 3), 	//index 3
+			new THREE.Vector3(0.5, 0, 1), 	//index 4
+			new THREE.Vector3(0.5, 1.73, 0),	//index 5
+
+			//back ones
+			new THREE.Vector3(0, 3.46, 1),	//index 6
+			new THREE.Vector3(0, 3.46, 3),	//index 7
+			new THREE.Vector3(0, 1.73, 4),	//index 8
+			new THREE.Vector3(0, 0, 3),		//index 9
+			new THREE.Vector3(0, 0, 1),		//index 10
+			new THREE.Vector3(0, 1.73, 0),	//index 11
+
+			//center vertexes
+			new THREE.Vector3(0.25, 3.46, 1.97),	//index 12
+			new THREE.Vector3(0.25, 2.59, 3.5),	//index 13
+			new THREE.Vector3(0.25, 1, 3.5),	//index 14
+			new THREE.Vector3(0.25, 0, 2),		//index 15
+			new THREE.Vector3(0.25, 1, 0.5),	//index 16
+			new THREE.Vector3(0.25, 2.58, 0.49),	//index 17
+			new THREE.Vector3(0.5, 1.73, 1.98), 	//front index 18
+			new THREE.Vector3(0, 1.73, 1.98)	//back index 19
+
+		];
+
+		// The faces
+		// Array of faces.
+		// The array of faces describe how each vertex in the model is connected to form faces.
+		// Additionally it holds information about face and vertex normals and colors
+		wheel_geometry.faces = [
+
+			//front face
+			new THREE.Face3(0, 18, 5),
+			new THREE.Face3(5, 18, 4),
+			new THREE.Face3(4, 18, 3),
+			new THREE.Face3(3, 18, 2),
+			new THREE.Face3(2, 18, 1),
+			new THREE.Face3(1, 18, 0),
+
+			//back face
+			new THREE.Face3(6, 19, 11),
+			new THREE.Face3(11, 19, 10),
+			new THREE.Face3(10, 19, 9),
+			new THREE.Face3(9, 19, 8),
+			new THREE.Face3(8, 19, 7),
+			new THREE.Face3(7, 19, 6),
+
+
+			//face 12
+			new THREE.Face3(6, 12, 0),
+			new THREE.Face3(0, 12, 1),
+			new THREE.Face3(1, 12, 7),
+			new THREE.Face3(7, 12, 0),
+
+			//face 13
+			new THREE.Face3(7, 13, 11),
+			new THREE.Face3(1, 13, 2),
+			new THREE.Face3(2, 13, 8),
+			new THREE.Face3(8, 13, 7),
+
+
+			//face 14
+			new THREE.Face3(8, 14, 2),
+			new THREE.Face3(2, 14, 3),
+			new THREE.Face3(3, 14, 9),
+			new THREE.Face3(9, 14, 8),
+
+
+			//face 15
+			new THREE.Face3(9, 15, 3),
+			new THREE.Face3(3, 15, 10),
+			new THREE.Face3(10, 15, 4),
+			new THREE.Face3(4, 15, 9),
+
+
+			//Back face
+			new THREE.Face3(0, 2, 6),
+			new THREE.Face3(6, 4, 0)
+
+		];
+
+		// Compute face normals
+		wheel_geometry.computeFaceNormals();
+		wheel_geometry.computeVertexNormals();
+
+		// Create the mesh for the body.
+		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
+		wheel.name = "wheel";
+
+		this.car_object.add(wheel);
+		wheel.position.set(x, y, z);
+		wheel.rotateY(Math.PI/2);
 	}
 	/*----------------------------------------------------------------------------------------------------------*/
 
