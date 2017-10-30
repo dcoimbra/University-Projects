@@ -39,7 +39,7 @@ class Car {
 		this.createWheel( -8,  -6.5, -6.1); // back-right
 		this.createWheel( 4,  -6.5,  -6.1); // front-right
 
-        this.createFollowingCamera(0, 10, 20);
+        this.createFollowingCamera(-80, 80/*10*/, /*20*/0);
 
         this.makeBounding();
 
@@ -310,12 +310,12 @@ class Car {
 
 		wheel_geometry.vertices = [
 
-			// front ones
+			// front ones (change to clockwise)
 			new THREE.Vector3(0.5, 3.46, 1), 	//index 0
 			new THREE.Vector3(0.5, 3.46, 3), 	//index 1
 			new THREE.Vector3(0.5, 1.73, 4),	//index 2
-			new THREE.Vector3(0.5, 0, 3), 	//index 3
-			new THREE.Vector3(0.5, 0, 1), 	//index 4
+			new THREE.Vector3(0.5, 0, 3), 		//index 3
+			new THREE.Vector3(0.5, 0, 1), 		//index 4
 			new THREE.Vector3(0.5, 1.73, 0),	//index 5
 
 			//back ones
@@ -328,13 +328,13 @@ class Car {
 
 			//center vertexes
 			new THREE.Vector3(0.25, 3.46, 1.97),	//index 12
-			new THREE.Vector3(0.25, 2.59, 3.5),	//index 13
-			new THREE.Vector3(0.25, 1, 3.5),	//index 14
-			new THREE.Vector3(0.25, 0, 2),		//index 15
-			new THREE.Vector3(0.25, 1, 0.5),	//index 16
+			new THREE.Vector3(0.25, 2.59, 3.5),		//index 13
+			new THREE.Vector3(0.25, 1, 3.5),		//index 14
+			new THREE.Vector3(0.25, 0, 2),			//index 15
+			new THREE.Vector3(0.25, 1, 0.5),		//index 16
 			new THREE.Vector3(0.25, 2.58, 0.49),	//index 17
 			new THREE.Vector3(0.5, 1.73, 1.98), 	//front index 18
-			new THREE.Vector3(0, 1.73, 1.98)	//back index 19
+			new THREE.Vector3(0, 1.73, 1.98)		//back index 19
 
 		];
 
@@ -345,12 +345,12 @@ class Car {
 		wheel_geometry.faces = [
 
 			//front face
-			new THREE.Face3(0, 18, 5),
-			new THREE.Face3(5, 18, 4),
-			new THREE.Face3(4, 18, 3),
-			new THREE.Face3(3, 18, 2),
-			new THREE.Face3(2, 18, 1),
-			new THREE.Face3(1, 18, 0),
+			new THREE.Face3(5, 18, 0),
+			new THREE.Face3(4, 18, 5),
+			new THREE.Face3(3, 18, 4),
+			new THREE.Face3(2, 18, 3),
+			new THREE.Face3(1, 18, 2),
+			new THREE.Face3(0, 18, 1),
 
 			//back face
 			new THREE.Face3(6, 19, 11),
@@ -360,15 +360,14 @@ class Car {
 			new THREE.Face3(8, 19, 7),
 			new THREE.Face3(7, 19, 6),
 
-
 			//face 12
 			new THREE.Face3(6, 12, 0),
 			new THREE.Face3(0, 12, 1),
 			new THREE.Face3(1, 12, 7),
-			new THREE.Face3(7, 12, 0),
+			new THREE.Face3(7, 12, 6),
 
 			//face 13
-			new THREE.Face3(7, 13, 11),
+			new THREE.Face3(7, 13, 1),
 			new THREE.Face3(1, 13, 2),
 			new THREE.Face3(2, 13, 8),
 			new THREE.Face3(8, 13, 7),
@@ -383,14 +382,21 @@ class Car {
 
 			//face 15
 			new THREE.Face3(9, 15, 3),
-			new THREE.Face3(3, 15, 10),
-			new THREE.Face3(10, 15, 4),
-			new THREE.Face3(4, 15, 9),
+			new THREE.Face3(3, 15, 4),
+			new THREE.Face3(4, 15, 10),
+			new THREE.Face3(10, 15, 9),
 
+			//face 16
+			new THREE.Face3(5, 16, 11),
+			new THREE.Face3(11, 16, 10),
+			new THREE.Face3(10, 16, 4),
+			new THREE.Face3(4, 16, 5),
 
-			//Back face
-			new THREE.Face3(0, 2, 6),
-			new THREE.Face3(6, 4, 0)
+			//face 17
+			new THREE.Face3(0, 17, 6),
+			new THREE.Face3(6, 17, 11),
+			new THREE.Face3(11, 17, 5),
+			new THREE.Face3(5, 17, 0)
 
 		];
 
