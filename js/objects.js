@@ -325,8 +325,7 @@ class Table {
 
 	    this.table_object = new THREE.Object3D();
 
-	    var table_material = new THREE.MeshPhongMaterial({ color: 0x007300, ambient: 0x007300, specular: 0x007300, shininess: 77,
-														   wireframe: true });
+	    var table_material = new THREE.MeshPhongMaterial({ color: 0x007300, wireframe: true });
 
 	    this.addTableTop(table_material, 0, 0, 0);
 

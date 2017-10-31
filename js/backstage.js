@@ -89,12 +89,12 @@ function createLights() {
 
      sun = new Sun(0xffffff, 1);
 
-     var candle1 = new Candle(5, 8, -5);
-     var candle2 = new Candle(36, 8, -15);
-     var candle3 = new Candle(10, 8, 35);
-     var candle4 = new Candle(-35, 8, 44);
-     var candle5 = new Candle(-35, 8, -10);
-     var candle6 = new Candle(-25, 8, -35);
+     var candle1 = new Candle(5, 2.3, -5);
+     var candle2 = new Candle(36, 2.3, -15);
+     var candle3 = new Candle(10, 2.3, 35);
+     var candle4 = new Candle(-35, 2.3, 44);
+     var candle5 = new Candle(-17, 2.3, 0);
+     var candle6 = new Candle(-25, 2.3, -35);
 
      candles.push(candle1);
      candles.push(candle2);

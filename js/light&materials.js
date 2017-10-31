@@ -27,7 +27,7 @@ class Candle {
 
         'use strict';
                                                     /* cor, intensidade, alcance, decay */
-        this.candle_object = new THREE.PointLight( 0xffffff, 5, 250, 2);
+        this.candle_object = new THREE.PointLight( 0xffcc66, 5, 250, 2);
 
         this.candle_object.position.set(x, y, z);
 
@@ -71,9 +71,6 @@ function toggleShading(node) {
 
             var parameters = {
                 color: node.material.color,
-                ambient: node.material.ambient,
-                specular: node.material.specular,
-                shininess: node.material.shininess,
                 wireframe: node.material.wireframe,
                 transparent: node.material.transparent,
                 opacity: node.material.opacity
@@ -105,9 +102,6 @@ function toggleLighting(node) {
 
         var parameters = {
             color: node.material.color,
-            ambient: node.material.ambient,
-            specular: node.material.specular,
-            shininess: node.material.shininess,
             wireframe: node.material.wireframe,
             transparent: node.material.transparent,
             opacity: node.material.opacity
