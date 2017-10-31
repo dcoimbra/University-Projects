@@ -61,9 +61,9 @@ class Orange {
 
         var stalk_geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
         var stalk_material = new THREE.MeshPhongMaterial({color: 0x00ff00,
-															wireframe: true,
-															opacity: 0,
-															transparent: false});
+														  wireframe: true,
+														  opacity: 0,
+														  transparent: false});
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
         stalk.position.set(0, 4, 0);
