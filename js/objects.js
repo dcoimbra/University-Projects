@@ -45,8 +45,8 @@ class Orange {
         this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
         this.orange_object.userData = { speed: 5, changePos: false,
-									    specular: 0xdb4200,
-			                            shininess: 10 };
+									    specular: orange_material.specular,
+			                            shininess: orange_material.shininess };
 
         this.orange_object.position.set(x, y, z);
 
@@ -73,8 +73,8 @@ class Orange {
 
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
-        stalk.userData = { specular: 0x00ee00,
-						   shininess: 0       };
+        stalk.userData = { specular: stalk_material.specular,
+						   shininess: stalk_material.shininess };
 
         stalk.position.set(0, 4, 0);
 
@@ -216,8 +216,8 @@ class ButterPackage {
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
-        this.butterPackage_object.userData = { specular: 0x00aeee,
-						                       shininess: 5 };
+        this.butterPackage_object.userData = { specular: butterPackage_material.specular,
+                                               shininess: butterPackage_material.shininess };
 
 		scene.add(this.butterPackage_object);
 
@@ -264,8 +264,8 @@ class BorderTorus {
         this.torus_object.userData = { speed: 0,
                                        car_collision_direction: new THREE.Vector3(0, 0, 0),
                                        torus_collision_direction: new THREE.Vector3(0, 0, 0),
-                                       specular: 0xee0000,
-                                       shininess: 5 };
+                                       specular: torus_material.specular,
+                                       shininess: torus_material.shininess };
 
         this.torus_object.position.set(location.getComponent(0),
                                        1.75,
@@ -372,8 +372,8 @@ class Table {
 		var tabletop_geometry = new THREE.BoxGeometry(tabletop_size , 3, tabletop_size);
 		var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
 
-        tabletop_mesh.userData = { specular: 0x006200,
-                                        shininess: 10 };
+        tabletop_mesh.userData = { specular: tabletop_mesh.material.specular,
+                                   shininess: tabletop_mesh.material.shininess };
 
 		tabletop_mesh.position.set(x, y, z);
 

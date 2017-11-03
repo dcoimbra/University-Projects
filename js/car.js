@@ -143,10 +143,8 @@ class Car {
 		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
 		chassis.name = "chassis";
 
-		chassis.userData = { specular: 0x0000ff,
-                             shininess: 40 };
-
-
+		chassis.userData = { specular: chassis_material.specular,
+                             shininess: chassis_material.shininess };
 
 		this.car_object.add(chassis);
         chassis.position.set(x, y, z);
@@ -250,8 +248,8 @@ class Car {
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
 		hood.name = "hood";
 
-		hood.userData = { specular: hood.material.specular,
-                          shininess: hood.material.shininess };
+		hood.userData = { specular: hood_material.specular,
+                          shininess: hood_material.shininess };
 
 		this.car_object.add(hood);
 		hood.position.set(x, y, z);
@@ -274,6 +272,7 @@ class Car {
                                                                     specular: 0xffffff,
                                                                     shininess: 40,
                                                                     wireframe: true });
+
 		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
 
 		windshield_side.userData = { specular: 0xffffff,
@@ -411,8 +410,8 @@ class Car {
 		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
 		wheel.name = "wheel";
 
-		wheel.userData = { specular: 0x222222,
-                           shininess: 5 };
+		wheel.userData = { specular: wheel_material.specular,
+                           shininess: wheel_material.shininess };
 
 		this.car_object.add(wheel);
 		wheel.position.set(x, y, z);
