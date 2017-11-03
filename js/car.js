@@ -30,7 +30,6 @@ class Car {
 
 		this.createHood( -9.7, 0, 3);
 
-		this.createWindShieldFront( 0,  +3.7, 0);
 		this.createWindShieldSide( -4.5,  2.7,  -3.3); // left
 		this.createWindShieldSide( -4.5,  2.7,  3.3); // right
 
@@ -60,7 +59,10 @@ class Car {
 		            depth: 5
 		*/
 
-		var chassis_material = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: true })
+		var chassis_material = new THREE.MeshPhongMaterial({ color: 0x0000ff,
+                                                             specular: 0x0000ff,
+                                                             shininess: 40,
+                                                             wireframe: true });
 
 		// Create the custom mesh.
 		var chassis_geometry = new THREE.Geometry();
@@ -141,6 +143,11 @@ class Car {
 		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
 		chassis.name = "chassis";
 
+		chassis.userData = { specular: 0x0000ff,
+                             shininess: 40 };
+
+
+
 		this.car_object.add(chassis);
         chassis.position.set(x, y, z);
 		chassis.rotateY(Math.PI/2);
@@ -159,7 +166,10 @@ class Car {
 
 
 
-		var hood_material = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: true });
+		var hood_material = new THREE.MeshPhongMaterial({ color: 0xff0000,
+                                                          specular: 0xff0000,
+                                                          shininess: 40,
+                                                          wireframe: true });
 
 		// Create the custom mesh.
 		var hood_geometry = new THREE.Geometry();
@@ -240,28 +250,12 @@ class Car {
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
 		hood.name = "hood";
 
+		hood.userData = { specular: hood.material.specular,
+                          shininess: hood.material.shininess };
+
 		this.car_object.add(hood);
 		hood.position.set(x, y, z);
 		hood.rotateY(Math.PI/2);
-	}
-
-	/*-----------------------------------------------------------------------------------------------------------*/
-
-	createWindShieldFront(x, y, z) {
-
-		'use strict';
-
-		/* Windshield (front): width: 0  (relative to camera)
-		                      height: 5.5
-		                      depth: 2
-		*/
-
-		var windshield_frontGeometry = new THREE.BoxGeometry(0, 2, 5.5);
-		var windshield_frontMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
-		var windshield = new THREE.Mesh(windshield_frontGeometry, windshield_frontMaterial);
-
-		this.car_object.add(windshield);
-        windshield.position.set(x, y, z);
 	}
 
 	/*------------------------------------------------------------------------------------------------------*/
@@ -276,8 +270,14 @@ class Car {
 		*/
 
 		var windshield_sideGeometry = new THREE.BoxGeometry(5.5, 2, 0);
-		var windshield_sideMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
+		var windshield_sideMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff,
+                                                                    specular: 0xffffff,
+                                                                    shininess: 40,
+                                                                    wireframe: true });
 		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
+
+		windshield_side.userData = { specular: 0xffffff,
+		                             shininess: 40};
 
 		this.car_object.add(windshield_side);
         windshield_side.position.set(x, y, z);
@@ -303,7 +303,10 @@ class Car {
 		this.car_object.add(wheel);
         wheel.position.set(x, y, z);*/
 
-		var wheel_material = new THREE.MeshPhongMaterial( { color: 0x333333, wireframe: true } );
+		var wheel_material = new THREE.MeshPhongMaterial( { color: 0x333333,
+                                                            specular: 0x222222,
+                                                            shininess: 5,
+                                                            wireframe: true } );
 
 		// Create the custom mesh.
 		var wheel_geometry = new THREE.Geometry();
@@ -407,6 +410,9 @@ class Car {
 		// Create the mesh for the body.
 		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
 		wheel.name = "wheel";
+
+		wheel.userData = { specular: 0x222222,
+                           shininess: 5 };
 
 		this.car_object.add(wheel);
 		wheel.position.set(x, y, z);

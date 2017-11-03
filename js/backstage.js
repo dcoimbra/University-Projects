@@ -43,7 +43,7 @@ function createSceneElements() {
 	'use strict';
 
     //Posicionamento dos vários objetos
-   var table = new Table(0, 0, 0);
+    var table = new Table(0, 0, 0);
 
     createBorderLine();
 

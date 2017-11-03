@@ -78,6 +78,8 @@ function toggleShading(node) {
 
             if (phong_shading) {
 
+                parameters.specular = node.userData.specular;
+                parameters.shininess = node.userData.shininess;
                 new_material = new THREE.MeshPhongMaterial(parameters);
             }
 
