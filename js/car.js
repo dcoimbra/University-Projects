@@ -39,7 +39,7 @@ class Car {
 		this.createWheel( -8,  -6.5, -6.1); // back-right
 		this.createWheel( 4,  -6.5,  -6.1); // front-right
 
-        this.createFollowingCamera(-80, 80/*10*/, /*20*/0);
+        this.createFollowingCamera(-80, 80, 0);
 
         this.makeBounding();
 
