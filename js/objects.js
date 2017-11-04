@@ -35,14 +35,18 @@ class Orange {
 
         var orange_geometry = new THREE.SphereGeometry(4, 17, 13);
 
-        var orange_material = new THREE.MeshPhongMaterial({color: 0xe49600,
+        var orange_material = new THREE.MeshPhongMaterial({ color: 0xe49600,
+            												specular: 0xdb4200,
+														    shininess: 10,
 															wireframe: true,
 															opacity: 0,
-															transparent: false});
+															transparent: false });
 
         this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
-        this.orange_object.userData = {speed: 5, changePos: false};
+        this.orange_object.userData = { speed: 5, changePos: false,
+									    specular: orange_material.specular,
+			                            shininess: orange_material.shininess };
 
         this.orange_object.position.set(x, y, z);
 
@@ -60,11 +64,17 @@ class Orange {
         'use strict';
 
         var stalk_geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-        var stalk_material = new THREE.MeshPhongMaterial({color: 0x00ff00,
-															wireframe: true,
-															opacity: 0,
-															transparent: false});
+        var stalk_material = new THREE.MeshPhongMaterial({ color: 0x00ff00,
+													       specular: 0x00ee00,
+														   shininess: 0,
+														   wireframe: true,
+														   opacity: 0,
+														   transparent: false });
+
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
+
+        stalk.userData = { specular: stalk_material.specular,
+						   shininess: stalk_material.shininess };
 
         stalk.position.set(0, 4, 0);
 
@@ -199,9 +209,15 @@ class ButterPackage {
 		*/
 
 		var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
-		var butterPackage_material = new THREE.MeshPhongMaterial({ color: 0x00bfff, wireframe: true });
+		var butterPackage_material = new THREE.MeshPhongMaterial({ color: 0x00bfff,
+																   specular: 0x00aeee,
+																   shininess: 5,
+																   wireframe: true });
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+
+        this.butterPackage_object.userData = { specular: butterPackage_material.specular,
+                                               shininess: butterPackage_material.shininess };
 
 		scene.add(this.butterPackage_object);
 
@@ -238,14 +254,18 @@ class BorderTorus {
         'use strict';
 
         var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
-        var torus_material = new THREE.MeshPhongMaterial({color: 0xff0000, wireframe: true});
+        var torus_material = new THREE.MeshPhongMaterial({ color: 0xff0000,
+                                                           specular: 0xee0000,
+                                                           shininess: 5,
+                                                           wireframe: true });
 
         this.torus_object = new THREE.Mesh(torus_geometry, torus_material);
 
         this.torus_object.userData = { speed: 0,
                                        car_collision_direction: new THREE.Vector3(0, 0, 0),
-                                       torus_collision_direction: new THREE.Vector3(0, 0, 0)
-                                     };
+                                       torus_collision_direction: new THREE.Vector3(0, 0, 0),
+                                       specular: torus_material.specular,
+                                       shininess: torus_material.shininess };
 
         this.torus_object.position.set(location.getComponent(0),
                                        1.75,
@@ -253,8 +273,8 @@ class BorderTorus {
 
         //Make torus look up
         var above_vector = new THREE.Vector3(this.torus_object.getWorldPosition().getComponent(0),
-											10,
-            								this.torus_object.getWorldPosition().getComponent(2));
+                                             10,
+                                             this.torus_object.getWorldPosition().getComponent(2));
 
         //LookAt: Rotates the object to face a point in world space.
         this.torus_object.lookAt(above_vector);
@@ -325,7 +345,10 @@ class Table {
 
 	    this.table_object = new THREE.Object3D();
 
-	    var table_material = new THREE.MeshPhongMaterial({ color: 0x007300, wireframe: true });
+	    var table_material = new THREE.MeshPhongMaterial({ color: 0x007300,
+                                                           specular: 0x006200,
+                                                           shininess: 10,
+                                                           wireframe: true });
 
 	    this.addTableTop(table_material, 0, 0, 0);
 
@@ -348,6 +371,10 @@ class Table {
 
 		var tabletop_geometry = new THREE.BoxGeometry(tabletop_size , 3, tabletop_size);
 		var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
+
+        tabletop_mesh.userData = { specular: tabletop_mesh.material.specular,
+                                   shininess: tabletop_mesh.material.shininess };
+
 		tabletop_mesh.position.set(x, y, z);
 
 		this.table_object.add(tabletop_mesh);

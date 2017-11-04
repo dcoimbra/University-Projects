@@ -27,7 +27,7 @@ class Candle {
 
         'use strict';
                                                     /* cor, intensidade, alcance, decay */
-        this.candle_object = new THREE.PointLight( 0xffcc66, 5, 250, 2);
+        this.candle_object = new THREE.PointLight( 0xffffff, 3, 250, 1);
 
         this.candle_object.position.set(x, y, z);
 
@@ -78,6 +78,8 @@ function toggleShading(node) {
 
             if (phong_shading) {
 
+                parameters.specular = node.userData.specular;
+                parameters.shininess = node.userData.shininess;
                 new_material = new THREE.MeshPhongMaterial(parameters);
             }
 
