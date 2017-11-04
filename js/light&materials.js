@@ -26,15 +26,33 @@ class Candle {
     constructor(x, y, z) {
 
         'use strict';
-                                                    /* cor, intensidade, alcance, decay */
-        this.candle_object = new THREE.PointLight( 0xffffff, 3, 250, 1);
 
-        this.candle_object.position.set(x, y, z);
+        /*light of the candle*/
+                                                    /* cor, intensidade, alcance, decay */
+        this.candle_light = new THREE.PointLight( 0xffffff, 1, 150, 1);
+        this.candle_light.position.set(x, y, z);
+        scene.add(this.candle_light);
+
+
+        /* candle stick*/
+        var candle_geometry = new THREE.CylinderGeometry( 1, 1, y-0.5, 16 );
+        var candle_material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa,
+                                                          specular: 0x888888,
+                                                          shininess: 10,
+                                                          wireframe: true });
+
+        this.candle_object = new THREE.Mesh(candle_geometry, candle_material);
+
+        this.candle_object.userData = { specular: candle_material.specular,
+                                        shininess: candle_material.shininess };
+
+        this.candle_object.position.set(x, 4, z);
 
         scene.add(this.candle_object);
+        
 
-
-        this.flame = new THREE.PointLightHelper(this.candle_object, 0.5);
+        /*candle flame*/
+        this.flame = new THREE.PointLightHelper(this.candle_light, 0.5, 0xe29822);
         scene.add(this.flame);
     }
 
@@ -43,7 +61,7 @@ class Candle {
 
         'use strict';
 
-        this.candle_object.visible = !this.candle_object.visible;
+        this.candle_light.visible = !this.candle_light.visible;
         this.flame.visible = !this.flame.visible;
     }
 }
