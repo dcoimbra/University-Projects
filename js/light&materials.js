@@ -7,16 +7,16 @@ class Sun {
 
         'use strict';
                                                         //intensity : [0, 1]
-        this.sun_object = new THREE.DirectionalLight( color, intensity );
+        this.sun_light = new THREE.DirectionalLight( color, intensity );
 
-        scene.add(this.sun_object);
+        scene.add(this.sun_light);
     }
 
     flick() {
 
         'use strict';
 
-        this.sun_object.visible = !this.sun_object.visible;
+        this.sun_light.visible = !this.sun_light.visible;
     }
 }
 /*********************************************************************************************************************/
@@ -29,7 +29,7 @@ class Candle {
 
         /*light of the candle*/
                                                     /* cor, intensidade, alcance, decay */
-        this.candle_light = new THREE.PointLight( 0xffffff, 1, 150, 1);
+        this.candle_light = new THREE.PointLight( 0xffffff, 1, 90, 1);
         this.candle_light.position.set(x, y, z);
         scene.add(this.candle_light);
 
