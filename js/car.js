@@ -38,14 +38,14 @@ class Car {
 		this.createWheel( -8,  -6.5, -5.6); // back-left
 		this.createWheel( 4,  -6.5,  -5.7); // front-left
 
-        this.createFollowingCamera(-40, 40, 0);
+        this.createFollowingCamera(-80, 80, 0);
 
         this.makeBounding();
 
 		scene.add(this.car_object);
 
-		//Scale down size of car
-		this.car_object.scale.multiplyScalar(0.2);
+        this.car_object.scale.multiplyScalar(0.2);
+        this.car_object.getObjectByName("camera").scale.divideScalar(0.2);
 	}
 
 	/*----------------------------------------------------------------------------------------------------------*/

@@ -7,16 +7,16 @@ class Sun {
 
         'use strict';
                                                         //intensity : [0, 1]
-        this.sun_object = new THREE.DirectionalLight( color, intensity );
+        this.sun_light = new THREE.DirectionalLight( color, intensity );
 
-        scene.add(this.sun_object);
+        scene.add(this.sun_light);
     }
 
     flick() {
 
         'use strict';
 
-        this.sun_object.visible = !this.sun_object.visible;
+        this.sun_light.visible = !this.sun_light.visible;
     }
 }
 /*********************************************************************************************************************/
@@ -28,18 +28,35 @@ class Candle {
         'use strict';
 
         //A light that gets emitted from a single point in all directions.
-		// A common use case for this is to replicate the light emitted from a bare lightbulb.
-		// color,
-		// intensity: numeric value of the light's strength/intensity. Default is 1.
-		// distance: The distance from the light where the intensity is 0. When set to 0, then the light never stops.
-		// decay: The amount the light dims along the distance of the light.
-        this.candle_object = new THREE.PointLight( 0xffffff, 3, 250, 1);
+        // A common use case for this is to replicate the light emitted from a bare lightbulb.
+        // color,
+        // intensity: numeric value of the light's strength/intensity. Default is 1.
+        // distance: The distance from the light where the intensity is 0. When set to 0, then the light never stops.
+        // decay: The amount the light dims along the distance of the light.
+        this.candle_light = new THREE.PointLight( 0xffffff, 1, 90, 1);
+        this.candle_light.position.set(x, y, z);
+        scene.add(this.candle_light);
 
-        this.candle_object.position.set(x, y, z);
+
+        /* candle stick*/
+        var candle_geometry = new THREE.CylinderGeometry( 1, 1, y-0.5, 16 );
+        var candle_material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa,
+                                                          specular: 0x888888,
+                                                          shininess: 10,
+                                                          wireframe: true });
+
+        this.candle_object = new THREE.Mesh(candle_geometry, candle_material);
+
+        this.candle_object.userData = { specular: candle_material.specular,
+                                        shininess: candle_material.shininess };
+
+        this.candle_object.position.set(x, 4, z);
+
         scene.add(this.candle_object);
+        
 
-        //Adicionado helper
-        this.flame = new THREE.PointLightHelper(this.candle_object, 0.5);
+        /*candle flame*/
+        this.flame = new THREE.PointLightHelper(this.candle_light, 0.5, 0xe29822);
         scene.add(this.flame);
     }
 
@@ -48,7 +65,7 @@ class Candle {
 
         'use strict';
 
-        this.candle_object.visible = !this.candle_object.visible;
+        this.candle_light.visible = !this.candle_light.visible;
         this.flame.visible = !this.flame.visible;
     }
 }
