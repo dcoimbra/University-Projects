@@ -26,14 +26,19 @@ class Candle {
     constructor(x, y, z) {
 
         'use strict';
-                                                    /* cor, intensidade, alcance, decay */
+
+        //A light that gets emitted from a single point in all directions.
+		// A common use case for this is to replicate the light emitted from a bare lightbulb.
+		// color,
+		// intensity: numeric value of the light's strength/intensity. Default is 1.
+		// distance: The distance from the light where the intensity is 0. When set to 0, then the light never stops.
+		// decay: The amount the light dims along the distance of the light.
         this.candle_object = new THREE.PointLight( 0xffffff, 3, 250, 1);
 
         this.candle_object.position.set(x, y, z);
-
         scene.add(this.candle_object);
 
-
+        //Adicionado helper
         this.flame = new THREE.PointLightHelper(this.candle_object, 0.5);
         scene.add(this.flame);
     }
