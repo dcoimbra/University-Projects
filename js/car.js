@@ -295,13 +295,6 @@ class Car {
 				  central angle: 2π
 	    */
 
-		/*var wheel_geometry = new THREE.TorusGeometry(2, 0.6, 8, 16, Math.PI * 2);
-
-		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
-
-		this.car_object.add(wheel);
-        wheel.position.set(x, y, z);*/
-
 		var wheel_material = new THREE.MeshPhongMaterial( { color: 0x333333,
                                                             specular: 0x222222,
                                                             shininess: 5,

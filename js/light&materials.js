@@ -6,9 +6,16 @@ class Sun {
     constructor(color, intensity) {
 
         'use strict';
-                                                        //intensity : [0, 1]
-        this.sun_light = new THREE.DirectionalLight( color, intensity );
 
+        /* A light that gets emitted in a specific direction.
+        This light will behave as though it is infinitely far away and the rays produced from it are all parallel.
+        The common use case for this is to simulate daylight;
+        All light rays coming from it are parallel. */
+
+        //color,
+        //intensity: numeric value of the light's strength/intensity. Minimum is 0 and maximum is 1.
+
+        this.sun_light = new THREE.DirectionalLight( color, intensity );
         scene.add(this.sun_light);
     }
 
