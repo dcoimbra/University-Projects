@@ -9,8 +9,7 @@ class Sun {
 
         /* A light that gets emitted in a specific direction.
         This light will behave as though it is infinitely far away and the rays produced from it are all parallel.
-        The common use case for this is to simulate daylight;
-        All light rays coming from it are parallel. */
+        The common use case for this is to simulate daylight; */
 
         //color,
         //intensity: numeric value of the light's strength/intensity. Minimum is 0 and maximum is 1.

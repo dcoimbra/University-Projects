@@ -15,15 +15,16 @@ var oranges = [];
 var butter_packages = [];
 var border_lines = [];
 
-var lighting_on = true;
-var phong_shading = true;
+var lighting_on;
+var phong_shading;
+var paused;  //true if the game is paused
 
 /* tamanho da area visivel */
 var frustumSize;
 
 var views;
 
-var clock = new THREE.Clock();
+var clock;
 
 
 /**********************************************************************************************************************/
@@ -408,6 +409,10 @@ function onKeyDown(e) {
             sun.flick();
             break;
 
+        case 83: //S
+            checkAnimation();
+            break;
+
 		default:
 			break;
 
@@ -483,9 +488,13 @@ function moveToruses(delta){
 function animate() {
 	'use strict';
 
-    var delta = clock.getDelta(); //Get the seconds passed since the last time it was called.
+	if (paused) { //if the game is paused
 
-	render();
+	    clock.stop(); // Stops clock and sets oldTime to the current time.
+	    return; //stop animation
+    }
+
+    var delta = clock.getDelta(); // Get the seconds passed since the time oldTime was set and sets oldTime to the current time.
 
 	/*guardar posicao inicial do carro*/
 	var carX = car.inner_object.car_object.position.x;
@@ -497,6 +506,8 @@ function animate() {
     checkCollision(carX, carY, carZ, delta);
 
 	requestAnimationFrame(animate);
+
+    render();
 }
 
 /******************************************************************************************************************/
@@ -507,10 +518,15 @@ function init() {
 	'use strict';
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
+	clock = new THREE.Clock();
 
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
 	document.body.appendChild(renderer.domElement);
+
+    lighting_on = true;
+    phong_shading = true;
+    paused = false;
 
 	views = [true, false, false];
 
