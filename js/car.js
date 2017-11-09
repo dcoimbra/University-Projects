@@ -28,6 +28,9 @@ class Car {
 		//Elements are instantiated relative to the car's position
 		this.createChassis(-10, -5, 5);
 
+		this.createHeadLight(0.5, 0.5, 5.5);
+        this.createHeadLight(0.5, 0.5, -5.5);
+
 		this.createHood( -9.7, 0, 3);
 
 		this.createWindShieldSide( -4.5,  2.7,  -3.3); // left
@@ -152,6 +155,19 @@ class Car {
 	}
 
 	/*----------------------------------------------------------------------------------------------------------*/
+
+	createHeadLight(x, y, z) {
+
+        var headLight = new THREE.SpotLight( 0xffffff, 3, 30, 0.5, 0.3, 1.3);
+        this.car_object.add(headLight);
+        headLight.position.set(x, y, z);
+
+        var targetObject = new THREE.Object3D();
+        this.car_object.add(targetObject);
+
+        targetObject.position.set(x + 5, y, z);
+        headLight.target = targetObject;
+	}
 
 	createHood(x, y, z) {
 
