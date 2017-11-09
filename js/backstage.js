@@ -44,7 +44,7 @@ function createSceneElements() {
 	'use strict';
 
     //Posicionamento dos vários objetos
-    var table = new Table(0, 0, 0);
+    new Table(0, 0, 0);
 
     createBorderLine();
 
@@ -148,12 +148,12 @@ function createOrtographicCamera(x, y, z) {
                                                              1000);
     }
 
-
     scene.add(orthographicCamera);
 
     /*Camera posicionada em vista de topo */
     orthographicCamera.position.set(x, y, z);
     orthographicCamera.lookAt(scene.position);
+    new Pause(0, 0, -10, 100, 50, orthographicCamera);
 }
 
  /*-----------------------------------------------------------------------------------------------------------------*/
@@ -172,6 +172,7 @@ function createOrtographicCamera(x, y, z) {
 
      perspectiveCamera.position.set(x, y, z);
      perspectiveCamera.lookAt(scene.position);
+     new Pause(0, 0, -15, 15, 7.5, perspectiveCamera);
  }
  /*******************************************************************************************************************/
 
@@ -491,6 +492,7 @@ function animate() {
 	if (paused) { //if the game is paused
 
 	    clock.stop(); // Stops clock and sets oldTime to the current time.
+        render();
 	    return; //stop animation
     }
 
@@ -529,6 +531,7 @@ function init() {
     paused = false;
 
 	views = [true, false, false];
+
 
 	createScene();
 	createCameras();

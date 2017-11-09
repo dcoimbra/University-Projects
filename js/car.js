@@ -420,13 +420,13 @@ class Car {
 
 		followingCamera.name = "camera";
 
-
         this.car_object.add(followingCamera);
 
         followingCamera.position.set(x, y, z);
 
         followingCamera.lookAt(this.car_object.position);
 
+        new Pause(0, 0, -10, 12.5, 6.25, this.getCamera());
     }
     /*---------------------------------------------------------------------------------------------------------*/
 
