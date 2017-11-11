@@ -116,7 +116,11 @@ function toggleShading(node) {
                 new_material = new THREE.MeshLambertMaterial(parameters);
             }
 
+            new_material.flatShading = false;
+            new_material.needsUpdate = true;
+
             node.material = new_material;
+            node.geometry.normalsNeedUpdate = true;
         }
     }
 }
@@ -142,7 +146,13 @@ function toggleLighting(node) {
             /* se o material é sombreado, cria um básico com os mesmos parametros */
 
             new_material = new THREE.MeshBasicMaterial(parameters);
+
+            new_material.flatShading = false;
+
+            new_material.needsUpdate = true;
+
             node.material = new_material;
+            node.geometry.normalsNeedUpdate = true;
         }
 
         else if (node.material instanceof THREE.MeshBasicMaterial) {
