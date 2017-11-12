@@ -40,13 +40,15 @@ class Orange {
 														    shininess: 10,
 															wireframe: true,
 															opacity: 0,
-															transparent: false });
+															transparent: false,
+															map: new THREE.TextureLoader().load('resources/textures/hm2.jpg')});
 
         this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
 
         this.orange_object.userData = { speed: 5, changePos: false,
 									    specular: orange_material.specular,
-			                            shininess: orange_material.shininess };
+			                            shininess: orange_material.shininess,
+			                            map: orange_material.map};
 
         this.orange_object.position.set(x, y, z);
 
@@ -345,10 +347,12 @@ class Table {
 
 	    this.table_object = new THREE.Object3D();
 
-	    var table_material = new THREE.MeshPhongMaterial({ color: 0x007300,
+	    var table_material = new THREE.MeshPhongMaterial({ //color: 0x007300,
                                                            specular: 0x222222,
                                                            shininess: 10,
-                                                           wireframe: true});
+                                                           wireframe: true,
+			                                                map: new THREE.TextureLoader().load('resources/textures/hm1.jpg'),
+	    													normalMap: new THREE.TextureLoader().load('resources/textures/hm.jpg')});
 
 	    this.addTableTop(table_material, 0, 0, 0);
 
@@ -373,7 +377,9 @@ class Table {
 		var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
 
         tabletop_mesh.userData = { specular: tabletop_mesh.material.specular,
-                                   shininess: tabletop_mesh.material.shininess };
+                                   shininess: tabletop_mesh.material.shininess,
+        							map: tabletop_mesh.material.map,
+									normalMap: tabletop_mesh.material.normalMap};
 
 		tabletop_mesh.position.set(x, y, z);
 

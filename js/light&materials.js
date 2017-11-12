@@ -108,12 +108,22 @@ function toggleShading(node) {
 
                 parameters.specular = node.userData.specular;
                 parameters.shininess = node.userData.shininess;
+                parameters.map = node.userData.map;
+                parameters.normalMap = node.userData.normalMap;
                 new_material = new THREE.MeshPhongMaterial(parameters);
+
             }
 
             else {
 
-                new_material = new THREE.MeshLambertMaterial(parameters);
+            	if(node === Table){
+            		parameters.push(parameters.map = node.userData.map);
+					new_material = new THREE.MeshLambertMaterial(parameters);
+				}
+				else{
+					new_material = new THREE.MeshLambertMaterial(parameters);
+				}
+
             }
 
             node.material = new_material;
