@@ -116,17 +116,16 @@ function toggleShading(node) {
 
             else {
 
-            	if(node === Table){
-            		parameters.push(parameters.map = node.userData.map);
 					new_material = new THREE.MeshLambertMaterial(parameters);
-				}
-				else{
-					new_material = new THREE.MeshLambertMaterial(parameters);
-				}
+
 
             }
 
+            new_material.flatShading = false;
+            new_material.needsUpdate = true;
+
             node.material = new_material;
+            node.geometry.normalsNeedUpdate = true;
         }
     }
 }
@@ -151,8 +150,18 @@ function toggleLighting(node) {
 
             /* se o material é sombreado, cria um básico com os mesmos parametros */
 
+            if(node instanceof Table){
+				parameters.push(parameters.map = node.userData.map);
+			}
+
             new_material = new THREE.MeshBasicMaterial(parameters);
+
+            new_material.flatShading = false;
+
+            new_material.needsUpdate = true;
+
             node.material = new_material;
+            node.geometry.normalsNeedUpdate = true;
         }
 
         else if (node.material instanceof THREE.MeshBasicMaterial) {

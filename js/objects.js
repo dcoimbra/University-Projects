@@ -43,7 +43,14 @@ class Orange {
 															transparent: false,
 															map: new THREE.TextureLoader().load('resources/textures/hm2.jpg')});
 
+
         this.orange_object = new THREE.Mesh(orange_geometry, orange_material);
+
+        this.orange_object.material.flatShading = false;
+
+        this.orange_object.material.needsUpdate = true;
+
+        this.orange_object.geometry.normalsNeedUpdate = true;
 
         this.orange_object.userData = { speed: 5, changePos: false,
 									    specular: orange_material.specular,
@@ -74,6 +81,12 @@ class Orange {
 														   transparent: false });
 
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
+
+        stalk.material.flatShading = false;
+
+        stalk.material.needsUpdate = true;
+
+        stalk.geometry.normalsNeedUpdate = true;
 
         stalk.userData = { specular: stalk_material.specular,
 						   shininess: stalk_material.shininess };
@@ -218,6 +231,12 @@ class ButterPackage {
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
 
+        this.butterPackage_object.material.flatShading = false;
+
+        this.butterPackage_object.material.needsUpdate = true;
+
+        this.butterPackage_object.geometry.normalsNeedUpdate = true;
+
         this.butterPackage_object.userData = { specular: butterPackage_material.specular,
                                                shininess: butterPackage_material.shininess };
 
@@ -262,6 +281,12 @@ class BorderTorus {
                                                            wireframe: true });
 
         this.torus_object = new THREE.Mesh(torus_geometry, torus_material);
+
+        this.torus_object.material.flatShading = false;
+
+        this.torus_object.material.needsUpdate = true;
+
+        this.torus_object.geometry.normalsNeedUpdate = true;
 
         this.torus_object.userData = { speed: 0,
                                        car_collision_direction: new THREE.Vector3(0, 0, 0),
@@ -354,6 +379,9 @@ class Table {
 			                                                map: new THREE.TextureLoader().load('resources/textures/hm1.jpg'),
 	    													normalMap: new THREE.TextureLoader().load('resources/textures/hm.jpg')});
 
+        table_material.flatShading = false;
+        table_material.needsUpdate = true;
+
 	    this.addTableTop(table_material, 0, 0, 0);
 
 	    scene.add(this.table_object);
@@ -375,6 +403,8 @@ class Table {
 
 		var tabletop_geometry = new THREE.BoxGeometry(tabletop_size , 3, tabletop_size);
 		var tabletop_mesh = new THREE.Mesh(tabletop_geometry, material);
+
+		tabletop_mesh.geometry.normalsNeedUpdate = true;
 
         tabletop_mesh.userData = { specular: tabletop_mesh.material.specular,
                                    shininess: tabletop_mesh.material.shininess,

@@ -401,6 +401,10 @@ function onKeyDown(e) {
             scene.traverse(toggleShading);
             break;
 
+        case 72: //H
+            car.inner_object.flickHeadlights();
+            break;
+
         case 76: //L
             lighting_on = !lighting_on;
             scene.traverse(toggleLighting);
