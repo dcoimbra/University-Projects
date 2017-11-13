@@ -221,12 +221,15 @@ class ButterPackage {
 		*/
 
 		var butterPackage_geometry = new THREE.BoxGeometry(13, 2, 7);
-		var butterPackage_material = new THREE.MeshPhongMaterial({ color: 0x00bfff,
+		var butterPackage_material = new THREE.MeshPhongMaterial({
 																   specular: 0x00aeee,
 																   shininess: 5,
-																   wireframe: true });
+																   wireframe: true,
+															       map: new THREE.TextureLoader().load(("resources/textures/hm6.jpg"))});
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
+
+		this.butterPackage_object.name ="butterp";
 
         this.butterPackage_object.userData = { specular: butterPackage_material.specular,
                                                shininess: butterPackage_material.shininess };
@@ -265,9 +268,9 @@ class BorderTorus {
 
         'use strict';
 
-        var torus_geometry = new THREE.TorusGeometry(0.5, 0.25, 4, 8, Math.PI * 2);
-        var torus_material = new THREE.MeshPhongMaterial({ color: 0xff0000,
-                                                           specular: 0xee0000,
+        var torus_geometry = new THREE.TorusGeometry(0.75, 0.3, 4, 8, Math.PI * 2);
+        var torus_material = new THREE.MeshPhongMaterial({ color: 0x000000,
+                                                           specular: 0x111111,
                                                            shininess: 5,
                                                            wireframe: true });
 

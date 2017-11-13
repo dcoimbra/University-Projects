@@ -104,7 +104,7 @@ function toggleShading(node) {
                 opacity: node.material.opacity,
             };
 
-            if (node.name === "table" || node.name === "orange") {
+            if (node.name === "table" || node.name === "orange" || node.name === "butterp") {
 
                 parameters.map = node.userData.map;
             }
