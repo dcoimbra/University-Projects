@@ -101,31 +101,28 @@ function toggleShading(node) {
                 color: node.material.color,
                 wireframe: node.material.wireframe,
                 transparent: node.material.transparent,
-                opacity: node.material.opacity
+                opacity: node.material.opacity,
             };
+
+            if (node.name === "table" || node.name === "orange") {
+
+                parameters.map = node.userData.map;
+            }
 
             if (phong_shading) {
 
                 parameters.specular = node.userData.specular;
                 parameters.shininess = node.userData.shininess;
-                parameters.map = node.userData.map;
-                parameters.normalMap = node.userData.normalMap;
                 new_material = new THREE.MeshPhongMaterial(parameters);
 
             }
 
             else {
 
-					new_material = new THREE.MeshLambertMaterial(parameters);
-
-
+                new_material = new THREE.MeshLambertMaterial(parameters);
             }
 
-            new_material.flatShading = false;
-            new_material.needsUpdate = true;
-
             node.material = new_material;
-            node.geometry.normalsNeedUpdate = true;
         }
     }
 }
@@ -150,18 +147,9 @@ function toggleLighting(node) {
 
             /* se o material é sombreado, cria um básico com os mesmos parametros */
 
-            if(node instanceof Table){
-				parameters.push(parameters.map = node.userData.map);
-			}
-
             new_material = new THREE.MeshBasicMaterial(parameters);
 
-            new_material.flatShading = false;
-
-            new_material.needsUpdate = true;
-
             node.material = new_material;
-            node.geometry.normalsNeedUpdate = true;
         }
 
         else if (node.material instanceof THREE.MeshBasicMaterial) {

@@ -145,12 +145,6 @@ class Car {
 		// Create the mesh for the body.
 		var chassis = new THREE.Mesh(chassis_geometry, chassis_material);
 
-        chassis.material.flatShading = false;
-
-        chassis.material.needsUpdate = true;
-
-        chassis.geometry.normalsNeedUpdate = true;
-
 		chassis.name = "chassis";
 
 		chassis.userData = { specular: chassis_material.specular,
@@ -270,12 +264,6 @@ class Car {
 		// Create the mesh for the body.
 		var hood = new THREE.Mesh(hood_geometry, hood_material);
 
-        hood.material.flatShading = false;
-
-        hood.material.needsUpdate = true;
-
-        hood.geometry.normalsNeedUpdate = true;
-
 		hood.name = "hood";
 
 		hood.userData = { specular: hood_material.specular,
@@ -304,12 +292,6 @@ class Car {
                                                                     wireframe: true });
 
 		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
-
-        windshield_side.material.flatShading = false;
-
-        windshield_side.material.needsUpdate = true;
-
-        windshield_side.geometry.normalsNeedUpdate = true;
 
 		windshield_side.userData = { specular: 0xffffff,
 		                             shininess: 40};
@@ -437,13 +419,6 @@ class Car {
 
 		// Create the mesh for the body.
 		var wheel = new THREE.Mesh(wheel_geometry, wheel_material);
-
-        wheel.material.flatShading = false;
-
-
-        wheel.material.needsUpdate = true;
-
-        wheel.geometry.normalsNeedUpdate = true;
 
 		wheel.name = "wheel";
 
