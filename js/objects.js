@@ -79,12 +79,6 @@ class Orange {
 
         var stalk = new THREE.Mesh(stalk_geometry, stalk_material);
 
-        stalk.material.flatShading = false;
-
-        stalk.material.needsUpdate = true;
-
-        stalk.geometry.normalsNeedUpdate = true;
-
         stalk.userData = { specular: stalk_material.specular,
 						   shininess: stalk_material.shininess };
 
@@ -414,12 +408,6 @@ function createBorderLine() {
 													   linewidth: 3
 												   	 });
 
-	var border1 = new THREE.Line(path_geometry1, path_material);
-	var border2 = new THREE.Line(path_geometry2, path_material);
-
-	border1.userData = { toruses: [] };
-    border2.userData = { toruses: [] };
-
 	//Criacao dos pontos principais que vão constituir a curva
 	var curve1 = new THREE.CatmullRomCurve3( [
 
@@ -468,6 +456,12 @@ function createBorderLine() {
     path_geometry1.vertices = curve1.getPoints( 100 );
     path_geometry2.vertices = curve2.getPoints( 100 );
 
+    var border1 = new THREE.Line(path_geometry1, path_material);
+    var border2 = new THREE.Line(path_geometry2, path_material);
+
+    border1.userData = { toruses: [] };
+    border2.userData = { toruses: [] };
+
 	//Adicionar border1 e border2 à cena
 	scene.add(border1);
 	scene.add(border2);
@@ -503,8 +497,7 @@ function createTorusBorders(obj, line) {
 
 		border_point = line.getPointAt(i);
 
-		var torus = new Collidable(new BorderTorus(obj, border_point));
-		obj.userData.toruses.push(torus);
+        obj.userData.toruses.push(new Collidable(new BorderTorus(obj, border_point)));
 	}
 }
 

@@ -12,7 +12,7 @@ class Car {
 		this.car_object.userData = { speed: 0,
 					 			     maxSpeed: 40,
 					 			     acceleration: 20,
-					 		         movingDirection: [ false, false, false, false ] // [left, up, right, down]7
+					 		         movingDirection: [ false, false, false, false ] // [left, up, right, down]
 							   	   };
 
 		this.car_object.position.set(x, y, z);

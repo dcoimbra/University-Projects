@@ -38,63 +38,30 @@ var clock;
 /**********************************************************************************************************************/
 
 /******************************************Criacao da cena************************************************************/
-function createScene() {
-
-	'use strict';
-
-    scene = new THREE.Scene();
-
-	createSceneElements();
-}
-
-/*------------------------------------------------------------------------------------------------------------------*/
-
- function createLivesScene() {
-
-     'use strict';
-
-     livesScene = new THREE.Scene();
-
-     var life = new Car(0, 0, 0);
-     livesScene.add(life.car_object);
- }
-/*------------------------------------------------------------------------------------------------------------------*/
-
 
 function createSceneElements() {
 	'use strict';
+
+    var orange_height = 5.5;
+    var butterPackage_height = 2.5;
 
     //Posicionamento dos vários objetos
     table = new Table(0, 0, 0);
 
     createBorderLine();
 
-    var orange_height = 5.5;
+    oranges.push(new Collidable(new Orange(-40, orange_height, 6)));
+    oranges.push(new Collidable(new Orange(15, orange_height, -15)));
+    oranges.push(new Collidable(new Orange(35, orange_height, 5)));
 
-    var orange1 = new Collidable(new Orange(-40, orange_height, 6));
-    var orange2 = new Collidable(new Orange(15, orange_height, -15));
-    var orange3 = new Collidable(new Orange(35, orange_height, 5));
+    oranges[1].inner_object.setOrangeSpeed(10);
+    oranges[2].inner_object.setOrangeSpeed(15);
 
-    oranges.push(orange1);
-    oranges.push(orange2);
-    oranges.push(orange3);
-
-    orange2.inner_object.setOrangeSpeed(10);
-    orange3.inner_object.setOrangeSpeed(15);
-
-    var butterPackage_height = 2.5;
-
-    var butterPackage1 = new Collidable(new ButterPackage(17, butterPackage_height, 10));
-    var butterPackage2 = new Collidable(new ButterPackage(47, butterPackage_height, 16));
-    var butterPackage3 = new Collidable(new ButterPackage(-39, butterPackage_height, -48.5));
-    var butterPackage4 = new Collidable(new ButterPackage(-33, butterPackage_height, 4.7));
-    var butterPackage5 = new Collidable(new ButterPackage(36, butterPackage_height, -35));
-
-    butter_packages.push(butterPackage1);
-    butter_packages.push(butterPackage2);
-    butter_packages.push(butterPackage3);
-    butter_packages.push(butterPackage4);
-    butter_packages.push(butterPackage5);
+    butter_packages.push(new Collidable(new ButterPackage(17, butterPackage_height, 10)));
+    butter_packages.push(new Collidable(new ButterPackage(47, butterPackage_height, 16)));
+    butter_packages.push(new Collidable(new ButterPackage(-39, butterPackage_height, -48.5)));
+    butter_packages.push(new Collidable(new ButterPackage(-33, butterPackage_height, 4.7)));
+    butter_packages.push(new Collidable(new ButterPackage(36, butterPackage_height, -35)));
 
     butter_packages[0].inner_object.butterPackage_object.rotateY( 5 * Math.PI / 3 );
     butter_packages[1].inner_object.butterPackage_object.rotateY( 6.2 * Math.PI / 3 );
@@ -113,19 +80,12 @@ function createLights() {
 
      sun = new Sun(0xffffff, 1);
 
-     var candle1 = new Candle(5, 8, -5);
-     var candle2 = new Candle(36, 8, -15);
-     var candle3 = new Candle(10, 8, 35);
-     var candle4 = new Candle(-35, 8, 44);
-     var candle5 = new Candle(-35, 8, -10);
-     var candle6 = new Candle(-25, 8, -35);
-
-     candles.push(candle1);
-     candles.push(candle2);
-     candles.push(candle3);
-     candles.push(candle4);
-     candles.push(candle5);
-     candles.push(candle6);
+     candles.push(new Candle(5, 8, -5));
+     candles.push(new Candle(36, 8, -15));
+     candles.push(new Candle(10, 8, 35));
+     candles.push(new Candle(-35, 8, 44));
+     candles.push(new Candle(-35, 8, -10));
+     candles.push(new Candle(-25, 8, -35));
  }
 /********************************************************************************************************************/
 
@@ -311,7 +271,6 @@ function onResize() {
 	 var car_position;
 	 var otherTorus_position;
 
-
 	 /* colisão entre laranjas e carro */
 	carOrangesCollision();
 
@@ -378,8 +337,8 @@ function onResize() {
 			 car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
 
 			 var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
-				 car.inner_object.car_object.position.y,
-				 car.inner_object.car_object.position.z);
+				                                    car.inner_object.car_object.position.y,
+				                                    car.inner_object.car_object.position.z);
 
 			 car.inner_object.car_object.lookAt(initial_vector);
 
@@ -607,16 +566,18 @@ function init() {
         window.addEventListener('keydown', onKeyDown);
         window.addEventListener('keyup', onKeyUp);
 
+        scene = new THREE.Scene();
+        livesScene = new THREE.Scene();
+
         firstTime = false;
     }
 
     paused = false;
     lives = 5;
 
-	createScene();
-	createLivesScene();
-	createCameras();
-	createLights();
+	createSceneElements();
+    createCameras();
+    createLights();
 
     orangeInterval = setInterval(updateOrangeSpeed, 5000);
 }
