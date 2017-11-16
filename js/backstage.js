@@ -15,6 +15,7 @@ var car;
 var oranges = [];
 var butter_packages = [];
 var border_lines = [];
+var table;
 
 /* Lighting */
 var lighting_on;
@@ -23,6 +24,8 @@ var phong_shading;
 /* Game management */
 var paused;  //true if the game is paused
 var lives;
+var firstTime = true;
+var orangeInterval;
 
 /* tamanho da area visivel */
 var frustumSize;
@@ -39,7 +42,7 @@ function createScene() {
 
 	'use strict';
 
-	scene = new THREE.Scene();
+    scene = new THREE.Scene();
 
 	createSceneElements();
 }
@@ -62,7 +65,7 @@ function createSceneElements() {
 	'use strict';
 
     //Posicionamento dos vários objetos
-    new Table(0, 0, 0);
+    table = new Table(0, 0, 0);
 
     createBorderLine();
 
@@ -379,6 +382,8 @@ function onResize() {
 				 car.inner_object.car_object.position.z);
 
 			 car.inner_object.car_object.lookAt(initial_vector);
+
+			 lives--;
 		 }
 	 }
  }
@@ -467,6 +472,10 @@ function onKeyDown(e) {
 
         case 78: //N
             sun.flick();
+            break;
+
+        case 82: //R
+            restart();
             break;
 
         case 83: //S
@@ -578,34 +587,38 @@ function init() {
 
 	'use strict';
 
-	renderer = new THREE.WebGLRenderer({ antialias: true });
-	clock = new THREE.Clock();
+	if (firstTime) {
 
-	renderer.autoClear = false;
-	renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        clock = new THREE.Clock();
 
-	document.body.appendChild(renderer.domElement);
+        renderer.autoClear = false;
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
-    lighting_on = true;
-    phong_shading = true;
+        document.body.appendChild(renderer.domElement);
+
+        lighting_on = true;
+        phong_shading = true;
+
+        views = [true, false, false];
+
+        //Adicionados eventos, quando resize, keydown e keyup
+        window.addEventListener('resize', onResize);
+        window.addEventListener('keydown', onKeyDown);
+        window.addEventListener('keyup', onKeyUp);
+
+        firstTime = false;
+    }
 
     paused = false;
     lives = 5;
-
-	views = [true, false, false];
-
 
 	createScene();
 	createLivesScene();
 	createCameras();
 	createLights();
 
-	//Adicionados eventos, quando resize, keydown e keyup
-	window.addEventListener('resize', onResize);
-	window.addEventListener('keydown', onKeyDown);
-	window.addEventListener('keyup', onKeyUp);
-
-    setInterval(updateOrangeSpeed, 5000);
+    orangeInterval = setInterval(updateOrangeSpeed, 5000);
 }
 
 /********************************************************************************************************************/

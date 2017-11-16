@@ -64,3 +64,26 @@ class Pause {
         sprite.visible = false;
     }
 }
+
+function restart() {
+
+    var to_remove = [];
+
+    clock.start();
+    clearInterval(orangeInterval);
+
+    scene.traverse ( function( node ) {
+        if (node instanceof THREE.Mesh || node instanceof THREE.PointLightHelper || node instanceof THREE.Line) {
+            to_remove.push( node );
+        }
+    } );
+
+    scene.remove(car.inner_object.car_object);
+    scene.remove(table.table_object);
+
+    for ( var i = 0; i < to_remove.length; i++ ) {
+        scene.remove( to_remove[i] );
+    }
+
+    init();
+}
