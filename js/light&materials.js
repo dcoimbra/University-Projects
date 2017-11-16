@@ -147,7 +147,14 @@ function toggleLighting(node) {
 
             /* se o material é sombreado, cria um básico com os mesmos parametros */
 
-            new_material = new THREE.MeshBasicMaterial(parameters);
+            if (node.name === "table"){
+            	parameters.color = 0x00ff00;
+				new_material = new THREE.MeshBasicMaterial(parameters);
+			}
+
+			else{
+            	new_material = new THREE.MeshBasicMaterial(parameters);
+			}
 
             node.material = new_material;
         }
@@ -156,7 +163,14 @@ function toggleLighting(node) {
 
             /*se o material é básico, determina qual o sombreado que deve criar */
 
-            toggleShading(node);
+			if (node.name === "table"){
+				node.material.color = 0xffffff;
+				toggleShading(node);
+			}
+			else{
+				toggleShading(node);
+			}
+
         }
     }
 }
