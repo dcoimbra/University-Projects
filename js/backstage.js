@@ -1,8 +1,9 @@
  /*********************************************Variaveis globais*****************************************************/
-var scene, renderer;
+var scene, livesScene, renderer;
 
 //Câmeras
 var orthographicCamera, perspectiveCamera;
+var livesCamera;
 
 //Light
 var sun;
@@ -38,7 +39,17 @@ function createScene() {
 
 	createSceneElements();
 }
+
 /*------------------------------------------------------------------------------------------------------------------*/
+
+ function createLivesScene() {
+
+     'use strict';
+
+     livesScene = new THREE.Scene();
+ }
+/*------------------------------------------------------------------------------------------------------------------*/
+
 
 function createSceneElements() {
 	'use strict';
@@ -136,6 +147,13 @@ function createOrtographicCamera(x, y, z) {
                                                             1,
                                                             1000);
 
+        livesCamera = new THREE.OrthographicCamera(- frustumSize * aspect,
+                                                    frustumSize * aspect,
+                                                    frustumSize,
+                                                    -  frustumSize,
+                                                   1,
+                                                   1000);
+
     }
 
     else {
@@ -146,13 +164,25 @@ function createOrtographicCamera(x, y, z) {
                                                            - frustumSize / aspect,
                                                              1,
                                                              1000);
+
+        livesCamera = new THREE.OrthographicCamera( - frustumSize,
+                                                      frustumSize,
+                                                     frustumSize / aspect,
+                                                   - frustumSize / aspect,
+                                                         1,
+                                                     1000);
     }
 
     scene.add(orthographicCamera);
+    livesScene.add(livesCamera);
 
     /*Camera posicionada em vista de topo */
     orthographicCamera.position.set(x, y, z);
     orthographicCamera.lookAt(scene.position);
+
+    livesCamera.position.set(x, y, z);
+    livesScene.lookAt(scene.position);
+
     new Pause(0, 0, -10, 100, 50, orthographicCamera);
 }
 
@@ -185,7 +215,14 @@ function render() {
 	var perspective = 1;
 	var moving = 2;
 
-	if (views[orthographic]) {
+    renderer.setScissorTest(true);
+
+    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+    renderer.setScissor(0, 0, window.innerWidth, window.innerHeight);
+
+    renderer.clear();
+
+    if (views[orthographic]) {
 
 	    renderer.render(scene, orthographicCamera);
     }
@@ -199,6 +236,15 @@ function render() {
 
 		renderer.render(scene, car.inner_object.getCamera());
 	}
+
+    renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight / 7);
+    renderer.setScissor(0, 0, window.innerWidth / 2, window.innerHeight / 7);
+
+    renderer.clear();
+
+    renderer.render(livesScene, livesCamera);
+
+    renderer.setScissorTest(false);
 }
 
 /*****************************************************************************************************************/
@@ -526,6 +572,7 @@ function init() {
 	renderer = new THREE.WebGLRenderer({ antialias: true });
 	clock = new THREE.Clock();
 
+	renderer.autoClear = false;
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
 	document.body.appendChild(renderer.domElement);
@@ -538,6 +585,7 @@ function init() {
 
 
 	createScene();
+	createLivesScene();
 	createCameras();
 	createLights();
 
