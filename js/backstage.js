@@ -7,32 +7,34 @@ var livesCamera;
 
 //Light
 var sun;
-var candles = [];
+var candles;
 
 //Objetos
 
 var car;
-var oranges = [];
-var butter_packages = [];
-var border_lines = [];
-var table;
+var oranges;
+var butter_packages;
+var border_lines;
 
-/* Lighting */
+// Lighting flags
 var lighting_on;
 var phong_shading;
 
-/* Game management */
+// Game management
 var paused;  //true if the game is paused
+var gameOver;
 var lives;
 var firstTime = true;
-var orangeInterval;
 
-/* tamanho da area visivel */
+// tamanho da area visivel
 var frustumSize;
 
+// perspetivas
 var views;
 
+// Time
 var clock;
+var orangeInterval;
 
 
 /**********************************************************************************************************************/
@@ -46,7 +48,7 @@ function createSceneElements() {
     var butterPackage_height = 2.5;
 
     //Posicionamento dos vários objetos
-    table = new Table(0, 0, 0);
+    new Table(0, 0, 0);
 
     createBorderLine();
 
@@ -153,9 +155,9 @@ function createOrtographicCamera(x, y, z) {
     orthographicCamera.lookAt(scene.position);
 
     livesCamera.position.set(x, y, z);
-    livesScene.lookAt(scene.position);
+    livesScene.lookAt(livesScene.position);
 
-    new Pause(0, 0, -10, 100, 50, orthographicCamera);
+    new Messages(-10, 100, 50, orthographicCamera);
 }
 
  /*-----------------------------------------------------------------------------------------------------------------*/
@@ -174,7 +176,7 @@ function createOrtographicCamera(x, y, z) {
 
      perspectiveCamera.position.set(x, y, z);
      perspectiveCamera.lookAt(scene.position);
-     new Pause(0, 0, -15, 15, 7.5, perspectiveCamera);
+     new Messages(-15, 15, 7.5, perspectiveCamera);
  }
  /*******************************************************************************************************************/
 
@@ -434,11 +436,19 @@ function onKeyDown(e) {
             break;
 
         case 82: //R
-            restart();
+
+            if (gameOver) {
+
+                restart();
+            }
             break;
 
         case 83: //S
-            checkAnimation();
+
+            if (!gameOver) {
+
+            checkPause();
+        }
             break;
 
 		default:
@@ -516,10 +526,16 @@ function moveToruses(delta){
 function animate() {
 	'use strict';
 
+	if (lives === 0) {
+
+	    gameOver = true;
+	    endGame();
+	    return;
+    }
+
 	if (paused) { //if the game is paused
 
 	    clock.stop(); // Stops clock and sets oldTime to the current time.
-        render();
 	    return; //stop animation
     }
 
@@ -572,7 +588,13 @@ function init() {
         firstTime = false;
     }
 
+    candles = [];
+    oranges = [];
+    butter_packages = [];
+    border_lines = [];
+
     paused = false;
+	gameOver = false;
     lives = 5;
 
 	createSceneElements();

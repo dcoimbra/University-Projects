@@ -177,8 +177,6 @@ class Car {
 		            depth: 6
 		*/
 
-
-
 		var hood_material = new THREE.MeshPhongMaterial({ color: 0xff0000,
                                                           specular: 0xff0000,
                                                           shininess: 40,
@@ -443,7 +441,7 @@ class Car {
 
         followingCamera.lookAt(this.car_object.position);
 
-        new Pause(0, 0, -10, 12.5, 6.25, this.getCamera());
+        new Messages(-10, 12.5, 6.25, this.getCamera());
     }
     /*---------------------------------------------------------------------------------------------------------*/
 
