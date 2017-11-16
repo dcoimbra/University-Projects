@@ -16,9 +16,13 @@ var oranges = [];
 var butter_packages = [];
 var border_lines = [];
 
+/* Lighting */
 var lighting_on;
 var phong_shading;
+
+/* Game management */
 var paused;  //true if the game is paused
+var lives;
 
 /* tamanho da area visivel */
 var frustumSize;
@@ -47,6 +51,9 @@ function createScene() {
      'use strict';
 
      livesScene = new THREE.Scene();
+
+     var life = new Car(0, 0, 0);
+     livesScene.add(life.car_object);
  }
 /*------------------------------------------------------------------------------------------------------------------*/
 
@@ -92,6 +99,8 @@ function createSceneElements() {
     butter_packages[4].inner_object.butterPackage_object.rotateY( Math.PI / 2 );
 
     car = new Collidable(new Car(0, 2.8, 0));
+    scene.add(car.inner_object.car_object);
+
     car.inner_object.car_object.translateZ(5);
 }
 /*------------------------------------------------------------------------------------------------------------------*/
@@ -133,6 +142,7 @@ function createOrtographicCamera(x, y, z) {
 	'use strict';
 
     var aspect = window.innerWidth / window.innerHeight;
+    var livesAspect = (window.innerWidth / 2) / (window.innerHeight/7);
 
     frustumSize = 60;
 
@@ -147,13 +157,12 @@ function createOrtographicCamera(x, y, z) {
                                                             1,
                                                             1000);
 
-        livesCamera = new THREE.OrthographicCamera(- frustumSize * aspect,
-                                                    frustumSize * aspect,
-                                                    frustumSize,
-                                                    -  frustumSize,
-                                                   1,
-                                                   1000);
-
+        livesCamera = new THREE.OrthographicCamera(- frustumSize * livesAspect,
+                                                     frustumSize * livesAspect,
+                                                     frustumSize,
+                                                   - frustumSize,
+                                                     1,
+                                                     1000);
     }
 
     else {
@@ -167,8 +176,8 @@ function createOrtographicCamera(x, y, z) {
 
         livesCamera = new THREE.OrthographicCamera( - frustumSize,
                                                       frustumSize,
-                                                     frustumSize / aspect,
-                                                   - frustumSize / aspect,
+                                                     frustumSize / livesAspect,
+                                                   - frustumSize / livesAspect,
                                                          1,
                                                      1000);
     }
@@ -579,7 +588,9 @@ function init() {
 
     lighting_on = true;
     phong_shading = true;
+
     paused = false;
+    lives = 5;
 
 	views = [true, false, false];
 

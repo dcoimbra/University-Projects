@@ -12,7 +12,7 @@ class Car {
 		this.car_object.userData = { speed: 0,
 					 			     maxSpeed: 40,
 					 			     acceleration: 20,
-					 		         movingDirection: [ false, false, false, false ] // [left, up, right, down]
+					 		         movingDirection: [ false, false, false, false ] // [left, up, right, down]7
 							   	   };
 
 		this.car_object.position.set(x, y, z);
@@ -44,8 +44,6 @@ class Car {
         this.createFollowingCamera(-80, 80, 0);
 
         this.makeBounding();
-
-		scene.add(this.car_object);
 
         this.car_object.scale.multiplyScalar(0.2);
         this.car_object.getObjectByName("camera").scale.divideScalar(0.2);
@@ -467,6 +465,18 @@ class Car {
 		'use strict';
 
 		var distance = this.getDisplacement(delta);
+
+
+        var car_Xposition = this.car_object.position.x;
+        var car_Zposition = this.car_object.position.z;
+
+        //Se a laranja ultrapassar os limites da table
+        if (car_Xposition > 55 || car_Xposition < -55 ||
+            car_Zposition > 55 || car_Zposition < -55) {
+
+        	lives--;
+        	this.car_object.position.set(0, 2.8, 0);
+        }
 
 		if (this.car_object.userData.movingDirection[1]) { // Up arrow
 
