@@ -70,6 +70,7 @@ function restart() {
     var to_remove = [];
 
 
+    /* Remoção dos objectos da cena */
     scene.traverse ( function( node ) {
         if (node instanceof THREE.Object3D) {
             to_remove.push( node );
@@ -80,9 +81,19 @@ function restart() {
         scene.remove( to_remove[i] );
     }
 
+
+    /* Esvaziamento dos arrays.
+        Ao fazer length = 0, o garbage collector
+        automaticamente apaga o conteúdo do array
+     */
+    candles.length = 0;
     oranges.length = 0;
+    butter_packages.length = 0;
+    border_lines[0].length = 0;
+    border_lines[1].length = 0;
     border_lines.length = 0;
 
+    /* reiniciar tempo */
     clock.start();
     clearInterval(orangeInterval);
 
