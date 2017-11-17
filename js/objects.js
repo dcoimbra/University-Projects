@@ -134,7 +134,7 @@ class Orange {
 			if (this.orange_object.userData.changePos){
 
 				this.setOrangeTransparency();
-				setTimeout(this.changingPos, 5000, this.orange_object);
+				orangeTimeout = new Timer(this.changingPos, 5000, this.orange_object);
 				this.orange_object.userData.changePos = false;
 			}
 		}
@@ -179,6 +179,19 @@ class Orange {
 		var stalk = object.getObjectByName('stalk');
 		stalk.material.transparent = false;
 	}
+}
+
+/*--------------------------------------------------------------------------------------------------------------*/
+
+function checkOrangeInterval() {
+
+    var time = intervalClock.getElapsedTime();
+
+    if (time >= 5) {
+
+        updateOrangeSpeed();
+        intervalClock.start();
+    }
 }
 
 /*--------------------------------------------------------*/

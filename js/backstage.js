@@ -33,8 +33,10 @@ var frustumSize;
 var views;
 
 // Time
-var clock;
-var orangeInterval;
+var globalClock;
+var intervalClock;
+
+var orangeTimeout;
 
 
 /**********************************************************************************************************************/
@@ -445,10 +447,7 @@ function onKeyDown(e) {
 
         case 83: //S
 
-            if (!gameOver) {
-
-            checkPause();
-        }
+            togglePause();
             break;
 
 		default:
@@ -526,27 +525,30 @@ function moveToruses(delta){
 function animate() {
 	'use strict';
 
+	var stopped = paused || gameOver;
+
+	/* if the lives ever reach 0, the game is over */
 	if (lives === 0) {
 
 	    gameOver = true;
 	    endGame();
-	    return;
     }
 
-	if (paused) { //if the game is paused
+	checkPauseMessage();
+	checkOverMessage(); // precisamos disto para mudar de cameras durante pause ou game over
+	checkOrangeInterval();  // verificar se já é altura de aumentar a velocidade das laranjas
 
-	    clock.stop(); // Stops clock and sets oldTime to the current time.
-	    return; //stop animation
-    }
-
-    var delta = clock.getDelta(); // Get the seconds passed since the time oldTime was set and sets oldTime to the current time.
+    var delta = globalClock.getDelta(); // Get the seconds passed since the time oldTime was set and sets oldTime to the current time.
 
 	/*guardar posicao inicial do carro*/
 	var carX = car.inner_object.car_object.position.x;
 	var carY = car.inner_object.car_object.position.y;
 	var carZ = car.inner_object.car_object.position.z;
 
-	update(delta);
+	if (!stopped) { // para parar as rotações
+
+        update(delta);
+    }
 
     checkCollision(carX, carY, carZ, delta);
 
@@ -562,10 +564,15 @@ function init() {
 
 	'use strict';
 
+	/* da primeira vez, são criados o renderer e as cenas.
+	    a partir daí, só é necessário criar os objectos.
+	 */
+
 	if (firstTime) {
 
         renderer = new THREE.WebGLRenderer({antialias: true});
-        clock = new THREE.Clock();
+        globalClock = new THREE.Clock();
+        intervalClock = new THREE.Clock();
 
         renderer.autoClear = false;
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -600,8 +607,6 @@ function init() {
 	createSceneElements();
     createCameras();
     createLights();
-
-    orangeInterval = setInterval(updateOrangeSpeed, 5000);
 }
 
 /********************************************************************************************************************/
