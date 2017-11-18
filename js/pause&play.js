@@ -70,6 +70,27 @@ class Timer {
 }
 /*************************************************************************************************/
 
+function killCheck(posX, posY, posZ) {
+
+    car.inner_object.setSpeed(0);
+
+    if (lives > 0) { //se o carro ainda tiver vidas, voltar à origem
+
+        car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
+
+        var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
+            car.inner_object.car_object.position.y,
+            car.inner_object.car_object.position.z);
+
+        car.inner_object.car_object.lookAt(initial_vector);
+    }
+
+    else { //se o carro não tiver mais vidas, colocá-lo na posição anterior
+
+        car.inner_object.car_object.position.set(posX, posY, posZ);
+    }
+}
+
 /* recebe o nome de uma mensagem e mostra-a na camara ativa */
 function showMessage(name) {
 
@@ -100,7 +121,6 @@ function showMessage(name) {
 }
 
 /*************************************************************************************************/
-
 
 function togglePause() {
 

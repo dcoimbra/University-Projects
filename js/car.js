@@ -464,18 +464,6 @@ class Car {
 
 		var distance = this.getDisplacement(delta);
 
-
-        var car_Xposition = this.car_object.position.x;
-        var car_Zposition = this.car_object.position.z;
-
-        //Se a laranja ultrapassar os limites da table
-        if (car_Xposition > 55 || car_Xposition < -55 ||
-            car_Zposition > 55 || car_Zposition < -55) {
-
-        	lives--;
-        	this.car_object.position.set(0, 2.8, 5);
-        }
-
 		if (this.car_object.userData.movingDirection[1]) { // Up arrow
 
 			this.moveForward(distance, delta);

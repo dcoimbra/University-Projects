@@ -275,8 +275,11 @@ function onResize() {
 	 var car_position;
 	 var otherTorus_position;
 
+	 /* colisão entre carro e mesa */
+	 carTableCollision(posX, posY, posZ);
+
 	 /* colisão entre laranjas e carro */
-	carOrangesCollision();
+	carOrangesCollision(posX, posY, posZ);
 
 	 /* colisão entre manteigas e carro */
 	carButterPackagesCollision(posX, posY, posZ);
@@ -327,9 +330,24 @@ function onResize() {
 		 }
 	 }
  }
+ /*------------------------------------------------------------------------------------------------------------------*/
+function carTableCollision(posX, posY, posZ) {
+
+    var car_Xposition = car.inner_object.car_object.position.x;
+    var car_Zposition = car.inner_object.car_object.position.z;
+
+    //Se a laranja ultrapassar os limites da table
+    if (car_Xposition > 55 || car_Xposition < -55 ||
+        car_Zposition > 55 || car_Zposition < -55) {
+
+        lives--;
+
+        killCheck(posX, posY, posZ); //verificar se o carro ficou sem vidas
+    }
+}
 
  /*------------------------------------------------------------------------------------------------------------------*/
- function carOrangesCollision(){
+ function carOrangesCollision(posX, posY, posZ){
 	'use strict';
 
  	for (var i = 0; i < oranges.length; i++) {
@@ -337,16 +355,9 @@ function onResize() {
 		 /* se há colisão, colocar o carro na posicao inicial */
 		 if (oranges[i].collisionSphere(car)) {
 
-			 car.inner_object.setSpeed(0);
-			 car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
-
-			 var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
-				                                    car.inner_object.car_object.position.y,
-				                                    car.inner_object.car_object.position.z);
-
-			 car.inner_object.car_object.lookAt(initial_vector);
-
 			 lives--;
+
+			 killCheck(posX, posY, posZ); //verificar se o carro ficou sem vidas
 		 }
 	 }
  }
@@ -579,11 +590,6 @@ function init() {
 
         document.body.appendChild(renderer.domElement);
 
-        lighting_on = true;
-        phong_shading = true;
-
-        views = [true, false, false];
-
         //Adicionados eventos, quando resize, keydown e keyup
         window.addEventListener('resize', onResize);
         window.addEventListener('keydown', onKeyDown);
@@ -599,6 +605,11 @@ function init() {
     oranges = [];
     butter_packages = [];
     border_lines = [];
+
+    lighting_on = true;
+    phong_shading = true;
+
+    views = [true, false, false];
 
     paused = false;
 	gameOver = false;
