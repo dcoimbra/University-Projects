@@ -97,8 +97,6 @@ function showMessage(name) {
         perspectiveCamera.getObjectByName(name).visible = false;
         car.inner_object.getCamera().getObjectByName(name).visible = true;
     }
-
-    render();
 }
 
 /*************************************************************************************************/

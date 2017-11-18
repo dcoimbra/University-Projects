@@ -473,7 +473,11 @@ class Car {
             car_Zposition > 55 || car_Zposition < -55) {
 
         	lives--;
-        	this.car_object.position.set(0, 2.8, 5);
+
+        	if (lives > 0) {
+
+                this.car_object.position.set(0, 2.8, 5);
+            }
         }
 
 		if (this.car_object.userData.movingDirection[1]) { // Up arrow
