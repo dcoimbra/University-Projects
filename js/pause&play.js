@@ -52,14 +52,14 @@ class Timer {
 
     pause() {
 
-        clearTimeout(this.timerId);
+        this.clear();
         this.remaining -= new Date() - this.start;
     };
 
     resume() {
 
         this.start = new Date();
-        clearTimeout(this.timerId);
+        this.clear();
         this.timerId = setTimeout(this.callback, this.remaining, this.argument);
     };
 
@@ -88,6 +88,17 @@ function killCheck(posX, posY, posZ) {
     else { //se o carro não tiver mais vidas, colocá-lo na posição anterior
 
         car.inner_object.car_object.position.set(posX, posY, posZ);
+    }
+}
+
+/*************************************************************************************************/
+function removeLife() {
+
+    if (lives_objects.length > 0) {
+
+        var life = lives_objects.pop();
+
+        livesScene.remove(life.car_object);
     }
 }
 

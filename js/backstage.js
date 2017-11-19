@@ -16,6 +16,8 @@ var oranges;
 var butter_packages;
 var border_lines;
 
+var lives_objects;
+
 // Lighting flags
 var lighting_on;
 var phong_shading;
@@ -78,6 +80,25 @@ function createSceneElements() {
     car.inner_object.car_object.translateZ(5);
 }
 /*------------------------------------------------------------------------------------------------------------------*/
+
+function createLives() {
+
+    for (var i = 0; i < 5; i++) {
+
+        var life = new Car(-95 + (i * 20), 53, 0);
+
+        life.car_object.scale.multiplyScalar(3.5);
+
+        livesScene.add(life.car_object);
+
+        lives_objects.push(life);
+    }
+
+    livesScene.traverse(toggleLighting);
+}
+
+/*------------------------------------------------------------------------------------------------------------------*/
+
 function createLights() {
 
     'use strict';
@@ -92,7 +113,7 @@ function createLights() {
      candles.push(new Candle(-25, 8, -35));
  }
 /********************************************************************************************************************/
-
+ 
 /********************************************Criacao das cameras******************************************************/
 function createCameras() {
 
@@ -109,7 +130,6 @@ function createOrtographicCamera(x, y, z) {
 	'use strict';
 
     var aspect = window.innerWidth / window.innerHeight;
-    var livesAspect = (window.innerWidth / 2) / (window.innerHeight/7);
 
     frustumSize = 60;
 
@@ -117,19 +137,12 @@ function createOrtographicCamera(x, y, z) {
 
     if (window.innerWidth > window.innerHeight) {
 
-        orthographicCamera = new THREE.OrthographicCamera(- frustumSize * aspect,
-                                                            frustumSize * aspect,
-                                                            frustumSize,
-                                                         -  frustumSize,
-                                                            1,
-                                                            1000);
-
-        livesCamera = new THREE.OrthographicCamera(- frustumSize * livesAspect,
-                                                     frustumSize * livesAspect,
-                                                     frustumSize,
-                                                   - frustumSize,
-                                                     1,
-                                                     1000);
+        orthographicCamera = new THREE.OrthographicCamera( - frustumSize * aspect,
+                                                             frustumSize * aspect,
+                                                             frustumSize,
+                                                           - frustumSize,
+                                                             1,
+                                                             1000);
     }
 
     else {
@@ -140,15 +153,9 @@ function createOrtographicCamera(x, y, z) {
                                                            - frustumSize / aspect,
                                                              1,
                                                              1000);
-
-        livesCamera = new THREE.OrthographicCamera( - frustumSize,
-                                                      frustumSize,
-                                                     frustumSize / livesAspect,
-                                                   - frustumSize / livesAspect,
-                                                         1,
-                                                     1000);
     }
 
+    livesCamera = orthographicCamera.clone();
     scene.add(orthographicCamera);
     livesScene.add(livesCamera);
 
@@ -156,7 +163,7 @@ function createOrtographicCamera(x, y, z) {
     orthographicCamera.position.set(x, y, z);
     orthographicCamera.lookAt(scene.position);
 
-    livesCamera.position.set(x, y, z);
+    livesCamera.position.set(0, 0, 50);
     livesScene.lookAt(livesScene.position);
 
     new Messages(-10, 100, 50, orthographicCamera);
@@ -191,11 +198,6 @@ function render() {
 	var perspective = 1;
 	var moving = 2;
 
-    renderer.setScissorTest(true);
-
-    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
-    renderer.setScissor(0, 0, window.innerWidth, window.innerHeight);
-
     renderer.clear();
 
     if (views[orthographic]) {
@@ -213,14 +215,9 @@ function render() {
 		renderer.render(scene, car.inner_object.getCamera());
 	}
 
-    renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight / 7);
-    renderer.setScissor(0, 0, window.innerWidth / 2, window.innerHeight / 7);
-
-    renderer.clear();
+    renderer.clearDepth();
 
     renderer.render(livesScene, livesCamera);
-
-    renderer.setScissorTest(false);
 }
 
 /*****************************************************************************************************************/
@@ -236,20 +233,8 @@ function onResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    if (window.innerWidth > window.innerHeight) {
-
-        orthographicCamera.left = -frustumSize * aspect;
-        orthographicCamera.right = frustumSize * aspect;
-        orthographicCamera.top = frustumSize;
-        orthographicCamera.bottom = -frustumSize;
-    }
-
-    else {
-        orthographicCamera.left = -frustumSize;
-        orthographicCamera.right = frustumSize;
-        orthographicCamera.top = frustumSize / aspect;
-        orthographicCamera.bottom = -frustumSize / aspect;
-    }
+    resizeOrtho(orthographicCamera, aspect);
+    resizeOrtho(livesCamera, aspect);
 
     perspectiveCamera.aspect = aspect;
     car.inner_object.getCamera().aspect = aspect;
@@ -260,6 +245,24 @@ function onResize() {
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
+
+function resizeOrtho(camera, aspect) {
+
+    if (window.innerWidth > window.innerHeight) {
+
+        camera.left = -frustumSize * aspect;
+        camera.right = frustumSize * aspect;
+        camera.top = frustumSize;
+        camera.bottom = -frustumSize;
+    }
+
+    else {
+        camera.left = -frustumSize;
+        camera.right = frustumSize;
+        camera.top = frustumSize / aspect;
+        camera.bottom = -frustumSize / aspect;
+    }
+}
 
 /*************************************Verificacao de colisoes********************************************************/
 
@@ -341,6 +344,7 @@ function carTableCollision(posX, posY, posZ) {
         car_Zposition > 55 || car_Zposition < -55) {
 
         lives--;
+        removeLife();
 
         killCheck(posX, posY, posZ); //verificar se o carro ficou sem vidas
     }
@@ -355,7 +359,8 @@ function carTableCollision(posX, posY, posZ) {
 		 /* se há colisão, colocar o carro na posicao inicial */
 		 if (oranges[i].collisionSphere(car)) {
 
-			 lives--;
+             lives--;
+			 removeLife();
 
 			 killCheck(posX, posY, posZ); //verificar se o carro ficou sem vidas
 		 }
@@ -419,6 +424,13 @@ function onKeyDown(e) {
         case 65: //A
 
             scene.traverse(function (node) {
+
+                if (node instanceof THREE.Mesh) {
+                    node.material.wireframe = !node.material.wireframe;
+                }
+            });
+
+            livesScene.traverse(function (node) {
 
                 if (node instanceof THREE.Mesh) {
                     node.material.wireframe = !node.material.wireframe;
@@ -605,6 +617,7 @@ function init() {
     oranges = [];
     butter_packages = [];
     border_lines = [];
+    lives_objects = [];
 
     lighting_on = true;
     phong_shading = true;
@@ -616,6 +629,7 @@ function init() {
     lives = 5;
 
 	createSceneElements();
+	createLives();
     createCameras();
     createLights();
 }
