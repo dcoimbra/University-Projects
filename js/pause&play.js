@@ -1,9 +1,8 @@
 /*************************************************************************************************/
-/* Esta classe cria duas mensagens: pause e game over.
- * As mensagens são adicionadas à câmara. */
+/* Esta classe cria duas mensagens: pause e game over. */
+// As mensagens fazem overlay por cima da cena principal.
 class Messages {
 
-                /* altura, escala, camara */
     constructor(width, height) {
 
         'use strict';

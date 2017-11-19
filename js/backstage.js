@@ -199,7 +199,8 @@ function render() {
 	var perspective = 1;
 	var moving = 2;
 
-    renderer.clear();
+    renderer.clear(); // Tells the renderer to clear its color, depth ans stencil drawing buffers.
+                      // Initializes the color buffer to the current clear color value.
 
     if (views[orthographic]) {
 
@@ -216,7 +217,7 @@ function render() {
 		renderer.render(scene, car.inner_object.getCamera());
 	}
 
-    renderer.clearDepth();
+    renderer.clearDepth(); //Clear the depth buffer
 
     renderer.render(livesScene, livesCamera);
 }
@@ -600,7 +601,7 @@ function init() {
         globalClock = new THREE.Clock();
         intervalClock = new THREE.Clock();
 
-        renderer.autoClear = false;
+        renderer.autoClear = false; //Disable automatically clearing the renderer output before rendering a frame
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         document.body.appendChild(renderer.domElement);
