@@ -28,9 +28,6 @@ var gameOver;
 var lives;
 var firstTime = true;
 
-// tamanho da area visivel
-var frustumSize;
-
 // perspetivas
 var views;
 
@@ -85,7 +82,7 @@ function createLives() {
 
     for (var i = 0; i < 5; i++) {
 
-        var life = new Car(-95 + (i * 20), 53, 0);
+        var life = new Car(-40 + (i * 20), 93, 0);
 
         life.car_object.scale.multiplyScalar(3.5);
 
@@ -120,7 +117,7 @@ function createCameras() {
     'use strict';
 
     createOrtographicCamera(0, 25, 0);
-    createPerspectiveCamera(0, 50, 100);
+    createPerspectiveCamera(0, 50, 105);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -129,33 +126,11 @@ function createOrtographicCamera(x, y, z) {
 
 	'use strict';
 
-    var aspect = window.innerWidth / window.innerHeight;
-
-    frustumSize = 60;
-
     /*Camera ortogonal inicializada com frustumSize fixo */
 
-    if (window.innerWidth > window.innerHeight) {
+    orthographicCamera = buildOrtho(60);
+    livesCamera = buildOrtho(100);
 
-        orthographicCamera = new THREE.OrthographicCamera( - frustumSize * aspect,
-                                                             frustumSize * aspect,
-                                                             frustumSize,
-                                                           - frustumSize,
-                                                             1,
-                                                             1000);
-    }
-
-    else {
-
-        orthographicCamera = new THREE.OrthographicCamera( - frustumSize,
-                                                             frustumSize,
-                                                             frustumSize / aspect,
-                                                           - frustumSize / aspect,
-                                                             1,
-                                                             1000);
-    }
-
-    livesCamera = orthographicCamera.clone();
     scene.add(orthographicCamera);
     livesScene.add(livesCamera);
 
@@ -167,6 +142,33 @@ function createOrtographicCamera(x, y, z) {
     livesScene.lookAt(livesScene.position);
 
     new Messages(-10, 100, 50, orthographicCamera);
+}
+
+function buildOrtho(frustumSize) {
+
+    var aspect = window.innerWidth / window.innerHeight;
+
+    if (window.innerWidth > window.innerHeight) {
+
+        camera = new THREE.OrthographicCamera( - frustumSize * aspect,
+                                                 frustumSize * aspect,
+                                                 frustumSize,
+                                               - frustumSize,
+                                                 1,
+                                                 1000);
+    }
+
+    else {
+
+        camera = new THREE.OrthographicCamera( - frustumSize,
+                                                 frustumSize,
+                                                 frustumSize / aspect,
+                                               - frustumSize / aspect,
+                                                 1,
+                                                 1000);
+    }
+
+    return camera;
 }
 
  /*-----------------------------------------------------------------------------------------------------------------*/
@@ -233,20 +235,19 @@ function onResize() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    resizeOrtho(orthographicCamera, aspect);
-    resizeOrtho(livesCamera, aspect);
+    resizeOrtho(orthographicCamera, 60, aspect);
+    resizeOrtho(livesCamera, 100, aspect);
 
     perspectiveCamera.aspect = aspect;
     car.inner_object.getCamera().aspect = aspect;
 
-    orthographicCamera.updateProjectionMatrix();
     perspectiveCamera.updateProjectionMatrix();
     car.inner_object.getCamera().updateProjectionMatrix();
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
 
-function resizeOrtho(camera, aspect) {
+function resizeOrtho(camera, frustumSize, aspect) {
 
     if (window.innerWidth > window.innerHeight) {
 
@@ -257,11 +258,14 @@ function resizeOrtho(camera, aspect) {
     }
 
     else {
+
         camera.left = -frustumSize;
         camera.right = frustumSize;
         camera.top = frustumSize / aspect;
         camera.bottom = -frustumSize / aspect;
     }
+
+    camera.updateProjectionMatrix();
 }
 
 /*************************************Verificacao de colisoes********************************************************/

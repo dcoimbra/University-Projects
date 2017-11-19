@@ -157,7 +157,8 @@ class Car {
 
 	createHeadLight(x, y, z) {
 
-        var headLight = new THREE.SpotLight( 0xffffff, 3, 30, 0.5, 0.3, 1.3);
+	                                          //color, intensity, distance, angle, penumbra, decay
+        var headLight = new THREE.SpotLight( 0xffffff, 3, 30, 0.5, 0.6, 1.3);
         this.car_object.add(headLight);
         headLight.position.set(x, y, z);
 
