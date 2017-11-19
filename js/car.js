@@ -441,8 +441,6 @@ class Car {
         followingCamera.position.set(x, y, z);
 
         followingCamera.lookAt(this.car_object.position);
-
-        new Messages(-10, 12.5, 6.25, this.getCamera());
     }
     /*---------------------------------------------------------------------------------------------------------*/
 

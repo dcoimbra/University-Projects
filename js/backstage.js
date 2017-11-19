@@ -91,6 +91,8 @@ function createLives() {
         lives_objects.push(life);
     }
 
+    new Messages(185, 85);
+
     livesScene.traverse(toggleLighting);
 }
 
@@ -140,8 +142,6 @@ function createOrtographicCamera(x, y, z) {
 
     livesCamera.position.set(0, 0, 50);
     livesScene.lookAt(livesScene.position);
-
-    new Messages(-10, 100, 50, orthographicCamera);
 }
 
 function buildOrtho(frustumSize) {
@@ -187,7 +187,6 @@ function buildOrtho(frustumSize) {
 
      perspectiveCamera.position.set(x, y, z);
      perspectiveCamera.lookAt(scene.position);
-     new Messages(-15, 15, 7.5, perspectiveCamera);
  }
  /*******************************************************************************************************************/
 

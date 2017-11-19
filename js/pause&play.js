@@ -4,7 +4,7 @@
 class Messages {
 
                 /* altura, escala, camara */
-    constructor(z, width, height, camera) {
+    constructor(width, height) {
 
         'use strict';
 
@@ -23,8 +23,8 @@ class Messages {
         over.scale.x *= width;
         over.scale.y *= height;
 
-        pause.position.set(0, 0, z);
-        over.position.set(0, 0, z);
+        pause.position.set(0, 0, 0);
+        over.position.set(0, 0, 0);
 
         pause.visible = false;
         over.visible = false;
@@ -32,8 +32,8 @@ class Messages {
         pause.name = "pause";
         over.name = "over";
 
-        camera.add(pause);
-        camera.add(over);
+        livesScene.add(pause);
+        livesScene.add(over);
     }
 }
 
@@ -102,33 +102,17 @@ function removeLife() {
     }
 }
 
-/* recebe o nome de uma mensagem e mostra-a na camara ativa */
+/* recebe o nome de uma mensagem e mostra-a  */
 function showMessage(name) {
 
-    var orthographic = 0;
-    var perspective = 1;
-    var moving = 2;
+    livesScene.getObjectByName(name).visible = true;
+}
 
-    if (views[orthographic]) {
 
-        orthographicCamera.getObjectByName(name).visible = true;
-        perspectiveCamera.getObjectByName(name).visible = false;
-        car.inner_object.getCamera().getObjectByName(name).visible = false;
-    }
+/* recebe o nome de uma mensagem e esconde-a  */
+function hideMessage(name) {
 
-    else if (views[perspective]) {
-
-        orthographicCamera.getObjectByName(name).visible = false;
-        perspectiveCamera.getObjectByName(name).visible = true;
-        car.inner_object.getCamera().getObjectByName(name).visible = false;
-    }
-
-    else if (views[moving]) {
-
-        orthographicCamera.getObjectByName(name).visible = false;
-        perspectiveCamera.getObjectByName(name).visible = false;
-        car.inner_object.getCamera().getObjectByName(name).visible = true;
-    }
+    livesScene.getObjectByName(name).visible = false;
 }
 
 /*************************************************************************************************/
@@ -176,9 +160,7 @@ function checkPauseMessage() {
 
     else {  //if the game is not paused
 
-        orthographicCamera.getObjectByName("pause").visible = false;
-        perspectiveCamera.getObjectByName("pause").visible = false;
-        car.inner_object.getCamera().getObjectByName("pause").visible = false;
+        hideMessage("pause");
     }
 }
 
@@ -195,9 +177,7 @@ function checkOverMessage() {
 
     else {  //if the game is not paused
 
-        orthographicCamera.getObjectByName("over").visible = false;
-        perspectiveCamera.getObjectByName("over").visible = false;
-        car.inner_object.getCamera().getObjectByName("over").visible = false;
+        hideMessage("over");
     }
 }
 
@@ -219,9 +199,7 @@ function restart() {
 
     var to_remove = [];
 
-    orthographicCamera.getObjectByName("over").visible = false;
-    perspectiveCamera.getObjectByName("over").visible = false;
-    car.inner_object.getCamera().getObjectByName("over").visible = false;
+    hideMessage("over");
 
     /* Remoção dos objectos da cena */
     scene.traverse ( function (node) {
