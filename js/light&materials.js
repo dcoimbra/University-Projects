@@ -49,7 +49,7 @@ class Candle {
         var candle_material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa,
                                                           specular: 0x888888,
                                                           shininess: 10,
-                                                          wireframe: true });
+                                                          wireframe: false });
 
         this.candle_object = new THREE.Mesh(candle_geometry, candle_material);
 

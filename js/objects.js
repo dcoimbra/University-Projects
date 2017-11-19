@@ -38,7 +38,7 @@ class Orange {
         var orange_material = new THREE.MeshPhongMaterial({ color: 0xe49600,
             												specular: 0xdb4200,
 														    shininess: 10,
-															wireframe: true,
+															wireframe: false,
 															opacity: 0,
 															transparent: false,
 															map: new THREE.TextureLoader().load('resources/textures/hm2.jpg')});
@@ -73,7 +73,7 @@ class Orange {
         var stalk_material = new THREE.MeshPhongMaterial({ color: 0x00ff00,
 													       specular: 0x00ee00,
 														   shininess: 0,
-														   wireframe: true,
+														   wireframe: false,
 														   opacity: 0,
 														   transparent: false });
 
@@ -231,7 +231,7 @@ class ButterPackage {
 		var butterPackage_material = new THREE.MeshPhongMaterial({
 																   specular: 0x00aeee,
 																   shininess: 5,
-																   wireframe: true,
+																   wireframe: false,
 															       map: new THREE.TextureLoader().load(("resources/textures/hm6.jpg"))});
 
 		this.butterPackage_object = new THREE.Mesh(butterPackage_geometry, butterPackage_material);
@@ -279,7 +279,7 @@ class BorderTorus {
         var torus_material = new THREE.MeshPhongMaterial({ color: 0x000000,
                                                            specular: 0x111111,
                                                            shininess: 5,
-                                                           wireframe: true });
+                                                           wireframe: false });
 
         this.torus_object = new THREE.Mesh(torus_geometry, torus_material);
 
@@ -370,7 +370,7 @@ class Table {
 	    var table_material = new THREE.MeshPhongMaterial({ color: 0xffffff,
                                                            specular: 0x222222,
                                                            shininess: 10,
-                                                           wireframe: true,
+                                                           wireframe: false,
 			                                                map: new THREE.TextureLoader().load('resources/textures/hm1.jpg')});
 
 	    this.addTableTop(table_material, 0, 0, 0);

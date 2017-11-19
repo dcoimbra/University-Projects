@@ -63,7 +63,7 @@ class Car {
 		var chassis_material = new THREE.MeshPhongMaterial({ color: 0x0000ff,
                                                              specular: 0x0000ff,
                                                              shininess: 40,
-                                                             wireframe: true });
+                                                             wireframe: false });
 
 		// Create the custom mesh.
 		var chassis_geometry = new THREE.Geometry();
@@ -181,7 +181,7 @@ class Car {
 		var hood_material = new THREE.MeshPhongMaterial({ color: 0xff0000,
                                                           specular: 0xff0000,
                                                           shininess: 40,
-                                                          wireframe: true });
+                                                          wireframe: false});
 
 		// Create the custom mesh.
 		var hood_geometry = new THREE.Geometry();
@@ -286,7 +286,7 @@ class Car {
 		var windshield_sideMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff,
                                                                     specular: 0xffffff,
                                                                     shininess: 40,
-                                                                    wireframe: true });
+                                                                    wireframe: false });
 
 		var windshield_side = new THREE.Mesh(windshield_sideGeometry, windshield_sideMaterial);
 
@@ -313,7 +313,7 @@ class Car {
 		var wheel_material = new THREE.MeshPhongMaterial( { color: 0x333333,
                                                             specular: 0x222222,
                                                             shininess: 5,
-                                                            wireframe: true } );
+                                                            wireframe: false } );
 
 		// Create the custom mesh.
 		var wheel_geometry = new THREE.Geometry();
