@@ -50,9 +50,7 @@ class Orange {
 
         this.orange_object.userData = { speed: 5, changePos: false,
 									    specular: orange_material.specular,
-			                            shininess: orange_material.shininess,
-			                            map: orange_material.map,
-        								normalMap: orange_material.normalMap};
+			                            shininess: orange_material.shininess};
 
         this.orange_object.position.set(x, y, z);
 
@@ -398,8 +396,8 @@ class Table {
         tabletop_mesh.name = "table";
 
         tabletop_mesh.userData = { specular: tabletop_mesh.material.specular,
-                                   shininess: tabletop_mesh.material.shininess,
-        							map: tabletop_mesh.material.map};
+           						   shininess: tabletop_mesh.material.shininess,
+        						 };
 
 		tabletop_mesh.position.set(x, y, z);
 
