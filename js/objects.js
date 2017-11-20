@@ -402,29 +402,7 @@ class Table {
 		tabletop_mesh.position.set(x, y, z);
 
 		this.table_object.add(tabletop_mesh);
-
-		//this.addTableCloth(1.5, tabletop_size);
 	}
-
-	addTableCloth(y, size) {
-
-	    var tablecloth_geometry = new THREE.BoxGeometry(size, 0.005, size);
-	    var tablecloth_material = new THREE.MeshPhongMaterial({
-                                                                specular: 0x222222,
-                                                                shininess: 10,
-                                                                wireframe: false,
-                                                                map: new THREE.TextureLoader().load('resources/textures/hm1.jpg')});
-
-        var tablecloth_mesh = new THREE.Mesh(tablecloth_geometry, tablecloth_material);
-
-        tablecloth_mesh.userData = { specular: tablecloth_mesh.material.specular,
-                                     shininess: tablecloth_mesh.material.shininess,
-                                   };
-
-        tablecloth_mesh.position.set(0, y, 0);
-
-        this.table_object.children[0].add(tablecloth_mesh);
-    }
 }
 
 

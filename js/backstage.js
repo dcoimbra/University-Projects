@@ -53,7 +53,7 @@ function createSceneElements() {
 
     createBorderLine();
 
-    oranges.push(new Collidable(new Orange(-40, orange_height, 6)));
+    oranges.push(new Collidable(new Orange(-40, orange_height, 20)));
     oranges.push(new Collidable(new Orange(15, orange_height, -15)));
     oranges.push(new Collidable(new Orange(35, orange_height, 5)));
 
@@ -78,23 +78,6 @@ function createSceneElements() {
 }
 /*------------------------------------------------------------------------------------------------------------------*/
 
-function createOverlaidScene() {
-
-    for (var i = 0; i < 5; i++) {
-
-        var life = new Car(-40 + (i * 20), 93, 0);
-
-        life.car_object.scale.multiplyScalar(3.5);
-
-        overlaidScene.add(life.car_object);
-
-        lives_objects.push(life);
-    }
-
-    new Messages(185, 85);
-
-    overlaidScene.traverse(toggleLighting);
-}
 
 /*------------------------------------------------------------------------------------------------------------------*/
 
@@ -106,10 +89,10 @@ function createLights() {
 
      candles.push(new Candle(5, 8, -5));
      candles.push(new Candle(36, 8, -15));
-     candles.push(new Candle(10, 8, 35));
-     candles.push(new Candle(-35, 8, 44));
+     candles.push(new Candle(50, 8, 50));
+     candles.push(new Candle(-50, 8, 53));
      candles.push(new Candle(-35, 8, -10));
-     candles.push(new Candle(-25, 8, -35));
+     candles.push(new Candle(-50, 8, -50));
  }
 /********************************************************************************************************************/
  
@@ -633,7 +616,7 @@ function init() {
     lives = 5;
 
 	createSceneElements();
-	createOverlaidScene();
+	createHUD();
     createCameras();
     createLights();
 }

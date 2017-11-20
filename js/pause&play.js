@@ -69,6 +69,26 @@ class Timer {
 }
 /*************************************************************************************************/
 
+function createHUD() {
+
+    for (var i = 0; i < 5; i++) {
+
+        var life = new Car(-40 + (i * 20), 93, 0);
+
+        life.car_object.scale.multiplyScalar(3.5);
+
+        overlaidScene.add(life.car_object);
+
+        lives_objects.push(life);
+    }
+
+    new Messages(185, 85);
+
+    overlaidScene.traverse(toggleLighting);
+}
+
+/*************************************************************************************************/
+
 function killCheck(posX, posY, posZ) {
 
     car.inner_object.setSpeed(0);
@@ -100,6 +120,9 @@ function removeLife() {
         overlaidScene.remove(life.car_object);
     }
 }
+
+/*************************************************************************************************/
+
 
 /* recebe o nome de uma mensagem e mostra-a  */
 function showMessage(name) {
