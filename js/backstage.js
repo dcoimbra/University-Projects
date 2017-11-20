@@ -1,9 +1,9 @@
  /*********************************************Variaveis globais*****************************************************/
-var scene, livesScene, renderer;
+var scene, overlaidScene, renderer;
 
 //Câmeras
 var orthographicCamera, perspectiveCamera;
-var livesCamera;
+var overlaidCamera;
 
 //Light
 var sun;
@@ -78,7 +78,7 @@ function createSceneElements() {
 }
 /*------------------------------------------------------------------------------------------------------------------*/
 
-function createLives() {
+function createOverlaidScene() {
 
     for (var i = 0; i < 5; i++) {
 
@@ -86,14 +86,14 @@ function createLives() {
 
         life.car_object.scale.multiplyScalar(3.5);
 
-        livesScene.add(life.car_object);
+        overlaidScene.add(life.car_object);
 
         lives_objects.push(life);
     }
 
     new Messages(185, 85);
 
-    livesScene.traverse(toggleLighting);
+    overlaidScene.traverse(toggleLighting);
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
@@ -131,17 +131,17 @@ function createOrtographicCamera(x, y, z) {
     /*Camera ortogonal inicializada com frustumSize fixo */
 
     orthographicCamera = buildOrtho(60);
-    livesCamera = buildOrtho(100);
+    overlaidCamera = buildOrtho(100);
 
     scene.add(orthographicCamera);
-    livesScene.add(livesCamera);
+    overlaidScene.add(overlaidCamera);
 
     /*Camera posicionada em vista de topo */
     orthographicCamera.position.set(x, y, z);
     orthographicCamera.lookAt(scene.position);
 
-    livesCamera.position.set(0, 0, 50);
-    livesScene.lookAt(livesScene.position);
+    overlaidCamera.position.set(0, 0, 50);
+    overlaidScene.lookAt(overlaidScene.position);
 }
 
 function buildOrtho(frustumSize) {
@@ -199,7 +199,7 @@ function render() {
 	var perspective = 1;
 	var moving = 2;
 
-    renderer.clear(); // Tells the renderer to clear its color, depth ans stencil drawing buffers.
+    renderer.clear(); // Tells the renderer to clear its color, depth and stencil drawing buffers.
                       // Initializes the color buffer to the current clear color value.
 
     if (views[orthographic]) {
@@ -219,7 +219,7 @@ function render() {
 
     renderer.clearDepth(); //Clear the depth buffer
 
-    renderer.render(livesScene, livesCamera);
+    renderer.render(overlaidScene, overlaidCamera);
 }
 
 /*****************************************************************************************************************/
@@ -236,7 +236,7 @@ function onResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     resizeOrtho(orthographicCamera, 60, aspect);
-    resizeOrtho(livesCamera, 100, aspect);
+    resizeOrtho(overlaidCamera, 100, aspect);
 
     perspectiveCamera.aspect = aspect;
     car.inner_object.getCamera().aspect = aspect;
@@ -343,7 +343,7 @@ function carTableCollision(posX, posY, posZ) {
     var car_Xposition = car.inner_object.car_object.position.x;
     var car_Zposition = car.inner_object.car_object.position.z;
 
-    //Se a laranja ultrapassar os limites da table
+    //Se o carro ultrapassar os limites da table
     if (car_Xposition > 55 || car_Xposition < -55 ||
         car_Zposition > 55 || car_Zposition < -55) {
 
@@ -399,7 +399,7 @@ function onKeyDown(e) {
 		case 37: //left arrow
 			car.inner_object.setMovingDirection(0, true);
 			break;
-			
+
 		case 39: //Right arrow
 			car.inner_object.setMovingDirection(2, true);
 			break;
@@ -434,7 +434,7 @@ function onKeyDown(e) {
                 }
             });
 
-            livesScene.traverse(function (node) {
+            overlaidScene.traverse(function (node) {
 
                 if (node instanceof THREE.Mesh) {
                     node.material.wireframe = !node.material.wireframe;
@@ -612,7 +612,7 @@ function init() {
         window.addEventListener('keyup', onKeyUp);
 
         scene = new THREE.Scene();
-        livesScene = new THREE.Scene();
+        overlaidScene = new THREE.Scene();
 
         firstTime = false;
     }
@@ -633,7 +633,7 @@ function init() {
     lives = 5;
 
 	createSceneElements();
-	createLives();
+	createOverlaidScene();
     createCameras();
     createLights();
 }

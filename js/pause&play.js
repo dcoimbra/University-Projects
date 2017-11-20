@@ -31,8 +31,8 @@ class Messages {
         pause.name = "pause";
         over.name = "over";
 
-        livesScene.add(pause);
-        livesScene.add(over);
+        overlaidScene.add(pause);
+        overlaidScene.add(over);
     }
 }
 
@@ -78,8 +78,8 @@ function killCheck(posX, posY, posZ) {
         car.inner_object.car_object.position.set(0, 2.8, 5); //car's initial position
 
         var initial_vector = new THREE.Vector3(car.inner_object.car_object.position.x,
-            car.inner_object.car_object.position.y,
-            car.inner_object.car_object.position.z);
+                                               car.inner_object.car_object.position.y,
+                                               car.inner_object.car_object.position.z);
 
         car.inner_object.car_object.lookAt(initial_vector);
     }
@@ -97,21 +97,21 @@ function removeLife() {
 
         var life = lives_objects.pop();
 
-        livesScene.remove(life.car_object);
+        overlaidScene.remove(life.car_object);
     }
 }
 
 /* recebe o nome de uma mensagem e mostra-a  */
 function showMessage(name) {
 
-    livesScene.getObjectByName(name).visible = true;
+    overlaidScene.getObjectByName(name).visible = true;
 }
 
 
 /* recebe o nome de uma mensagem e esconde-a  */
 function hideMessage(name) {
 
-    livesScene.getObjectByName(name).visible = false;
+    overlaidScene.getObjectByName(name).visible = false;
 }
 
 /*************************************************************************************************/

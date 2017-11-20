@@ -28,8 +28,8 @@ class Car {
 		//Elements are instantiated relative to the car's position
 		this.createChassis(-10, -5, 5);
 
-		this.createHeadLight(0.5, 0.5, 5.5);
-        this.createHeadLight(0.5, 0.5, -5.5);
+        this.createHeadLight(0.5, 0.5, -5.5); //left
+        this.createHeadLight(0.5, 0.5, 5.5); //right
 
 		this.createHood( -9.7, 0, 3);
 
