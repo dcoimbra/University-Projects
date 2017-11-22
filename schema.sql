@@ -2,18 +2,18 @@ DROP TABLE IF EXISTS categoria, categoria_simples, super_categoria,constituida, 
 
 
 CREATE TABLE categoria (
-nome varchar(20),
-PRIMARY KEY (nome)
+  nome varchar(20),
+  PRIMARY KEY (nome)
 );
 
 CREATE TABLE categoria_simples (
-nome varchar(20) REFERENCES categoria(nome),
-PRIMARY KEY (nome)
+  nome varchar(20) REFERENCES categoria(nome),
+  PRIMARY KEY (nome)
 );
 
 CREATE TABLE super_categoria (
-nome varchar(20) REFERENCES categoria(nome),
-PRIMARY KEY (nome)
+  nome varchar(20) REFERENCES categoria(nome),
+  PRIMARY KEY (nome)
 );
 
 CREATE TABLE constituida (
@@ -29,12 +29,12 @@ CREATE TABLE fornecedor (
 );
 
 CREATE TABLE produto (
-		ean integer,
-		design varchar(50),
-		categoria varchar(20) REFERENCES categoria(nome),
-		forn_primario integer REFERENCES fornecedor(nif),
-		PRIMARY KEY (ean),
-		UNIQUE (design)
+	ean integer,
+	design varchar(50),
+	categoria varchar(20) REFERENCES categoria(nome),
+	forn_primario integer REFERENCES fornecedor(nif),
+	PRIMARY KEY (ean),
+	UNIQUE (design)
 );
 
 CREATE TABLE fornece_sec (
