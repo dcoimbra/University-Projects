@@ -31,7 +31,8 @@ CREATE TABLE fornecedor (
 CREATE TABLE produto (
 	ean integer,
 	design varchar(50),
-	categoria varchar(20) REFERENCES categoria(nome),
+  data integer,
+  categoria varchar(20) REFERENCES categoria(nome),
 	forn_primario integer REFERENCES fornecedor(nif),
 	PRIMARY KEY (ean),
 	UNIQUE (design)
@@ -50,9 +51,9 @@ CREATE TABLE corredor (
 );
 
 CREATE TABLE prateleira (
-  nro integer REFERENCES corredor(nro),
   lado varchar(20),
   altura varchar(20),
+  nro integer REFERENCES corredor(nro),
   PRIMARY KEY (nro, lado, altura)
 );
 
@@ -60,10 +61,10 @@ CREATE TABLE planograma (
   faces integer,
   unidades integer,
   loc integer,
-  ean integer REFERENCES produto(ean),
   nro integer,
   lado varchar(20),
   altura varchar(20),
+  ean integer REFERENCES produto(ean),
   PRIMARY KEY(ean, nro, lado, altura),
   FOREIGN KEY(nro, lado, altura) REFERENCES prateleira(nro, lado, altura)
 );
