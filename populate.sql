@@ -1,0 +1,173 @@
+INSERT INTO categoria VALUES ('fruta');
+INSERT INTO categoria VALUES ('brinquedos');
+INSERT INTO categoria VALUES ('congelados');
+INSERT INTO categoria VALUES ('mobilia');
+INSERT INTO categoria VALUES ('frutos vermelhos');
+INSERT INTO categoria VALUES ('bebidas');
+INSERT INTO categoria VALUES ('peixe');
+INSERT INTO categoria VALUES ('sobremesas');
+INSERT INTO categoria VALUES ('cozinha');
+INSERT INTO categoria VALUES ('bebidas com gas');
+INSERT INTO categoria VALUES ('bolos');
+
+INSERT INTO categoria_simples VALUES ('brinquedos');
+INSERT INTO categoria_simples VALUES ('frutos vermelhos');
+INSERT INTO categoria_simples VALUES ('peixe');
+INSERT INTO categoria_simples VALUES ('bebidas com gas');
+INSERT INTO categoria_simples VALUES ('bolos');
+
+INSERT INTO super_categoria VALUES ('congelados');
+INSERT INTO super_categoria VALUES ('bebidas');
+INSERT INTO super_categoria VALUES ('fruta');
+INSERT INTO super_categoria VALUES ('mobilia');
+INSERT INTO super_categoria VALUES ('sobremesas');
+INSERT INTO super_categoria VALUES ('cozinha');
+
+INSERT INTO constituida VALUES ('fruta', 'frutos vermelhos');
+INSERT INTO constituida VALUES ('congelados', 'peixe');
+INSERT INTO constituida VALUES ('congelados', 'sobremesas');
+INSERT INTO constituida VALUES ('bebidas', 'bebidas com gas');
+INSERT INTO constituida VALUES ('mobilia', 'cozinha');
+
+INSERT INTO fornecedor
+  VALUES (
+    111,
+    'um'
+  );
+
+INSERT INTO fornecedor
+  VALUES (
+    222,
+    'dois'
+  );
+
+INSERT INTO fornecedor
+  VALUES (
+    333,
+    'tres'
+  );
+
+INSERT INTO fornecedor(nif, nome)
+  VALUES (
+    444,
+    'quatro'
+  );
+
+INSERT INTO produto(ean, design, categoria, forn_primario, data)
+  VALUES (
+     1111,
+     'maca',
+     'fruta',
+     111,
+     20170122
+  );
+
+INSERT INTO produto(ean, design, categoria, forn_primario, data)
+  VALUES (
+    2222,
+    'gelado',
+    'sobremesas',
+    222,
+    20170123
+  );
+
+INSERT INTO produto(ean, design, categoria, forn_primario, data)
+  VALUES (
+    3333,
+    'cadeira',
+    'mobilia',
+    333,
+    20170123
+  );
+
+INSERT INTO fornece_sec(nif, ean)
+  VALUES (
+    444,
+    1111
+  );
+
+INSERT INTO fornece_sec(nif, ean)
+  VALUES (
+    222,
+    3333
+  );
+
+INSERT INTO corredor(nro, largura)
+  VALUES (
+    1,
+    1
+  );
+
+INSERT INTO corredor(nro, largura)
+  VALUES (
+    2,
+    2
+  );
+
+INSERT INTO prateleira(nro, lado, altura)
+  VALUES (
+    1,
+    'esquerdo',
+    'cima'
+  );
+
+INSERT INTO prateleira(nro, lado, altura)
+  VALUES (
+    2,
+    'esquerdo',
+    'cima'
+  );
+
+INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
+  VALUES (
+      1111,
+      1,
+      'esquerdo',
+      'cima',
+      1,
+      3,
+      1
+    );
+
+INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
+  VALUES (
+      2222,
+      1,
+      'esquerdo',
+      'cima',
+      2,
+      4,
+      2
+    );
+
+INSERT INTO evento_reposicao(operador, instante)
+  VALUES (
+    'joao',
+    20171102
+  );
+
+INSERT INTO evento_reposicao(operador, instante)
+  VALUES (
+    'alberto',
+    20171103
+  );
+
+INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
+  VALUES (
+    2222,
+    1,
+    'esquerdo',
+    'cima',
+    'joao',
+    '20171102',
+    2
+  );
+
+
+
+
+
+
+
+
+

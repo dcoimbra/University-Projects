@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS categoria, categoria_simples, super_categoria,constituida, fornecedor, produto, fornecedor, fornece_sec, corredor, prateleira, planograma, evento_reposicao, reposicao;
 
-
 CREATE TABLE categoria (
   nome varchar(20),
   PRIMARY KEY (nome)
@@ -31,9 +30,9 @@ CREATE TABLE fornecedor (
 CREATE TABLE produto (
 	ean integer,
 	design varchar(50),
-  data integer,
   categoria varchar(20) REFERENCES categoria(nome),
-	forn_primario integer REFERENCES fornecedor(nif),
+  forn_primario integer REFERENCES fornecedor(nif),
+  data integer,
 	PRIMARY KEY (ean),
 	UNIQUE (design)
 );
@@ -51,20 +50,20 @@ CREATE TABLE corredor (
 );
 
 CREATE TABLE prateleira (
+  nro integer REFERENCES corredor(nro),
   lado varchar(20),
   altura varchar(20),
-  nro integer REFERENCES corredor(nro),
   PRIMARY KEY (nro, lado, altura)
 );
 
 CREATE TABLE planograma (
-  faces integer,
-  unidades integer,
-  loc integer,
+  ean integer REFERENCES produto(ean),
   nro integer,
   lado varchar(20),
   altura varchar(20),
-  ean integer REFERENCES produto(ean),
+  face integer,
+  unidades integer,
+  loc integer,
   PRIMARY KEY(ean, nro, lado, altura),
   FOREIGN KEY(nro, lado, altura) REFERENCES prateleira(nro, lado, altura)
 );
@@ -76,14 +75,14 @@ CREATE TABLE evento_reposicao (
 );
 
 CREATE TABLE reposicao (
-  unidades integer,
-  operador varchar(50),
-  instante integer,
   ean integer,
   nro integer,
   lado varchar(20),
   altura varchar(20),
-  PRIMARY KEY (operador, instante, ean, nro, lado, altura),
+  operador varchar(50),
+  instante integer,
+  unidades integer,
+  PRIMARY KEY (ean, nro, lado, altura, operador, instante),
   FOREIGN KEY (operador, instante) REFERENCES evento_reposicao(operador, instante),
   FOREIGN KEY (ean, nro, lado, altura) REFERENCES planograma(ean, nro, lado, altura)
 );
