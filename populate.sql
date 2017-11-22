@@ -1,47 +1,47 @@
-INSERT INTO categoria VALUES ('fruta');
-INSERT INTO categoria VALUES ('brinquedos');
-INSERT INTO categoria VALUES ('congelados');
-INSERT INTO categoria VALUES ('mobilia');
-INSERT INTO categoria VALUES ('frutos vermelhos');
-INSERT INTO categoria VALUES ('bebidas');
-INSERT INTO categoria VALUES ('peixe');
-INSERT INTO categoria VALUES ('sobremesas');
-INSERT INTO categoria VALUES ('cozinha');
-INSERT INTO categoria VALUES ('bebidas com gas');
-INSERT INTO categoria VALUES ('bolos');
+INSERT INTO categoria(nome) VALUES ('fruta');
+INSERT INTO categoria(nome) VALUES ('brinquedos');
+INSERT INTO categoria(nome) VALUES ('congelados');
+INSERT INTO categoria(nome) VALUES ('mobilia');
+INSERT INTO categoria(nome) VALUES ('frutos vermelhos');
+INSERT INTO categoria(nome) VALUES ('bebidas');
+INSERT INTO categoria(nome) VALUES ('peixe');
+INSERT INTO categoria(nome) VALUES ('sobremesas');
+INSERT INTO categoria(nome) VALUES ('cozinha');
+INSERT INTO categoria(nome) VALUES ('bebidas com gas');
+INSERT INTO categoria(nome) VALUES ('bolos');
 
-INSERT INTO categoria_simples VALUES ('brinquedos');
-INSERT INTO categoria_simples VALUES ('frutos vermelhos');
-INSERT INTO categoria_simples VALUES ('peixe');
-INSERT INTO categoria_simples VALUES ('bebidas com gas');
-INSERT INTO categoria_simples VALUES ('bolos');
+INSERT INTO categoria_simples(nome) VALUES ('brinquedos');
+INSERT INTO categoria_simples(nome) VALUES ('frutos vermelhos');
+INSERT INTO categoria_simples(nome) VALUES ('peixe');
+INSERT INTO categoria_simples(nome) VALUES ('bebidas com gas');
+INSERT INTO categoria_simples(nome) VALUES ('bolos');
 
-INSERT INTO super_categoria VALUES ('congelados');
-INSERT INTO super_categoria VALUES ('bebidas');
-INSERT INTO super_categoria VALUES ('fruta');
-INSERT INTO super_categoria VALUES ('mobilia');
-INSERT INTO super_categoria VALUES ('sobremesas');
-INSERT INTO super_categoria VALUES ('cozinha');
+INSERT INTO super_categoria(nome) VALUES ('congelados');
+INSERT INTO super_categoria(nome) VALUES ('bebidas');
+INSERT INTO super_categoria(nome) VALUES ('fruta');
+INSERT INTO super_categoria(nome) VALUES ('mobilia');
+INSERT INTO super_categoria(nome) VALUES ('sobremesas');
+INSERT INTO super_categoria(nome) VALUES ('cozinha');
 
-INSERT INTO constituida VALUES ('fruta', 'frutos vermelhos');
-INSERT INTO constituida VALUES ('congelados', 'peixe');
-INSERT INTO constituida VALUES ('congelados', 'sobremesas');
-INSERT INTO constituida VALUES ('bebidas', 'bebidas com gas');
-INSERT INTO constituida VALUES ('mobilia', 'cozinha');
+INSERT INTO constituida(super_categoria, categoria) VALUES ('fruta', 'frutos vermelhos');
+INSERT INTO constituida(super_categoria, categoria) VALUES ('congelados', 'peixe');
+INSERT INTO constituida(super_categoria, categoria) VALUES ('congelados', 'sobremesas');
+INSERT INTO constituida(super_categoria, categoria) VALUES ('bebidas', 'bebidas com gas');
+INSERT INTO constituida(super_categoria, categoria) VALUES ('mobilia', 'cozinha');
 
-INSERT INTO fornecedor
+INSERT INTO fornecedor(nif, nome)
   VALUES (
     111,
     'um'
   );
 
-INSERT INTO fornecedor
+INSERT INTO fornecedor(nif, nome)
   VALUES (
     222,
     'dois'
   );
 
-INSERT INTO fornecedor
+INSERT INTO fornecedor(nif, nome)
   VALUES (
     333,
     'tres'
