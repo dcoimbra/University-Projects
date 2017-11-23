@@ -17,10 +17,7 @@
 
         if ($tipo == "remover") {
 
-            $sql1 = "DELETE FROM fornece_sec WHERE ean = '$ean';";
             $sql  = "DELETE FROM produto WHERE ean = '$ean';";
-
-            $db->query($sql1);
         }
 
         else {
