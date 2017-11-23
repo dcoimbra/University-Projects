@@ -15,15 +15,14 @@ INSERT INTO categoria_simples(nome) VALUES ('frutos vermelhos');
 INSERT INTO categoria_simples(nome) VALUES ('peixe');
 INSERT INTO categoria_simples(nome) VALUES ('bebidas com gas');
 INSERT INTO categoria_simples(nome) VALUES ('bolos');
+INSERT INTO categoria_simples(nome) VALUES ('fruta');
 
 INSERT INTO super_categoria(nome) VALUES ('congelados');
 INSERT INTO super_categoria(nome) VALUES ('bebidas');
-INSERT INTO super_categoria(nome) VALUES ('fruta');
 INSERT INTO super_categoria(nome) VALUES ('mobilia');
 INSERT INTO super_categoria(nome) VALUES ('sobremesas');
 INSERT INTO super_categoria(nome) VALUES ('cozinha');
 
-INSERT INTO constituida(super_categoria, categoria) VALUES ('fruta', 'frutos vermelhos');
 INSERT INTO constituida(super_categoria, categoria) VALUES ('congelados', 'peixe');
 INSERT INTO constituida(super_categoria, categoria) VALUES ('congelados', 'sobremesas');
 INSERT INTO constituida(super_categoria, categoria) VALUES ('bebidas', 'bebidas com gas');
@@ -64,6 +63,15 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
+     4444,
+     'pera',
+     'fruta',
+     111,
+     20170122
+  );
+
+INSERT INTO produto(ean, design, categoria, forn_primario, data)
+  VALUES (
     2222,
     'gelado',
     'sobremesas',
@@ -89,6 +97,24 @@ INSERT INTO fornece_sec(nif, ean)
 INSERT INTO fornece_sec(nif, ean)
   VALUES (
     222,
+    3333
+  );
+
+INSERT INTO fornece_sec(nif, ean)
+  VALUES (
+    333,
+    1111
+  );
+
+INSERT INTO fornece_sec(nif, ean)
+  VALUES (
+    222,
+    4444
+  );
+
+INSERT INTO fornece_sec(nif, ean)
+  VALUES (
+    444,
     3333
   );
 
@@ -149,7 +175,7 @@ INSERT INTO evento_reposicao(operador, instante)
 INSERT INTO evento_reposicao(operador, instante)
   VALUES (
     'alberto',
-    20171103
+    20171104
   );
 
 INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
@@ -159,7 +185,18 @@ INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
     'esquerdo',
     'cima',
     'joao',
-    '20171102',
+    20171102,
+    2
+  );
+
+INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
+  VALUES (
+    2222,
+    1,
+    'esquerdo',
+    'cima',
+    'alberto',
+    20171104,
     2
   );
 
