@@ -58,7 +58,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
      'maca',
      'fruta',
      111,
-     20170122
+     '2017-01-22'
   );
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
@@ -67,7 +67,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
      'pera',
      'fruta',
      111,
-     20170122
+     '2017-01-22'
   );
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
@@ -76,7 +76,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
     'gelado',
     'sobremesas',
     222,
-    20170123
+    '2017-01-23'
   );
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
@@ -85,7 +85,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
     'cadeira',
     'mobilia',
     333,
-    20170123
+    '2017-01-23'
   );
 
 INSERT INTO fornece_sec(nif, ean)
@@ -169,13 +169,13 @@ INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
 INSERT INTO evento_reposicao(operador, instante)
   VALUES (
     'joao',
-    20171102
+    '2017-11-02 00:00'
   );
 
 INSERT INTO evento_reposicao(operador, instante)
   VALUES (
     'alberto',
-    20171104
+    '2017-11-04 00:00'
   );
 
 INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
@@ -185,7 +185,7 @@ INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
     'esquerdo',
     'cima',
     'joao',
-    20171102,
+    '2017-11-02 00:00',
     2
   );
 
@@ -196,7 +196,7 @@ INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
     'esquerdo',
     'cima',
     'alberto',
-    20171104,
+    '2017-11-04 00:00',
     2
   );
 

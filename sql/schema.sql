@@ -32,14 +32,14 @@ CREATE TABLE produto (
 	design varchar(50),
   categoria varchar(20) REFERENCES categoria(nome),
   forn_primario integer REFERENCES fornecedor(nif),
-  data integer,
+  data date,
 	PRIMARY KEY (ean),
 	UNIQUE (design)
 );
 
 CREATE TABLE fornece_sec (
   nif integer REFERENCES fornecedor(nif),
-  ean integer REFERENCES produto(ean),
+  ean integer REFERENCES produto(ean) ON DELETE CASCADE,
   PRIMARY KEY (nif, ean)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE prateleira (
 );
 
 CREATE TABLE planograma (
-  ean integer REFERENCES produto(ean),
+  ean integer REFERENCES produto(ean) ON DELETE CASCADE,
   nro integer,
   lado varchar(20),
   altura varchar(20),
@@ -70,7 +70,7 @@ CREATE TABLE planograma (
 
 CREATE TABLE evento_reposicao (
   operador varchar(50),
-  instante integer,
+  instante timestamp,
   PRIMARY KEY (operador, instante)
 );
 
@@ -80,9 +80,9 @@ CREATE TABLE reposicao (
   lado varchar(20),
   altura varchar(20),
   operador varchar(50),
-  instante integer,
+  instante timestamp,
   unidades integer,
   PRIMARY KEY (ean, nro, lado, altura, operador, instante),
   FOREIGN KEY (operador, instante) REFERENCES evento_reposicao(operador, instante),
-  FOREIGN KEY (ean, nro, lado, altura) REFERENCES planograma(ean, nro, lado, altura)
+  FOREIGN KEY (ean, nro, lado, altura) REFERENCES planograma(ean, nro, lado, altura) ON DELETE CASCADE
 );
