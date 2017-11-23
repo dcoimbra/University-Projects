@@ -18,6 +18,7 @@
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                 $categorias = $db->query("SELECT nome FROM categoria");
+
                 foreach($categorias as $row) {
                     echo ("<option value='{$row['nome']}'>{$row['nome']}</option>");}
             }

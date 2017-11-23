@@ -17,6 +17,15 @@
             $result = $db->query($sql);
 
             echo("<table border=\"0\" cellspacing=\"5\">\n");
+
+            echo("<tr>\n
+                    <th>EAN</th>\n
+                    <th>Designacao</th>\n
+                    <th>Categoria</th>\n
+                    <th>Fornecedor primario</th>\n
+                    <th>Data</th>\n
+                  </tr>\n");
+
             foreach($result as $row)
             {
                 echo("<tr>\n");
@@ -26,10 +35,11 @@
                 echo("<td>{$row['forn_primario']}</td>\n");
                 echo("<td>{$row['data']}</td>\n");
                 echo("<td><a href=\"design_d.php?ean={$row['ean']}\">Editar designacao</a></td>\n");
-                echo("<td><a href=\"update_prod.php?ean={$row['ean']}&tipo=remover\">Remover produto</a></td>");
+                echo("<td><a href=\"update_prod.php?ean={$row['ean']}&tipo=remover\">Remover produto</a></td>\n");
+                echo("<td><a href=\"listar_reposicoes.php?ean={$row['ean']}\">Listar eventos de reposicao</a></td>\n");
                 echo("</tr>\n");
             }
-            echo("<td><a href=\"inserir_produto_b.php\">Novo produto</a></td>");
+            echo("<tr><td><a href=\"inserir_produto_b.php\">Novo produto</a></td></tr>");
             echo("</table>\n");
         }
         catch (PDOException $e)
