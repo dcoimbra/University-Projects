@@ -17,7 +17,8 @@
 
         if ($tipo == "remover") {
 
-            $sql  = "DELETE FROM produto WHERE ean = '$ean';";
+            $sql = "DELETE FROM produto WHERE ean = '$ean';";
+            echo("Produto $ean removido");
         }
 
         else {
@@ -34,7 +35,10 @@
                              '$forn_primario',
                              '$data'
                     );";
+
+            echo("Produto $ean adicionado com designacao $design");
         }
+
         echo("<p>$sql</p>");
 
         $db->query($sql);
@@ -43,6 +47,7 @@
 
         $db = null;
     }
+
     catch (PDOException $e)
     {
         $db->query("rollback;");

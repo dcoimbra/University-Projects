@@ -21,6 +21,7 @@
             $db->query($sql);
 
             $db->query("commit;");
+            echo("Descricao do produto $ean alterado para $design");
 
             $db = null;
         }
