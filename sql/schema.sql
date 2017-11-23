@@ -6,18 +6,18 @@ CREATE TABLE categoria (
 );
 
 CREATE TABLE categoria_simples (
-  nome varchar(20) REFERENCES categoria(nome),
+  nome varchar(20) REFERENCES categoria(nome) ON DELETE CASCADE,
   PRIMARY KEY (nome)
 );
 
 CREATE TABLE super_categoria (
-  nome varchar(20) REFERENCES categoria(nome),
+  nome varchar(20) REFERENCES categoria(nome) ON DELETE CASCADE,
   PRIMARY KEY (nome)
 );
 
 CREATE TABLE constituida (
-  super_categoria varchar(20) REFERENCES super_categoria(nome),
-	categoria varchar(20) REFERENCES categoria(nome),
+  super_categoria varchar(20) REFERENCES super_categoria(nome) ON DELETE CASCADE,
+	categoria varchar(20) REFERENCES categoria(nome) ON DELETE CASCADE,
   PRIMARY KEY (super_categoria, categoria)
 );
 
@@ -30,15 +30,15 @@ CREATE TABLE fornecedor (
 CREATE TABLE produto (
 	ean integer,
 	design varchar(50),
-  categoria varchar(20) REFERENCES categoria(nome),
-  forn_primario integer REFERENCES fornecedor(nif),
+  categoria varchar(20) REFERENCES categoria(nome) ON DELETE CASCADE,
+  forn_primario integer REFERENCES fornecedor(nif) ON DELETE CASCADE,
   data date,
 	PRIMARY KEY (ean),
 	UNIQUE (design)
 );
 
 CREATE TABLE fornece_sec (
-  nif integer REFERENCES fornecedor(nif),
+  nif integer REFERENCES fornecedor(nif) ON DELETE CASCADE,
   ean integer REFERENCES produto(ean) ON DELETE CASCADE,
   PRIMARY KEY (nif, ean)
 );
@@ -50,7 +50,7 @@ CREATE TABLE corredor (
 );
 
 CREATE TABLE prateleira (
-  nro integer REFERENCES corredor(nro),
+  nro integer REFERENCES corredor(nro) ON DELETE CASCADE,
   lado varchar(20),
   altura varchar(20),
   PRIMARY KEY (nro, lado, altura)
@@ -65,7 +65,7 @@ CREATE TABLE planograma (
   unidades integer,
   loc integer,
   PRIMARY KEY(ean, nro, lado, altura),
-  FOREIGN KEY(nro, lado, altura) REFERENCES prateleira(nro, lado, altura)
+  FOREIGN KEY(nro, lado, altura) REFERENCES prateleira(nro, lado, altura) ON DELETE CASCADE
 );
 
 CREATE TABLE evento_reposicao (
@@ -83,6 +83,6 @@ CREATE TABLE reposicao (
   instante timestamp,
   unidades integer,
   PRIMARY KEY (ean, nro, lado, altura, operador, instante),
-  FOREIGN KEY (operador, instante) REFERENCES evento_reposicao(operador, instante),
+  FOREIGN KEY (operador, instante) REFERENCES evento_reposicao(operador, instante) ON DELETE CASCADE,
   FOREIGN KEY (ean, nro, lado, altura) REFERENCES planograma(ean, nro, lado, altura) ON DELETE CASCADE
 );

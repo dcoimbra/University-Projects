@@ -17,10 +17,7 @@
 
         if ($tipo == "remover") {
 
-            $sql1 = "DELETE FROM fornece_sec WHERE ean = '$ean';";
             $sql  = "DELETE FROM produto WHERE ean = '$ean';";
-
-            $db->query($sql1);
         }
 
         else {
@@ -32,10 +29,10 @@
             $sql = "INSERT INTO produto(ean, design, categoria, forn_primario, data)
                     VALUES (
                             '$ean',
-                             '$design',
-                             '$categoria',
-                             '$forn_primario',
-                             '$data'
+                            '$design',
+                            '$categoria',
+                            '$forn_primario',
+                            '$data'
                     );";
         }
         echo("<p>$sql</p>");
