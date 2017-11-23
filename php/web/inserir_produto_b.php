@@ -17,8 +17,8 @@
                 $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                $sql = $db->query("SELECT nome FROM categoria");
-                foreach($sql as $row) {
+                $categorias = $db->query("SELECT nome FROM categoria");
+                foreach($categorias as $row) {
                     echo ("<option value='{$row['nome']}'>{$row['nome']}</option>");}
             }
 
