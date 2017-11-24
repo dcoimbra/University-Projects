@@ -10,11 +10,11 @@ def features(X):
     
     F = np.zeros((len(X),5))
     for x in range(0,len(X)):
-        F[x,0] = len(X[x])
-        F[x,1] = 
-        F[x,2] = 
-        F[x,3] = 
-        F[x,4] = 
+        F[x, 0] = len(X[x]) #tamanho do vetor
+        F[x, 1] = hasEvenVowels(X[x]) #numero de vogais
+        F[x, 2] = X[x][0] #primeira letra
+        F[x, 3] = X[x][-1] #ultima letra
+        F[x, 4] =
 
     return F     
 
@@ -32,3 +32,21 @@ def myprediction(f, clf):
 
     return Ypred
 
+
+def countVowels(word):
+
+    count = 0
+    vowels = set("aáâeéèêiíìioóòôuúù")
+
+    for letter in word:
+        if letter in vowels:
+            count += 1
+
+    return count
+
+
+def hasEvenVowels(word):
+
+    vowelCount = countVowels(word)
+
+    return (vowelCount % 2 == 0)

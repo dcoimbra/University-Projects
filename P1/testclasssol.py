@@ -3,7 +3,7 @@ from sklearn import neighbors, datasets, tree, linear_model
 from sklearn.model_selection import cross_val_score
 from sklearn.externals import joblib
 
-import classsol
+'''import classsol'''
 
 #load input data
 words = []
