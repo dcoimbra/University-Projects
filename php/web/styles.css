@@ -1,0 +1,14 @@
+/*Style of our PHP app*/
+
+/*Products table*/
+table, tr, th{
+    border: 1px solid black;
+    border-collapse: collapse;
+
+}
+
+td, th{
+    padding-right: 20px;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------*/

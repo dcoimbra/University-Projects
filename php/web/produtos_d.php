@@ -1,9 +1,11 @@
 <html>
+    <link rel="stylesheet" href="styles.css" type="text/css">
     <body>
-        <h3>Produtos</h3>
+        <h2>Produtos</h2>
         <?php
         try
         {
+            //Initializing connection
             $host = "db.ist.utl.pt";
             $user ="ist426008";
             $password = "northernlights";
@@ -12,12 +14,13 @@
             $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+            //Creation of the products table
             $sql = "SELECT * FROM produto;";
-
             $result = $db->query($sql);
 
-            echo("<table border=\"0\" cellspacing=\"5\">\n");
+            echo("<table cellspacing=\"10\">\n");
 
+                //Table headers
             echo("<tr>\n
                     <th>EAN</th>\n
                     <th>Designacao</th>\n
@@ -26,21 +29,24 @@
                     <th>Data</th>\n
                   </tr>\n");
 
+                //Table content
             foreach($result as $row)
             {
-                echo("<tr>\n");
-                echo("<td>{$row['ean']}</td>\n");
-                echo("<td>{$row['design']}</td>\n");
-                echo("<td>{$row['categoria']}</td>\n");
-                echo("<td>{$row['forn_primario']}</td>\n");
-                echo("<td>{$row['data']}</td>\n");
-                echo("<td><a href=\"design_d.php?ean={$row['ean']}\">Editar designacao</a></td>\n");
-                echo("<td><a href=\"update_prod.php?ean={$row['ean']}&tipo=remover\">Remover produto</a></td>\n");
-                echo("<td><a href=\"listar_reposicoes.php?ean={$row['ean']}\">Listar eventos de reposicao</a></td>\n");
-                echo("</tr>\n");
+                echo("<tr>\n
+                        <td>{$row['ean']}</td>\n
+                        <td>{$row['design']}</td>\n
+                        <td>{$row['categoria']}</td>\n
+                        <td>{$row['forn_primario']}</td>\n
+                        <td>{$row['data']}</td>\n
+                        <td><a href=\"design_d.php?ean={$row['ean']}\">Editar designacao</a></td>\n
+                        <td><a href=\"update_prod.php?ean={$row['ean']}&tipo=remover\">Remover produto</a></td>\n
+                        <td><a href=\"listar_reposicoes.php?ean={$row['ean']}\">Listar eventos de reposicao</a></td>\n
+                    </tr>\n");
             }
-            echo("<tr><td><a href=\"inserir_produto_b.php\">Novo produto</a></td></tr>");
+
             echo("</table>\n");
+            echo("<tr><td><a href=\"inserir_produto_b.php\">Novo produto</a></td></tr>");
+
         }
         catch (PDOException $e)
         {

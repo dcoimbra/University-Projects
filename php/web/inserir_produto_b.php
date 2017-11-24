@@ -8,15 +8,17 @@
         <p>Categoria: <select name="categoria" Id="categoria">
             <option value=""></option>
             <?php
+
             try {
                 $host = "db.ist.utl.pt";
                 $user = "ist426008";
                 $password = "northernlights";
                 $dbname = $user;
 
-                $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
+                $db = new PDO("pgsql:host=$host; dbname=$dbname", $user, $password);
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+                //Creation of a dropdown list
                 $categorias = $db->query("SELECT nome FROM categoria");
 
                 foreach($categorias as $row) {
