@@ -60,16 +60,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
      111,
      '2017-01-22'
   );
-
-INSERT INTO produto(ean, design, categoria, forn_primario, data)
-  VALUES (
-     4444,
-     'pera',
-     'fruta',
-     111,
-     '2017-01-22'
-  );
-
+  
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
     2222,
@@ -86,6 +77,24 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
     'mobilia',
     333,
     '2017-01-23'
+  );
+
+INSERT INTO produto(ean, design, categoria, forn_primario, data)
+  VALUES (
+     4444,
+     'pera',
+     'fruta',
+     111,
+     '2017-01-22'
+  );
+
+INSERT INTO produto(ean, design, categoria, forn_primario, data)
+  VALUES (
+     5555,
+     'morangos com chantily',
+     'sobremesas',
+     111,
+     '2017-01-22'
   );
 
 INSERT INTO fornece_sec(nif, ean)
@@ -116,6 +125,12 @@ INSERT INTO fornece_sec(nif, ean)
   VALUES (
     444,
     3333
+  );
+  
+INSERT INTO fornece_sec(nif, ean)
+  VALUES (
+    222,
+    5555
   );
 
 INSERT INTO corredor(nro, largura)
