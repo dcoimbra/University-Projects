@@ -25,11 +25,11 @@ for test in ["wordsclass.npy", "wordsclass2.npy"]:
       
     Ypred = classsol.myprediction(f, clf)
 
-    print(np.sum(Y^Ypred)/len(X))
+    q_error = (np.sum(Y^Ypred)/len(X))
 
     if (np.sum(Y^Ypred)/len(X))<.05:
-        print("Erro bastante baixo. PERFECT!\n")
+        print("Erro bastante baixo. PERFECT! Q:", q_error)
     elif (np.sum(Y^Ypred)/len(X))<.3:
-        print("Erro nos Q dentro dos limites de tolerância. OK\n")
+        print("Erro nos Q dentro dos limites de tolerância. OK Q:", q_error)
     else:
-        print("Erro nos Q acima dos limites de tolerância. FAILED\n")
+        print("Erro nos Q acima dos limites de tolerância. FAILED Q:", q_error)
