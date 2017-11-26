@@ -1,3 +1,8 @@
+#         Grupo T001          #
+#   57842 - Filipa Marques    #
+#   84708 - David Coimbra     #
+
+
 import numpy as np
 from sklearn import neighbors, datasets, tree, linear_model
 

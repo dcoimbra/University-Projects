@@ -1,3 +1,7 @@
+#         Grupo T001          #
+#   57842 - Filipa Marques    #
+#   84708 - David Coimbra     #
+
 # -*- coding: utf-8 -*-
 """
 Created on Mon Oct 16 20:31:54 2017
