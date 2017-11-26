@@ -11,7 +11,7 @@ import timeit
 
 def mytraining(X, Y):
 
-    reg = KernelRidge(kernel="")
+    reg = KernelRidge(kernel='rbf', gamma=0.08, alpha=0.001)
     reg = reg.fit(X, Y)
     return reg
 
