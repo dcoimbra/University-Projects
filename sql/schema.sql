@@ -52,14 +52,16 @@ CREATE TABLE corredor (
 CREATE TABLE prateleira (
   nro integer REFERENCES corredor(nro),
   lado varchar(20),
-  altura varchar(20),
+  altura varchar(10),
+  CHECK (altura IN ('chao', 'medio', 'superior')),
   PRIMARY KEY (nro, lado, altura)
 );
 
 CREATE TABLE planograma (
   ean numeric(13, 0) REFERENCES produto(ean) ON DELETE CASCADE,
   nro integer,
-  lado varchar(20),
+  lado varchar(10),
+  CHECK (lado IN ('esquerdo', 'direito')),
   altura varchar(20),
   face integer,
   unidades integer,
@@ -78,7 +80,8 @@ CREATE TABLE reposicao (
   ean numeric(13, 0),
   nro integer,
   lado varchar(20),
-  altura varchar(20),
+  altura varchar(10),
+  CHECK (altura IN ('chao', 'medio', 'superior')),
   operador varchar(50),
   instante timestamp,
   unidades integer,
