@@ -28,9 +28,7 @@
             $design = $_REQUEST['design'];
             $categoria = $_REQUEST['categoria'];
             $forn_primario = $_REQUEST['forn_primario'];
-            $nome_forn_primario = $_REQUEST['nome_forn_primario'];
             $forn_secundario = $_REQUEST['forn_secundario'];
-            $nome_forn_sec = $_REQUEST['nome_forn_sec'];
             $data = $_REQUEST['data'];
 
             if ($forn_primario == $forn_secundario) {
