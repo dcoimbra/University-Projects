@@ -22,24 +22,24 @@ CREATE TABLE constituida (
 );
 
 CREATE TABLE fornecedor (
-  nif integer,
+  nif numeric(9,0),
 	nome varchar(20),
 	PRIMARY KEY (nif)
 );
 
 CREATE TABLE produto (
-	ean integer,
+	ean numeric(13, 0),
 	design varchar(50),
   categoria varchar(20) REFERENCES categoria(nome),
-  forn_primario integer REFERENCES fornecedor(nif),
+  forn_primario numeric(9,0) REFERENCES fornecedor(nif) NOT NULL,
   data date,
 	PRIMARY KEY (ean),
 	UNIQUE (design)
 );
 
 CREATE TABLE fornece_sec (
-  nif integer REFERENCES fornecedor(nif),
-  ean integer REFERENCES produto(ean) ON DELETE CASCADE,
+  nif numeric(9, 0) REFERENCES fornecedor(nif) NOT NULL,
+  ean numeric(13, 0) REFERENCES produto(ean) ON DELETE CASCADE,
   PRIMARY KEY (nif, ean)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE prateleira (
 );
 
 CREATE TABLE planograma (
-  ean integer REFERENCES produto(ean) ON DELETE CASCADE,
+  ean numeric(13, 0) REFERENCES produto(ean) ON DELETE CASCADE,
   nro integer,
   lado varchar(20),
   altura varchar(20),
@@ -75,7 +75,7 @@ CREATE TABLE evento_reposicao (
 );
 
 CREATE TABLE reposicao (
-  ean integer,
+  ean numeric(13, 0),
   nro integer,
   lado varchar(20),
   altura varchar(20),
