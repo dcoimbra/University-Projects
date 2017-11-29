@@ -30,107 +30,107 @@ INSERT INTO constituida(super_categoria, categoria) VALUES ('mobilia', 'cozinha'
 
 INSERT INTO fornecedor(nif, nome)
   VALUES (
-    111,
+    111111111,
     'um'
   );
 
 INSERT INTO fornecedor(nif, nome)
   VALUES (
-    222,
+    222222222,
     'dois'
   );
 
 INSERT INTO fornecedor(nif, nome)
   VALUES (
-    333,
+    333333333,
     'tres'
   );
 
 INSERT INTO fornecedor(nif, nome)
   VALUES (
-    444,
+    444444444,
     'quatro'
   );
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
-     1111,
+     1111111111111,
      'maca',
      'fruta',
-     111,
+     111111111,
      '2017-01-22'
   );
   
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
-    2222,
+    2222222222222,
     'gelado',
     'sobremesas',
-    222,
+    222222222,
     '2017-01-23'
   );
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
-    3333,
+    3333333333333,
     'cadeira',
     'mobilia',
-    333,
+    333333333,
     '2017-01-23'
   );
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
-     4444,
+     4444444444444,
      'pera',
      'fruta',
-     111,
+     111111111,
      '2017-01-22'
   );
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
-     5555,
+     5555555555555,
      'morangos com chantily',
      'sobremesas',
-     111,
+     111111111,
      '2017-01-22'
   );
 
 INSERT INTO fornece_sec(nif, ean)
   VALUES (
-    444,
-    1111
+    444444444,
+    1111111111111
   );
 
 INSERT INTO fornece_sec(nif, ean)
   VALUES (
-    222,
-    3333
+    222222222,
+    3333333333333
   );
 
 INSERT INTO fornece_sec(nif, ean)
   VALUES (
-    333,
-    1111
+    333333333,
+    1111111111111
   );
 
 INSERT INTO fornece_sec(nif, ean)
   VALUES (
-    222,
-    4444
+    222222222,
+    4444444444444
   );
 
 INSERT INTO fornece_sec(nif, ean)
   VALUES (
-    444,
-    3333
+    444444444,
+    3333333333333
   );
   
 INSERT INTO fornece_sec(nif, ean)
   VALUES (
-    222,
-    5555
+    222222222,
+    5555555555555
   );
 
 INSERT INTO corredor(nro, largura)
@@ -149,22 +149,22 @@ INSERT INTO prateleira(nro, lado, altura)
   VALUES (
     1,
     'esquerdo',
-    'cima'
+    'superior'
   );
 
 INSERT INTO prateleira(nro, lado, altura)
   VALUES (
     2,
     'esquerdo',
-    'cima'
+    'superior'
   );
 
 INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
   VALUES (
-      1111,
+      1111111111111,
       1,
       'esquerdo',
-      'cima',
+      'superior',
       1,
       3,
       1
@@ -172,10 +172,10 @@ INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
 
 INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
   VALUES (
-      2222,
+      2222222222222,
       1,
       'esquerdo',
-      'cima',
+      'superior',
       2,
       4,
       2
@@ -195,10 +195,10 @@ INSERT INTO evento_reposicao(operador, instante)
 
 INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
   VALUES (
-    2222,
+    2222222222222,
     1,
     'esquerdo',
-    'cima',
+    'superior',
     'joao',
     '2017-11-02 00:00',
     2
@@ -206,20 +206,11 @@ INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
 
 INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
   VALUES (
-    2222,
+    2222222222222,
     1,
     'esquerdo',
-    'cima',
+    'superior',
     'alberto',
     '2017-11-04 00:00',
     2
   );
-
-
-
-
-
-
-
-
-

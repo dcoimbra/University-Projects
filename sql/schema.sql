@@ -22,24 +22,24 @@ CREATE TABLE constituida (
 );
 
 CREATE TABLE fornecedor (
-  nif integer,
+  nif numeric(9,0),
 	nome varchar(20),
 	PRIMARY KEY (nif)
 );
 
 CREATE TABLE produto (
-	ean integer,
+	ean numeric(13, 0),
 	design varchar(50),
   categoria varchar(20) REFERENCES categoria(nome),
-  forn_primario integer REFERENCES fornecedor(nif),
+  forn_primario numeric(9,0) REFERENCES fornecedor(nif) NOT NULL,
   data date,
 	PRIMARY KEY (ean),
 	UNIQUE (design)
 );
 
 CREATE TABLE fornece_sec (
-  nif integer REFERENCES fornecedor(nif),
-  ean integer REFERENCES produto(ean) ON DELETE CASCADE,
+  nif numeric(9, 0) REFERENCES fornecedor(nif) NOT NULL,
+  ean numeric(13, 0) REFERENCES produto(ean) ON DELETE CASCADE,
   PRIMARY KEY (nif, ean)
 );
 
@@ -52,15 +52,18 @@ CREATE TABLE corredor (
 CREATE TABLE prateleira (
   nro integer REFERENCES corredor(nro),
   lado varchar(20),
-  altura varchar(20),
+  altura varchar(10),
+  CHECK (altura IN ('chao', 'medio', 'superior')),
   PRIMARY KEY (nro, lado, altura)
 );
 
 CREATE TABLE planograma (
-  ean integer REFERENCES produto(ean) ON DELETE CASCADE,
+  ean numeric(13, 0) REFERENCES produto(ean) ON DELETE CASCADE,
   nro integer,
-  lado varchar(20),
-  altura varchar(20),
+  lado varchar(10),
+  CHECK (lado IN ('esquerdo', 'direito')),
+  altura varchar(10),
+  CHECK (altura IN ('chao', 'medio', 'superior')),
   face integer,
   unidades integer,
   loc integer,
@@ -71,16 +74,19 @@ CREATE TABLE planograma (
 CREATE TABLE evento_reposicao (
   operador varchar(50),
   instante timestamp,
+  CHECK (instante <= CURRENT_TIMESTAMP),
   PRIMARY KEY (operador, instante)
 );
 
 CREATE TABLE reposicao (
-  ean integer,
+  ean numeric(13, 0),
   nro integer,
   lado varchar(20),
-  altura varchar(20),
+  altura varchar(10),
+  CHECK (altura IN ('chao', 'medio', 'superior')),
   operador varchar(50),
   instante timestamp,
+  CHECK (instante <= CURRENT_TIMESTAMP),
   unidades integer,
   PRIMARY KEY (ean, nro, lado, altura, operador, instante),
   FOREIGN KEY (operador, instante) REFERENCES evento_reposicao(operador, instante),
