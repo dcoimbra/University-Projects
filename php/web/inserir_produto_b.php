@@ -6,7 +6,6 @@
         <p>Designacao: <input type="text" name="design"/></p>
 
         <p>Categoria: <select name="categoria" Id="categoria">
-            <option value=""></option>
             <?php
 
             try {
@@ -15,14 +14,15 @@
                 $password = "northernlights";
                 $dbname = $user;
 
-                $db = new PDO("pgsql:host=$host; dbname=$dbname", $user, $password);
+                $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                 //Creation of a dropdown list
-                $categorias = $db->query("SELECT nome FROM categoria");
+                $categorias = $db->query("SELECT nome FROM categoria;");
 
                 foreach($categorias as $row) {
-                    echo ("<option value='{$row['nome']}'>{$row['nome']}</option>");}
+                    echo ("<option value='{$row['nome']}'>{$row['nome']}</option>");
+                }
             }
 
             catch (PDOException $e)
@@ -34,6 +34,7 @@
             </select></p>
 
         <p>Fornecedor primario: <input type="text" name="forn_primario"/></p>
+        <p>Fornecedor secundario: <input type="text" name="forn_secundario"/></p>
         <p>Data: <input type="date" name="data"/></p>
         <p><input type="hidden" name="tipo" value="inserir"/></p>
         <p><input type="submit" value="Submit"/></p>

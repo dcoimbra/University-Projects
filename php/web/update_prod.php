@@ -25,11 +25,12 @@
             $design = $_REQUEST['design'];
             $categoria = $_REQUEST['categoria'];
             $forn_primario = $_REQUEST['forn_primario'];
+            $forn_secundario = $_REQUEST['forn_secundario'];
             $data = $_REQUEST['data'];
 
             $sql = "INSERT INTO produto(ean, design, categoria, forn_primario, data)
                     VALUES (
-                            '$ean',
+                             '$ean',
                              '$design',
                              '$categoria',
                              '$forn_primario',
