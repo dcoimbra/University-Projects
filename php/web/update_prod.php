@@ -17,32 +17,50 @@
 
         if ($tipo == "remover") {
 
-            $sql = "DELETE FROM produto WHERE ean = '$ean';";
-            echo("Produto $ean removido");
+            $sql_apagar_produto = "DELETE FROM produto WHERE ean = '$ean';";
+
+            echo("$sql_apagar_produto\n");
+            $db->query($sql_apagar_produto);
+            echo("Produto $ean removido\n");
         }
 
         else {
             $design = $_REQUEST['design'];
             $categoria = $_REQUEST['categoria'];
             $forn_primario = $_REQUEST['forn_primario'];
+            $nome_forn_primario = $_REQUEST['nome_forn_primario'];
             $forn_secundario = $_REQUEST['forn_secundario'];
+            $nome_forn_sec = $_REQUEST['nome_forn_sec'];
             $data = $_REQUEST['data'];
 
-            $sql = "INSERT INTO produto(ean, design, categoria, forn_primario, data)
-                    VALUES (
-                             '$ean',
-                             '$design',
-                             '$categoria',
-                             '$forn_primario',
-                             '$data'
-                    );";
+            if ($forn_primario == $forn_secundario) {
 
-            echo("Produto $ean adicionado com designacao $design");
+                exit("Fornecedor primario nao pode ser igual ao secundario");
+            }
+
+            $sql_inserir_produto = "INSERT INTO produto(ean, design, categoria, forn_primario, data)
+                                    VALUES (
+                                            '$ean',
+                                            '$design',
+                                            '$categoria',
+                                            '$forn_primario',
+                                            '$data'
+                                            );";
+
+            $sql_inserir_forn_sec = "INSERT INTO fornece_sec(nif, ean)
+                                     VALUES (
+                                              '$forn_secundario', 
+                                              '$ean'
+                                            );";
+
+            echo("<p>$sql_inserir_produto</p>");
+            echo("<p>$sql_inserir_forn_sec</p>");
+
+            $db->query($sql_inserir_produto);
+            $db->query($sql_inserir_forn_sec);
+
+            echo("<p>Produto $ean adicionado com designacao $design</p>");
         }
-
-        echo("<p>$sql</p>");
-
-        $db->query($sql);
 
         $db->query("commit;");
 

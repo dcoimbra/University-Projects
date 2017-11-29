@@ -1,40 +1,61 @@
 <html>
     <body>
     <h3>Inserir novo produto</h3>
-    <form action="update_prod.php" method="post">
+    <form name="insert" action="update_prod.php" method="post">
         <p>EAN: <input type="number" name="ean"/></p>
         <p>Designacao: <input type="text" name="design"/></p>
 
-        <p>Categoria: <select name="categoria" Id="categoria">
-            <?php
+        <?php
 
-            try {
-                $host = "db.ist.utl.pt";
-                $user = "ist426008";
-                $password = "northernlights";
-                $dbname = $user;
+        try {
+            $host = "db.ist.utl.pt";
+            $user = "ist426008";
+            $password = "northernlights";
+            $dbname = $user;
 
-                $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
-                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                //Creation of a dropdown list
-                $categorias = $db->query("SELECT nome FROM categoria;");
+            echo("<p>Categoria: <select name=\"categoria\" Id=\"categoria\">");
 
-                foreach($categorias as $row) {
-                    echo ("<option value='{$row['nome']}'>{$row['nome']}</option>");
-                }
+            //Creation of a dropdown list
+            $categorias = $db->query("SELECT nome FROM categoria;");
+
+            foreach($categorias as $row) {
+                echo ("<option value='{$row['nome']}'>{$row['nome']}</option>");
             }
 
-            catch (PDOException $e)
-            {
-                echo("<p>ERROR: {$e->getMessage()}</p>");
+            echo(" </select></p>");
+
+            echo("<p>Fornecedor primario: <select name=\"forn_primario\" Id=\"categoria\">");
+
+            //Creation of a dropdown list
+            $fornecedores = $db->query("SELECT nif FROM fornecedor;");
+
+            foreach($fornecedores as $row) {
+                echo ("<option value='{$row['nif']}'>{$row['nif']}</option>");
             }
-            ?>
 
-            </select></p>
+            echo(" </select></p>");
 
-        <p>Fornecedor primario: <input type="text" name="forn_primario"/></p>
-        <p>Fornecedor secundario: <input type="text" name="forn_secundario"/></p>
+
+            echo("<p>Fornecedor secundario: <select name=\"forn_secundario\" Id=\"categoria\">");
+
+            $fornecedores = $db->query("SELECT nif FROM fornecedor;");
+
+            foreach ($fornecedores as $row) {
+
+                echo("<option value='{$row['nif']}'>{$row['nif']}</option>");
+            }
+
+            echo(" </select></p>");
+        }
+
+        catch (PDOException $e)
+        {
+            echo("<p>ERROR: {$e->getMessage()}</p>");
+        }
+        ?>
         <p>Data: <input type="date" name="data"/></p>
         <p><input type="hidden" name="tipo" value="inserir"/></p>
         <p><input type="submit" value="Submit"/></p>
