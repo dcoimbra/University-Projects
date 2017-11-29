@@ -35,7 +35,7 @@
 
             if ($forn_primario == $forn_secundario) {
 
-                exit("Fornecedor primario nao pode ser igual ao secundario");
+                exit("<p>Fornecedor primario nao pode ser igual ao secundario</p>");
             }
 
             $sql_inserir_produto = "INSERT INTO produto(ean, design, categoria, forn_primario, data)
