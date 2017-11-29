@@ -74,6 +74,7 @@ CREATE TABLE planograma (
 CREATE TABLE evento_reposicao (
   operador varchar(50),
   instante timestamp,
+  CHECK (instante <= CURRENT_TIMESTAMP),
   PRIMARY KEY (operador, instante)
 );
 
@@ -85,7 +86,7 @@ CREATE TABLE reposicao (
   CHECK (altura IN ('chao', 'medio', 'superior')),
   operador varchar(50),
   instante timestamp,
-  CHECK (instante < CURRENT_TIMESTAMP),
+  CHECK (instante <= CURRENT_TIMESTAMP),
   unidades integer,
   PRIMARY KEY (ean, nro, lado, altura, operador, instante),
   FOREIGN KEY (operador, instante) REFERENCES evento_reposicao(operador, instante),
