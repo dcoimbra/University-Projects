@@ -23,29 +23,24 @@ CREATE TABLE constituida (
 );
 
 CREATE TABLE fornecedor (
-  nif integer,
-  CHECK (nif > 8 and nif <= 9),
+  nif numeric(9,0),
 	nome varchar(20),
 	PRIMARY KEY (nif)
 );
 
 CREATE TABLE produto (
-	ean integer,
-  CHECK (ean > 12 and ean <= 13),
+	ean numeric(13, 0),
 	design varchar(50),
   categoria varchar(20) REFERENCES categoria(nome),
-  forn_primario integer REFERENCES fornecedor(nif) NOT NULL,
-  CHECK (produto.forn_primario > 8 and produto.forn_primario <= 9),
+  forn_primario numeric(9,0) REFERENCES fornecedor(nif) NOT NULL,
   data date,
 	PRIMARY KEY (ean),
 	UNIQUE (design)
 );
 
 CREATE TABLE fornece_sec (
-  nif integer REFERENCES fornecedor(nif) NOT NULL,
-  CHECK (nif > 8 and ean <= 9),
-  ean integer REFERENCES produto(ean) ON DELETE CASCADE,
-  CHECK (ean > 12 and ean <= 13),
+  nif numeric(9, 0) REFERENCES fornecedor(nif) NOT NULL,
+  ean numeric(13, 0) REFERENCES produto(ean) ON DELETE CASCADE,
   PRIMARY KEY (nif, ean)
 );
 
@@ -64,8 +59,7 @@ CREATE TABLE prateleira (
 );
 
 CREATE TABLE planograma (
-  ean integer REFERENCES produto(ean) ON DELETE CASCADE,
-  CHECK (ean > 12 and ean <= 13),
+  ean numeric(13,0) REFERENCES produto(ean) ON DELETE CASCADE,
   nro integer,
   lado varchar(10),
   CHECK (lado IN ('esquerdo', 'direito')),
@@ -86,8 +80,7 @@ CREATE TABLE evento_reposicao (
 );
 
 CREATE TABLE reposicao (
-  ean integer,
-  CHECK (ean > 12 and ean <= 13),
+  ean numeric(13, 0),
   nro integer,
   lado varchar(20),
   altura varchar(10),
