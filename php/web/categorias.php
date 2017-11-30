@@ -35,6 +35,7 @@
             {
                 echo("<tr>
                         <td>{$row['nome']}</td>
+                        <td><a href=\"remove_cat.php?nome={$row['nome']}&tipo=simples\">Remover categoria</a></td>\n
                     </tr>");
             }
 
@@ -60,7 +61,8 @@
             {
                 echo("<tr>
                         <td>{$row['nome']}</td>
-                        <td><a href=\"listar_categoria.php?nome={$row['nome']}\">Listar sub-categorias</a></td>
+                        <td><a href=\"listar_categoria.php?nome={$row['nome']}\">Listar sub-categorias</a></td>\n
+                        <td><a href=\"remove_cat.php?nome={$row['nome']}&tipo=super\">Remover categoria</a></td>
                     </tr>");
             }
 
