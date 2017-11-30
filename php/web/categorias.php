@@ -17,41 +17,54 @@
             //Creation of the categories tables
             $sql1 = "SELECT * FROM categoria_simples;";
             $sql2 = "SELECT * FROM super_categoria;";
-            $result = $db->query($sql1);
+
+
+            /*Criacao da tabela das categorias simples*/
 
             echo("<table cellspacing=\"10\">\n");
 
-                //Table headers
-            echo("<tr>\n
-                    <th>Categorias Simples</th>\n
-                  </tr>\n");
+                //Table headers para categorias simples
+            echo("<tr>
+                    <th>Categorias Simples</th>
+                  </tr>");
 
-                //Table content
+            $result = $db->query($sql1);
+
+                //Insercao das categorias simples como rows na tabela
             foreach($result as $row)
             {
-                echo("<tr>\n
-                        <td>{$row['nome']}</td>\n
-                    </tr>\n<p>");
+                echo("<tr>
+                        <td>{$row['nome']}</td>
+                    </tr>");
             }
-//esta' feio:
-// FIXME
-            $result = $db->query($sql2);
+
+            echo("</table>\n");
+
+            echo("<p><a href=\"categoria_simples.php\">Nova categoria simples</a></p>");
+            echo("<p><a href=\"super_categoria.php\">Nova supercategoria </a></p>");
+
+
+            /*Criacao da tabela das super categorias*/
+
+            echo("<table cellspacing=\"10\" id = 'super_cat'>\n");
+
+            //Table headers para super categorias
             echo("<tr>\n
                     <th>Super Categorias</th>\n
                   </tr>\n");
 
-                //Table content
+            $result = $db->query($sql2);
+
+                //Insercao das super categorias como rows na tabela
             foreach($result as $row)
             {
-                echo("<tr>\n
-                        <td>{$row['nome']}</td>\n
-                        <td><a href=\"listar_categoria.php?nome={$row['nome']}\">Listar sub-categorias</a></td>\n
-                    </tr>\n");
+                echo("<tr>
+                        <td>{$row['nome']}</td>
+                        <td><a href=\"listar_categoria.php?nome={$row['nome']}\">Listar sub-categorias</a></td>
+                    </tr>");
             }
 
             echo("</table>\n");
-            echo("<tr><td><a href=\"categoria_simples.php\">Nova categoria simples</a></td></tr>");
-            echo("<p><tr><td><a href=\"super_categoria.php\">Nova supercategoria </a></td></tr>");
 
         }
         catch (PDOException $e)
