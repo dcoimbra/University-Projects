@@ -33,7 +33,7 @@
         $sql = "SELECT categoria FROM constituida WHERE super_categoria = '$cat';";
         //echo("<p>$sql\n</p>");
         $subcats = $db->query($sql);
-        $cont = ($subcats)->rowCount();
+        $cont = $subcats->rowCount();
         
         if($cont == 0)
                 return;
@@ -48,7 +48,6 @@
             array_push($aux, $row['categoria']);
             list_aux($row['categoria'], $db);
         }
-
     }
     
     ?>
