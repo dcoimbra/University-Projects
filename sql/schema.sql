@@ -17,9 +17,10 @@ CREATE TABLE super_categoria (
 
 CREATE TABLE constituida (
   super_categoria varchar(20) REFERENCES super_categoria(nome),
-	categoria varchar(20) REFERENCES categoria(nome),
+  categoria varchar(20) REFERENCES categoria(nome),
   CHECK (super_categoria != categoria),
-  PRIMARY KEY (super_categoria, categoria)
+  PRIMARY KEY (super_categoria, categoria),
+  UNIQUE(categoria)
 );
 
 CREATE TABLE fornecedor (

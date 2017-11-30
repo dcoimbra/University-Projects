@@ -1,4 +1,5 @@
 <html>
+    <script type="text/javascript" src="forn_sec_input.js"></script>
     <body>
     <h3>Inserir novo produto</h3>
     <form name="insert" action="update_prod.php" method="post">
@@ -27,8 +28,7 @@
 
             echo("</select></p>");
 
-            echo("<p>Fornecedor primario: <input list=\"forn_primario_list\" name=\"forn_primario\" id=\"forn_primario\" autocomplete=\"off\">");
-            echo("<datalist id=\"forn_primario_list\">");
+            echo("<datalist id=\"forn_list\">");
 
             //Creation of a dropdown list
             $fornecedores = $db->query("SELECT nif FROM fornecedor;");
@@ -38,27 +38,19 @@
             }
 
             echo("</datalist>");
+
+            echo("<p>Fornecedor primario: <input list=\"forn_list\" name=\"forn_primario\" id=\"forn_primario\" autocomplete=\"off\">");
             echo(" Nome: <input name=\"forn_primario_nome\" id=\"forn_primario_nome\" autocomplete=\"off\"></p>");
 
-
-            echo("<p>Fornecedor secundario: <input list=\"forn_secundario_list\" name=\"forn_secundarios[]\" id=\"forn_secundario\" autocomplete=\"off\">");
-            echo("<datalist id=\"forn_secundario_list\">");
-
-            //Creation of a dropdown list
-            $fornecedores = $db->query("SELECT nif FROM fornecedor;");
-
-            foreach ($fornecedores as $row) {
-
-                echo("<option value='{$row['nif']}'>{$row['nif']}</option>");
-            }
-
-            echo("</datalist>");
-            echo(" Nome: <input name=\"forn_secundarios_nomes[]\" id=\"forn_secundario_nome\" autocomplete=\"off\"></p>");
+            echo("<p>Fornecedor secundario: <input list=\"forn_list\" name=\"forn_secundarios[]\" id=\"forn_secundario\" autocomplete=\"off\">");
+            echo(" Nome: <input name=\"forn_secundarios_nomes[]\" id=\"forn_secundarios_nomes\" autocomplete=\"off\"></p>");
+            echo("<div id=\"input_container\"></div>");
+            echo("<button type=\"button\" onclick=\"adicionarInput();\">Adicionar fornecedor secundario</button>");
         }
 
         catch (PDOException $e)
         {
-            echo("<p>ERROR: {$e->getMessage()}</p>");
+            echo(" <p>ERROR: {$e->getMessage()}</p>");
         }
         ?>
         <p>Data: <input type="date" name="data" autocomplete="off"/></p>

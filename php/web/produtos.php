@@ -45,7 +45,7 @@
             }
 
             echo("</table>\n");
-            echo("<tr><td><a href=\"inserir_produto_b.php\">Novo produto</a></td></tr>");
+            echo("<a href=\"inserir_produto_b.php\">Novo produto</a>");
 
         }
         catch (PDOException $e)
