@@ -1,4 +1,5 @@
 <html>
+    <link rel="stylesheet" href="styles.css" type="text/css">
     <body>
         <?php
         try
@@ -18,21 +19,21 @@
 
             $result = $db->query($sql);
 
-            echo("<table border=\"0\" cellspacing=\"5\">\n");
+            echo("<table border=\"0\" cellspacing=\"5\">");
 
             echo("<tr>\n
-                    <th>Operador</th>\n
-                    <th>Instante</th>\n
-                    <th>Unidades</th>\n
+                    <th>Operador</th>
+                    <th>Instante</th>
+                    <th>Unidades</th>
                   </tr>\n");
 
             foreach ($result as $row) {
 
-                echo("<tr>\n");
-                echo("<td>{$row['operador']}</td>\n");
-                echo("<td>{$row['instante']}</td>\n");
-                echo("<td>{$row['unidades']}</td>\n");
-                echo("</tr>\n");
+                echo("<tr>");
+                echo("<td>{$row['operador']}</td>");
+                echo("<td>{$row['instante']}</td>");
+                echo("<td>{$row['unidades']}</td>");
+                echo("</tr>");
             }
             echo("</table>\n");
 
