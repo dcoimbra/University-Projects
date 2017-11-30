@@ -40,8 +40,8 @@
 
             echo("</table>\n");
 
-            echo("<p><a href=\"categoria_simples.php\">Nova categoria simples</a></p>");
-            echo("<p><a href=\"super_categoria.php\">Nova supercategoria </a></p>");
+            echo("<p><a href=\"categoria_simples.php\">Nova categoria simples</a></p>
+                  <p><a href=\"super_categoria.php\">Nova supercategoria </a></p>");
 
 
             /*Criacao da tabela das super categorias*/
@@ -49,9 +49,9 @@
             echo("<table cellspacing=\"10\" id = 'super_cat'>\n");
 
             //Table headers para super categorias
-            echo("<tr>\n
-                    <th>Super Categorias</th>\n
-                  </tr>\n");
+            echo("<tr>
+                    <th>Super Categorias</th>
+                  </tr>");
 
             $result = $db->query($sql2);
 

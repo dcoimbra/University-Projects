@@ -46,9 +46,9 @@
                 continue;
             }
 
-            echo("<ul>");
-            echo("<li>{$row['categoria']}</li>");
-            echo("</ul>");
+            echo("<ul>
+                    <li>{$row['categoria']}</li>
+                  </ul>");
 
             array_push($aux, $row['categoria']);
             list_aux($row['categoria'], $db);
