@@ -1,5 +1,7 @@
 <html>
-    <link rel="stylesheet" href="styles.css" type="text/css">
+    <head>
+        <link rel="stylesheet" href="styles.css" type="text/css">
+    </head>
     <body>
         <h2>Categorias</h2>
         <?php
