@@ -14,7 +14,7 @@
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-        echo("Sub-categorias de $nome:\n<br>");
+        echo("<b>Sub-categorias de $nome:\n</b>");
         
         list_aux($nome, $db);
       
@@ -30,6 +30,7 @@
 
     function list_aux($cat, $db) {
         global $aux;
+
         $sql = "SELECT categoria FROM constituida WHERE super_categoria = '$cat';";
         //echo("<p>$sql\n</p>");
         $subcats = $db->query($sql);
@@ -38,13 +39,17 @@
         if($cont == 0)
                 return;
         
-
+        //Listar as subcategorias
         foreach ($subcats as $row) {
+
             if (in_array($row['categoria'], $aux)){
                 continue;
             }
-            
-            echo("<p>{$row['categoria']}\n");
+
+            echo("<ul>");
+            echo("<li>{$row['categoria']}</li>");
+            echo("</ul>");
+
             array_push($aux, $row['categoria']);
             list_aux($row['categoria'], $db);
         }
