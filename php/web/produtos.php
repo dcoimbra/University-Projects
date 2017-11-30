@@ -21,27 +21,27 @@
             echo("<table cellspacing=\"10\">\n");
 
                 //Table headers
-            echo("<tr>\n
-                    <th>EAN</th>\n
-                    <th>Designacao</th>\n
-                    <th>Categoria</th>\n
-                    <th>Fornecedor primario</th>\n
-                    <th>Data</th>\n
-                  </tr>\n");
+            echo("<tr>
+                    <th>EAN</th>
+                    <th>Designacao</th>
+                    <th>Categoria</th>
+                    <th>Fornecedor primario</th>
+                    <th>Data</th>
+                  </tr>");
 
                 //Table content
             foreach($result as $row)
             {
                 echo("<tr>\n
-                        <td>{$row['ean']}</td>\n
-                        <td>{$row['design']}</td>\n
-                        <td>{$row['categoria']}</td>\n
-                        <td>{$row['forn_primario']}</td>\n
-                        <td>{$row['data']}</td>\n
-                        <td><a href=\"design_d.php?ean={$row['ean']}\">Editar designacao</a></td>\n
-                        <td><a href=\"update_prod.php?ean={$row['ean']}&tipo=remover\">Remover produto</a></td>\n
-                        <td><a href=\"listar_reposicoes.php?ean={$row['ean']}\">Listar eventos de reposicao</a></td>\n
-                    </tr>\n");
+                        <td>{$row['ean']}</td>
+                        <td>{$row['design']}</td>
+                        <td>{$row['categoria']}</td>
+                        <td>{$row['forn_primario']}</td>
+                        <td>{$row['data']}</td>
+                        <td><a href=\"design_d.php?ean={$row['ean']}\">Editar designacao</a></td>
+                        <td><a href=\"update_prod.php?ean={$row['ean']}&tipo=remover\">Remover produto</a></td>
+                        <td><a href=\"listar_reposicoes.php?ean={$row['ean']}\">Listar eventos de reposicao</a></td>
+                    </tr>");
             }
 
             echo("</table>\n");

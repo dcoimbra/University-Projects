@@ -28,29 +28,10 @@ INSERT INTO constituida(super_categoria, categoria) VALUES ('congelados', 'sobre
 INSERT INTO constituida(super_categoria, categoria) VALUES ('bebidas', 'bebidas com gas');
 INSERT INTO constituida(super_categoria, categoria) VALUES ('mobilia', 'cozinha');
 
-INSERT INTO fornecedor(nif, nome)
-  VALUES (
-    111111111,
-    'um'
-  );
-
-INSERT INTO fornecedor(nif, nome)
-  VALUES (
-    222222222,
-    'dois'
-  );
-
-INSERT INTO fornecedor(nif, nome)
-  VALUES (
-    333333333,
-    'tres'
-  );
-
-INSERT INTO fornecedor(nif, nome)
-  VALUES (
-    444444444,
-    'quatro'
-  );
+INSERT INTO fornecedor(nif, nome) VALUES (111111111, 'um');
+INSERT INTO fornecedor(nif, nome) VALUES (222222222, 'dois');
+INSERT INTO fornecedor(nif, nome) VALUES (333333333, 'tres');
+INSERT INTO fornecedor(nif, nome) VALUES (444444444, 'quatro');
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
@@ -97,56 +78,17 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
      '2017-01-22'
   );
 
-INSERT INTO fornece_sec(nif, ean)
-  VALUES (
-    444444444,
-    1111111111111
-  );
+INSERT INTO fornece_sec(nif, ean) VALUES (444444444, 1111111111111);
+INSERT INTO fornece_sec(nif, ean) VALUES (222222222, 3333333333333);
+INSERT INTO fornece_sec(nif, ean) VALUES (333333333, 1111111111111);
+INSERT INTO fornece_sec(nif, ean) VALUES (222222222, 4444444444444);
+INSERT INTO fornece_sec(nif, ean) VALUES (444444444, 3333333333333);
+INSERT INTO fornece_sec(nif, ean) VALUES (222222222, 5555555555555);
 
-INSERT INTO fornece_sec(nif, ean)
-  VALUES (
-    222222222,
-    3333333333333
-  );
+INSERT INTO corredor(nro, largura) VALUES (1, 1);
+INSERT INTO corredor(nro, largura) VALUES (2, 2);
 
-INSERT INTO fornece_sec(nif, ean)
-  VALUES (
-    333333333,
-    1111111111111
-  );
-
-INSERT INTO fornece_sec(nif, ean)
-  VALUES (
-    222222222,
-    4444444444444
-  );
-
-INSERT INTO fornece_sec(nif, ean)
-  VALUES (
-    444444444,
-    3333333333333
-  );
-  
-INSERT INTO fornece_sec(nif, ean)
-  VALUES (
-    222222222,
-    5555555555555
-  );
-
-INSERT INTO corredor(nro, largura)
-  VALUES (
-    1,
-    1
-  );
-
-INSERT INTO corredor(nro, largura)
-  VALUES (
-    2,
-    2
-  );
-
-INSERT INTO prateleira(nro, lado, altura)
-  VALUES (
+INSERT INTO prateleira(nro, lado, altura) VALUES (
     1,
     'esquerdo',
     'superior'

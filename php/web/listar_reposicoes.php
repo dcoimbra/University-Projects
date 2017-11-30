@@ -1,7 +1,6 @@
 <html>
     <body>
         <?php
-
         try
         {
             $host = "db.ist.utl.pt";
@@ -18,7 +17,6 @@
             $sql = "SELECT operador, instante, unidades FROM reposicao WHERE ean = '$ean';";
 
             $result = $db->query($sql);
-            echo("<p>$sql</p>");
 
             echo("<table border=\"0\" cellspacing=\"5\">\n");
 

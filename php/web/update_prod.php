@@ -19,23 +19,49 @@
 
             $sql_apagar_produto = "DELETE FROM produto WHERE ean = '$ean';";
 
-            echo("$sql_apagar_produto\n");
+            echo("<p>$sql_apagar_produto</p>");
             $db->query($sql_apagar_produto);
-            echo("Produto $ean removido\n");
+            echo("<p>Produto $ean removido</p>");
         }
 
         else {
             $design = $_REQUEST['design'];
             $categoria = $_REQUEST['categoria'];
             $forn_primario = $_REQUEST['forn_primario'];
-            $forn_secundario = $_REQUEST['forn_secundario'];
+            $forn_primario_nome = $_REQUEST['forn_primario_nome'];
+            $forn_secundarios = $_REQUEST['forn_secundarios'];
+            $forn_secundarios_nomes = $_REQUEST['forn_secundarios_nomes'];
             $data = $_REQUEST['data'];
 
-            if ($forn_primario == $forn_secundario) {
+            //verifica se fornecedor primario != fornecedores secundarios
+            if (in_array($forn_primario, $forn_secundarios)) {
 
-                exit("<p>Fornecedor primario nao pode ser igual ao secundario</p>");
+                exit("<p>$forn_primario ja e' fornecedor primario deste produto, pelo que nao pode ser secundario. 
+                         Escolha outro fornecedor secundario.</p>");
             }
 
+            //se o fornecedor for novo, adiciona-lo
+            $fornecedores = $db->query("SELECT nif FROM fornecedor;");
+            $fornecedores = $fornecedores->fetchAll(PDO::FETCH_COLUMN, 'nif');
+
+            $fornecedores_candidatos = array_merge([$forn_primario], $forn_secundarios);
+            $fornecedores_candidatos_nomes = array_merge([$forn_primario_nome], $forn_secundarios_nomes);
+
+            $index = 0; //para encontrar o nome correspondente
+            foreach ($fornecedores_candidatos as $candidato) {
+
+                if (!in_array($candidato, $fornecedores)) {
+
+                    $sql_inserir_fornecedor = "INSERT INTO fornecedor(nif, nome) VALUES ('$candidato', '$fornecedores_candidatos_nomes[$index]')";
+
+                    echo("<p>$sql_inserir_fornecedor</p>");
+                    $db->query($sql_inserir_fornecedor);
+                }
+
+                $index++;
+            }
+
+            //inserir produto
             $sql_inserir_produto = "INSERT INTO produto(ean, design, categoria, forn_primario, data)
                                     VALUES (
                                             '$ean',
@@ -45,17 +71,17 @@
                                             '$data'
                                             );";
 
-            $sql_inserir_forn_sec = "INSERT INTO fornece_sec(nif, ean)
-                                     VALUES (
-                                              '$forn_secundario', 
-                                              '$ean'
-                                            );";
-
             echo("<p>$sql_inserir_produto</p>");
-            echo("<p>$sql_inserir_forn_sec</p>");
-
             $db->query($sql_inserir_produto);
-            $db->query($sql_inserir_forn_sec);
+
+            //inserir relacao forn_secundario->produto
+            foreach ($forn_secundarios as $f2) {
+
+                $sql_inserir_fornece_sec = "INSERT INTO fornece_sec(nif, ean) VALUES ('$f2', '$ean');";
+
+                echo("<p>$sql_inserir_fornece_sec</p>");
+                $db->query($sql_inserir_fornece_sec);
+            }
 
             echo("<p>Produto $ean adicionado com designacao $design</p>");
         }
