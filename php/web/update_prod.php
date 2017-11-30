@@ -50,7 +50,7 @@
             $index = 0; //para encontrar o nome correspondente
             foreach ($fornecedores_candidatos as $candidato) {
 
-                if (!in_array($candidato, $fornecedores)) {
+                if (!in_array($candidato, $fornecedores) and $candidato != "") {
 
                     $sql_inserir_fornecedor = "INSERT INTO fornecedor(nif, nome) VALUES ('$candidato', '$fornecedores_candidatos_nomes[$index]')";
 
@@ -77,10 +77,12 @@
             //inserir relacao forn_secundario->produto
             foreach ($forn_secundarios as $f2) {
 
-                $sql_inserir_fornece_sec = "INSERT INTO fornece_sec(nif, ean) VALUES ('$f2', '$ean');";
+                if ($f2 != "") {
+                    $sql_inserir_fornece_sec = "INSERT INTO fornece_sec(nif, ean) VALUES ('$f2', '$ean');";
 
-                echo("<p>$sql_inserir_fornece_sec</p>");
-                $db->query($sql_inserir_fornece_sec);
+                    echo("<p>$sql_inserir_fornece_sec</p>");
+                    $db->query($sql_inserir_fornece_sec);
+                }
             }
 
             echo("<p>Produto $ean adicionado com designacao $design</p>");
