@@ -6,5 +6,9 @@
         <p>Nova designacao: <input type="text" name="design" autocomplete="off"/></p>
         <p><input type="submit" value="Submit"/></p>
     </form>
+    <?php
+        $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+        echo "<a href='$url'>Voltar</a>";
+    ?>
     </body>
 </html>

@@ -38,6 +38,9 @@
             echo("</table>\n");
 
             $db = null;
+
+            $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+            echo "<p><a href='$url'>Voltar</a></p>";
         }
         catch (PDOException $e)
         {

@@ -46,8 +46,9 @@
             echo(" Nome: <input name=\"forn_secundarios_nomes[]\" id=\"forn_secundarios_nomes\" autocomplete=\"off\"></p>");
             echo("<div id=\"input_container\"></div>");
             echo("<button type=\"button\" onclick=\"adicionarInput();\">Adicionar fornecedor secundario</button>");
-        }
 
+        }
+        
         catch (PDOException $e)
         {
             echo(" <p>ERROR: {$e->getMessage()}</p>");
@@ -56,6 +57,12 @@
         <p>Data: <input type="date" name="data" autocomplete="off"/></p>
         <p><input type="hidden" name="tipo" value="inserir" autocomplete="off"/></p>
         <p><input type="submit" value="Submit"/></p>
+
+        <?php
+            $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+            echo "<a href='$url'>Voltar</a>";
+        ?>
+
     </form>
     </body>
 </html>

@@ -24,12 +24,14 @@
             echo("<p>Descricao do produto $ean alterado para $design</p>");
 
             $db = null;
+
         }
         catch (PDOException $e)
         {
             $db->query("rollback;");
             echo("<p>ERROR: {$e->getMessage()}</p>");
         }
+
     ?>
     </body>
 </html>
