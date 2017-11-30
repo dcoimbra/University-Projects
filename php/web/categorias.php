@@ -42,7 +42,10 @@
             echo("</table>\n");
 
             echo("<p><a href=\"categoria_simples.php\">Nova categoria simples</a></p>
-                  <p><a href=\"super_categoria.php\">Nova supercategoria </a></p>");
+                  <p><a href=\"super_categoria.php\">Nova super categoria </a></p>");
+
+            $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+            echo "<a href='$url'>Voltar</a>";
 
 
             /*Criacao da tabela das super categorias*/
