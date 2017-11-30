@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
     <body>
     <?php
     $tipo = $_REQUEST['tipo'];
@@ -19,7 +22,7 @@
 
             $sql_apagar_produto = "DELETE FROM produto WHERE ean = '$ean';";
 
-            echo("<p>$sql_apagar_produto</p>");
+            #echo("<p>$sql_apagar_produto</p>");
             $db->query($sql_apagar_produto);
             echo("<p>Produto $ean removido</p>");
         }
@@ -99,5 +102,7 @@
         echo("<p>ERROR: {$e->getMessage()}</p>");
     }
     ?>
+    <p><a href="index.html" class = "home">Menu inicial</a></p>
+
     </body>
 </html>

@@ -31,3 +31,13 @@ table#super_cat{
     text-align: center;
     padding-top: 14px;
 }
+
+/*------------------------------------------------------------------------------------------------------------*/
+.home{
+    color: black;
+    -webkit-appearance: button;
+    text-decoration: none;
+    text-align: center;
+    width: 100px;
+
+}

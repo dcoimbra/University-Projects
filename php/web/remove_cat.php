@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
     <body>
     <?php
     $tipo = $_REQUEST['tipo'];
@@ -60,14 +63,12 @@
             $db->query($sql);
         }
 
-        echo("<p>$sql</p>");
+        #echo("<p>$sql</p>");
         $sql = "DELETE FROM categoria WHERE nome = '$nome';";
         $db->query($sql);
 
 
         echo("<p>Categoria $nome removida");
-        
-
 
         $db->query("commit;");
 
@@ -80,5 +81,8 @@
         echo("<p>ERROR: {$e->getMessage()}</p>");
     }
     ?>
+
+    <p><a href="index.html" class = "home">Menu inicial</a></p>
+
     </body>
 </html>

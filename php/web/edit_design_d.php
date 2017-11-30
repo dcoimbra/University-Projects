@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
     <body>
     <?php
         $ean = $_REQUEST['ean'];
@@ -16,7 +19,7 @@
 
             $sql = "UPDATE produto SET design = '$design' WHERE ean = '$ean';";
 
-            echo("<p>$sql</p>");
+            #echo("<p>$sql</p>");
 
             $db->query($sql);
 
@@ -31,7 +34,9 @@
             $db->query("rollback;");
             echo("<p>ERROR: {$e->getMessage()}</p>");
         }
+        ?>
 
-    ?>
+    <a href="index.html" class = "home">Menu inicial</a>
+
     </body>
 </html>

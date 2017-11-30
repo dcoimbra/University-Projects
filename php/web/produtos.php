@@ -56,5 +56,8 @@
             echo("<p>ERROR: {$e->getMessage()}</p>");
         }
         ?>
+
+        <p><a href="index.html" class = "home">Menu inicial</a></p>
+
     </body>
 </html>
