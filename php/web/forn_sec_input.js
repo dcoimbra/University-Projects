@@ -6,7 +6,7 @@ function adicionarInput() {
 
     var inputForn = document.createElement("input");
 
-    inputForn.list = "forn_list";
+    inputForn.setAttribute('list', 'forn_list');
     inputForn.name = "forn_secundarios[]";
     inputForn.autocomplete = "off";
 
