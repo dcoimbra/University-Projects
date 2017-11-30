@@ -45,7 +45,10 @@
             }
 
             echo("</table>\n");
-            echo("<a href=\"inserir_produto_b.php\">Novo produto</a>");
+            echo("<p><a href=\"inserir_produto_b.php\">Novo produto</a></p>");
+
+            $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+            echo "<a href='$url'>Voltar</a>";
 
         }
         catch (PDOException $e)
