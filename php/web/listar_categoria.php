@@ -54,10 +54,10 @@
             list_aux($row['categoria'], $db);
         }
 
+
+    }
         $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
         echo "<a href='$url'>Voltar</a>";
-    }
-    
     ?>
     </body>
 </html>
