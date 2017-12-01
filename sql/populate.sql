@@ -1,10 +1,8 @@
 INSERT INTO categoria(nome) VALUES ('gelados');
 INSERT INTO categoria(nome) VALUES ('frutos vermelhos');
 INSERT INTO categoria(nome) VALUES ('peixe');
-INSERT INTO categoria(nome) VALUES ('7up');
 INSERT INTO categoria(nome) VALUES ('pao');
 INSERT INTO categoria(nome) VALUES ('bolos');
-INSERT INTO categoria(nome) VALUES ('coca-cola');
 INSERT INTO categoria(nome) VALUES ('fruta');
 INSERT INTO categoria(nome) VALUES ('congelados');
 INSERT INTO categoria(nome) VALUES ('bebidas');
@@ -15,22 +13,18 @@ INSERT INTO categoria(nome) VALUES ('cozinha');
 INSERT INTO categoria_simples(nome) VALUES ('gelados');
 INSERT INTO categoria_simples(nome) VALUES ('frutos vermelhos');
 INSERT INTO categoria_simples(nome) VALUES ('peixe');
-INSERT INTO categoria_simples(nome) VALUES ('7up');
 INSERT INTO categoria_simples(nome) VALUES ('pao');
 INSERT INTO categoria_simples(nome) VALUES ('bolos');
-INSERT INTO categoria_simples(nome) VALUES ('coca-cola');
+INSERT INTO categoria_simples(nome) VALUES ('bebidas com gas');
 
 INSERT INTO super_categoria(nome) VALUES ('fruta');
 INSERT INTO super_categoria(nome) VALUES ('congelados');
 INSERT INTO super_categoria(nome) VALUES ('bebidas');
-INSERT INTO super_categoria(nome) VALUES ('bebidas com gas');
 INSERT INTO super_categoria(nome) VALUES ('sobremesas');
 INSERT INTO super_categoria(nome) VALUES ('cozinha');
 
 
 INSERT INTO constituida(super_categoria, categoria) VALUES ('bebidas', 'bebidas com gas');
-INSERT INTO constituida(super_categoria, categoria) VALUES ('bebidas com gas', '7up');
-INSERT INTO constituida(super_categoria, categoria) VALUES ('bebidas com gas', 'coca-cola');
 INSERT INTO constituida(super_categoria, categoria) VALUES ('congelados', 'peixe');
 INSERT INTO constituida(super_categoria, categoria) VALUES ('cozinha', 'sobremesas');
 INSERT INTO constituida(super_categoria, categoria) VALUES ('sobremesas', 'fruta');
