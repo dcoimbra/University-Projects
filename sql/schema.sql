@@ -26,27 +26,23 @@ CREATE TABLE constituida (
 CREATE TABLE fornecedor (
   nif integer,
   CHECK (nif > 99999999 and nif <= 999999999),
-	nome varchar(20),
-	PRIMARY KEY (nif)
+  nome varchar(20),
+  PRIMARY KEY (nif)
 );
 
 CREATE TABLE produto (
-	ean bigint,
-  CHECK (ean > 999999999999 and ean <= 9999999999999),
-	design varchar(50),
+  ean bigint,
+  design varchar(50) UNIQUE,
   categoria varchar(20) REFERENCES categoria(nome),
   forn_primario integer REFERENCES fornecedor(nif) NOT NULL,
-  CHECK (forn_primario > 99999999 and forn_primario <= 999999999),
   data date,
-	PRIMARY KEY (ean),
-	UNIQUE (design)
+  CHECK (ean > 999999999999 and ean <= 9999999999999),
+  PRIMARY KEY (ean)
 );
 
 CREATE TABLE fornece_sec (
   nif integer REFERENCES fornecedor(nif) NOT NULL,
-  CHECK (nif > 99999999 and nif <= 999999999),
   ean bigint REFERENCES produto(ean) ON DELETE CASCADE,
-  CHECK (ean > 999999999999 and ean <= 9999999999999),
   PRIMARY KEY (nif, ean)
 );
 
@@ -66,12 +62,9 @@ CREATE TABLE prateleira (
 
 CREATE TABLE planograma (
   ean bigint REFERENCES produto(ean) ON DELETE CASCADE,
-  CHECK (ean > 999999999999 and ean <= 9999999999999),
   nro integer,
   lado varchar(10),
-  CHECK (lado IN ('esquerdo', 'direito')),
   altura varchar(10),
-  CHECK (altura IN ('chao', 'medio', 'superior')),
   face integer,
   unidades integer,
   loc integer,
@@ -88,14 +81,11 @@ CREATE TABLE evento_reposicao (
 
 CREATE TABLE reposicao (
   ean bigint,
-  CHECK (ean > 999999999999 and ean <= 9999999999999),
   nro integer,
   lado varchar(20),
   altura varchar(10),
-  CHECK (altura IN ('chao', 'medio', 'superior')),
   operador varchar(50),
   instante timestamp,
-  CHECK (instante <= CURRENT_TIMESTAMP),
   unidades integer,
   PRIMARY KEY (ean, nro, lado, altura, operador, instante),
   FOREIGN KEY (operador, instante) REFERENCES evento_reposicao(operador, instante),

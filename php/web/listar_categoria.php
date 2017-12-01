@@ -3,7 +3,6 @@
     <?php
 
     $nome = $_REQUEST['nome'];
-    $aux = [];
     try
     {
         $host = "db.ist.utl.pt";
@@ -27,7 +26,6 @@
 
     catch (PDOException $e)
     {
-//        $db->query("rollback;");
         echo("<p>ERROR: {$e->getMessage()}</p>");
     }
 
@@ -35,7 +33,7 @@
         global $aux;
 
         $sql = "SELECT categoria FROM constituida WHERE super_categoria = '$cat';";
-        #echo("<p>$sql\n</p>");
+//       echo("<p>$sql\n</p>");
         $subcats = $db->query($sql);
         $cont = $subcats->rowCount();
         
@@ -43,19 +41,14 @@
                 return;
         
         //Listar as subcategorias
+        echo("<ul>");
         foreach ($subcats as $row) {
 
-            if (in_array($row['categoria'], $aux)){
-                continue;
-            }
+            echo("<li>{$row['categoria']}</li>");
 
-            echo("<ul>
-                    <li>{$row['categoria']}</li>
-                  </ul>");
-
-            array_push($aux, $row['categoria']);
             list_aux($row['categoria'], $db);
         }
+        echo("</ul>");
     }
     
     ?>
