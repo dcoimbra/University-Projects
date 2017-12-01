@@ -41,6 +41,8 @@
 
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
             echo "<p><a href='$url'>Voltar</a></p>";
+
+            echo("<p><a href=\"index.html\" class = 'home'>Menu inicial</a></p>");
         }
         catch (PDOException $e)
         {
@@ -48,5 +50,6 @@
             echo("<p>ERROR: {$e->getMessage()}</p>");
         }
         ?>
+
     </body>
 </html>
