@@ -23,9 +23,9 @@
             $sql_inserir_cat1 = "INSERT INTO categoria(nome) VALUES('$nome');";
             $sql_inserir_cat2 = "INSERT INTO categoria_simples(nome) VALUES('$nome');";
 
-            echo("$sql_inserir_cat1\n");
+            #echo("$sql_inserir_cat1\n");
             $db->query($sql_inserir_cat1);
-            echo("<p>$sql_inserir_cat2\n");
+            #echo("$sql_inserir_cat2\n");
             $db->query($sql_inserir_cat2);
             echo("<p>Categoria $nome inserida\n</p>");
         }

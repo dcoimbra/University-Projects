@@ -43,7 +43,7 @@
 
             echo("</table>\n");
 
-            echo("<p><a href=\"categoria_simples.php\">Nova categoria simples</a></p>
+            echo("<p><a href=\"categoria_simples.html\">Nova categoria simples</a></p>
                   <p><a href=\"super_categoria.php\">Nova super categoria </a></p>");
 
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);

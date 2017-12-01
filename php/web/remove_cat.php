@@ -17,7 +17,6 @@
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $db->query("start transaction;");
-
         
         $sql = "SELECT ean FROM produto WHERE categoria = ('$nome');";
         $categ = $db->query($sql);

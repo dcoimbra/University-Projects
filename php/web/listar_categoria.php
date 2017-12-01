@@ -32,7 +32,7 @@
         global $aux;
 
         $sql = "SELECT categoria FROM constituida WHERE super_categoria = '$cat';";
-        //echo("<p>$sql\n</p>");
+        #echo("<p>$sql\n</p>");
         $subcats = $db->query($sql);
         $cont = $subcats->rowCount();
         
