@@ -2,7 +2,7 @@
     <body>
     <h3>Inserir nova super categoria </h3>
     <form name="insert" action="update_cat.php" method="post">
-        <p>Nome: <input type="text" name="nome"/></p>
+        <p>Nome: <input type="text" name="nome" required/></p>
 
         <?php
         try {

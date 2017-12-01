@@ -3,7 +3,7 @@
     <body>
     <h3>Inserir novo produto</h3>
     <form name="insert" action="update_prod.php" method="post">
-        <p>EAN: <input type="number" name="ean" autocomplete="off"/></p>
+        <p>EAN: <input type="number" name="ean" autocomplete="off" required/></p>
         <p>Designacao: <input type="text" name="design" autocomplete="off"/></p>
 
         <?php
@@ -17,7 +17,7 @@
             $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            echo("<p>Categoria: <select name=\"categoria\" id=\"categoria\" autocomplete=\"off\">");
+            echo("<p>Categoria: <select name=\"categoria\" id=\"categoria\">");
 
             //Creation of a dropdown list
             $categorias = $db->query("SELECT nome FROM categoria;");
@@ -40,10 +40,10 @@
             echo("</datalist>");
 
             echo("<p>Fornecedor primario: <input list=\"forn_list\" name=\"forn_primario\" id=\"forn_primario\" autocomplete=\"off\">");
-            echo(" Nome: <input name=\"forn_primario_nome\" id=\"forn_primario_nome\" autocomplete=\"off\"></p>");
+            echo(" Nome: <input name=\"forn_primario_nome\" id=\"forn_primario_nome\" autocomplete=\"off\" required></p>");
 
             echo("<p>Fornecedor secundario: <input list=\"forn_list\" name=\"forn_secundarios[]\" id=\"forn_secundario\" autocomplete=\"off\">");
-            echo(" Nome: <input name=\"forn_secundarios_nomes[]\" id=\"forn_secundarios_nomes\" autocomplete=\"off\"></p>");
+            echo(" Nome: <input name=\"forn_secundarios_nomes[]\" id=\"forn_secundarios_nomes\" autocomplete=\"off\" required></p>");
             echo("<div id=\"input_container\"></div>");
             echo("<button type=\"button\" onclick=\"adicionarInput();\">Adicionar fornecedor secundario</button>");
 
