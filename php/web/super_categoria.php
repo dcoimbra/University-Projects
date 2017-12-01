@@ -17,6 +17,7 @@
             $categorias = $db->query("SELECT * FROM categoria WHERE nome NOT IN(SELECT categoria FROM constituida);");
 
             echo("Seleccione as categorias que constituem esta super categoria\n<p>");
+
             foreach($categorias as $row) {
 
                 echo ("<input type=\"checkbox\" name=\"cat_s[]\" value='{$row['nome']}'/>{$row['nome']}<br>");
