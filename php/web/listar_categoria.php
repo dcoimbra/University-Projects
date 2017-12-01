@@ -17,7 +17,10 @@
         echo("<b>Sub-categorias de $nome:\n</b>");
         
         list_aux($nome, $db);
-      
+
+        $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+        echo "<a href='$url'>Voltar</a>";
+
         $db = null;
 
     }
@@ -53,9 +56,6 @@
             array_push($aux, $row['categoria']);
             list_aux($row['categoria'], $db);
         }
-
-        $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
-        echo "<a href='$url'>Voltar</a>";
     }
     
     ?>
