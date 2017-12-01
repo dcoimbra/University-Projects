@@ -5,24 +5,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <!-- Bootstrap -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
     <!-- jQuery -->
-    <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
 
     <title>Com.ISTo</title>
 </head>
 
 <body onload="waiter();ordercheck();showhelp()">
 
-    <img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" />
+    <img src="images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" />
 
     <button type="button" id="waitbutton">Enquanto Espera</button>
 
     <!--------------------------------- ECRA INICIAL ---------------------------------->
     <div id="ecrainicial">
-        <img src="../images/ecra_inicial/comecar.svg" id="comecarbutton" alt="começar" onclick="$('#ecrainicial').hide();$('#menupage').show();$('#order').show();$('#finishmeal').show();savedivname('#menupage')" />
+        <img src="images/ecra_inicial/comecar.svg" id="comecarbutton" alt="começar" onclick="$('#ecrainicial').hide();$('#menupage').show();$('#order').show();$('#finishmeal').show();savedivname('#menupage')" />
     </div>
 
     <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - -  -->
@@ -160,11 +160,11 @@
 
             <!-- TODO: Adicionar informação relativa a alergias + Acompanhamentos -->
             <div id="popoverbacalhau" style="display: none">
-                <img class="foodimage" src="../images/bacalhau.jpg" alt="Bacalhau com Natas" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)">
+                <img class="foodimage" src="images/bacalhau.jpg" alt="Bacalhau com Natas" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)">
                 <p>Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</p><button type="button" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
 
             <div id="popoveresparguete" style="display: none">
-                <img class="foodimage" src="../images/esparguete.jpg" alt="Esparguete à Bolonhesa" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)">
+                <img class="foodimage" src="images/esparguete.jpg" alt="Esparguete à Bolonhesa" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)">
                 <p>Original da cidade italiana de Bolonha, é uma das pastas italianas mais apreciadas em todo o mundo.</p><button type="button" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button>
             </div>
 
@@ -339,12 +339,12 @@
     </div>
 
     <div id="pong">
-        <img id="pongif" src="../images/pong.gif" />
+        <img id="pongif" src="images/pong.gif" />
         <button onclick="$('#pong').hide();$('#jogos').show();savedivname('#jogos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
     </div>
 
     <div id="sudoku">
-        <img id="sudokugif" src="../images/sudoku.gif" />
+        <img id="sudokugif" src="images/sudoku.gif" />
         <button onclick="$('#sudoku').hide();$('#passatempos').show();savedivname('#passatempos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
     </div>
 
@@ -358,8 +358,8 @@
         <div id="menuPrincipal" aling="center" style="display: inline-table; margin-top: 10vh;">
             <div id="metodospagamento">
                 <h3 id="headermetodospagamento">Métodos de pagamento</h3>
-                <img src="../images/202365-200.png" id="pDinheiro" class="imagempagamento imgbutton" onclick="changePayMethod(0)" style="box-shadow: 0px 0px 50px transparent;" />
-                <img src="../images/2000px-Multibanco.svg_.png" id="pMultibanco" class="imagempagamento imgbutton" onclick="changePayMethod(1)" />
+                <img src="images/202365-200.png" id="pDinheiro" class="imagempagamento imgbutton" onclick="changePayMethod(0)" style="box-shadow: 0px 0px 50px transparent;" />
+                <img src="images/2000px-Multibanco.svg_.png" id="pMultibanco" class="imagempagamento imgbutton" onclick="changePayMethod(1)" />
                 
             </div>
             
@@ -424,7 +424,7 @@
     <!-- - - - - - - - - - - - - - - - - - - LOGIN - - - - - - - - - - - - - - - - - - -->
     <div id="loginpage">
         <!-- Custom styles for this template -->
-        <link href="../css/signin.css" rel="stylesheet" />
+        <link href="css/signin.css" rel="stylesheet" />
 
         <style type="text/css">
              :root #carbonads-container,
@@ -451,9 +451,9 @@
             </form>
 
             <div id="loginOptionsDiv">
-                <img onclick="$('#loginpage').hide();$('#facescan').show();$('.backbutton').show();showBar('face', 'barface');saveldivname('#facescan');clearUsername()" src="../images/login/face.png" id="loginOptions" class="imgbutton loginbutton" alt="Reconhecimento facial" />
-                <img onclick="$('#loginpage').hide();$('#nfcscan').show();$('.backbutton').show();showBar('nfc', 'barnfc');saveldivname('#nfcscan');clearUsername()" src="../images/login/nfcbutton.png" id="loginOptions" class="imgbutton loginbutton" alt="NFC" />
-                <img onclick="showBar('finger', 'barfinger');clearUsername()" src="../images/login/fingerprinticon.png" id="loginOptions" class="imgbutton loginbutton" alt="Impressão digital" />
+                <img onclick="$('#loginpage').hide();$('#facescan').show();$('.backbutton').show();showBar('face', 'barface');saveldivname('#facescan');clearUsername()" src="images/login/face.png" id="loginOptions" class="imgbutton loginbutton" alt="Reconhecimento facial" />
+                <img onclick="$('#loginpage').hide();$('#nfcscan').show();$('.backbutton').show();showBar('nfc', 'barnfc');saveldivname('#nfcscan');clearUsername()" src="images/login/nfcbutton.png" id="loginOptions" class="imgbutton loginbutton" alt="NFC" />
+                <img onclick="showBar('finger', 'barfinger');clearUsername()" src="images/login/fingerprinticon.png" id="loginOptions" class="imgbutton loginbutton" alt="Impressão digital" />
             </div>
         </div>
 
@@ -468,7 +468,7 @@
 
         <div class="instructions">Centre o seu<br />rosto na moldura</div>
 
-        <img src="../images/scan/placeface.png" class="placehere" alt="Put your face here" />
+        <img src="images/scan/placeface.png" class="placehere" alt="Put your face here" />
 
         <div class="popup face" id="myProgress">
             <div class="popup face myBar" id="barface"></div>
@@ -479,7 +479,7 @@
     <div id="nfcscan">
         <div class="instructions">Coloque o seu<br />smartphone no espaço abaixo</div>
 
-        <img src="../images/scan/nfcscan.png" class="placehere" alt="Put your phone here" />
+        <img src="images/scan/nfcscan.png" class="placehere" alt="Put your phone here" />
 
         <div class="popup nfc" id="myProgress">
             <div class="myBar popup nfc" id="barnfc"></div>
@@ -588,10 +588,10 @@
         </div>
     </div>
 
-    <img src="../images/keyboard.png" id="keyboardImage" class="imgbutton" alt="teclado" align="center" />
+    <img src="images/keyboard.png" id="keyboardImage" class="imgbutton" alt="teclado" align="center" />
 
     <!-- - - - - - - - - - - - - - - - - - - HELP - - - - - - - - - - - - - - - - - - - -->
-    <img src="../images/help.png" id="helpbutton" alt="ajuda" />
+    <img src="images/help.png" id="helpbutton" alt="ajuda" />
     
     <div class="modal fade" id="helpmodal" role="dialog">
         <div class="modal-dialog">
@@ -629,7 +629,7 @@
     
     <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
 
-    <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
+    <img src="images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
 
     <div class="modal fade" id="waitermodal" role="dialog">
         <div class="modal-dialog">
@@ -645,7 +645,7 @@
 
 </body>
 <!-- Bootstrap javascript -->
-<script src="../js/bootstrap.min.js" type="text/javascript"></script>
-<script src="../js/functions.js" type="text/javascript"></script>
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
+<script src="js/functions.js" type="text/javascript"></script>
 
 </html>
