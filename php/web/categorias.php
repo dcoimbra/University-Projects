@@ -47,7 +47,9 @@
                   <p><a href=\"super_categoria.php\">Nova super categoria </a></p>");
 
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
-            echo "<a href='$url'>Voltar</a>";
+            echo ("<a href='$url'>Voltar</a>");
+            echo("<p><a href=\"index.html\" class = 'home'>Menu inicial</a></p>");
+
 
 
             /*Criacao da tabela das super categorias*/

@@ -21,21 +21,21 @@
 
             echo("<table border=\"0\" cellspacing=\"5\">");
 
-            echo("<tr>\n
+            echo("<tr>
                     <th>Operador</th>
                     <th>Instante</th>
                     <th>Unidades</th>
-                  </tr>\n");
+                  </tr>");
 
             foreach ($result as $row) {
 
-                echo("<tr>");
-                echo("<td>{$row['operador']}</td>");
-                echo("<td>{$row['instante']}</td>");
-                echo("<td>{$row['unidades']}</td>");
-                echo("</tr>");
+                echo("<tr>
+                        <td>{$row['operador']}</td>
+                        <td>{$row['instante']}</td>
+                        <td>{$row['unidades']}</td>
+                    </tr>");
             }
-            echo("</table>\n");
+            echo("</table>");
 
             $db = null;
 

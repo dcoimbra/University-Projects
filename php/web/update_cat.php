@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
     <body>
     <?php
     $tipo = $_REQUEST['tipo'];
@@ -51,7 +54,6 @@
             }
 
             echo("<p>Categoria $nome inserida\n</p>");
-
   
         }
 
@@ -66,5 +68,8 @@
         echo("<p>ERROR: {$e->getMessage()}</p>");
     }
     ?>
+
+    <a href="index.html" class = "home">Menu inicial</a>
+
     </body>
 </html>
