@@ -2,7 +2,7 @@ function adicionarInput() {
 
     var container = document.getElementById("input_container");
 
-    container.appendChild(document.createTextNode("Fornecedor secundario: "));
+    container.appendChild(document.createTextNode("Fornecedor secundario: NIF: "));
 
     var inputForn = document.createElement("input");
 
