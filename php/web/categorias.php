@@ -48,7 +48,6 @@
 
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
             echo ("<a href='$url' class='Back'>Voltar</a>");
-            echo("<p><a href=\"index.html\" class = 'home'>Menu inicial</a></p>");
 
 
             /*Criacao da tabela das super categorias*/
