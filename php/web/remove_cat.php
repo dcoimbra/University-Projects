@@ -20,13 +20,7 @@
         
         $sql = "SELECT ean FROM produto WHERE categoria = ('$nome');";
         $categ = $db->query($sql);
-        
-        foreach ($categ as $ean) {
 
-           $sql_p = "UPDATE produto SET categoria = null WHERE ean = '{$ean['ean']}';";
-           $db->query($sql_p);
-           echo("<p>Producto com ean {$ean['ean']} referencia a categoria a apagar.<br> A categoria deste produto foi removida e encontra-se vazia.</p>");
-        }
 
         $sql1 = "SELECT super_categoria FROM constituida WHERE categoria = ('$nome');"; //a super-categoria associada a' categoria, se existir
 
@@ -51,6 +45,13 @@
 
             $sql = "DELETE FROM constituida WHERE categoria = '$nome';";
             $db->query($sql);
+        }
+
+        foreach ($categ as $ean) {
+
+            $sql_p = "UPDATE produto SET categoria = null WHERE ean = '{$ean['ean']}';";
+            $db->query($sql_p);
+            echo("<p>Producto com ean {$ean['ean']} referencia a categoria a apagar.<br> A categoria deste produto foi removida e encontra-se vazia.</p>");
         }
 
         if ($tipo == "simples") {

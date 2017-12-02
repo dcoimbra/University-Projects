@@ -20,7 +20,7 @@
             $sql1 = "SELECT * FROM categoria_simples;";
             $sql2 = "SELECT * FROM super_categoria;";
 
-
+            
             /*Criacao da tabela das categorias simples*/
             echo("<table cellspacing=\"10\">\n");
 
@@ -42,7 +42,7 @@
 
             echo("</table>\n");
 
-            
+
             echo("<p><a href=\"categoria_simples.html\">Nova categoria simples</a></p>
                   <p><a href=\"super_categoria.php\">Nova super categoria </a></p>");
 
