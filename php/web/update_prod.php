@@ -57,7 +57,7 @@
 
                     $sql_inserir_fornecedor = "INSERT INTO fornecedor(nif, nome) VALUES ('$candidato', '$fornecedores_candidatos_nomes[$index]')";
 
-                    echo("<p>$sql_inserir_fornecedor</p>");
+                    #echo("<p>$sql_inserir_fornecedor</p>");
                     $db->query($sql_inserir_fornecedor);
                 }
 
@@ -83,7 +83,7 @@
                 if ($f2 != "") {
                     $sql_inserir_fornece_sec = "INSERT INTO fornece_sec(nif, ean) VALUES ('$f2', '$ean');";
 
-                    echo("<p>$sql_inserir_fornece_sec</p>");
+                    #echo("<p>$sql_inserir_fornece_sec</p>");
                     $db->query($sql_inserir_fornece_sec);
                 }
             }
@@ -99,7 +99,23 @@
     catch (PDOException $e)
     {
         $db->query("rollback;");
-        echo("<p>ERROR: {$e->getMessage()}</p>");
+
+        $message = $e->getMessage();
+
+        if (strpos($message, 'produto_ean_check') !== false) {
+
+            echo ("<p>O EAN de um produto deve ter exatamente 13 algarismos.</p>");
+        }
+
+        else if (strpos($message, 'fornecedor_nif_check') !== false) {
+
+            echo ("<p>O NIF de um produto deve ter exatamente 9 algarismos.</p>");
+        }
+
+        else {
+
+            echo("<p>ERROR: {$e->getMessage()}</p>");
+        }
     }
     ?>
     <p><a href="index.html" class = "home">Menu inicial</a></p>
