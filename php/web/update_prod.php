@@ -109,12 +109,12 @@
 
         else if (strpos($message, 'fornecedor_nif_check') !== false) {
 
-            echo ("<p>O NIF de um produto deve ter exatamente 9 algarismos.</p>");
+            echo ("<p>O NIF de um fornecedor deve ter exatamente 9 algarismos.</p>");
         }
 
         else {
 
-            echo("<p>ERROR: {$e->getMessage()}</p>");
+            echo($message);
         }
     }
     ?>
