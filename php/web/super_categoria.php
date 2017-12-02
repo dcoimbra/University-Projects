@@ -15,7 +15,15 @@
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
             $categorias = $db->query("SELECT * FROM categoria WHERE nome NOT IN(SELECT categoria FROM constituida);");
-
+            
+            if($categorias->rowCount() == 0) {
+                echo("ERRO: Nao existem sub-categorias disponiveis, por favor crie uma categoria simples primeiro.<p>");
+                
+                $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+                echo "<a href='$url'>Voltar</a>";
+                return;
+            }
+           
             echo("Seleccione as categorias que constituem esta super categoria\n<p>");
 
             foreach($categorias as $row) {
@@ -31,6 +39,10 @@
         ?>
         <p><input type="hidden" name="tipo" value="super"/></p>
         <p><input type="submit" value="Submit"/></p>
+        <?php
+            $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+            echo "<a href='$url'>Voltar</a>";
+        ?>
     </form>
     </body>
 </html>
