@@ -39,15 +39,15 @@ INSERT INTO constituida(super_categoria, categoria) VALUES ('sobremesas', 'gelad
 INSERT INTO constituida(super_categoria, categoria) VALUES ('fruta', 'frutos vermelhos');
 
 
-INSERT INTO fornecedor(nif, nome) VALUES (111111111, 'um');
-INSERT INTO fornecedor(nif, nome) VALUES (222222222, 'dois');
-INSERT INTO fornecedor(nif, nome) VALUES (333333333, 'tres');
-INSERT INTO fornecedor(nif, nome) VALUES (444444444, 'quatro');
+INSERT INTO fornecedor(nif, nome) VALUES (111111111, 'Umberto & Filhos');
+INSERT INTO fornecedor(nif, nome) VALUES (222222222, 'Dolores & Filhas');
+INSERT INTO fornecedor(nif, nome) VALUES (333333333, 'Teresa SA');
+INSERT INTO fornecedor(nif, nome) VALUES (444444444, 'Quim Electro');
 
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
      1111111111111,
-     'maca',
+     'Laranja do Algarve',
      'fruta',
      111111111,
      '2017-01-22'
@@ -56,7 +56,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
     2222222222222,
-    'gelado de chocolate',
+    'Gelado de Chocolate',
     'gelados',
     222222222,
     '2017-01-23'
@@ -65,7 +65,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
     3333333333333,
-    'batedeira para bolos',
+    'Batedeira para bolos',
     'cozinha',
     333333333,
     '2017-01-23'
@@ -74,7 +74,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
      4444444444444,
-     'pera',
+     'Pera Rocha',
      'fruta',
      111111111,
      '2017-01-22'
@@ -83,7 +83,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
 INSERT INTO produto(ean, design, categoria, forn_primario, data)
   VALUES (
      5555555555555,
-     'morangos com chantily',
+     'Mousse de Manga',
      'sobremesas',
      111111111,
      '2017-01-22'
@@ -96,13 +96,31 @@ INSERT INTO fornece_sec(nif, ean) VALUES (222222222, 4444444444444);
 INSERT INTO fornece_sec(nif, ean) VALUES (444444444, 3333333333333);
 INSERT INTO fornece_sec(nif, ean) VALUES (222222222, 5555555555555);
 
-INSERT INTO corredor(nro, largura) VALUES (1, 1);
+INSERT INTO corredor(nro, largura) VALUES (1, 2);
 INSERT INTO corredor(nro, largura) VALUES (2, 2);
 
 INSERT INTO prateleira(nro, lado, altura) VALUES (
     1,
     'esquerdo',
     'superior'
+  );
+
+INSERT INTO prateleira(nro, lado, altura) VALUES (
+    1,
+    'direito',
+    'superior'
+  );
+
+INSERT INTO prateleira(nro, lado, altura) VALUES (
+    1,
+    'esquerdo',
+    'medio'
+  );
+
+INSERT INTO prateleira(nro, lado, altura) VALUES (
+    1,
+    'direito',
+    'medio'
   );
 
 INSERT INTO prateleira(nro, lado, altura)
@@ -112,6 +130,27 @@ INSERT INTO prateleira(nro, lado, altura)
     'superior'
   );
 
+INSERT INTO prateleira(nro, lado, altura)
+  VALUES (
+    2,
+    'direito',
+    'superior'
+  );
+
+INSERT INTO prateleira(nro, lado, altura)
+  VALUES (
+    2,
+    'esquerdo',
+    'medio'
+  );
+
+INSERT INTO prateleira(nro, lado, altura)
+  VALUES (
+    2,
+    'direito',
+    'medio'
+  );
+
 INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
   VALUES (
       1111111111111,
@@ -119,7 +158,7 @@ INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
       'esquerdo',
       'superior',
       1,
-      3,
+      40,
       1
     );
 
@@ -130,20 +169,64 @@ INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
       'esquerdo',
       'superior',
       2,
-      4,
+      40,
       2
     );
 
+INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
+  VALUES (
+      3333333333333,
+      1,
+      'direito',
+      'superior',
+      1,
+      5,
+      2
+    );
+
+INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
+  VALUES (
+      4444444444444,
+      2,
+      'esquerdo',
+      'superior',
+      1,
+      40,
+      2
+    );
+
+INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
+  VALUES (
+      5555555555555,
+      2,
+      'esquerdo',
+      'medio',
+      1,
+      40,
+      2
+    );    
+
 INSERT INTO evento_reposicao(operador, instante)
   VALUES (
     'joao',
-    '2017-11-02 00:00'
+    '2017-11-02 15:43'
   );
 
 INSERT INTO evento_reposicao(operador, instante)
   VALUES (
     'alberto',
-    '2017-11-04 00:00'
+    '2017-11-04 18:32'
+  );
+
+INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
+  VALUES (
+    1111111111111,
+    1,
+	 'esquerdo',
+	 'superior',
+    'joao',
+    '2017-11-02 15:43',
+    20
   );
 
 INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
@@ -153,8 +236,8 @@ INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
     'esquerdo',
     'superior',
     'joao',
-    '2017-11-02 00:00',
-    2
+    '2017-11-02 15:43',
+    20
   );
 
 INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
@@ -164,6 +247,17 @@ INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
     'esquerdo',
     'superior',
     'alberto',
-    '2017-11-04 00:00',
-    2
+    '2017-11-04 18:32',
+    20
+  );
+  
+INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
+  VALUES (
+    3333333333333,
+    1,
+	 'direito',
+	 'superior',
+    'joao',
+    '2017-11-02 15:43',
+    1
   );
