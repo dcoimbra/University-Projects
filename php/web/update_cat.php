@@ -23,9 +23,9 @@
             $sql_inserir_cat1 = "INSERT INTO categoria(nome) VALUES('$nome');";
             $sql_inserir_cat2 = "INSERT INTO categoria_simples(nome) VALUES('$nome');";
 
-            #echo("$sql_inserir_cat1\n");
+//          echo("$sql_inserir_cat1\n");
             $db->query($sql_inserir_cat1);
-            #echo("$sql_inserir_cat2\n");
+//          echo("$sql_inserir_cat2\n");
             $db->query($sql_inserir_cat2);
             echo("<p>Categoria $nome inserida\n</p>");
         }
@@ -36,15 +36,15 @@
             
             if(empty($cat_s)){
                 $db->query("rollback;");
-                echo("<p>ERRO: Tem de seleccionar pelo menos uma categoria simples.</p>");
+                echo("<p>ERRO: Tem de seleccionar pelo menos uma sub-categoria.</p>");
                 return;
             }
 
             $sql_inserir_cat1 = "INSERT INTO categoria(nome) VALUES('$nome');";
             $sql_inserir_cat2 = "INSERT INTO super_categoria(nome) VALUES('$nome');";
-//            echo("$sql_inserir_cat1\n");
+//          echo("$sql_inserir_cat1\n");
             $db->query($sql_inserir_cat1);
- //           echo("<p>$sql_inserir_cat2\n");
+//          echo("<p>$sql_inserir_cat2\n");
             $db->query($sql_inserir_cat2);
 
 
@@ -66,6 +66,8 @@
     {
         $db->query("rollback;");
         echo("<p>ERROR: {$e->getMessage()}</p>");
+        $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
+        echo "<a href='$url'>Voltar</a> <br><br>";
     }
     ?>
 

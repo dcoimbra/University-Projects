@@ -7,6 +7,9 @@ function adicionarInput() {
     var inputForn = document.createElement("input");
 
     inputForn.setAttribute('list', 'forn_list');
+    inputForn.setAttribute('type','number');
+    inputForn.setAttribute('min', '100000000');
+    inputForn.setAttribute('max', '999999999');
     inputForn.name = "forn_secundarios[]";
     inputForn.autocomplete = "off";
 
