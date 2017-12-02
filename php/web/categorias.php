@@ -42,13 +42,13 @@
 
             echo("</table>\n");
 
+            
             echo("<p><a href=\"categoria_simples.html\">Nova categoria simples</a></p>
                   <p><a href=\"super_categoria.php\">Nova super categoria </a></p>");
 
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
             echo ("<a href='$url' class='Back'>Voltar</a>");
             echo("<p><a href=\"index.html\" class = 'home'>Menu inicial</a></p>");
-
 
 
             /*Criacao da tabela das super categorias*/
@@ -73,9 +73,8 @@
             }
 
             echo("</table>\n");
-         
-
         }
+
         catch (PDOException $e)
         {
             echo("<p>ERROR: {$e->getMessage()}</p>");
