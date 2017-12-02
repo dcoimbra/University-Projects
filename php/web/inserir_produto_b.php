@@ -4,7 +4,7 @@
     <h3>Inserir novo produto</h3>
     <form name="insert" action="update_prod.php" method="post">
         <p>EAN: <input type="number" name="ean" autocomplete="off" required/></p>
-        <p>Designacao: <input type="text" name="design" autocomplete="off"/></p>
+        <p>Designacao: <input type="text" name="design" autocomplete="off" required/></p>
 
         <?php
 
@@ -39,11 +39,11 @@
 
             echo("</datalist>");
 
-            echo("<p>Fornecedor primario: NIF: <input list=\"forn_list\" name=\"forn_primario\" id=\"forn_primario\" autocomplete=\"off\">");
-            echo(" Nome: <input name=\"forn_primario_nome\" id=\"forn_primario_nome\" autocomplete=\"off\" required></p>");
+            echo("<p>Fornecedor primario: NIF: <input list=\"forn_list\" name=\"forn_primario\" id=\"forn_primario\" autocomplete=\"off\" required>");
+            echo(" Nome: <input name=\"forn_primario_nome\" id=\"forn_primario_nome\" autocomplete=\"off\"></p>");
 
-            echo("<p>Fornecedor secundario: NIF: <input list=\"forn_list\" name=\"forn_secundarios[]\" id=\"forn_secundario\" autocomplete=\"off\">");
-            echo(" Nome: <input name=\"forn_secundarios_nomes[]\" id=\"forn_secundarios_nomes\" autocomplete=\"off\" required></p>");
+            echo("<p>Fornecedor secundario: NIF: <input list=\"forn_list\" name=\"forn_secundarios[]\" id=\"forn_secundario\" autocomplete=\"off\" required>");
+            echo(" Nome: <input name=\"forn_secundarios_nomes[]\" id=\"forn_secundarios_nomes\" autocomplete=\"off\"></p>");
             echo("<div id=\"input_container\"></div>");
             echo("<button type=\"button\" onclick=\"adicionarInput();\">Adicionar fornecedor secundario</button>");
 
