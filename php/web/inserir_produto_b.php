@@ -21,10 +21,10 @@
             $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            echo("<p>Categoria: <select name=\"categoria\" id=\"categoria\">");
-
-            //Creation of a dropdown list
+            //Creation of a dropdown list for Categoria
             $categorias = $db->query("SELECT nome FROM categoria;");
+
+            echo("<p>Categoria: <select name=\"categoria\" id=\"categoria\">");
 
             foreach($categorias as $row) {
                 echo ("<option value='{$row['nome']}'>{$row['nome']}</option>");
@@ -32,9 +32,10 @@
 
             echo("</select></p>");
 
-            echo("<datalist id=\"forn_list\">");
 
-            //Creation of a dropdown list
+            echo("<datalist id='forn_list'>");
+
+            //Creation of a dropdown list for Fornecedor
             $fornecedores = $db->query("SELECT nif FROM fornecedor;");
 
             foreach($fornecedores as $row) {
@@ -49,7 +50,7 @@
             echo("<p>Fornecedor secundario: NIF: <input type=\"number\" min=\"100000000\" max=\"999999999\" list=\"forn_list\" name=\"forn_secundarios[]\" id=\"forn_secundario\" autocomplete=\"off\" required>");
             echo(" Nome: <input name=\"forn_secundarios_nomes[]\" id=\"forn_secundarios_nomes\" autocomplete=\"off\"></p>");
             echo("<div id=\"input_container\"></div>");
-            echo("<button type=\"button\" onclick=\"adicionarInput();\">Adicionar fornecedor secundario</button>");
+            echo("<button type=\"button\" onclick=\"adicionarInput()\">Adicionar fornecedor secundario</button>");
 
         }
         
