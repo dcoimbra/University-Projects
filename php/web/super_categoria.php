@@ -1,4 +1,7 @@
 <html>
+    <head>
+        <link rel="stylesheet" href="styles.css" type="text/css">
+    </head>
     <body>
     <h3>Inserir nova super categoria </h3>
     <form name="insert" action="update_cat.php" method="post">
@@ -41,7 +44,7 @@
         <p><input type="submit" value="Submit"/></p>
         <?php
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
-            echo "<a href='$url'>Voltar</a>";
+            echo "<a href='$url' class = Back>Voltar</a>";
         ?>
     </form>
     </body>
