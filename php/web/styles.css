@@ -42,3 +42,11 @@ table#super_cat{
     width: 100px;
 
 }
+
+.Back{
+    -webkit-appearance: button;
+    text-decoration: none;
+    color: black;
+    width: 50px;
+    text-align: center;s
+}

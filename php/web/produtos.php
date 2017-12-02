@@ -48,7 +48,7 @@
             echo("<p><a href=\"inserir_produto_b.php\">Novo produto</a></p>");
 
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
-            echo "<a href='$url'>Voltar</a>";
+            echo "<a href='$url' class = Back>Voltar </a>";
 
         }
         catch (PDOException $e)
