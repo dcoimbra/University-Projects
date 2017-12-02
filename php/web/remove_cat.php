@@ -22,6 +22,7 @@
         $categ = $db->query($sql);
         
         foreach ($categ as $ean) {
+
            $sql_p = "UPDATE produto SET categoria = null WHERE ean = '{$ean['ean']}';";
            $db->query($sql_p);
            echo("<p>Producto com ean {$ean['ean']} referencia a categoria a apagar.<br> A categoria deste produto foi removida e encontra-se vazia.</p>");
@@ -32,7 +33,7 @@
         $super = $db->query($sql1);
         $contS = $super->rowCount();
 
-        if($contS) {  //se existir uma relacao entre a categoria e uma super categoria:
+        if ($contS) {  //se existir uma relacao entre a categoria e uma super categoria:
 
             $row = $super->fetch();
             
@@ -42,6 +43,7 @@
             $cont = $subcats_from_super->rowCount();
 
             if ($cont == 0){ //se essa super categoria so' estiver ligada 'a categoria a apagar:
+
                 echo("<p><p>ERRO: Super categoria {$row['super_categoria']} associada apenas a $nome. Remova {$row['super_categoria']} primeiro.</p></p>");
                 $db->query("rollback;");
                 return;
@@ -51,11 +53,14 @@
             $db->query($sql);
         }
 
-        if($tipo == "simples") {
+        if ($tipo == "simples") {
+
             $sql = "DELETE FROM categoria_simples WHERE nome = '$nome';";
             $db->query($sql);
         }
-        elseif($tipo == "super") {
+
+        elseif ($tipo == "super") {
+
             $sql = "DELETE FROM constituida WHERE super_categoria = '$nome';";
             $db->query($sql);
             $sql = "DELETE FROM super_categoria WHERE nome = '$nome';";
