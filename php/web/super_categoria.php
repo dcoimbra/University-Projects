@@ -19,6 +19,7 @@
 
                 $categorias = $db->query("SELECT * FROM categoria WHERE nome NOT IN(SELECT categoria FROM constituida);");
 
+                //Erro no caso de a super categoria não ter sub-categorias disponíveis.
                 if($categorias->rowCount() == 0) {
                     echo("ERRO: Nao existem sub-categorias disponiveis, por favor crie uma categoria simples primeiro.<p>");
                     return;
@@ -26,6 +27,7 @@
 
                 echo("Seleccione as categorias que constituem esta super categoria\n<p>");
 
+                //Representacao das varias categorias como checkboxes
                 foreach($categorias as $row) {
 
                     echo ("<input type=\"checkbox\" name=\"cat_s[]\" value='{$row['nome']}'/>{$row['nome']}<br>");
