@@ -9,8 +9,8 @@
             try
             {
                 $host = "db.ist.utl.pt";
-                $user ="ist426038";
-                $password = "taeyang18";
+                $user ="ist426008";
+                $password = "northernlights";
                 $dbname = $user;
                 $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
