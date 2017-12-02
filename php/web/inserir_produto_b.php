@@ -1,5 +1,9 @@
 <html>
-    <script type="text/javascript" src="forn_sec_input.js"></script>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script type="text/javascript" src="forn_sec_input.js"></script>
+    </head>
+
     <body>
     <h3>Inserir novo produto</h3>
     <form name="insert" action="update_prod.php" method="post">
@@ -60,7 +64,7 @@
 
         <?php
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
-            echo "<a href='$url'>Voltar</a>";
+            echo "<a href='$url' class='Back'>Voltar</a>";
         ?>
 
     </form>
