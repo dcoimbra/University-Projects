@@ -14,8 +14,9 @@ td, th{
 /*Tabela das categorias*/
 
 table#super_cat{
-    margin-left: 380px;
-    margin-top: -300px;
+    top: 50;
+    left: 400;
+    position: fixed;
 }
 /*----------------------------------------------------------------------------------------------------------------*/
 
