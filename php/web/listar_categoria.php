@@ -12,13 +12,12 @@
         $db = new PDO("pgsql:host=$host;dbname=$dbname", $user, $password);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-
         echo("<b>Sub-categorias de $nome:\n</b>");
         
         list_aux($nome, $db);
 
         $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
-        echo "<a href='$url'>Voltar</a>";
+        echo "<a href='$url' class='Back'>Voltar</a>";
 
         $db = null;
 

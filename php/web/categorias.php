@@ -22,7 +22,6 @@
 
 
             /*Criacao da tabela das categorias simples*/
-
             echo("<table cellspacing=\"10\">\n");
 
                 //Table headers para categorias simples
@@ -47,7 +46,7 @@
                   <p><a href=\"super_categoria.php\">Nova super categoria </a></p>");
 
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
-            echo ("<a href='$url'>Voltar</a>");
+            echo ("<a href='$url' class='Back'>Voltar</a>");
             echo("<p><a href=\"index.html\" class = 'home'>Menu inicial</a></p>");
 
 
@@ -74,6 +73,7 @@
             }
 
             echo("</table>\n");
+         
 
         }
         catch (PDOException $e)

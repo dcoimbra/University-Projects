@@ -40,7 +40,7 @@
             $db = null;
 
             $url = htmlspecialchars($_SERVER['HTTP_REFERER']);
-            echo "<p><a href='$url'>Voltar</a></p>";
+            echo "<p><a href='$url' class='Back'>Voltar</a></p>";
 
             echo("<p><a href=\"index.html\" class = 'home'>Menu inicial</a></p>");
         }
