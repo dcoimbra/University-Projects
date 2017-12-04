@@ -17,17 +17,24 @@ for test in [('fmdp1.pkl','traj1.pkl'), ('fmdp2.pkl','traj2.pkl')]:
     
     print("Valores Q aprendidos")
     print(qlearn.Q)
-    print("Erro: " + str(np.linalg.norm(Q-fmdp.Q)))
+    print("Erro: ", np.linalg.norm(Q-fmdp.Q))
     if np.linalg.norm(Q-fmdp.Q)<.3:
         print("Erro nos Q dentro dos limites de tolerância. OK\n")
     else:
         print("Erro nos Q acima dos limites de tolerância. FAILED\n")
 
     # gerar trajectoria aprendida
+
+    print("Politica")
+    print(RLsol.Q2pol(Q))
+
     J,trajlearn = fmdp.runPolicy(4,5,RLsol.Q2pol(Q))
     
     print("Trajectoria gerada com a politica aprendida")
     print(trajlearn)
+
+    print("Recompensa: ", J)
+
     if J>.7:
         print("Recompensa obtida dentro do previsto. OK\n")
     else:

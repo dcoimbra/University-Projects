@@ -12,7 +12,7 @@ import numpy as np
 
 
 def Q2pol(Q, eta=5):
-    return
+    return np.exp(Q*eta) / np.dot(np.exp(Q*eta), np.array([[1, 1], [1, 1]]))
 
 
 class myRL:
@@ -53,7 +53,7 @@ class myRL:
             self.Q = np.copy(new_Q)
             iteracoes += 1
 
-            if diff < 0.001:
+            if diff < 0.0001:
                 print("Iteracoes: ", iteracoes)
                 break
 
