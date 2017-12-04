@@ -3,7 +3,7 @@ from sklearn import neighbors, datasets, tree, linear_model
 from sklearn.model_selection import cross_val_score
 from sklearn.externals import joblib
 
-import classsol
+import classsol as classsol
 
 #load input data
 words = []
@@ -24,12 +24,12 @@ for test in ["wordsclass.npy", "wordsclass2.npy"]:
     clf = classsol.mytraining(f,Y)
       
     Ypred = classsol.myprediction(f, clf)
-
+    break
     q_error = (np.sum(Y^Ypred)/len(X))
 
     if (np.sum(Y^Ypred)/len(X))<.05:
-        print("Erro bastante baixo. PERFECT! Q:", q_error)
+        print("Erro bastante baixo. PERFECT!")
     elif (np.sum(Y^Ypred)/len(X))<.3:
-        print("Erro nos Q dentro dos limites de tolerância. OK Q:", q_error)
+        print("Erro nos Q dentro dos limites de tolerância. OK")
     else:
-        print("Erro nos Q acima dos limites de tolerância. FAILED Q:", q_error)
+        print("Erro nos Q acima dos limites de tolerância. FAILED")

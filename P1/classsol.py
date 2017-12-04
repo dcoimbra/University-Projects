@@ -10,7 +10,8 @@ from sklearn.externals import joblib
 import timeit
 
 from sklearn.model_selection import cross_val_score
-
+from sklearn.metrics import confusion_matrix
+import graphviz
 
 def features(X):
     
@@ -25,21 +26,33 @@ def features(X):
     return F     
 
 
+
 def mytraining(f,Y):
 
-    clf = linear_model.LogisticRegression()
+    clf = tree.DecisionTreeClassifier(min_samples_split=2) #linear_model.LogisticRegression()
     clf = clf.fit(f, Y)
+    mytrainingaux(f, Y, clf)
+   # print(clf.score(f, Y))
     return clf
 
 
-def mytrainingaux(f,Y,par):
-    
+def mytrainingaux(f, Y, clf):
+
+    print(" 5-fold cross validation score (scoring='f1'):\n", cross_val_score(clf, f, Y, scoring='f1', cv=5))
+    clf = clf.fit(f, Y)
+    Ypred = clf.predict(f)
+    print("confusion matrix: \n", confusion_matrix(Y, Ypred, labels=[1, 0]))
+
+    dot_data = tree.export_graphviz(clf, out_file=None)
+    graph= graphviz.Source(dot_data)
+    graph.render("P1_tree")
     return clf
 
 
 def myprediction(f, clf):
 
     Ypred = clf.predict(f)
+
     return Ypred
 
 
