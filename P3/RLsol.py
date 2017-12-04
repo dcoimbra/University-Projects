@@ -35,15 +35,26 @@ class myRL:
         # Para calcular Q num certo estado, usa-se a seguinte formula:
         # Q[s, a] = Q[s, a] + alpha * (r + gamma * max(Q[s', a']) - Q[s, a])
 
-        for i in range(215): # repete-se o calculo do Q ate estabilizar
+        new_Q = np.zeros((self.nS, self.nA))
+
+        iteracoes = 0
+        while True: # repete-se o calculo do Q ate convergir
             for line in trace:
                 s = int(line[0])
                 a = int(line[1])
                 next_s = int(line[2])
-                r = int(line[3])
-                alpha = 0.01
+                r = float(line[3])
+                alpha = 0.1
 
                                                                         # max Q de todas as ações possíveis no estado seguinte
-                self.Q[s, a] = self.Q[s, a] + alpha * (r + self.gamma * max(self.Q[next_s, :]) - self.Q[s, a])
+                new_Q[s, a] = new_Q[s, a] + alpha * (r + self.gamma * max(new_Q[next_s, :]) - new_Q[s, a])
+
+            diff = np.linalg.norm(self.Q-new_Q)
+            self.Q = np.copy(new_Q)
+            iteracoes += 1
+
+            if diff < 0.001:
+                print("Iteracoes: ", iteracoes)
+                break
+
         return self.Q
-    
