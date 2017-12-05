@@ -12,7 +12,16 @@ import numpy as np
 
 
 def Q2pol(Q, eta=5):
-    return np.exp(Q*eta) / np.dot(np.exp(Q*eta), np.array([[1, 1], [1, 1]]))
+
+    pol = np.zeros((len(Q), len(Q[0])))
+    i = 0
+    for i in range(len(Q)):
+        pol[i, 0] = True if Q[i, 0] > Q[i, 1] else False
+        pol[i, 1] = not pol[i, 0]
+
+#   pol = np.exp(Q*eta) / np.dot(np.exp(Q*eta), np.array([[1, 1], [1, 1]]))
+
+    return pol
 
 
 class myRL:
@@ -29,8 +38,7 @@ class myRL:
 
         # trace e' uma matriz em que cada linha contém o
         # estado atual, a acao executada, o estado seguinte e a recompensa
-
-        # [s, a, s', r]
+        # [s,                a,                  s',                 r]
 
         # Para calcular Q num certo estado, usa-se a seguinte formula:
         # Q[s, a] = Q[s, a] + alpha * (r + gamma * max(Q[s', a']) - Q[s, a])
@@ -46,10 +54,10 @@ class myRL:
                 r = float(line[3])
                 alpha = 0.1
 
-                                                                        # max Q de todas as ações possíveis no estado seguinte
+                                                                    # max Q de todas as ações possíveis no estado seguinte
                 new_Q[s, a] = new_Q[s, a] + alpha * (r + self.gamma * max(new_Q[next_s, :]) - new_Q[s, a])
 
-            diff = np.linalg.norm(self.Q-new_Q)
+            diff = np.sum(np.fabs(self.Q - new_Q)) # np.linalg.norm(self.Q - new_Q)
             self.Q = np.copy(new_Q)
             iteracoes += 1
 
