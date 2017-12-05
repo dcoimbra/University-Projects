@@ -11,13 +11,28 @@ import timeit
 
 def mytraining(X, Y):
 
-    reg = KernelRidge(kernel='rbf', gamma=0.08, alpha=0.001)
-    reg = reg.fit(X, Y)
-    return reg
+    best_kernel_reg = KernelRidge()
+    min_err = 2000
+
+    for kernel in ['poly', 'linear', 'rbf', 'cosine']:
+        reg = mytrainingaux(X, Y, kernel)
+
+        err = -cross_val_score(reg, X, Y, cv=5, scoring='neg_mean_squared_error').mean()
+
+        if (err < min_err):
+            min_err = err
+            best_kernel_reg = reg
+
+    print("Best kernel: ", best_kernel_reg.get_params()['kernel'])
+    print(min_err)
+
+    return best_kernel_reg
 
 
 def mytrainingaux(X, Y, par):
-    reg.fit(X, Y)
+    reg = KernelRidge(kernel=par, gamma=0.08, alpha=0.001)
+
+    reg = reg.fit(X, Y)
 
     return reg
 
