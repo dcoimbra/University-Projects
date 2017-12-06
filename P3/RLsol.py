@@ -12,15 +12,10 @@ import numpy as np
 
 
 def Q2pol(Q, eta=5):
-
     pol = np.zeros((len(Q), len(Q[0])))
     i = 0
     for i in range(len(Q)):
-        pol[i, 0] = True if Q[i, 0] > Q[i, 1] else False
-        pol[i, 1] = not pol[i, 0]
-
-#   pol = np.exp(Q*eta) / np.dot(np.exp(Q*eta), np.array([[1, 1], [1, 1]]))
-
+        pol[i, Q[i].argmax()] = True
     return pol
 
 
@@ -32,11 +27,8 @@ class myRL:
         self.Q = np.zeros((nS, nA))
 
     def traces2Q(self, trace):
-        # implementar esta funcao
 
-        # o coimbra escreveu o cabecalho abaixo lol
-
-        # trace e' uma matriz em que cada linha contém o
+        # trace e' uma matriz em que cada linha contem o
         # estado atual, a acao executada, o estado seguinte e a recompensa
         # [s,                a,                  s',                 r]
 
