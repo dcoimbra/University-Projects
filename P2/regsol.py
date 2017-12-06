@@ -8,6 +8,7 @@ from sklearn.kernel_ridge import KernelRidge
 from sklearn.svm import SVR
 from sklearn.model_selection import cross_val_score, GridSearchCV
 import timeit
+from time import time
 
 
 def mytraining(X, Y):
@@ -34,7 +35,14 @@ def mytraining(X, Y):
 
     search = GridSearchCV(reg, param_grid, scoring='neg_mean_squared_error', cv=5)
 
+
+    fit_time_start = time()
+
     search.fit(X, Y)
+
+    fit_time = time() - fit_time_start
+
+    print("Fit time:", fit_time)
 
     reg = search.best_estimator_
 
@@ -48,6 +56,13 @@ def mytrainingaux(X, Y, par):
 
 
 def myprediction(X, reg):
+
+    predict_time_start = time()
+
     Ypred = reg.predict(X)
+
+    predict_time = time() - predict_time_start
+
+    print("Predict time:", predict_time)
 
     return Ypred
