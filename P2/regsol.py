@@ -5,34 +5,44 @@
 import numpy as np
 from sklearn import datasets, tree, linear_model
 from sklearn.kernel_ridge import KernelRidge
-from sklearn.model_selection import cross_val_score
+from sklearn.svm import SVR
+from sklearn.model_selection import cross_val_score, GridSearchCV
 import timeit
 
 
 def mytraining(X, Y):
 
-    best_kernel_reg = KernelRidge()
-    min_err = 2000
+    Y = Y.ravel()
 
-    for kernel in ['poly', 'linear', 'rbf', 'cosine']:
-        reg = mytrainingaux(X, Y, kernel)
+    reg = KernelRidge().fit(X, Y)
 
-        err = -cross_val_score(reg, X, Y, cv=5, scoring='neg_mean_squared_error').mean()
+    param_grid = [
+        {
+            'alpha': [0.1, 0.01, 0.001, 0.0001], 'gamma': [0.1, 0.01, 0.001], 'kernel': ['rbf', 'poly']
+        }
+    ]
 
-        if (err < min_err):
-            min_err = err
-            best_kernel_reg = reg
+    '''
+    reg = SVR().fit(X, Y)
 
-    print("Best kernel: ", best_kernel_reg.get_params()['kernel'])
-    print(min_err)
+    param_grid = [
+         {
+            'C': [100, 1000, 10000, 100000], 'gamma': [0.1, 0.01], 'kernel': ['rbf'],
+         }
+    ]
+    '''
 
-    return best_kernel_reg
+    search = GridSearchCV(reg, param_grid, scoring='neg_mean_squared_error', cv=5)
 
+    search.fit(X, Y)
+
+    reg = search.best_estimator_
+
+    print(reg)
+
+    return reg
 
 def mytrainingaux(X, Y, par):
-    reg = KernelRidge(kernel=par, gamma=0.08, alpha=0.001)
-
-    reg = reg.fit(X, Y)
 
     return reg
 
