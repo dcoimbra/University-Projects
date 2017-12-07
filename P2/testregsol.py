@@ -22,11 +22,10 @@ for ii, test in enumerate(["regress.npy", "regress2.npy"]):
 
     Ypred = regsol.myprediction(Xp, reg)
 
-    val = -cross_val_score(reg, X, Y, cv=5, scoring='neg_mean_squared_error').mean()
-    if  val < tres[ii]:
-        print("Erro dentro dos limites de tolerância. OK Score:", val, "tres: ", tres[ii])
+    if  -cross_val_score(reg, X, Y, cv=5, scoring='neg_mean_squared_error').mean() < tres[ii]:
+        print("Erro dentro dos limites de tolerância. OK\n")
     else:
-        print("Erro acima dos limites de tolerância. FAILED Score:", val, "tres: ", tres[ii])
+        print("Erro acima dos limites de tolerância. FAILED\n")
     plt.figure()
     plt.plot(Xp, Yp, 'g.', label='datatesting')
     plt.plot(X, Y, 'k+', label='datatrain')

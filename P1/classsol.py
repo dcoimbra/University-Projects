@@ -11,7 +11,6 @@ import timeit
 
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix
-import graphviz
 
 def features(X):
     
@@ -20,7 +19,7 @@ def features(X):
         F[x, 0] = len(X[x])  # tamanho da palavra
         F[x, 1] = hasEvenVowels(X[x])  # se numero de vogais e' par
         F[x, 2] = (len(X[x]) % 2 == 0)  # tamanho da palavra par
-        F[x, 3] = has_letter_a(X[x])  # lastLetterisVowel(X[x])  # se a ultima letra e' vogal
+        F[x, 3] = has_letter_a(X[x])  # se tem a letra a
         F[x, 4] = hasAccent(X[x])  # se tem acentos
 
     return F     
@@ -32,7 +31,6 @@ def mytraining(f,Y):
     clf = tree.DecisionTreeClassifier(min_samples_split=2) #linear_model.LogisticRegression()
     clf = clf.fit(f, Y)
     mytrainingaux(f, Y, clf)
-   # print(clf.score(f, Y))
     return clf
 
 
@@ -43,9 +41,6 @@ def mytrainingaux(f, Y, clf):
     Ypred = clf.predict(f)
     print("confusion matrix: \n", confusion_matrix(Y, Ypred, labels=[1, 0]))
 
-    dot_data = tree.export_graphviz(clf, out_file=None)
-    graph= graphviz.Source(dot_data)
-    graph.render("P1_tree")
     return clf
 
 
