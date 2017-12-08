@@ -11,11 +11,18 @@ Created on Mon Oct 16 20:31:54 2017
 import numpy as np
 
 
-def Q2pol(Q, eta=5):
+def Q2pol(Q, eta=0):
+    """
+    Q2pol(Q, eta=0): returns the best action to take given the Q value for each state
+    Q: quality matrix (Q value for each state and action)
+    eta: percentage of exploration. Default value is 0, making this a deterministic policy
+    """
+    prob = ((100-eta)/100)
     pol = np.zeros((len(Q), len(Q[0])))
     i = 0
     for i in range(len(Q)):
-        pol[i, Q[i].argmax()] = True
+        pol[i, Q[i].argmax()] = 1*prob
+
     return pol
 
 

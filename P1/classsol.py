@@ -12,30 +12,27 @@ import timeit
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import confusion_matrix
 
+
 def features(X):
-    
     F = np.zeros((len(X), 5))
-    for x in range(0,len(X)):
+    for x in range(0, len(X)):
         F[x, 0] = len(X[x])  # tamanho da palavra
-        F[x, 1] = hasEvenVowels(X[x])  # se numero de vogais e' par
+        F[x, 1] = has_even_vowels(X[x])  # se numero de vogais e' par
         F[x, 2] = (len(X[x]) % 2 == 0)  # tamanho da palavra par
         F[x, 3] = has_letter_a(X[x])  # se tem a letra a
-        F[x, 4] = hasAccent(X[x])  # se tem acentos
+        F[x, 4] = has_accent(X[x])  # se tem acentos
 
-    return F     
+    return F
 
 
-
-def mytraining(f,Y):
-
-    clf = tree.DecisionTreeClassifier(min_samples_split=2) #linear_model.LogisticRegression()
+def mytraining(f, Y):
+    clf = tree.DecisionTreeClassifier(min_samples_split=2)
     clf = clf.fit(f, Y)
     mytrainingaux(f, Y, clf)
     return clf
 
 
 def mytrainingaux(f, Y, clf):
-
     print(" 5-fold cross validation score (scoring='f1'):\n", cross_val_score(clf, f, Y, scoring='f1', cv=5))
     clf = clf.fit(f, Y)
     Ypred = clf.predict(f)
@@ -45,14 +42,13 @@ def mytrainingaux(f, Y, clf):
 
 
 def myprediction(f, clf):
-
     Ypred = clf.predict(f)
 
     return Ypred
 
 
-def countVowels(word):
-
+#####  FEATURES  #####
+def count_vowels(word):
     count = 0
     vowels = set("aáâãeéèêiíìioóòôõuúù")
 
@@ -62,30 +58,12 @@ def countVowels(word):
     return count
 
 
-def hasEvenVowels(word):
-
-    vowelCount = countVowels(word)
+def has_even_vowels(word):
+    vowelCount = count_vowels(word)
     return (vowelCount % 2 == 0)
 
 
-def hasNumber(word):
-
-    numbers = set('0123456789')
-
-    for letter in word:
-        if letter in numbers:
-            return True
-    return False
-
-# nao esta' a ser usada
-def lastLetterisVowel(word):
-
-    vowels = set("aáâãeéèêiíìioóòôõuúù")
-    return word[-1] in vowels
-
-
-def hasAccent(word):
-
+def has_accent(word):
     accents = set("áâãéèêiíìióòôõúùç")
 
     for letter in word:

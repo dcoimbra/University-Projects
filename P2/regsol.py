@@ -13,28 +13,18 @@ import warnings
 
 
 def mytraining(X, Y):
-
     Y = Y.ravel()
 
     reg = KernelRidge(kernel='rbf').fit(X, Y)
 
     # parametros a ser testados
-    param_grid = [
-        {
-            'alpha': [0.1, 0.01, 0.001, 0.0001], 'gamma': [0.1, 0.01, 0.001]
-        }
-    ]
+    param_grid = [{'alpha': [0.1, 0.01, 0.001, 0.0001], 'gamma': [0.1, 0.01, 0.001]}]
 
-    '''
-    reg = SVR(kernel='rbf').fit(X, Y)
+#    reg = SVR(kernel='rbf').fit(X, Y)
 
     # parametros a ser testados
-    param_grid = [
-         {
-            'C': [100, 1000, 10000, 100000], 'gamma': [0.1, 0.01]
-         }
-    ]
-    '''
+#    param_grid = [{'C': [100, 1000, 10000, 100000], 'gamma': [0.1, 0.01]}]
+
 
     # GridSearchCV testa todas as combinacoes de parametros possiveis, e efetua validacao cruzada
     search = GridSearchCV(reg, param_grid, scoring='neg_mean_squared_error', cv=5)
@@ -55,8 +45,8 @@ def mytraining(X, Y):
 
     return reg
 
-def myprediction(X, reg):
 
+def myprediction(X, reg):
     predict_time_start = time()
 
     Ypred = reg.predict(X)
@@ -66,5 +56,6 @@ def myprediction(X, reg):
     print("Predict time:", predict_time)
 
     return Ypred
+
 
 warnings.filterwarnings("ignore")
