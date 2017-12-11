@@ -36,5 +36,4 @@ for ii, test in enumerate(["regress.npy", "regress2.npy"]):
 
     filename_test = "test2.svg"
 
-
 plt.show()

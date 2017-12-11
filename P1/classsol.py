@@ -33,10 +33,10 @@ def mytraining(f, Y):
 
 
 def mytrainingaux(f, Y, clf):
-    print(" 5-fold cross validation score (scoring='f1'):\n", cross_val_score(clf, f, Y, scoring='f1', cv=5))
+    # print(" 5-fold cross validation score (scoring='f1'):\n", cross_val_score(clf, f, Y, scoring='f1', cv=5))
     clf = clf.fit(f, Y)
-    Ypred = clf.predict(f)
-    print("confusion matrix: \n", confusion_matrix(Y, Ypred, labels=[1, 0]))
+    # Ypred = clf.predict(f)
+    # print("confusion matrix: \n", confusion_matrix(Y, Ypred, labels=[1, 0]))
 
     return clf
 
