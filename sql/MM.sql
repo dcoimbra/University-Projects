@@ -8,19 +8,21 @@ CREATE TABLE d_produto(
 );
 
 CREATE TABLE d_tempo(
-  time_id INTEGER,
   dia INTEGER NOT NULL ,
   mes varchar(10) NOT NULL ,
   ano INTEGER NOT NULL,
-  PRIMARY KEY (time_id)
+  PRIMARY KEY (dia, mes, ano)
 );
 
 CREATE TABLE facts_table(
   cean BIGINT,
   FOREIGN KEY (cean) REFERENCES d_produto(cean),
-  time_id INTEGER,
-  FOREIGN KEY (time_id) REFERENCES d_tempo(time_id),
-  n_reposicoes INTEGER
+  dia INTEGER NOT NULL ,
+  mes varchar(10) NOT NULL ,
+  ano INTEGER NOT NULL,
+  FOREIGN KEY (dia, mes, ano) REFERENCES d_tempo(dia, mes, ano),
+  n_reposicoes INTEGER,
+  PRIMARY KEY(cean, dia, mes, ano)
 );
 
 
@@ -28,10 +30,24 @@ INSERT INTO d_produto (cean, categoria, nif_fornecedor_principal)
 SELECT ean, categoria, forn_primario
 FROM produto;
 
-INSERT INTO d_tempo (time_id, dia, mes, ano)
-SELECT random(), extract(day from instante), extract (month from instante), extract (year from instante)
+INSERT INTO facts_table(cean, dia, mes, ano, n_reposicoes)
+SELECT ean, extract(day from instante), extract (month from instante), extract (year from instante), unidades
 FROM reposicao;
 
-INSERT INTO facts_table(cean, time_id, n_reposicoes)
-SELECT ean, random(), unidades
-FROM reposicao;
+(SELECT count(n_reposicoes), categoria, mes, ano
+  FROM facts_table, d_produto
+  WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123 455 678'
+  GROUP BY mes, ano)
+
+UNION
+
+(SELECT count(n_reposicoes), categoria, null, ano
+  FROM facts_table, d_produto
+  WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123 455 678'
+  GROUP BY ano)
+
+UNION
+
+(SELECT count(n_reposicoes), categoria, null, null
+ FROM facts_table, d_produto
+ WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123 455 678');
