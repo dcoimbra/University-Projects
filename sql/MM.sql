@@ -31,13 +31,8 @@ SELECT ean, categoria, forn_primario
 FROM produto;
 
 -- -------------------------------------------------------------------------------------------------------------
-DO $$ BEGIN
-  PERFORM "polulate"();
-END $$;
 
-DROP FUNCTION IF EXISTS polulate();
-
-CREATE FUNCTION polulate()
+CREATE OR REPLACE FUNCTION populate()
   returns void
 AS
 $$
@@ -55,6 +50,10 @@ BEGIN
 END
 $$
 language plpgsql;
+
+DO $$ BEGIN
+  PERFORM populate();
+END $$;
 
 -- -----------------------------------------------------------------------------------------------------------
 
