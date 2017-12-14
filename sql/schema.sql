@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS categoria, categoria_simples, super_categoria,constituida, fornecedor, produto, fornecedor, fornece_sec, corredor, prateleira, planograma, evento_reposicao, reposicao;
+DROP TABLE IF EXISTS categoria, categoria_simples, super_categoria,constituida, produto, fornecedor, fornece_sec, corredor, prateleira, planograma, evento_reposicao, reposicao;
 DROP TRIGGER IF EXISTS check_forn_sec ON fornece_sec;
 DROP FUNCTION IF EXISTS check_forn();
 

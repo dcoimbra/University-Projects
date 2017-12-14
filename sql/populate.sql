@@ -89,6 +89,8 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
      '2017-01-22'
   );
 
+
+
 INSERT INTO fornece_sec(nif, ean) VALUES (444444444, 1111111111111);
 INSERT INTO fornece_sec(nif, ean) VALUES (222222222, 3333333333333);
 INSERT INTO fornece_sec(nif, ean) VALUES (333333333, 1111111111111);
@@ -204,7 +206,18 @@ INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
       1,
       40,
       2
-    );    
+    );
+
+INSERT INTO planograma(ean, nro, lado, altura, face, unidades, loc)
+VALUES (
+  5555555555555,
+  1,
+  'esquerdo',
+  'superior',
+  1,
+  40,
+  2
+);
 
 INSERT INTO evento_reposicao(operador, instante)
   VALUES (
@@ -218,6 +231,12 @@ INSERT INTO evento_reposicao(operador, instante)
     '2017-11-04 18:32'
   );
 
+INSERT INTO evento_reposicao(operador, instante)
+VALUES (
+  'david',
+  '2017-10-02 15:43'
+);
+
 INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
   VALUES (
     1111111111111,
@@ -228,6 +247,17 @@ INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
     '2017-11-02 15:43',
     20
   );
+
+INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
+VALUES (
+  5555555555555,
+  1,
+  'esquerdo',
+  'superior',
+  'david',
+  '2017-10-02 15:43',
+  20
+);
 
 INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
   VALUES (

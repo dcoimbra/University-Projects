@@ -36,9 +36,9 @@ CREATE OR REPLACE FUNCTION populate()
   returns void
 AS
 $$
-DECLARE date DATE := '2017-01-01';
+DECLARE date DATE := '2016-01-01';
 BEGIN
-  while date < '2018-12-31'
+  while date < current_date
   loop
     INSERT INTO d_tempo (dia, mes, ano) VALUES (
       extract(day from date),
@@ -62,23 +62,25 @@ SELECT ean, extract(day from instante), extract (month from instante), extract (
 FROM reposicao;
 
 -- -----------------------------------------------------------------------------------------------------------------
-(SELECT count(n_reposicoes), categoria, mes, ano
+(SELECT categoria, ano, mes, count(n_reposicoes)
   FROM facts_table, d_produto
   WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123455678'
-  GROUP BY categoria, mes, ano)
+  GROUP BY categoria, ano, mes)
 
 UNION
 
-(SELECT count(n_reposicoes), categoria, null, ano
+(SELECT categoria, ano, null, count(n_reposicoes)
   FROM facts_table, d_produto
   WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123455678'
   GROUP BY categoria, ano)
 
 UNION
 
-(SELECT count(n_reposicoes), categoria, null, null
+(SELECT categoria, null, null, count(n_reposicoes)
  FROM facts_table, d_produto
  WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123455678'
- GROUP BY categoria);
+ GROUP BY categoria)
+ORDER BY categoria, ano, mes;
+
 
 -- ----------------------------------------------------------------------------------------------------------------
