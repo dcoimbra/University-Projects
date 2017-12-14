@@ -291,3 +291,67 @@ INSERT INTO reposicao(ean, nro, lado, altura, operador, instante, unidades)
     '2017-11-02 15:43',
     1
   );
+
+-- Teste de indices
+
+-- correr primeiro a que cria fornecedores, e de seguida a que cria produtos -> com a mesma quantity <-
+
+-- criar mais fornecedores
+CREATE OR REPLACE FUNCTION add_fornecedores(
+  forneprefix varchar,
+  quantity integer)
+  RETURNS void
+LANGUAGE 'plpgsql'
+AS $$
+
+DECLARE
+  i integer;
+
+BEGIN
+  i := 0;
+  WHILE(i <= quantity)
+  loop
+    INSERT INTO fornecedor(nif,nome) VALUES (200000000 + i, concat(forneprefix, i));
+
+    i := i + 1;
+  end loop;
+END $$;
+
+-- criar produtos
+CREATE OR REPLACE FUNCTION add_produtos(
+  eanbase bigint,
+  prodprefix varchar,
+  quantity integer)
+  RETURNS void
+LANGUAGE 'plpgsql'
+
+AS $$
+
+DECLARE
+  i integer;
+  cat text[];
+  catlen integer;
+
+BEGIN
+  i := 1;
+  cat := ARRAY(SELECT nome FROM categoria);
+  catlen := array_length(cat, 1);
+  WHILE(i <= quantity)
+  loop
+    INSERT INTO produto(ean, design, categoria, forn_primario, data) VALUES (
+      eanbase + i,
+      concat(prodprefix, i),
+      cat[i%catlen+1],
+      200000000 + i,
+      current_date);
+    INSERT INTO fornece_sec(nif, ean) VALUES(200000000 + i - 1, eanbase + i);
+    i := i + 1;
+  end loop;
+END $$;
+
+-- Chamadas as funcoes para testar indices
+
+/* DO $$ BEGIN
+  PERFORM add_fornecedores('f', 10000);
+  PERFORM add_produtos(1111111111111, 'p', 10000);
+END $$; */
