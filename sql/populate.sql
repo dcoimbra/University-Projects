@@ -39,7 +39,7 @@ INSERT INTO constituida(super_categoria, categoria) VALUES ('sobremesas', 'gelad
 INSERT INTO constituida(super_categoria, categoria) VALUES ('fruta', 'frutos vermelhos');
 
 
-INSERT INTO fornecedor(nif, nome) VALUES (111111111, 'Umberto & Filhos');
+INSERT INTO fornecedor(nif, nome) VALUES (123455678, 'Umberto & Filhos');
 INSERT INTO fornecedor(nif, nome) VALUES (222222222, 'Dolores & Filhas');
 INSERT INTO fornecedor(nif, nome) VALUES (333333333, 'Teresa SA');
 INSERT INTO fornecedor(nif, nome) VALUES (444444444, 'Quim Electro');
@@ -49,7 +49,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
      1111111111111,
      'Laranja do Algarve',
      'fruta',
-     111111111,
+     123455678,
      '2017-01-22'
   );
   
@@ -76,7 +76,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
      4444444444444,
      'Pera Rocha',
      'fruta',
-     111111111,
+     123455678,
      '2017-01-22'
   );
 
@@ -85,7 +85,7 @@ INSERT INTO produto(ean, design, categoria, forn_primario, data)
      5555555555555,
      'Mousse de Manga',
      'sobremesas',
-     111111111,
+     123455678,
      '2017-01-22'
   );
 
