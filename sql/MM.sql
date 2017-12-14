@@ -21,10 +21,10 @@ CREATE TABLE facts_table(
   mes varchar(10) NOT NULL ,
   ano INTEGER NOT NULL,
   FOREIGN KEY (dia, mes, ano) REFERENCES d_tempo(dia, mes, ano),
-  n_reposicoes INTEGER,
+  n_unidades_repostas INTEGER,
   PRIMARY KEY(cean, dia, mes, ano)
 );
-
+-- -------------------------------------------------------------------------------------------------------------
 
 INSERT INTO d_produto (cean, categoria, nif_fornecedor_principal)
 SELECT ean, categoria, forn_primario
@@ -57,26 +57,26 @@ END $$;
 
 -- -----------------------------------------------------------------------------------------------------------
 
-INSERT INTO facts_table(cean, dia, mes, ano, n_reposicoes)
+INSERT INTO facts_table(cean, dia, mes, ano, n_unidades_repostas)
 SELECT ean, extract(day from instante), extract (month from instante), extract (year from instante), unidades
 FROM reposicao;
 
 -- -----------------------------------------------------------------------------------------------------------------
-(SELECT categoria, ano, mes, count(n_reposicoes)
+(SELECT categoria, ano, mes, count(n_unidades_repostas)
   FROM facts_table, d_produto
   WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123455678'
   GROUP BY categoria, ano, mes)
 
 UNION
 
-(SELECT categoria, ano, null, count(n_reposicoes)
+(SELECT categoria, ano, null, count(n_unidades_repostas)
   FROM facts_table, d_produto
   WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123455678'
   GROUP BY categoria, ano)
 
 UNION
 
-(SELECT categoria, null, null, count(n_reposicoes)
+(SELECT categoria, null, null, count(n_unidades_repostas)
  FROM facts_table, d_produto
  WHERE facts_table.cean = d_produto.cean and nif_fornecedor_principal = '123455678'
  GROUP BY categoria)
