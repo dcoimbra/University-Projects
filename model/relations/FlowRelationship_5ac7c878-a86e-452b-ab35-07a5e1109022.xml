@@ -1,0 +1,12 @@
+<archimate:FlowRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    id="5ac7c878-a86e-452b-ab35-07a5e1109022"
+    documentation="comunicação da localização da BICA (controlo de distância percorrida para taxação de clientes)">
+  <source
+      xsi:type="archimate:ApplicationComponent"
+      href="ApplicationComponent_f7c6a803-7dfe-41f7-96a7-1b2907126b10.xml#f7c6a803-7dfe-41f7-96a7-1b2907126b10"/>
+  <target
+      xsi:type="archimate:ApplicationComponent"
+      href="ApplicationComponent_924c4a00-cfac-4a52-9c51-654212524990.xml#924c4a00-cfac-4a52-9c51-654212524990"/>
+</archimate:FlowRelationship>

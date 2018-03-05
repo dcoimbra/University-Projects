@@ -1,0 +1,12 @@
+<archimate:FlowRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    id="4daba856-ee6a-4ee5-aa93-4f012b3dd721"
+    documentation="mediação de comunicações de localização da BICA -> BAIK-TAXAÇÃO">
+  <source
+      xsi:type="archimate:ApplicationComponent"
+      href="ApplicationComponent_53fceac2-1bbe-480b-90f6-335f1cceff24.xml#53fceac2-1bbe-480b-90f6-335f1cceff24"/>
+  <target
+      xsi:type="archimate:ApplicationComponent"
+      href="ApplicationComponent_f7c6a803-7dfe-41f7-96a7-1b2907126b10.xml#f7c6a803-7dfe-41f7-96a7-1b2907126b10"/>
+</archimate:FlowRelationship>
