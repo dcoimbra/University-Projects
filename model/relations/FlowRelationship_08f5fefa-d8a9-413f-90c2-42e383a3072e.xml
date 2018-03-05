@@ -1,0 +1,12 @@
+<archimate:FlowRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    id="08f5fefa-d8a9-413f-90c2-42e383a3072e"
+    documentation="gestão das operações de débito/crédito">
+  <source
+      xsi:type="archimate:ApplicationComponent"
+      href="ApplicationComponent_fac6c8ad-2495-4c29-9c59-54643b2f1eb4.xml#fac6c8ad-2495-4c29-9c59-54643b2f1eb4"/>
+  <target
+      xsi:type="archimate:ApplicationComponent"
+      href="ApplicationComponent_e9c9c9f4-104a-494d-8289-49687d86cc29.xml#e9c9c9f4-104a-494d-8289-49687d86cc29"/>
+</archimate:FlowRelationship>
