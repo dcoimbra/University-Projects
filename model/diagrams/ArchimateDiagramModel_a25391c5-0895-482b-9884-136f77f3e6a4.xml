@@ -63,7 +63,7 @@
           href="SpecializationRelationship_84385e41-012d-4cf8-be34-f38532b99b45.xml#84385e41-012d-4cf8-be34-f38532b99b45"/>
     </sourceConnections>
     <bounds
-        x="120"
+        x="225"
         y="84"
         width="313"
         height="241"/>
@@ -98,7 +98,7 @@
         id="fc1f5dff-ca23-4e05-9eea-cfde6dcc9c66"
         targetConnections="cc301cd7-12c6-4499-bc38-0db7fef64fab">
       <bounds
-          x="171"
+          x="12"
           y="144"
           width="120"
           height="73"/>
@@ -178,7 +178,7 @@
           href="SpecializationRelationship_a91db595-d464-494d-840a-5162573055c1.xml#a91db595-d464-494d-840a-5162573055c1"/>
     </sourceConnections>
     <bounds
-        x="492"
+        x="597"
         y="84"
         width="385"
         height="241"/>
@@ -243,7 +243,7 @@
       id="e13fe02e-102f-42e7-badc-adb6e2ed0b81"
       targetConnections="4b7e22c4-e37d-48ec-a1be-c0dd45551fc3">
     <bounds
-        x="181"
+        x="322"
         width="120"
         height="55"/>
     <archimateElement
@@ -255,7 +255,7 @@
       id="16c41a4c-ce0c-47ff-857e-483f4aabad2c"
       targetConnections="3d201ca4-3b83-4b54-8b3a-1d98b905d874">
     <bounds
-        x="613"
+        x="732"
         width="120"
         height="55"/>
     <archimateElement
@@ -294,7 +294,7 @@
           href="AggregationRelationship_0f2e6c34-d76d-4710-b0a7-4fc55ef80cc4.xml#0f2e6c34-d76d-4710-b0a7-4fc55ef80cc4"/>
     </sourceConnections>
     <bounds
-        x="156"
+        x="261"
         y="444"
         width="588"
         height="121"/>
@@ -340,5 +340,17 @@
     <archimateElement
         xsi:type="archimate:Product"
         href="Product_9974a26b-93c9-48de-8764-ee5493589bbc.xml#9974a26b-93c9-48de-8764-ee5493589bbc"/>
+  </children>
+  <children
+      xsi:type="archimate:DiagramModelArchimateObject"
+      id="2ce3103e-4424-4e9d-84e2-3119da48dfb7">
+    <bounds
+        x="60"
+        y="228"
+        width="120"
+        height="73"/>
+    <archimateElement
+        xsi:type="archimate:BusinessProcess"
+        href="BusinessProcess_ca3f0937-484c-47f8-a0fb-ec3063f78732.xml#ca3f0937-484c-47f8-a0fb-ec3063f78732"/>
   </children>
 </archimate:ArchimateDiagramModel>
