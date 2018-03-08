@@ -1,12 +1,11 @@
-<archimate:FlowRelationship
+<archimate:RealizationRelationship
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:archimate="http://www.archimatetool.com/archimate"
-    id="2b840840-74e2-4c69-8cc7-0dd0b5b37a33"
-    documentation="receber carregamentos pré-pagos&#xD;&#xA;cobrar pagamentos pós-pagos">
+    id="44c7fcd2-a32d-4efe-8fac-95648c9b6379">
   <source
       xsi:type="archimate:ApplicationComponent"
-      href="ApplicationComponent_e9c9c9f4-104a-494d-8289-49687d86cc29.xml#e9c9c9f4-104a-494d-8289-49687d86cc29"/>
+      href="ApplicationComponent_b27ce734-727b-4c73-b878-8162a7a0d361.xml#b27ce734-727b-4c73-b878-8162a7a0d361"/>
   <target
       xsi:type="archimate:ApplicationInterface"
       href="ApplicationInterface_04bbd56f-ce42-4596-a802-4a21967d7488.xml#04bbd56f-ce42-4596-a802-4a21967d7488"/>
-</archimate:FlowRelationship>
+</archimate:RealizationRelationship>
