@@ -1,0 +1,42 @@
+<archimate:ArchimateDiagramModel
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Descrição aplicacional (next try)"
+    id="c8d12436-2364-48e4-b744-29b5ea3db675">
+  <children
+      xsi:type="archimate:DiagramModelArchimateObject"
+      id="3c8161e1-da16-4802-887b-f09873ec7ee0">
+    <bounds
+        x="144"
+        y="24"
+        width="120"
+        height="55"/>
+    <archimateElement
+        xsi:type="archimate:ApplicationInterface"
+        href="ApplicationInterface_e96bf60b-39bb-49a7-86bb-25a9dffea101.xml#e96bf60b-39bb-49a7-86bb-25a9dffea101"/>
+  </children>
+  <children
+      xsi:type="archimate:DiagramModelArchimateObject"
+      id="6ac27831-6a27-4a33-b24d-ef910c79acc3">
+    <bounds
+        x="84"
+        y="120"
+        width="120"
+        height="55"/>
+    <archimateElement
+        xsi:type="archimate:ApplicationComponent"
+        href="ApplicationComponent_854786d8-3bdb-4f14-8609-8ce94d676825.xml#854786d8-3bdb-4f14-8609-8ce94d676825"/>
+  </children>
+  <children
+      xsi:type="archimate:DiagramModelArchimateObject"
+      id="d99bb46b-4f3b-4cc4-8307-d8e8d36b4892">
+    <bounds
+        x="216"
+        y="120"
+        width="120"
+        height="55"/>
+    <archimateElement
+        xsi:type="archimate:ApplicationComponent"
+        href="ApplicationComponent_ba2a21cb-cefb-45ee-8361-223d873a2f61.xml#ba2a21cb-cefb-45ee-8361-223d873a2f61"/>
+  </children>
+</archimate:ArchimateDiagramModel>
