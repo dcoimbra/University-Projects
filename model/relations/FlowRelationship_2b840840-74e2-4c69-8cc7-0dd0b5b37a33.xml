@@ -2,11 +2,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:archimate="http://www.archimatetool.com/archimate"
     id="2b840840-74e2-4c69-8cc7-0dd0b5b37a33"
-    documentation="receber carregamentos pré-pagos&#xD;&#xA;cobrar pagamentos pós-pagos">
+    documentation="- mantém perfil + serviços dos clientes&#xD;&#xA;- receber carregamentos pré-pagos&#xD;&#xA;- cobrar pagamentos pós-pagos">
   <source
       xsi:type="archimate:ApplicationComponent"
       href="ApplicationComponent_e9c9c9f4-104a-494d-8289-49687d86cc29.xml#e9c9c9f4-104a-494d-8289-49687d86cc29"/>
   <target
-      xsi:type="archimate:ApplicationInterface"
-      href="ApplicationInterface_04bbd56f-ce42-4596-a802-4a21967d7488.xml#04bbd56f-ce42-4596-a802-4a21967d7488"/>
+      xsi:type="archimate:ApplicationComponent"
+      href="ApplicationComponent_58b72f67-555c-48b0-a13c-72b2783b8416.xml#58b72f67-555c-48b0-a13c-72b2783b8416"/>
 </archimate:FlowRelationship>
