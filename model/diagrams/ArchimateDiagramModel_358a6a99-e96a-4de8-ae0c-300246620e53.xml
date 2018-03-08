@@ -74,8 +74,8 @@
     <bounds
         x="84"
         y="84"
-        width="1189"
-        height="301"/>
+        width="1105"
+        height="265"/>
     <children
         xsi:type="archimate:DiagramModelArchimateObject"
         id="bfc41c3b-8dc1-4db5-a706-94450d75e90c"
@@ -91,7 +91,7 @@
       </sourceConnections>
       <bounds
           x="24"
-          y="228"
+          y="219"
           width="253"
           height="28"/>
       <archimateElement
@@ -117,7 +117,7 @@
             href="AssignmentRelationship_97a6cfa8-26f7-4c99-a3fc-1bff1ffe20fb.xml#97a6cfa8-26f7-4c99-a3fc-1bff1ffe20fb"/>
       </sourceConnections>
       <bounds
-          x="876"
+          x="828"
           y="30"
           width="253"
           height="31"/>
@@ -148,9 +148,9 @@
             href="AssignmentRelationship_284a7e29-db23-4a22-af5e-4b5c197d4d46.xml#284a7e29-db23-4a22-af5e-4b5c197d4d46"/>
       </sourceConnections>
       <bounds
-          x="432"
-          y="240"
-          width="217"
+          x="456"
+          y="204"
+          width="181"
           height="43"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
@@ -219,9 +219,9 @@
             href="AssignmentRelationship_4d6eebe1-3027-4b13-bd94-592968fb154d.xml#4d6eebe1-3027-4b13-bd94-592968fb154d"/>
       </sourceConnections>
       <bounds
-          x="672"
-          y="240"
-          width="217"
+          x="684"
+          y="204"
+          width="169"
           height="43"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
@@ -250,24 +250,13 @@
             href="AssignmentRelationship_5f43523d-298a-4b8e-a1a3-e29822b73a4c.xml#5f43523d-298a-4b8e-a1a3-e29822b73a4c"/>
       </sourceConnections>
       <bounds
-          x="912"
-          y="240"
-          width="253"
+          x="888"
+          y="204"
+          width="181"
           height="43"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
           href="BusinessActor_46a19802-1852-470c-91d4-a3850fafbe18.xml#46a19802-1852-470c-91d4-a3850fafbe18"/>
-    </children>
-    <children
-        xsi:type="archimate:DiagramModelNote"
-        id="c1988ceb-0afc-42e5-9b21-01c5c25d53bb"
-        textAlignment="1"
-        content="BAIK-CRM, BAIK-TAXAÇÃO, BAIK-MEDIAÇÃO">
-      <bounds
-          x="336"
-          y="180"
-          width="145"
-          height="61"/>
     </children>
     <children
         xsi:type="archimate:DiagramModelArchimateObject"
@@ -407,17 +396,6 @@
           xsi:type="archimate:BusinessActor"
           href="BusinessActor_173be48b-ae24-40e9-be6f-93332edc7bbd.xml#173be48b-ae24-40e9-be6f-93332edc7bbd"/>
     </children>
-    <children
-        xsi:type="archimate:DiagramModelNote"
-        id="5d9cbc56-fa25-408a-a56b-a28cebf87562"
-        textAlignment="1"
-        content="Responsabilidade direta por: BAIK-MEDIAÇÃO">
-      <bounds
-          x="936"
-          y="90"
-          width="145"
-          height="43"/>
-    </children>
     <archimateElement
         xsi:type="archimate:BusinessActor"
         href="BusinessActor_33ba3c12-0245-414c-8a76-8d3468eddecd.xml#33ba3c12-0245-414c-8a76-8d3468eddecd"/>
@@ -427,8 +405,8 @@
       id="e945fb72-e25f-474b-81bb-d2adb81b3541"
       targetConnections="11bd87cc-56ff-4e80-9156-890d66999deb">
     <bounds
-        x="996"
-        y="405"
+        x="972"
+        y="372"
         width="121"
         height="55"/>
     <archimateElement
@@ -440,8 +418,8 @@
       id="7754aaec-63ca-483a-9732-1729f4d8f4aa"
       targetConnections="d03f4d96-60ef-4be5-a302-daecf1a7dc32">
     <bounds
-        x="1128"
-        y="417"
+        x="1104"
+        y="384"
         width="121"
         height="43"/>
     <archimateElement
@@ -454,6 +432,7 @@
       targetConnections="93a22b23-1368-454a-b323-3bd839a30f4b">
     <bounds
         x="132"
+        y="24"
         width="133"
         height="43"/>
     <archimateElement
@@ -466,6 +445,7 @@
       targetConnections="9166a715-afe0-4d4c-9cb6-314e7f5c220f">
     <bounds
         x="300"
+        y="24"
         width="133"
         height="43"/>
     <archimateElement
@@ -478,6 +458,7 @@
       targetConnections="b06d5f83-5d8b-4a9c-a08a-4a2db72dd6c6">
     <bounds
         x="444"
+        y="24"
         width="133"
         height="43"/>
     <archimateElement
@@ -490,7 +471,7 @@
       targetConnections="c9c2f748-46a4-4bfe-9ad5-bbb37e4f1014">
     <bounds
         x="648"
-        y="-15"
+        y="3"
         width="193"
         height="61"/>
     <archimateElement
@@ -498,39 +479,17 @@
         href="BusinessRole_965f7b0e-e22e-49b2-93a4-46604501398c.xml#965f7b0e-e22e-49b2-93a4-46604501398c"/>
   </children>
   <children
-      xsi:type="archimate:DiagramModelNote"
-      id="8d1d028f-4300-40c2-86d1-abc7e91e0baa"
-      textAlignment="1"
-      content="Responsabilidade direta por: BAIK-ERP, BAIK-TAXAÇÃO ">
-    <bounds
-        x="840"
-        y="-15"
-        width="145"
-        height="61"/>
-  </children>
-  <children
       xsi:type="archimate:DiagramModelArchimateObject"
       id="df13096e-cacb-4a89-bba1-6f80edd02c74"
       targetConnections="91c7b22c-ef22-4061-b0e2-31a64cc8f6f1">
     <bounds
-        x="1020"
-        y="3"
+        x="948"
+        y="27"
         width="193"
         height="37"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_4e2f201d-8803-42a2-8e6b-bb9c301176c6.xml#4e2f201d-8803-42a2-8e6b-bb9c301176c6"/>
-  </children>
-  <children
-      xsi:type="archimate:DiagramModelNote"
-      id="6dffce96-1a06-4811-8c60-32b9a029873b"
-      textAlignment="1"
-      content="Responsabilidade direta por: BANK-CRM">
-    <bounds
-        x="1212"
-        y="-6"
-        width="121"
-        height="55"/>
   </children>
   <children
       xsi:type="archimate:DiagramModelArchimateObject"
@@ -576,7 +535,7 @@
       id="62437742-53fc-4aaf-aa58-c92fe34809f1"
       targetConnections="117a64c4-d3a6-4f92-a1f0-050a1354da94">
     <bounds
-        x="1284"
+        x="1212"
         y="216"
         width="193"
         height="49"/>
@@ -589,8 +548,8 @@
       id="5744ad29-ba37-4fd1-850b-354023dc18a0"
       targetConnections="183dde2c-f307-4f93-9a2d-688cbd477161">
     <bounds
-        x="408"
-        y="414"
+        x="396"
+        y="387"
         width="205"
         height="49"/>
     <archimateElement
@@ -602,8 +561,8 @@
       id="ce876e7d-a9b9-4366-8699-2e46febaea25"
       targetConnections="11a25f51-233b-44e8-a560-6ec72993b615">
     <bounds
-        x="624"
-        y="402"
+        x="612"
+        y="375"
         width="169"
         height="61"/>
     <archimateElement
@@ -616,7 +575,7 @@
       targetConnections="93eaad30-c1cc-401f-afda-a5f147591572">
     <bounds
         x="804"
-        y="414"
+        y="375"
         width="145"
         height="49"/>
     <archimateElement
