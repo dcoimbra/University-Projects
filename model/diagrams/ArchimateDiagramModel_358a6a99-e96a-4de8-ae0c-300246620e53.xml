@@ -406,9 +406,9 @@
       targetConnections="11bd87cc-56ff-4e80-9156-890d66999deb">
     <bounds
         x="972"
-        y="372"
+        y="375"
         width="121"
-        height="55"/>
+        height="61"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_ac80bfc1-9d95-4bab-9a5f-ca8c22f2960e.xml#ac80bfc1-9d95-4bab-9a5f-ca8c22f2960e"/>
@@ -419,9 +419,9 @@
       targetConnections="d03f4d96-60ef-4be5-a302-daecf1a7dc32">
     <bounds
         x="1104"
-        y="384"
+        y="375"
         width="121"
-        height="43"/>
+        height="61"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_d06ade3b-8915-47ef-b9c1-c29720f5dae5.xml#d06ade3b-8915-47ef-b9c1-c29720f5dae5"/>
@@ -470,10 +470,10 @@
       id="f10a2f16-6f67-43b0-8a5d-6bbbb55b5067"
       targetConnections="c9c2f748-46a4-4bfe-9ad5-bbb37e4f1014">
     <bounds
-        x="648"
-        y="3"
-        width="193"
-        height="61"/>
+        x="636"
+        y="24"
+        width="229"
+        height="40"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_965f7b0e-e22e-49b2-93a4-46604501398c.xml#965f7b0e-e22e-49b2-93a4-46604501398c"/>
@@ -483,9 +483,9 @@
       id="df13096e-cacb-4a89-bba1-6f80edd02c74"
       targetConnections="91c7b22c-ef22-4061-b0e2-31a64cc8f6f1">
     <bounds
-        x="948"
+        x="912"
         y="27"
-        width="193"
+        width="253"
         height="37"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
@@ -549,9 +549,9 @@
       targetConnections="183dde2c-f307-4f93-9a2d-688cbd477161">
     <bounds
         x="396"
-        y="387"
+        y="375"
         width="205"
-        height="49"/>
+        height="61"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_ff3197e3-a83f-4c97-96e1-bada645fef47.xml#ff3197e3-a83f-4c97-96e1-bada645fef47"/>
@@ -577,7 +577,7 @@
         x="804"
         y="375"
         width="145"
-        height="49"/>
+        height="61"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_3d5cba5e-6123-4012-865a-a04f288cfbeb.xml#3d5cba5e-6123-4012-865a-a04f288cfbeb"/>
