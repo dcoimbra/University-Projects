@@ -91,9 +91,9 @@
       </sourceConnections>
       <bounds
           x="24"
-          y="219"
+          y="204"
           width="253"
-          height="28"/>
+          height="43"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
           href="BusinessActor_49483233-df69-4037-a3b9-faea11130b6a.xml#49483233-df69-4037-a3b9-faea11130b6a"/>
@@ -117,9 +117,9 @@
             href="AssignmentRelationship_97a6cfa8-26f7-4c99-a3fc-1bff1ffe20fb.xml#97a6cfa8-26f7-4c99-a3fc-1bff1ffe20fb"/>
       </sourceConnections>
       <bounds
-          x="828"
+          x="852"
           y="30"
-          width="253"
+          width="229"
           height="31"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
@@ -148,9 +148,9 @@
             href="AssignmentRelationship_284a7e29-db23-4a22-af5e-4b5c197d4d46.xml#284a7e29-db23-4a22-af5e-4b5c197d4d46"/>
       </sourceConnections>
       <bounds
-          x="456"
+          x="432"
           y="204"
-          width="181"
+          width="205"
           height="43"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
@@ -252,7 +252,7 @@
       <bounds
           x="888"
           y="204"
-          width="181"
+          width="193"
           height="43"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
@@ -327,9 +327,9 @@
       </sourceConnections>
       <bounds
           x="24"
-          y="114"
-          width="277"
-          height="73"/>
+          y="96"
+          width="253"
+          height="97"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
           href="BusinessActor_6e816c42-d9cb-48e7-9531-a7afec8468d0.xml#6e816c42-d9cb-48e7-9531-a7afec8468d0"/>
@@ -359,7 +359,7 @@
       <bounds
           x="204"
           y="30"
-          width="265"
+          width="241"
           height="31"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
@@ -388,9 +388,9 @@
             href="AggregationRelationship_d194ced3-1658-4b10-b6a0-3b09997798dc.xml#d194ced3-1658-4b10-b6a0-3b09997798dc"/>
       </sourceConnections>
       <bounds
-          x="540"
+          x="600"
           y="30"
-          width="253"
+          width="229"
           height="31"/>
       <archimateElement
           xsi:type="archimate:BusinessActor"
@@ -405,10 +405,10 @@
       id="e945fb72-e25f-474b-81bb-d2adb81b3541"
       targetConnections="11bd87cc-56ff-4e80-9156-890d66999deb">
     <bounds
-        x="972"
+        x="948"
         y="375"
         width="121"
-        height="61"/>
+        height="70"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_ac80bfc1-9d95-4bab-9a5f-ca8c22f2960e.xml#ac80bfc1-9d95-4bab-9a5f-ca8c22f2960e"/>
@@ -418,10 +418,10 @@
       id="7754aaec-63ca-483a-9732-1729f4d8f4aa"
       targetConnections="d03f4d96-60ef-4be5-a302-daecf1a7dc32">
     <bounds
-        x="1104"
+        x="1080"
         y="375"
-        width="121"
-        height="61"/>
+        width="109"
+        height="70"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_d06ade3b-8915-47ef-b9c1-c29720f5dae5.xml#d06ade3b-8915-47ef-b9c1-c29720f5dae5"/>
@@ -431,9 +431,9 @@
       id="463575fc-9347-4600-947d-94057ddba56b"
       targetConnections="93a22b23-1368-454a-b323-3bd839a30f4b">
     <bounds
-        x="132"
+        x="108"
         y="24"
-        width="133"
+        width="145"
         height="43"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
@@ -444,9 +444,9 @@
       id="c0c48c34-2319-4153-9f75-db7e5305883e"
       targetConnections="9166a715-afe0-4d4c-9cb6-314e7f5c220f">
     <bounds
-        x="300"
+        x="276"
         y="24"
-        width="133"
+        width="109"
         height="43"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
@@ -457,7 +457,7 @@
       id="e770f043-2828-4921-a9d7-c57ab9bcffc1"
       targetConnections="b06d5f83-5d8b-4a9c-a08a-4a2db72dd6c6">
     <bounds
-        x="444"
+        x="396"
         y="24"
         width="133"
         height="43"/>
@@ -470,8 +470,8 @@
       id="f10a2f16-6f67-43b0-8a5d-6bbbb55b5067"
       targetConnections="c9c2f748-46a4-4bfe-9ad5-bbb37e4f1014">
     <bounds
-        x="636"
-        y="24"
+        x="684"
+        y="26"
         width="229"
         height="40"/>
     <archimateElement
@@ -483,9 +483,9 @@
       id="df13096e-cacb-4a89-bba1-6f80edd02c74"
       targetConnections="91c7b22c-ef22-4061-b0e2-31a64cc8f6f1">
     <bounds
-        x="912"
+        x="936"
         y="27"
-        width="253"
+        width="229"
         height="37"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
@@ -522,9 +522,9 @@
       id="e45cd23b-a6c7-4ebf-9aff-7d761ad26322"
       targetConnections="4ff26a13-ee72-415e-9f90-9406361dcce6">
     <bounds
-        x="-72"
-        y="300"
-        width="145"
+        x="-69"
+        y="288"
+        width="139"
         height="43"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
@@ -551,7 +551,7 @@
         x="396"
         y="375"
         width="205"
-        height="61"/>
+        height="70"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_ff3197e3-a83f-4c97-96e1-bada645fef47.xml#ff3197e3-a83f-4c97-96e1-bada645fef47"/>
@@ -563,8 +563,8 @@
     <bounds
         x="612"
         y="375"
-        width="169"
-        height="61"/>
+        width="157"
+        height="70"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_6ec0f34b-e97b-47fd-b648-3a5db401d8a2.xml#6ec0f34b-e97b-47fd-b648-3a5db401d8a2"/>
@@ -574,10 +574,10 @@
       id="c375cc85-60e1-4994-bb0e-f319849f0cd8"
       targetConnections="93eaad30-c1cc-401f-afda-a5f147591572">
     <bounds
-        x="804"
+        x="792"
         y="375"
         width="145"
-        height="61"/>
+        height="70"/>
     <archimateElement
         xsi:type="archimate:BusinessRole"
         href="BusinessRole_3d5cba5e-6123-4012-865a-a04f288cfbeb.xml#3d5cba5e-6123-4012-865a-a04f288cfbeb"/>
