@@ -437,4 +437,15 @@
         xsi:type="archimate:BusinessActor"
         href="BusinessActor_0a06cea4-5c3e-4253-9457-150df45210ce.xml#0a06cea4-5c3e-4253-9457-150df45210ce"/>
   </children>
+  <children
+      xsi:type="archimate:DiagramModelNote"
+      id="1b22e849-9ffc-41b4-ab37-5f1b9a94f071"
+      textAlignment="1"
+      content="Não vejo application services na Manutenção das bicicletas e nem faz sentido porque é algo feito por humanos que usam algumas componentes aplicacionais (que não existem neste diagrama), Mas pode-se ver melhor. Podemos colocar nas assumptions também caso duvidemos.">
+    <bounds
+        x="912"
+        y="480"
+        width="220"
+        height="265"/>
+  </children>
 </archimate:ArchimateDiagramModel>
