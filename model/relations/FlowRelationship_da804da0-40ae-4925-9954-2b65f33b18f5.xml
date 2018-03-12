@@ -1,7 +1,8 @@
 <archimate:FlowRelationship
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:archimate="http://www.archimatetool.com/archimate"
-    id="da804da0-40ae-4925-9954-2b65f33b18f5">
+    id="da804da0-40ae-4925-9954-2b65f33b18f5"
+    documentation="gerir contactos e pedidos">
   <source
       xsi:type="archimate:ApplicationInterface"
       href="ApplicationInterface_bdc032bd-ca7d-43b9-928b-5399857320e4.xml#bdc032bd-ca7d-43b9-928b-5399857320e4"/>
