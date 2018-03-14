@@ -82,7 +82,7 @@
     <bounds
         x="225"
         y="84"
-        width="448"
+        width="436"
         height="313"/>
     <children
         xsi:type="archimate:DiagramModelArchimateObject"
@@ -227,7 +227,7 @@
           href="RealizationRelationship_679ab556-2b2b-4c83-a47b-bcc0fdd99820.xml#679ab556-2b2b-4c83-a47b-bcc0fdd99820"/>
     </sourceConnections>
     <bounds
-        x="695"
+        x="684"
         y="237"
         width="120"
         height="55"/>
@@ -257,8 +257,8 @@
           href="ServingRelationship_72bb74f8-7e2d-4f2f-a214-b1487fab8ffc.xml#72bb74f8-7e2d-4f2f-a214-b1487fab8ffc"/>
     </sourceConnections>
     <bounds
-        x="888"
-        y="288"
+        x="876"
+        y="291"
         width="120"
         height="55"/>
     <archimateElement
@@ -288,7 +288,7 @@
           href="ServingRelationship_5c4e8681-92e8-44cc-b8a4-a00597de128c.xml#5c4e8681-92e8-44cc-b8a4-a00597de128c"/>
     </sourceConnections>
     <bounds
-        x="888"
+        x="876"
         y="183"
         width="120"
         height="55"/>
@@ -320,7 +320,7 @@
     </sourceConnections>
     <bounds
         x="-132"
-        y="324"
+        y="312"
         width="144"
         height="85"/>
     <archimateElement
@@ -347,7 +347,7 @@
         x="-132"
         y="246"
         width="144"
-        height="55"/>
+        height="46"/>
     <archimateElement
         xsi:type="archimate:ApplicationService"
         href="ApplicationService_39cd9d09-1ba4-4b81-9742-e54d1035d12f.xml#39cd9d09-1ba4-4b81-9742-e54d1035d12f"/>
@@ -420,7 +420,7 @@
       textAlignment="1"
       content="Não vejo application services na Manutenção das bicicletas e nem faz sentido porque é algo feito por humanos que usam algumas componentes aplicacionais (que não existem neste diagrama), Mas pode-se ver melhor. Podemos colocar nas assumptions também caso duvidemos.&#xD;&#xA;É para utilizar o triggering na decisão do abate da reparação da BICA?&#xD;&#xA;Podemos deixar este business process sozinho?">
     <bounds
-        x="912"
+        x="720"
         y="480"
         width="220"
         height="265"/>
@@ -435,8 +435,9 @@
         target="2ce3103e-4424-4e9d-84e2-3119da48dfb7">
       <bendpoints
           startX="108"
+          startY="-6"
           endX="-96"
-          endY="216"/>
+          endY="180"/>
       <bendpoints
           startX="108"
           startY="-192"
@@ -448,9 +449,9 @@
     </sourceConnections>
     <bounds
         x="-132"
-        y="444"
+        y="420"
         width="144"
-        height="73"/>
+        height="61"/>
     <archimateElement
         xsi:type="archimate:ApplicationService"
         href="ApplicationService_22addbfc-66bb-46a4-bef2-11507928c9fe.xml#22addbfc-66bb-46a4-bef2-11507928c9fe"/>
