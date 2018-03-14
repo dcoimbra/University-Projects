@@ -1,0 +1,12 @@
+<archimate:ServingRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    id="ff09a0da-8b7c-4f62-842c-5ebbf3800949"
+    documentation="verificação do registo e aquisição do produto BAIK pelo cliente">
+  <source
+      xsi:type="archimate:ApplicationService"
+      href="ApplicationService_a5512266-e72c-4029-b134-89b603c7191f.xml#a5512266-e72c-4029-b134-89b603c7191f"/>
+  <target
+      xsi:type="archimate:BusinessProcess"
+      href="BusinessProcess_ca3f0937-484c-47f8-a0fb-ec3063f78732.xml#ca3f0937-484c-47f8-a0fb-ec3063f78732"/>
+</archimate:ServingRelationship>
