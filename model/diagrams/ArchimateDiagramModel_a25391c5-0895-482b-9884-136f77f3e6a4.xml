@@ -320,7 +320,7 @@
     </sourceConnections>
     <bounds
         x="-132"
-        y="324"
+        y="294"
         width="144"
         height="49"/>
     <archimateElement
@@ -345,7 +345,7 @@
     </sourceConnections>
     <bounds
         x="-132"
-        y="246"
+        y="228"
         width="144"
         height="46"/>
     <archimateElement
@@ -415,17 +415,6 @@
         href="ApplicationService_db6fa8cc-43af-484e-9208-1f493aec1d33.xml#db6fa8cc-43af-484e-9208-1f493aec1d33"/>
   </children>
   <children
-      xsi:type="archimate:DiagramModelNote"
-      id="1b22e849-9ffc-41b4-ab37-5f1b9a94f071"
-      textAlignment="1"
-      content="É preciso ter uma sequência nos business services?">
-    <bounds
-        x="720"
-        y="480"
-        width="220"
-        height="265"/>
-  </children>
-  <children
       xsi:type="archimate:DiagramModelArchimateObject"
       id="5bcb91f1-0337-49c6-aec3-3232f658b240">
     <sourceConnections
@@ -440,16 +429,21 @@
           endY="180"/>
       <bendpoints
           startX="108"
-          startY="-192"
+          startY="-114"
           endX="-96"
-          endY="24"/>
+          endY="12"/>
+      <bendpoints
+          startX="120"
+          startY="-114"
+          endX="-84"
+          endY="12"/>
       <archimateRelationship
           xsi:type="archimate:ServingRelationship"
           href="ServingRelationship_6613a367-f0de-4f56-a479-1e0aa9e42fe0.xml#6613a367-f0de-4f56-a479-1e0aa9e42fe0"/>
     </sourceConnections>
     <bounds
         x="-132"
-        y="420"
+        y="360"
         width="144"
         height="61"/>
     <archimateElement
@@ -457,15 +451,14 @@
         href="ApplicationService_22addbfc-66bb-46a4-bef2-11507928c9fe.xml#22addbfc-66bb-46a4-bef2-11507928c9fe"/>
   </children>
   <children
-      xsi:type="archimate:DiagramModelArchimateObject"
-      id="95ce0202-0b5f-49a1-b8e5-d1bf6f6b1169">
+      xsi:type="archimate:DiagramModelNote"
+      id="737cef93-e13c-4b8a-bc30-ccbfc2e41dc6"
+      textAlignment="1"
+      content="Omitimos o processo de Manutenção das bicicletas como mencionado nas Notas Gerais">
     <bounds
-        x="1032"
-        y="251"
-        width="182"
-        height="28"/>
-    <archimateElement
-        xsi:type="archimate:ApplicationService"
-        href="ApplicationService_95a2fdc3-d64b-469a-86fe-baec4b2b9dc2.xml#95a2fdc3-d64b-469a-86fe-baec4b2b9dc2"/>
+        x="906"
+        y="553"
+        width="185"
+        height="80"/>
   </children>
 </archimate:ArchimateDiagramModel>
