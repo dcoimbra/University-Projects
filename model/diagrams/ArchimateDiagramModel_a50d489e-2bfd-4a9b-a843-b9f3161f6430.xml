@@ -50,12 +50,12 @@
     </sourceConnections>
     <sourceConnections
         xsi:type="archimate:DiagramModelArchimateConnection"
-        id="862db4b0-4b0f-437c-846d-363158364b99"
+        id="53235b4e-40f0-424d-90f9-d35c1698d638"
         source="672b2276-cea9-424f-a42c-e9dbff2ebe60"
         target="28426e42-d613-4222-8e39-506391740a66">
       <archimateRelationship
-          xsi:type="archimate:RealizationRelationship"
-          href="RealizationRelationship_c2517602-18fa-4caf-82ea-65fb32eac5c5.xml#c2517602-18fa-4caf-82ea-65fb32eac5c5"/>
+          xsi:type="archimate:CompositionRelationship"
+          href="CompositionRelationship_b749bd9e-9436-457d-b024-8fc7758b2b26.xml#b749bd9e-9436-457d-b024-8fc7758b2b26"/>
     </sourceConnections>
     <bounds
         x="528"
@@ -540,7 +540,7 @@
   <children
       xsi:type="archimate:DiagramModelArchimateObject"
       id="28426e42-d613-4222-8e39-506391740a66"
-      targetConnections="862db4b0-4b0f-437c-846d-363158364b99">
+      targetConnections="53235b4e-40f0-424d-90f9-d35c1698d638">
     <sourceConnections
         xsi:type="archimate:DiagramModelArchimateConnection"
         id="ac5cbe00-1723-47db-80fe-9388af4ef209"

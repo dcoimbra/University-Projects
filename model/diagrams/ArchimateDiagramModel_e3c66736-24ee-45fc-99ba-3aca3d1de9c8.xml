@@ -140,12 +140,12 @@
             source="3477b528-e7c7-408e-9e54-7678742a5923"
             target="b49ae39c-9748-4ec2-8644-a369a26cfd75">
           <bendpoints
-              startX="144"
-              startY="-2"
+              startX="132"
+              startY="-3"
               endX="-98"
               endY="204"/>
           <bendpoints
-              startX="144"
+              startX="132"
               startY="-159"
               endX="-98"
               endY="48"/>
@@ -159,7 +159,7 @@
               href="ServingRelationship_cebafa03-374d-4ce2-86ad-fa7ad958186a.xml#cebafa03-374d-4ce2-86ad-fa7ad958186a"/>
         </sourceConnections>
         <bounds
-            x="12"
+            x="24"
             y="72"
             width="132"
             height="55"/>
