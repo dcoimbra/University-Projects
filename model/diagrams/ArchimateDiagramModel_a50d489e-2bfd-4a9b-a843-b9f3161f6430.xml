@@ -1260,8 +1260,8 @@
       textAlignment="1"
       content="Qual a relação mais correcta entre interfaces e serviços?&#xD;&#xA;&#xD;&#xA;É necessário incluir o serviço &quot;gestão de manutenção&quot; em ERP?&#xD;&#xA;&#xD;&#xA;Limite na modelação - assun&#xD;&#xA;&#xD;&#xA;Dividir ERP em duas interfaces e nomes diferentes para o software empresarial&#xD;&#xA;&#xD;&#xA;Passar os triggers para assignements.">
     <bounds
-        x="1104"
-        y="88"
+        x="1272"
+        y="95"
         width="205"
         height="162"/>
   </children>
