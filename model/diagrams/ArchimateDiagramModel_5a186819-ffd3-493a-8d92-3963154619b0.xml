@@ -2878,6 +2878,25 @@
             source="004f85de-5a08-4098-9b72-81cceca0d0b6"
             target="e40a747b-781d-4410-b3ad-c4a27084698b">
           <bendpoints
+              startX="124"
+              endX="-192"
+              endY="923"/>
+          <bendpoints
+              startX="124"
+              startY="-228"
+              endX="-192"
+              endY="695"/>
+          <bendpoints
+              startX="-128"
+              startY="-228"
+              endX="-444"
+              endY="695"/>
+          <bendpoints
+              startX="-128"
+              startY="-924"
+              endX="-444"
+              endY="-1"/>
+          <bendpoints
               startX="-32"
               startY="-924"
               endX="-348"
@@ -2926,10 +2945,19 @@
             source="fd9a99ce-9281-4717-a97f-61a22bb49e5a"
             target="14a6bffb-6b0b-4e27-a757-18ae08cdc191">
           <bendpoints
-              startX="30"
-              startY="-96"
-              endX="-24"
-              endY="120"/>
+              startX="102"
+              endX="49"
+              endY="216"/>
+          <bendpoints
+              startX="102"
+              startY="-132"
+              endX="49"
+              endY="84"/>
+          <bendpoints
+              startX="42"
+              startY="-132"
+              endX="-11"
+              endY="84"/>
           <archimateRelationship
               xsi:type="archimate:ServingRelationship"
               href="ServingRelationship_bc3cd25c-3af5-477d-bf3e-262a5edd30f8.xml#bc3cd25c-3af5-477d-bf3e-262a5edd30f8"/>
@@ -2974,20 +3002,19 @@
             source="66e284fd-2444-497d-a8da-00d32385e8e9"
             target="78f2062e-8437-4e09-857b-19d0715ec7e3">
           <bendpoints
-              startX="66"
-              startY="-12"
-              endX="-372"
-              endY="629"/>
+              startX="-138"
+              endX="-576"
+              endY="641"/>
           <bendpoints
-              startX="66"
-              startY="-120"
-              endX="-372"
-              endY="521"/>
+              startX="-138"
+              startY="-396"
+              endX="-576"
+              endY="245"/>
           <bendpoints
               startX="42"
-              startY="-120"
+              startY="-396"
               endX="-396"
-              endY="521"/>
+              endY="245"/>
           <bendpoints
               startX="42"
               startY="-636"
@@ -3037,6 +3064,16 @@
             source="0949a233-cd74-4a87-aaa8-2a174bca23ac"
             target="1416069c-323f-49e9-a415-2800ee95d353">
           <bendpoints
+              startX="-174"
+              startY="-12"
+              endX="-624"
+              endY="782"/>
+          <bendpoints
+              startX="-174"
+              startY="-780"
+              endX="-624"
+              endY="14"/>
+          <bendpoints
               startX="30"
               startY="-780"
               endX="-420"
@@ -3050,6 +3087,16 @@
             id="d7cb8570-0d9b-45f3-bc9b-9b9bb20971bc"
             source="0949a233-cd74-4a87-aaa8-2a174bca23ac"
             target="7485955c-de41-4f5b-bc33-64e8ea6f614a">
+          <bendpoints
+              startX="-174"
+              startY="-12"
+              endX="-624"
+              endY="688"/>
+          <bendpoints
+              startX="-174"
+              startY="-720"
+              endX="-624"
+              endY="-20"/>
           <bendpoints
               startX="42"
               startY="-720"
