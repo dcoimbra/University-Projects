@@ -18,7 +18,7 @@
     </sourceConnections>
     <bounds
         x="397"
-        y="801"
+        y="797"
         width="120"
         height="59"/>
     <archimateElement
@@ -1013,7 +1013,7 @@
   <children
       xsi:type="archimate:DiagramModelArchimateObject"
       id="1a02ddcb-57d6-41ff-a9ba-2738cc05f4ec"
-      targetConnections="87ab3b72-b6a1-4815-8329-4fd0bb30bd76">
+      targetConnections="87ab3b72-b6a1-4815-8329-4fd0bb30bd76 d2b62f8e-54ab-47c7-b0ca-39e8ea0207f1">
     <bounds
         x="216"
         y="801"
@@ -1164,7 +1164,7 @@
         x="895"
         y="544"
         width="188"
-        height="37"/>
+        height="33"/>
     <archimateElement
         xsi:type="archimate:ApplicationService"
         href="ApplicationService_b60587f7-68e8-4d78-af12-91c4a152cbfb.xml#b60587f7-68e8-4d78-af12-91c4a152cbfb"/>
@@ -1295,6 +1295,40 @@
       <archimateRelationship
           xsi:type="archimate:AssignmentRelationship"
           href="AssignmentRelationship_58f9ab57-5e25-4d9a-a026-de2d1c2358f1.xml#58f9ab57-5e25-4d9a-a026-de2d1c2358f1"/>
+    </sourceConnections>
+    <sourceConnections
+        xsi:type="archimate:DiagramModelArchimateConnection"
+        id="d2b62f8e-54ab-47c7-b0ca-39e8ea0207f1"
+        source="eade606f-9a37-4896-800c-b16cbcd972b1"
+        target="1a02ddcb-57d6-41ff-a9ba-2738cc05f4ec">
+      <bendpoints
+          startX="-147"
+          startY="-7"
+          endX="324"
+          endY="1"/>
+      <bendpoints
+          startX="-219"
+          startY="-7"
+          endX="252"
+          endY="1"/>
+      <bendpoints
+          startX="-219"
+          startY="-43"
+          endX="252"
+          endY="-35"/>
+      <bendpoints
+          startX="-363"
+          startY="-43"
+          endX="108"
+          endY="-35"/>
+      <bendpoints
+          startX="-363"
+          startY="-7"
+          endX="108"
+          endY="1"/>
+      <archimateRelationship
+          xsi:type="archimate:ServingRelationship"
+          href="ServingRelationship_86d0b294-08ff-4c52-8aa5-06c3493bfc5a.xml#86d0b294-08ff-4c52-8aa5-06c3493bfc5a"/>
     </sourceConnections>
     <bounds
         x="687"
