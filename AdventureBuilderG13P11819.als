@@ -5,9 +5,9 @@ open util/boolean
 /* ------------------- SETS  ------------------- */
 
 abstract sig State {}
-sig InitialState extends State {}
-sig PayedState extends State {}
-sig ConfirmedState extends State {}
+one sig InitialState extends State {}
+one sig PayedState extends State {}
+one sig ConfirmedState extends State {}
 
 sig TIME {}
 
@@ -21,12 +21,15 @@ sig CLIENT {
 sig BROKER in CLIENT {
 
 	roomReservations: ROOMRESERVATION set -> TIME,
-	activityReservations: ACTIVITYRESERVATION set -> TIME
+	activityReservations: ACTIVITYRESERVATION set -> TIME,
+	adventures: ADVENTURE set -> TIME
 }
 
 sig BANK {
 	
 	accounts: set ACCOUNT
+}{
+	all a: accounts | a.bank = this
 }
 
 sig ACCOUNT {
@@ -34,18 +37,23 @@ sig ACCOUNT {
 	bank: one BANK,
 	client: one CLIENT,
 	balance: Int one ->  TIME
+}{
+	this in bank.accounts
 }
 
 sig HOTEL {
 	
 	rooms: some ROOM
+}{
+	all r: rooms | r.hotel = this
 }
 
 sig ROOM {
 	
 	hotel: one HOTEL,
-	single: one Bool   //single: true, double: false
-	
+	single: one Bool   //single: true, double: false	
+}{
+	this in hotel.rooms
 }
 
 sig ROOMRESERVATION {
@@ -100,11 +108,15 @@ sig ADVENTURE {
 	cost: one Int,
 	payerAccount: one ACCOUNT,
 	brokerAccount: one ACCOUNT,
-	state: one State
+	state: State one -> TIME
 }{
 	cost > 0
+	participants > 0
 	all t: TIME | payerAccount in payer.accounts.t
 	all t: TIME | brokerAccount in broker.accounts.t
+	payerAccount.client = payer
+	brokerAccount.client = broker
+	payer = roomReservation.client and payer = activityReservation.client
 }
 
 sig INVOICE {
@@ -122,11 +134,13 @@ one sig IRS {}
 
 /* ------------- PREDICATES ------------- */
 
-pred openAccount [t, t' : TIME, account: ACCOUNT, cli: CLIENT, bank: BANK] {
+pred openAccount [t, t' : TIME, account: ACCOUNT, cli: CLIENT, bk: BANK] {
 
 	// pre-conditions
 	account not in CLIENT.accounts.t
-	account in bank.accounts
+	account.bank = bk
+	account in bk.accounts
+	account.client = cli
 
 	//post-conditions
 	account in cli.accounts.t'
@@ -162,6 +176,30 @@ pred makeActivityOffer [t, t': TIME, offer: ACTIVITYOFFER, act: ACTIVITY, beg: D
 	one activityProvider: ACTIVITYPROVIDER | offer in activityProvider.activityOffers.t'
 }
 
+
+pred createAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: BROKER, actReserv: ACTIVITYRESERVATION, roomReserv: ROOMRESERVATION, amount: Int, fromAccount: ACCOUNT, toAccount: ACCOUNT] {
+ 
+	//pre-conditions
+	fromAccount in cli.accounts.t
+	fromAccount.client = cli
+	toAccount in bro.accounts.t
+	toAccount.client = bro
+	adv not in bro.adventures.t
+
+	//post-conditions
+	adv.payer = cli
+	adv.participants = num
+	adv.broker = bro
+	adv.activityReservation = actReserv
+	adv.roomReservation = roomReserv
+	adv.cost = amount
+	adv.payerAccount = fromAccount
+	adv.brokerAccount = toAccount
+	one initialState: InitialState | adv.state.t' = initialState
+
+	adv in bro.adventures.t'
+} 
+
 /*-------AUX PREDICATES-----*/
 pred deposit [t, t' : TIME, a: ACCOUNT, amount: Int] {
 	
@@ -196,6 +234,7 @@ pred cancelActivityReservation [t, t': TIME, reserv: ACTIVITYRESERVATION] {
 	reserv not in BROKER.activityReservations.t'
 }
 
+
 pred reserveRooms [t, t': TIME, reservs: set ROOMRESERVATION, rooms: set ROOM, cli: CLIENT, arr: DATE, dep: DATE] {
 
 	//pre-conditions
@@ -224,7 +263,6 @@ pred cancelRoomReservations [t, t': TIME, reservs: set ROOMRESERVATION] {
 }
 
 
-
 /* ----------INITIALIZATION ------------- */
 pred init [t: TIME] {
 
@@ -239,17 +277,18 @@ pred trans [t, t': TIME] {
 
 /*
 	some a: ACCOUNT, b: BANK, c: CLIENT |
-		openAccount[t, t', a, c, b] or
+		openAccount[t, t', a, c, b] or 
 		clientDeposit[t, t', a, 1]
 
 	or
 */
 
+/*
 	some o: ACTIVITYOFFER, a: ACTIVITY, b: DATE, e: DATE |
 		makeActivityOffer[t, t', o, a, b, e, 4]
 
 	or
-
+*/
 /*
 
 	some reservs: ROOMRESERVATION, rooms: ROOM,  c: CLIENT, a: DATE, d: DATE |
@@ -259,11 +298,11 @@ pred trans [t, t': TIME] {
 	or
 */
 
-
+/*
 	some reservs: ACTIVITYRESERVATION, offers: ACTIVITYOFFER, c: CLIENT |
 		reserveActivity[t, t', reservs, offers, c, 3] or
 		cancelActivityReservation[t, t', reservs]
-
+*/
 }
 
 
@@ -274,7 +313,7 @@ fact {
 	all t: TIME - T/last | trans [t, T/next[t]]
 }
 
-run {}
+run {} for 2 but exactly 4 TIME
 
 
 
