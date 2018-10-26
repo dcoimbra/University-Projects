@@ -1,13 +1,20 @@
 open util/ordering[DATE] as D
 open util/ordering[TIME] as T
-open util/boolean
 
 /* ------------------- SETS  ------------------- */
 
-abstract sig State {}
-one sig InitialState extends State {}
-one sig PayedState extends State {}
-one sig ConfirmedState extends State {}
+abstract sig STATE {}
+one sig INITIALSTATE extends STATE {}
+one sig PAYEDSTATE extends STATE {}
+one sig CONFIRMEDSTATE extends STATE {}
+
+abstract sig ROOMTYPE {}
+one sig SINGLE extends ROOMTYPE {}
+one sig DOUBLE extends ROOMTYPE {}
+
+abstract sig INVOICETYPE {}
+one sig BUSINESS extends INVOICETYPE {}
+one sig LEISURE extends INVOICETYPE{}
 
 sig TIME {}
 
@@ -51,7 +58,7 @@ sig HOTEL {
 sig ROOM {
 	
 	hotel: one HOTEL,
-	single: one Bool   //single: true, double: false	
+	type: one ROOMTYPE	
 }{
 	this in hotel.rooms
 }
@@ -108,7 +115,7 @@ sig ADVENTURE {
 	cost: one Int,
 	payerAccount: one ACCOUNT,
 	brokerAccount: one ACCOUNT,
-	state: State one -> TIME
+	state: STATE one -> TIME
 }{
 	cost > 0
 	participants > 0
@@ -122,9 +129,10 @@ sig ADVENTURE {
 sig INVOICE {
 
 	client: one CLIENT,
-	leisure: one Bool,  //leisure: true, business: false
+	type: one INVOICETYPE,
 	amount: one Int,
-	tax: one Int
+	tax: one Int,
+	registered: one TIME
 }
 
 one sig IRS {}
@@ -195,7 +203,7 @@ pred createAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: B
 	adv.cost = amount
 	adv.payerAccount = fromAccount
 	adv.brokerAccount = toAccount
-	one initialState: InitialState | adv.state.t' = initialState
+	adv.state.t' = INITIALSTATE
 
 	adv in bro.adventures.t'
 } 
@@ -262,6 +270,27 @@ pred cancelRoomReservations [t, t': TIME, reservs: set ROOMRESERVATION] {
 	no reserv: reservs | reserv in BROKER.roomReservations.t'
 }
 
+pred makeInvoice [t, t': TIME, inv: INVOICE, cli: CLIENT, tp: INVOICETYPE, price: Int, tx: Int] {
+	
+	//pre-conditions
+	inv not in registered.t
+
+	//post-conditions 
+	inv.client = cli
+	inv.type = tp
+	inv.amount = price
+	inv.tax = tx
+	inv in registered.t'
+}
+
+pred cancelInvoice[t, t': TIME, inv: INVOICE] {
+
+	//pre-conditions
+	inv in registered.t
+
+	//post_conditions
+	inv not in registered.t'
+}
 
 /* ----------INITIALIZATION ------------- */
 pred init [t: TIME] {
@@ -302,6 +331,14 @@ pred trans [t, t': TIME] {
 	some reservs: ACTIVITYRESERVATION, offers: ACTIVITYOFFER, c: CLIENT |
 		reserveActivity[t, t', reservs, offers, c, 3] or
 		cancelActivityReservation[t, t', reservs]
+	
+	or
+*/
+
+/*
+	some inv: INVOICE, cli: CLIENT, tp: INVOICETYPE |
+		makeInvoice[t, t', inv, cli, tp, 2, 1] or
+		cancelInvoice [t, t', inv]
 */
 }
 
@@ -313,7 +350,7 @@ fact {
 	all t: TIME - T/last | trans [t, T/next[t]]
 }
 
-run {} for 2 but exactly 4 TIME
+run {}
 
 
 
