@@ -119,8 +119,8 @@ sig ADVENTURE {
 }{
 	cost > 0
 	participants > 0
-	all t: TIME | payerAccount in payer.accounts.t
-	all t: TIME | brokerAccount in broker.accounts.t
+	some t: TIME | payerAccount in payer.accounts.t
+	some t: TIME | brokerAccount in broker.accounts.t
 	payerAccount.client = payer
 	brokerAccount.client = broker
 	payer = roomReservation.client and payer = activityReservation.client
@@ -188,11 +188,11 @@ pred makeActivityOffer [t, t': TIME, offer: ACTIVITYOFFER, act: ACTIVITY, beg: D
 pred createAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: BROKER, actReserv: ACTIVITYRESERVATION, roomReserv: ROOMRESERVATION, amount: Int, fromAccount: ACCOUNT, toAccount: ACCOUNT] {
  
 	//pre-conditions
-	fromAccount in cli.accounts.t
-	fromAccount.client = cli
-	toAccount in bro.accounts.t
-	toAccount.client = bro
-	adv not in bro.adventures.t
+	//fromAccount in cli.accounts.t
+	//fromAccount.client = cli
+	//toAccount in bro.accounts.t
+	//toAccount.client = bro
+	adv not in BROKER.adventures.t
 
 	//post-conditions
 	adv.payer = cli
@@ -207,6 +207,16 @@ pred createAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: B
 
 	adv in bro.adventures.t'
 } 
+
+pred confirmAdventure[t, t': TIME, adv: ADVENTURE] {
+	
+	//pre-conditions
+	one broker: BROKER | adv in broker.adventures.t
+
+	//post-conditions
+	adv.state.t' = CONFIRMEDSTATE
+		
+}
 
 /*-------AUX PREDICATES-----*/
 pred deposit [t, t' : TIME, a: ACCOUNT, amount: Int] {
@@ -318,13 +328,15 @@ pred trans [t, t': TIME] {
 
 	or
 */
-/*
 
+/*
 	some reservs: ROOMRESERVATION, rooms: ROOM,  c: CLIENT, a: DATE, d: DATE |
 		  reserveRooms[t, t', reservs, rooms, c, a, d]
-		  or cancelRoomReservations [t, t', reservs]
+		 // or cancelRoomReservations [t, t', reservs]
 	
 	or
+
+
 */
 
 /*
@@ -333,12 +345,20 @@ pred trans [t, t': TIME] {
 		cancelActivityReservation[t, t', reservs]
 	
 	or
-*/
 
+*/
 /*
 	some inv: INVOICE, cli: CLIENT, tp: INVOICETYPE |
 		makeInvoice[t, t', inv, cli, tp, 2, 1] or
 		cancelInvoice [t, t', inv]
+
+*/
+
+/*
+	some adv:ADVENTURE, cli: CLIENT, bro:BROKER, actReserv: ACTIVITYRESERVATION, roomReserv: ROOMRESERVATION, fromAccount: ACCOUNT, toAccount: ACCOUNT |
+		createAdventure[t, t', adv, cli, 1,bro, actReserv, roomReserv, 3, fromAccount, toAccount] or 
+		confirmAdventure[t, t', adv]
+
 */
 }
 
@@ -350,8 +370,7 @@ fact {
 	all t: TIME - T/last | trans [t, T/next[t]]
 }
 
-run {}
-
+run {} for 3 
 
 
 
