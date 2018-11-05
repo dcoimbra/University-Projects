@@ -146,7 +146,6 @@ pred openAccount [t, t' : TIME, account: ACCOUNT, cli: CLIENT, bk: BANK] {
 	noActivityReservationChangeExcept[t, t', none]
  	noAdventureChangeExcept[t, t', none]
 	noStateChangeExcept[t, t', none]
-	noNewInvoices[t, t']
 }
 
 pred clientDeposit [t, t' : TIME, a: ACCOUNT, amount: Int] {
@@ -167,7 +166,6 @@ pred clientDeposit [t, t' : TIME, a: ACCOUNT, amount: Int] {
 	noActivityReservationChangeExcept[t, t', none] 
  	noAdventureChangeExcept[t, t', none]
 	noStateChangeExcept[t, t', none]
-	noNewInvoices[t, t']
 }
 
 pred makeActivityOffer [t, t': TIME, offer: ACTIVITYOFFER, act: ACTIVITY, beg: DATE, en: DATE, avail: Int] {
@@ -196,7 +194,6 @@ pred makeActivityOffer [t, t': TIME, offer: ACTIVITYOFFER, act: ACTIVITY, beg: D
 	noActivityReservationChangeExcept[t, t', none]
 	noAdventureChangeExcept[t, t', none]
 	noStateChangeExcept[t, t', none]
-	noNewInvoices[t, t']
 }
 
 
@@ -224,7 +221,6 @@ pred createAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: B
 	noActivityReservationChangeExcept[t, t', none]
 	noAdventureChangeExcept[t, t', adv]
 	noStateChangeExcept[t, t', adv]
-	noNewInvoices[t, t']
 } 
 
 
@@ -232,10 +228,6 @@ pred payAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: BROK
 
 	//pre-conditions
 	adv in bro.adventures.t
-	fromAccount in cli.clientAccounts.t
-	toAccount in bro.clientAccounts.t
-	num > 0
-	amount > 0
 	adv.state.t = INITIALSTATE
 	consistentAdventure[adv, cli, num, bro, actReserv, roomReservs, amount, fromAccount, toAccount]
 
@@ -284,7 +276,6 @@ pred cancelAdventure [t, t': TIME, adv: ADVENTURE, inv: INVOICE] {
 	noActivityReservationChangeExcept[t, t', adv.activityReservation]
 	noAdventureChangeExcept[t, t', adv]
 	noStateChangeExcept[t, t', adv]
-	noNewInvoices[t, t']
 }
 
 pred confirmAdventure[t, t': TIME, adv: ADVENTURE] {
@@ -305,7 +296,6 @@ pred confirmAdventure[t, t': TIME, adv: ADVENTURE] {
 	noActivityReservationChangeExcept[t, t', none]
 	noAdventureChangeExcept[t, t', none] 
 	noStateChangeExcept[t, t', adv]
-	noNewInvoices[t, t']
 }
 
 pred makeAnualTaxRed [t, t': TIME, accs: set ACCOUNT] {
@@ -329,7 +319,6 @@ pred makeAnualTaxRed [t, t': TIME, accs: set ACCOUNT] {
 	noRoomReservationsChangeExcept[t, t', none]
 	noActivityReservationChangeExcept[t, t', none] 
 	noAdventureChangeExcept[t, t', none]
-	noNewInvoices[t, t']
 }
 
 /*-------AUX PREDICATES-----*/
@@ -485,11 +474,6 @@ pred noAdventureChangeExcept[t, t': TIME, adv: ADVENTURE] {
 pred noStateChangeExcept[t, t': TIME, adv: ADVENTURE] {
 	
 	all advt: ADVENTURE - adv | advt.state.t' = advt.state.t
-}
-
-pred noNewInvoices[t, t': TIME] {
-	
-	 #(registered.t') <= #(registered.t)
 }
 
 /*---------- FUNCTIONS ------------------*/
