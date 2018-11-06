@@ -362,7 +362,7 @@ pred reserveRooms [t, t': TIME, reservs: set ROOMRESERVATION, rooms: set ROOM, c
 
 	//pre-conditions
 	#reservs = #rooms
-	no reserv: reservs | reserv in BROKER.roomReservations.t
+	reservs not in BROKER.roomReservations.t
 	arr in prevs[dep]
 	all ro: rooms | no reserv : BROKER.roomReservations.t |
 					reserv.room = ro and
@@ -689,12 +689,12 @@ pred init [t: TIME] {
 /* ------- TRANSITION RELATION ------ */
 pred trans [t, t': TIME] {
 	
-	some account, fromAccount, toAccount: ACCOUNT, cli: CLIENT, bk: BANK, off: ACTIVITYOFFER, act: ACTIVITY, beg: DATE, ed: DATE, adv: ADVENTURE, bro: BROKER, actRes: ACTIVITYRESERVATION, roomRes: ROOMRESERVATION, inv: INVOICE, accs: set ACCOUNT {
+	some depos: Int, avail: Int, num: Int, price: Int, account, fromAccount, toAccount: ACCOUNT, cli: CLIENT, bk: BANK, off: ACTIVITYOFFER, act: ACTIVITY, beg: DATE, ed: DATE, adv: ADVENTURE, bro: BROKER, actRes: ACTIVITYRESERVATION, roomRes: ROOMRESERVATION, inv: INVOICE, accs: set ACCOUNT {
 		openAccount[t, t', account, cli, bk] or
-		clientDeposit[t, t', account, 5] or
-		makeActivityOffer[t, t', off, act, beg, ed, 2] or
-		createAdventure[t, t', adv, cli, 2, bro, actRes, roomRes, 1, fromAccount, toAccount] or
-		payAdventure[t, t', adv, cli, 2, bro, actRes, roomRes, 1, fromAccount, toAccount, inv] or
+		clientDeposit[t, t', account, depos] or
+		makeActivityOffer[t, t', off, act, beg, ed, avail] or
+		createAdventure[t, t', adv, cli, num, bro, actRes, roomRes, price, fromAccount, toAccount] or
+		payAdventure[t, t', adv, cli, num, bro, actRes, roomRes, price, fromAccount, toAccount, inv] or
 		cancelAdventure[t, t', adv, inv] or
 		confirmAdventure[t, t', adv] or
 		makeAnualTaxRed[t, t', accs]
@@ -727,7 +727,7 @@ check A15  //15
 check A16  //16
 check A17  //17
 check A18  //18
-run A19  //19
+run {}  //19
 check A20  //20
 check A21  //21
 check A22  //22
@@ -735,12 +735,10 @@ check A23  //23
 check A24  //24
 check A25  //25
 check A26 //26
-run A27 //27
+run {} //27
 run {} //28
 check A29 //29
 check A30 //30
 check A31 //31 
 
 run createAdventure for 2 but exactly 4 TIME
-run payAdventure for 10
-run reserveRooms
