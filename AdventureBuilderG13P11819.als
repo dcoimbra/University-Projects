@@ -174,7 +174,7 @@ pred makeActivityOffer [t, t': TIME, offer: ACTIVITYOFFER, act: ACTIVITY, beg: D
 	offer not in ACTIVITYPROVIDER.activityOffers.t
 	avail > 0
 	avail <= act.capacity
-	beg in prevs[en]	
+	beg in prevs[en]
 	
 	//post-conditions
 	offer.activity = act
@@ -183,7 +183,7 @@ pred makeActivityOffer [t, t': TIME, offer: ACTIVITYOFFER, act: ACTIVITY, beg: D
 
 	offer.availability.t' = avail
 
-	one activityProvider: ACTIVITYPROVIDER | activityProvider.activityOffers.t' = activityProvider.activityOffers.t + offer
+	 offer.activity.activityProvider.activityOffers.t' = offer.activity.activityProvider.activityOffers.t + offer
 
 	//frame-conditions
 	noBalanceChangeExcept[t, t', none]
@@ -219,7 +219,7 @@ pred createAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: B
 	noAvailabilityChangeExcept[t, t', none] 
 	noRoomReservationsChangeExcept[t, t', none]
 	noActivityReservationChangeExcept[t, t', none]
-	noAdventureChangeExcept[t, t', adv]
+	noAdventureChangeExcept[t, t', bro]
 	noStateChangeExcept[t, t', adv]
 } 
 
@@ -236,7 +236,8 @@ pred payAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: BROK
 	one arr, dep: DATE | reserveRooms[t, t', roomReservs, roomReservs.room, cli, arr, dep] 
 	adv.state.t' = PAYEDSTATE
 	let tax = calculateTax[amount, LEISURE]  { 
-									      clientDeposit[t, t', toAccount, amount] and clientDeposit[t, t', fromAccount, negate[add[amount, tax]]]
+									      deposit[t, t', toAccount, amount] 
+									      deposit[t, t', fromAccount, negate[add[amount, tax]]]
 								               one inv: INVOICE - registered.t | makeInvoice[t, t', inv, cli, LEISURE, amount, tax] 
 									    }
 
@@ -245,8 +246,8 @@ pred payAdventure [t, t': TIME, adv: ADVENTURE, cli: CLIENT, num: Int, bro: BROK
 	noOpenAccountsChange[t, t']
 	noActivityOffersChangeExcept[t, t', none]
 	noAvailabilityChangeExcept[t, t', actReserv.activityOffer] 
-	noRoomReservationsChangeExcept[t, t', roomReservs]
-	noActivityReservationChangeExcept[t, t', actReserv]
+	noRoomReservationsChangeExcept[t, t', bro]
+	noActivityReservationChangeExcept[t, t', bro]
 	noAdventureChangeExcept[t, t', none]
 	noStateChangeExcept[t, t', adv]
 }
@@ -272,9 +273,9 @@ pred cancelAdventure [t, t': TIME, adv: ADVENTURE, inv: INVOICE] {
 	noOpenAccountsChange[t, t']
 	noActivityOffersChangeExcept[t, t', none]
 	noAvailabilityChangeExcept[t, t', adv.activityReservation.activityOffer]
-	noRoomReservationsChangeExcept[t, t', adv.roomReservations]
-	noActivityReservationChangeExcept[t, t', adv.activityReservation]
-	noAdventureChangeExcept[t, t', adv]
+	noRoomReservationsChangeExcept[t, t', adv.broker]
+	noActivityReservationChangeExcept[t, t', adv.broker]
+	noAdventureChangeExcept[t, t', adv.broker]
 	noStateChangeExcept[t, t', adv]
 }
 
@@ -444,8 +445,7 @@ pred noOpenAccountsChange[t, t': TIME] {
 
 pred noActivityOffersChangeExcept[t, t': TIME, offer: ACTIVITYOFFER] {
 
-	ACTIVITYPROVIDER.activityOffers.t' = ACTIVITYPROVIDER.activityOffers.t + offer or
-	ACTIVITYPROVIDER.activityOffers.t' = ACTIVITYPROVIDER.activityOffers.t - offer
+	ACTIVITYPROVIDER.activityOffers.t' = ACTIVITYPROVIDER.activityOffers.t + offer
 }
  
 pred noAvailabilityChangeExcept[t, t': TIME, offer: ACTIVITYOFFER] {
@@ -453,22 +453,19 @@ pred noAvailabilityChangeExcept[t, t': TIME, offer: ACTIVITYOFFER] {
 	all off: ACTIVITYOFFER - offer | off.availability.t' = off.availability.t
 }
 
-pred noRoomReservationsChangeExcept[t, t': TIME, roomReservs: set ROOMRESERVATION] {
+pred noRoomReservationsChangeExcept[t, t': TIME, bro: set BROKER] {
 	
-	BROKER.roomReservations.t' = BROKER.roomReservations.t + roomReservs or
-	BROKER.roomReservations.t' = BROKER.roomReservations.t - roomReservs
+	all brok: BROKER - bro | brok.roomReservations.t' = brok.roomReservations.t
 }
 
-pred noActivityReservationChangeExcept[t, t': TIME, activityReserv: ACTIVITYRESERVATION] {
+pred noActivityReservationChangeExcept[t, t': TIME, bro: set BROKER] {
 	
-	BROKER.activityReservations.t' = BROKER.activityReservations.t + activityReserv or
-	BROKER.activityReservations.t' = BROKER.activityReservations.t - activityReserv
+	all brok: BROKER - bro | brok.activityReservations.t' = brok.activityReservations.t
 }
 
-pred noAdventureChangeExcept[t, t': TIME, adv: ADVENTURE] {
+pred noAdventureChangeExcept[t, t': TIME, bro: set BROKER] {
 
-	BROKER.adventures.t' = BROKER.adventures.t + adv or
-	BROKER.adventures.t' = BROKER.adventures.t - adv
+	all brok: BROKER - bro | brok.adventures.t' = brok.adventures.t
 }
 
 pred noStateChangeExcept[t, t': TIME, adv: ADVENTURE] {
@@ -640,18 +637,18 @@ assert A25 { //25
 
 assert A26 { //26
 
-	all t: TIME - T/last | no a: ADVENTURE | some c: CLIENT, bro: BROKER, actReserv: bro.activityReservations.t, roomReservs: bro.roomReservations.t, fromAccount: c.clientAccounts.t, toAccount: bro.clientAccounts.t, inv: INVOICE - registered.t  {
+	all t: TIME - T/last | no a: ADVENTURE | some num: Int, amount: Int,  c: CLIENT, bro: BROKER, actReserv: bro.activityReservations.t, roomReservs: bro.roomReservations.t, fromAccount: c.clientAccounts.t, toAccount: bro.clientAccounts.t, inv: INVOICE - registered.t  {
 		a not in BROKER.adventures.t
-		payAdventure[t, t.next, a, c, 2, bro, actReserv, roomReservs, 1, fromAccount, toAccount, inv]
+		payAdventure[t, t.next, a, c, num, bro, actReserv, roomReservs, amount, fromAccount, toAccount, inv]
 	}
 }
 
 pred A27 { //27
 	
-	all t: TIME - T/last, a: ADVENTURE | some c: CLIENT, bro: BROKER, actReserv: bro.activityReservations.t, roomReservs: bro.roomReservations.t, fromAccount: c.clientAccounts.t, toAccount: bro.clientAccounts.t, inv: INVOICE - registered.t  {
+	all t: TIME - T/last, a: ADVENTURE | some num: Int, amount: Int, c: CLIENT, bro: BROKER, actReserv: bro.activityReservations.t, roomReservs: bro.roomReservations.t, fromAccount: c.clientAccounts.t, toAccount: bro.clientAccounts.t, inv: INVOICE - registered.t  {
 	
-		payAdventure[t, t.next, a, c, 2, bro, actReserv, roomReservs, 1, fromAccount, toAccount, inv]
 		fromAccount in c.clientAccounts.t
+		payAdventure[t, t.next, a, c, num, bro, actReserv, roomReservs, amount, fromAccount, toAccount, inv]
 	}
 }
 
@@ -671,8 +668,9 @@ assert A30 { //30
 
 assert A31 { //31
 
-	all t: TIME - T/last, adv: ADVENTURE | some c: CLIENT, bro: BROKER, actReserv: bro.activityReservations.t, roomReservs: bro.roomReservations.t, fromAccount: c.clientAccounts.t, toAccount: bro.clientAccounts.t, inv: INVOICE - registered.t  {
-			payAdventure[t, t.next, adv, c, 2, bro, actReserv, roomReservs, 1, fromAccount, toAccount, inv] => adv in BROKER.adventures.t
+	all t: TIME - T/last, adv: ADVENTURE | some num: Int, amount: Int, c: CLIENT, bro: BROKER, actReserv: bro.activityReservations.t, roomReservs: bro.roomReservations.t, fromAccount: c.clientAccounts.t, toAccount: bro.clientAccounts.t, inv: INVOICE  {
+			payAdventure[t, t.next, adv, c, num, bro, actReserv, roomReservs, amount, fromAccount, toAccount, inv] => adv in bro.adventures.t
+																								    
 	}
 }
 /* ----------INITIALIZATION ------------- */
@@ -739,6 +737,6 @@ run {} //27
 run {} //28
 check A29 //29
 check A30 //30
-check A31 //31 
+check A31 for 1 but exactly 2 ACCOUNT, exactly 6 TIME//31
 
-run createAdventure for 2 but exactly 4 TIME
+run payAdventure for 2 but 6 TIME
