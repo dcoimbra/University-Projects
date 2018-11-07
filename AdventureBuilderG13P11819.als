@@ -804,6 +804,12 @@ pred trans [t, t': TIME] {
 	
 	some depos: Int, avail: Int, num: Int, price: Int, account, fromAccount, toAccount: ACCOUNT, cli: CLIENT, bk: BANK, off: ACTIVITYOFFER, act: ACTIVITY, beg: DATE, ed: DATE, adv: ADVENTURE, bro: BROKER, actRes: ACTIVITYRESERVATION, roomRes: ROOMRESERVATION, inv: INVOICE, accs: set ACCOUNT {
 
+		//pre-conditions
+		cli != bro
+		fromAccount != toAccount
+		beg != ed
+		
+		//transitions
 		openAccount[t, t', account, cli, bk] or
 		clientDeposit[t, t', account, depos] or
 		makeActivityOffer[t, t', off, act, beg, ed, avail] or
