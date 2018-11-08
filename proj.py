@@ -90,7 +90,7 @@ def isNumber(val):
 def initializeLocalVariables(program, function):
 
     for var in program[function]["variables"]: 
-        memory[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"], "context": function }
+        memory[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"] }
 
 def mov(destination, value):
 
@@ -205,7 +205,6 @@ def leave():
     register["rbp"] = memory[register["rsp"]]["value"]
     memory.pop(register["rsp"], None)
 
-
 def runInstruction(instr):
         
     if instr['op'] == "mov":
@@ -244,22 +243,39 @@ def runInstruction(instr):
     elif instr["op"] == "leave":
         leave()
 
+def detectFgetsVuln(instruction, function):
+
+    bufferAddress = register["rdi"]
+    size = register["rsi"]
+
+    if bufferAddress in memory.keys():
+        bufferSize = memory[bufferAddress]["bytes"]
+
+    return size > bufferSize
+    
+
 
 def detectRBPOverflow(instruction, function):
 
     rbpVulnerabilities = []
 
-    vuln = {
-        "vulnerability": "RBPOVERFLOW",
-        "vuln_function": function,
-        "address": instruction["address"],
-        }
-
     if instruction["args"]["fnname"] == "<gets@plt>":
-        vuln["fnname"] = "gets"
-        vuln["overflow_var"] = memory[register["rdi"]]["name"]
 
-    rbpVulnerabilities.append(vuln)
+        getsVuln = {
+                "vulnerability": "RBPOVERFLOW",
+                "vuln_function": function,
+                "address": instruction["address"],
+                "fnname" : "gets",
+                "overflow_var" : memory[register["rdi"]]["name"]
+                }
+        
+        rbpVulnerabilities.append(getsVuln)
+
+    
+    if instruction["args"]["fnname"] == "<fgets@plt>":
+
+        hasFgetsVuln = detectFgetsVuln(instruction, function)
+    
     return rbpVulnerabilities
 
 def analyzeCall(instruction, function):
@@ -274,8 +290,6 @@ def analyzeCall(instruction, function):
         #handler para var overflow
         vulnerabilities = vulnerabilities + detectRBPOverflow(instruction, function)
         #handler para return overflow
-        return #retirar return para testar
-
 
 def runFunction(program, function):
     
@@ -290,6 +304,10 @@ def runFunction(program, function):
         elif instr['op'] == "call":
             analyzeCall(instr, function)
 
+        elif instr['op'] == "ret":
+            print("ret")
+            return
+
         runInstruction(instr)
 
         print(memory)
@@ -297,7 +315,7 @@ def runFunction(program, function):
 
 def writeJson(progName, vulnerabilities):
     f = open("%s.output.json" % progName, 'w+')
-    f.write(json.dumps(vulnerabilities, sort_keys=True, indent=2, separators=(',', ': ')))
+    f.write(json.dumps(vulnerabilities, indent=4, separators=(',', ': ')))
     f.close()
     
 def readJson(file):
