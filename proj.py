@@ -80,7 +80,11 @@ def detectVariableOverflow(instruction, function):
     if instruction["args"]["fnname"] == "<gets@plt>":
         result = result + identifyAllVariables(instruction, function)
         
-    if instruction["args"]["fnname"] == "<strcpy@plt>":
+    if instruction["args"]["fnname"] == "<fgets@plt>":
+        if(detectFgetsVuln(instruction, function)):
+           # result = result + 
+           return
+        
         
         
     return result
@@ -332,7 +336,7 @@ def detectRBPOverflow(instruction, function):
 
         hasFgetsVuln = detectFgetsVuln(instruction, function)
 
-        if not hasFgetsVuln:
+        if hasFgetsVuln:
             bufferAddress = str(register["rdi"])
             bufferSize = register["rsi"]
 
