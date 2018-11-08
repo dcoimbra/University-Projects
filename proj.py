@@ -24,6 +24,8 @@ register = {
 
 memory = {}
 
+vulnerabilities = []
+
 def addRegisterToRegister(dest, val):
     register[dest] = register[dest] + register[val]
     
@@ -243,7 +245,26 @@ def runInstruction(instr):
         leave()
 
 
-def analyzeCall(instruction):
+def detectRBPOverflow(instruction, function):
+
+    rbpVulnerabilities = []
+
+    vuln = {
+        "vulnerability": "RBPOVERFLOW",
+        "vuln_function": function,
+        "address": instruction["address"],
+        }
+
+    if instruction["args"]["fnname"] == "<gets@plt>":
+        vuln["fnname"] = "gets"
+        vuln["overflow_var"] = memory[register["rdi"]]["name"]
+
+    rbpVulnerabilities.append(vuln)
+    return rbpVulnerabilities
+
+def analyzeCall(instruction, function):
+
+    global vulnerabilities
 
     print("call", instruction["args"]["fnname"])
 
@@ -251,7 +272,7 @@ def analyzeCall(instruction):
 
     if instruction["args"]["fnname"] in dangerousFunctions:
         #handler para var overflow
-        #handler para ebp overflow
+        vulnerabilities = vulnerabilities + detectRBPOverflow(instruction, function)
         #handler para return overflow
         return #retirar return para testar
 
@@ -267,13 +288,17 @@ def runFunction(program, function):
             continue
         
         elif instr['op'] == "call":
-            analyzeCall(instr)
+            analyzeCall(instr, function)
 
         runInstruction(instr)
 
         print(memory)
         print(register, "\n")
-            
+
+def writeJson(progName, vulnerabilities):
+    f = open("%s.output.json" % progName, 'w+')
+    f.write(json.dumps(vulnerabilities, sort_keys=True, indent=2, separators=(',', ': ')))
+    f.close()
     
 def readJson(file):
     f = open(file, 'r')
@@ -292,3 +317,4 @@ if __name__ == '__main__':
     
     program = readJson(sys.argv[1])
     runFunction(program, "main")
+    writeJson(sys.argv[1], vulnerabilities)
