@@ -36,12 +36,12 @@ def detectFgetsVuln(instruction, function):
 
     return size > bufferSize
 
-def addVulnOver(instruction, function, offset, buffer):
+def addVarOver(instruction, function, offset, buffer, fnname):
     
     print("instruction", instruction)
     
     return [{
-            "fnname": "gets",
+            "fnname": fnname,
             "vuln_function": function,
             "overflown_var": memory[offset]["name"],
             "vulnerability": "VAROVERFLOW",
@@ -61,17 +61,40 @@ def identifyAllVariables(instruction, function):
     
     for off in memory:
         offset = str(off)
-        if("0x" in offset):
-            auxIntOffset = int(offset[4:],16)
+        if "0x" in offset:
+            #offsets nao negativos, por isso pode-se ignorar sinal
+            auxIntOffset = int(offset[4:],16) 
             print("auxIntOffer", auxIntOffset)
             print("intOffset", intOffset)
             if(auxIntOffset < intOffset):
-                found = found + addVulnOver(instruction, function, offset, buffer)
+                found = found + addVarOver(instruction, function, offset, buffer, "gets")
         
         #if 0x in offset -> take and see if offset is lower than this one
     
     return found
+ 
+def identifyWrittenVariables(instruction, function):
     
+    found = []
+    
+    buffer = str(register["rdi"])
+    address = buffer[3:]
+    intOffset = int(address,16)
+    
+    size = str(register["rsi"])
+    intSize = int(size,16)
+    
+    comparator = intOffset + intSize
+    
+    for off in memory:
+        offset = str(off)
+        if "0x" in offset:
+            if offset[3:] != address:
+                if int(offset[3:],16) <= comparator:
+                    print("AQUIIIIIIIIIII")
+                    found = found + addVarOver(instruction, function, offset, buffer, "fgets")
+                    print(found)
+    return found
 
 def detectVariableOverflow(instruction, function):
     
@@ -82,8 +105,8 @@ def detectVariableOverflow(instruction, function):
         
     if instruction["args"]["fnname"] == "<fgets@plt>":
         if(detectFgetsVuln(instruction, function)):
-           # result = result + 
-           return
+           result = result + identifyWrittenVariables(instruction, function)
+           
         
         
         
@@ -403,11 +426,11 @@ def usage(progName):
     sys.exit()
 
 if __name__ == '__main__':
-    '''
+    
     if len(sys.argv) < 2:
         usage(sys.argv[0])
-    '''
+    
     program = readJson(sys.argv[1])
     runFunction(program, "main")
-    #writeJson(sys.argv[1], vulnerabilities)
+    writeJson(sys.argv[1], vulnerabilities)
     print ("vulnerabilities", vulnerabilities)
