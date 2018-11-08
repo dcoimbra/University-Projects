@@ -24,6 +24,58 @@ register = {
 
 memory = {}
 
+vulnerabilities = []
+
+
+def addVulnOver(instruction, function, offset, buffer):
+    
+    print("instruction", instruction)
+    
+    return [{
+            "fnname": "gets",
+            "vuln_function": function,
+            "overflown_var": memory[offset]["name"],
+            "vulnerability": "VAROVERFLOW",
+            "overflow_var": memory[buffer]["name"],
+            "address": instruction["address"]
+            }]
+
+
+def identifyAllVariables(instruction, function):
+    
+    found = []
+    
+    buffer = register["rdi"]
+    address = buffer[4:]
+    intOffset = int(address,16)
+    print("buffer :",address)
+    
+    for off in memory:
+        offset = str(off)
+        if("0x" in offset):
+            auxIntOffset = int(offset[4:],16)
+            print("auxIntOffer", auxIntOffset)
+            print("intOffset", intOffset)
+            if(auxIntOffset < intOffset):
+                found = found + addVulnOver(instruction, function, offset, buffer)
+        
+        #if 0x in offset -> take and see if offset is lower than this one
+    
+    return found
+    
+
+def detectVariableOverflow(instruction, function):
+    
+    result = []
+    
+    if instruction["args"]["fnname"] == "<gets@plt>":
+        result = result + identifyAllVariables(instruction, function)
+        
+    if instruction["args"]["fnname"] == "<strcpy@plt>":
+        
+        
+    return result
+
 def addRegisterToRegister(dest, val):
     register[dest] = register[dest] + register[val]
     
@@ -243,18 +295,21 @@ def runInstruction(instr):
         leave()
 
 
-def analyzeCall(instruction):
+def analyzeCall(instruction, function):
+    
+    global vulnerabilities
 
     print("call", instruction["args"]["fnname"])
 
     dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
 
     if instruction["args"]["fnname"] in dangerousFunctions:
-        #handler para var overflow
+        vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
         #handler para ebp overflow
         #handler para return overflow
-        return #retirar return para testar
+        #return #retirar return para testar
 
+    print ("vulnerabilities", vulnerabilities, "\n")
 
 def runFunction(program, function):
     
@@ -267,7 +322,7 @@ def runFunction(program, function):
             continue
         
         elif instr['op'] == "call":
-            analyzeCall(instr)
+            analyzeCall(instr, function)
 
         runInstruction(instr)
 
