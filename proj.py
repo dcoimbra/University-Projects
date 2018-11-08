@@ -17,30 +17,69 @@ register = {
     "r13": 0,
     "r14": 0,
     "r15": 0,
-    "rbp": 0,
-    "rsp": hex(sys.maxsize),
+    "rbp": int("0x7fffffff", 16),
+    "rsp": int("0x7fffffff", 16),
     "rip": 0
 }
 
 memory = {}
 
-def registerToRegister(dest, val):
+def addRegisterToRegister(dest, val):
+    register[dest] = register[dest] + register[val]
+    
+def addRegisterToPointer(dest, val):
+    memory[val[11:-1]]['value'] = memory[val[11:-1]]['value'] + register[val]  
+    
+def addPointerToRegister(dest, val):
+    if "rip" in val:
+        register[dest] = "stdin"
+        return
+    
+    register[dest] = register[dest] + memory[val[11:-1]]['value']
+    
+def addNumToPointer(dest, val):
+    memory[dest[11:-1]]['value'] = memory[dest[11:-1]]['value'] + int(val,16)
+    
+def addNumToRegister(dest, val):   
+    register[dest] = register[dest] + int(val,16)
+
+def subNumToRegister(dest, val):   
+    register[dest] = register[dest] - int(val,16)
+
+def subRegisterToRegister(dest, val):
+    register[dest] = register[dest] - register[val]
+    
+def subRegisterToPointer(dest, val):
+    memory[val[11:-1]]['value'] = memory[val[11:-1]]['value'] - register[val]  
+    
+def subPointerToRegister(dest, val):
+    if "rip" in val:
+        register[dest] = "stdin"
+        return
+    
+    register[dest] = register[dest] - memory[val[11:-1]]['value']
+    
+def subNumToPointer(dest, val):
+    memory[dest[11:-1]]['value'] = memory[dest[11:-1]]['value'] - int(val,16)
+    
+
+def movRegisterToRegister(dest, val):
     register[dest] = register[val]
     
-def registerToPointer(dest, val):
+def movRegisterToPointer(dest, val):
     memory[val[11:-1]]['value'] = register[val]  
     
-def pointerToRegister(dest, val):
+def movPointerToRegister(dest, val):
     if "rip" in val:
         register[dest] = "stdin"
         return
     
     register[dest] = memory[val[11:-1]]['value']
     
-def numToPointer(dest, val):
+def movNumToPointer(dest, val):
     memory[dest[11:-1]]['value'] = int(val,16)
     
-def numToRegister(dest, val):   
+def movNumToRegister(dest, val):   
     register[dest] = int(val,16)
 
 def isNumber(val):
@@ -49,49 +88,192 @@ def isNumber(val):
 def initializeLocalVariables(program, function):
 
     for var in program[function]["variables"]: 
-        memory[var["address"]] = {"value": 0, "type": var["type"], "bytes": var["bytes"]}
+        memory[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"], "context": function }
 
 def mov(destination, value):
+
+    print("mov", destination, value)
     
     if destination == "esi":
         destination = "rsi" #esi = rsi
+
+    if destination == "eax":
+        destination = "rax" #eax = rax
             
     if (destination in register.keys()) and (value in register.keys()):
         
-        registerToRegister(destination,value)
+        movRegisterToRegister(destination,value)
                 
     elif (destination in register.keys()) and (isNumber(value)):
         
-        numToRegister(destination,value)
+        movNumToRegister(destination,value)
     
     elif (destination in register.keys()) and ("PTR" in value):
         
-        pointerToRegister(destination,value)
+        movPointerToRegister(destination,value)
     
     elif ("PTR" in destination) and (value in register.keys()):
         
-        registerToPointer(destination,value)
+        movRegisterToPointer(destination,value)
         
     elif ("PTR" in destination) and (isNumber(value)):
         
-        numToPointer(destination,value)
+        movNumToPointer(destination,value)
+
+def add(destination, value):
+    
+    print("add", destination, value)
+
+    if destination == "esi":
+        destination = "rsi" #esi = rsi
+
+    if destination == "eax":
+        destination = "rax" #eax = rax
+            
+    if (destination in register.keys()) and (value in register.keys()):
+        
+        addRegisterToRegister(destination,value)
+                
+    elif (destination in register.keys()) and (isNumber(value)):
+        
+        addNumToRegister(destination,value)
+    
+    elif (destination in register.keys()) and ("PTR" in value):
+        
+        addPointerToRegister(destination,value)
+    
+    elif ("PTR" in destination) and (value in register.keys()):
+        
+        addRegisterToPointer(destination,value)
+        
+    elif ("PTR" in destination) and (isNumber(value)):
+        
+        addNumToPointer(destination,value)
+
+def sub(destination, value):
+
+    print("sub", destination, value)
+    
+    if destination == "esi":
+        destination = "rsi" #esi = rsi
+
+    if destination == "eax":
+        destination = "rax" #eax = rax
+            
+    if (destination in register.keys()) and (value in register.keys()):
+        
+        subRegisterToRegister(destination,value)
+                
+    elif (destination in register.keys()) and (isNumber(value)):
+        
+        subNumToRegister(destination,value)
+    
+    elif (destination in register.keys()) and ("PTR" in value):
+        
+        subPointerToRegister(destination,value)
+    
+    elif ("PTR" in destination) and (value in register.keys()):
+        
+        subRegisterToPointer(destination,value)
+        
+    elif ("PTR" in destination) and (isNumber(value)):
+        
+        subNumToPointer(destination,value)
+
+def lea(destination, value):
+
+    print("lea", destination, value)
+
+    register[destination] = value[1:-1]
+
+def push(value):
+
+    print("push", value)
+
+    subNumToRegister("rsp", "0x8")
+
+    memory[register["rsp"]] = { "value": register[value] }
+
+def leave():
+
+    print("leave")
+
+    movRegisterToRegister("rsp", "rbp")
+    
+    register["rbp"] = memory[register["rsp"]]["value"]
+    memory.pop(register["rsp"], None)
 
 
-def detectVariableOverflowFunction(program, function):
+def runInstruction(instr):
+        
+    if instr['op'] == "mov":
+        
+        destination = instr['args']['dest']
+        value = instr['args']['value']
+        
+        mov(destination, value)
+    
+    elif instr['op'] == "add":
+        
+        destination = instr['args']['dest']
+        value = instr['args']['value']
+        
+        add(destination, value)
+
+    elif instr['op'] == "sub":
+        
+        destination = instr['args']['dest']
+        value = instr['args']['value']
+        
+        sub(destination, value)
+
+    elif instr['op'] == "lea":
+        
+        destination = instr['args']['dest']
+        value = instr['args']['value']
+
+        lea(destination, value)
+
+    elif instr['op'] == "push":
+        
+        value = instr["args"]["value"]
+        push(value)
+
+    elif instr["op"] == "leave":
+        leave()
+
+
+def analyzeCall(instruction):
+
+    print("call", instruction["args"]["fnname"])
+
+    dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
+
+    if instruction["args"]["fnname"] in dangerousFunctions:
+        #handler para var overflow
+        #handler para ebp overflow
+        #handler para return overflow
+        return #retirar return para testar
+
+
+def runFunction(program, function):
     
     initializeLocalVariables(program, function)
     
     for instr in program[function]["instructions"]:
-        if instr['op'] == "mov":
+
+        if instr['op'] == "nop":
+            print("nop")
+            continue
+        
+        elif instr['op'] == "call":
+            analyzeCall(instr)
+
+        runInstruction(instr)
+
+        print(memory)
+        print(register, "\n")
             
-            destination = instr['args']['dest']
-            value = instr['args']['value']
-            
-            mov(destination, value)
-            
-def analyzeProgram(program):
-    detectVariableOverflowFunction(program, "main")
-    #mais funcoes que detetam vulnerabilidades
     
 def readJson(file):
     f = open(file, 'r')
@@ -109,4 +291,4 @@ if __name__ == '__main__':
         usage(sys.argv[0])
     
     program = readJson(sys.argv[1])
-    analyzeProgram(program)
+    runFunction(program, "main")
