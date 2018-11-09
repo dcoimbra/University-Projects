@@ -34,7 +34,12 @@ def detectFgetsVuln(instruction, function):
 
     if bufferAddress in memory.keys():
         bufferSize = memory[bufferAddress]["bytes"]
-        memory[bufferAddress]["value"] = size
+
+        if size <= bufferSize:
+            memory[bufferAddress]["value"] = size
+        
+        else:
+            memory[bufferAddress]["value"] = bufferSize
         
         return size > bufferSize
 
@@ -44,9 +49,13 @@ def detectStrcpyVuln(instruction, function):
     src = register["rsi"]
 
     destSize = memory[dest]["bytes"]
-    srcSize = memory[src]["bytes"]
+    srcSize = memory[src]["value"]
 
-    memory[dest]["value"] = srcSize
+    if destSize <= srcSize:
+        memory[dest]["value"] = srcSize
+        
+    else:
+        memory[dest]["value"] = destSize
 
     return destSize < srcSize
 
