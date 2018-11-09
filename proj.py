@@ -96,7 +96,7 @@ def addVarOver(instruction, function, offset, buffer, fnname):
 
 
 def identifyAllVariables(instruction, function):
-    rbp
+
     found = []
     
     buffer = str(register["rdi"])
