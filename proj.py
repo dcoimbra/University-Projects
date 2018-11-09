@@ -242,6 +242,35 @@ def runInstruction(instr):
     elif instr["op"] == "leave":
         leave()
 
+def analyzeStrcpy():
+	return
+
+def detectRETOVERFLOW(dangerousFunc):
+
+	vulnerabilityObj = {"vulnerability": "RETOVERFLOW",
+        "vuln_function": "main",}
+
+	RETOVERFLOWvulnerability = []
+
+	if dangerousFunc == "<strcpy@plt>":
+		analyzeStrcpy()
+
+	elif dangerousFunc == "<strcat@plt>":
+		return
+
+	elif dangerousFunc == "<fgets@plt>":
+		return
+
+	elif dangerousFunc == "<strncpy@plt>":
+		return
+
+	elif dangerousFunc == "<strncat@plt>":
+		return
+
+	else:
+		RETOVERFLOWvulnerability #+ 
+
+	return RETOVERFLOWvulnerability	
 
 def analyzeCall(instruction):
 
@@ -253,6 +282,7 @@ def analyzeCall(instruction):
         #handler para var overflow
         #handler para ebp overflow
         #handler para return overflow
+        #detectRETOVERFLOW(instruction["args"]["fnname"])
         return #retirar return para testar
 
 
