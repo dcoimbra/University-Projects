@@ -24,6 +24,94 @@ register = {
 
 memory = {}
 
+vulnerabilities = []
+
+def detectFgetsVuln(instruction, function):
+
+    bufferAddress = register["rdi"]
+    size = register["rsi"]
+
+    if bufferAddress in memory.keys():
+        bufferSize = memory[bufferAddress]["bytes"]
+
+    return size > bufferSize
+
+def addVarOver(instruction, function, offset, buffer, fnname):
+    
+    print("instruction", instruction)
+    
+    return [{
+            "fnname": fnname,
+            "vuln_function": function,
+            "overflown_var": memory[offset]["name"],
+            "vulnerability": "VAROVERFLOW",
+            "overflow_var": memory[buffer]["name"],
+            "address": instruction["address"]
+            }]
+
+
+def identifyAllVariables(instruction, function):
+    
+    found = []
+    
+    buffer = str(register["rdi"])
+    address = buffer[4:]
+    intOffset = int(address,16)
+    print("buffer :",address)
+    
+    for off in memory:
+        offset = str(off)
+        if "0x" in offset:
+            #offsets nao negativos, por isso pode-se ignorar sinal
+            auxIntOffset = int(offset[4:],16) 
+            print("auxIntOffer", auxIntOffset)
+            print("intOffset", intOffset)
+            if(auxIntOffset < intOffset):
+                found = found + addVarOver(instruction, function, offset, buffer, "gets")
+        
+        #if 0x in offset -> take and see if offset is lower than this one
+    
+    return found
+ 
+def identifyWrittenVariables(instruction, function):
+    
+    found = []
+    
+    buffer = str(register["rdi"])
+    address = buffer[3:]
+    intOffset = int(address,16)
+    
+    size = str(register["rsi"])
+    intSize = int(size,16)
+    
+    comparator = intOffset + intSize
+    
+    for off in memory:
+        offset = str(off)
+        if "0x" in offset:
+            if offset[3:] != address:
+                if int(offset[3:],16) <= comparator:
+                    print("AQUIIIIIIIIIII")
+                    found = found + addVarOver(instruction, function, offset, buffer, "fgets")
+                    print(found)
+    return found
+
+def detectVariableOverflow(instruction, function):
+    
+    result = []
+    
+    if instruction["args"]["fnname"] == "<gets@plt>":
+        result = result + identifyAllVariables(instruction, function)
+        
+    if instruction["args"]["fnname"] == "<fgets@plt>":
+        if(detectFgetsVuln(instruction, function)):
+           result = result + identifyWrittenVariables(instruction, function)
+           
+        
+        
+        
+    return result
+
 def addRegisterToRegister(dest, val):
     register[dest] = register[dest] + register[val]
     
@@ -88,7 +176,7 @@ def isNumber(val):
 def initializeLocalVariables(program, function):
 
     for var in program[function]["variables"]: 
-        memory[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"], "context": function }
+        memory[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"] }
 
 def mov(destination, value):
 
@@ -203,7 +291,6 @@ def leave():
     register["rbp"] = memory[register["rsp"]]["value"]
     memory.pop(register["rsp"], None)
 
-
 def runInstruction(instr):
         
     if instr['op'] == "mov":
@@ -241,50 +328,107 @@ def runInstruction(instr):
 
     elif instr["op"] == "leave":
         leave()
+        
+    
+def detectRBPOverflow(instruction, function):
+
+    rbpVulnerability = []
+
+    '''
+    genericVuln = {
+                "vulnerability": "RBPOVERFLOW",
+                "vuln_function": function,
+                "address": instruction["address"],
+                "fnname" : "gets",
+                "overflow_var" : memory[register["rdi"]]["name"]
+    }
+    '''
+
+    vuln = {
+        "vulnerability": "RBPOVERFLOW",
+        "vuln_function": function,
+        "address": instruction["address"]
+    }
+
+    if instruction["args"]["fnname"] == "<gets@plt>":
+        
+        vuln["fnname"] = "gets"
+        rbpVulnerability.append(vuln)
+
+    elif instruction["args"]["fnname"] == "<fgets@plt>":
+
+        hasFgetsVuln = detectFgetsVuln(instruction, function)
+
+        if hasFgetsVuln:
+            bufferAddress = str(register["rdi"])
+            bufferSize = register["rsi"]
+
+            rbpOffset = int(bufferAddress[3:], 16) + bufferSize
+
+            if rbpOffset >= 0:
+                
+                vuln["fnname"] = "fgets"
+                vuln["overflow_var"] = memory[register["rdi"]]["name"]
+                rbpVulnerability.append(vuln)
+
+    return rbpVulnerability
 
 def analyzeStrcpy():
 	return
 
-def detectRETOVERFLOW(dangerousFunc):
+def detectRETOverflow(instruction, function):
 
-	vulnerabilityObj = {"vulnerability": "RETOVERFLOW",
-        "vuln_function": "main",}
+		print("RETOV", function)
 
-	RETOVERFLOWvulnerability = []
+		dangerousFunc = instruction["args"]["fnname"]
+		print("func", dangerousFunc)
 
-	if dangerousFunc == "<strcpy@plt>":
-		analyzeStrcpy()
+		RETOverflowVulnerability = []
+		
+		vulnerabilityObj = {
+				"vulnerability": "RETOVERFLOW",
+	      "vuln_function": function,
+	      "address": instruction["address"],
+		}
 
-	elif dangerousFunc == "<strcat@plt>":
-		return
+		if dangerousFunc == "<strcpy@plt>":
+			analyzeStrcpy()
 
-	elif dangerousFunc == "<fgets@plt>":
-		return
+		elif dangerousFunc == "<strcat@plt>":
+			return
 
-	elif dangerousFunc == "<strncpy@plt>":
-		return
+		elif dangerousFunc == "<fgets@plt>":
+			return
 
-	elif dangerousFunc == "<strncat@plt>":
-		return
+		elif dangerousFunc == "<strncpy@plt>":
+			return
 
-	else:
-		RETOVERFLOWvulnerability #+ 
+		elif dangerousFunc == "<strncat@plt>":
+			return
 
-	return RETOVERFLOWvulnerability	
+		else:
+			vulnerabilityObj["fnname"] = "gets"
+			vulnerabilityObj["overflow_var"] = str(register["rdi"])
 
-def analyzeCall(instruction):
+			RETOverflowVulnerability.append(vulnerabilityObj)
+	
+		return RETOverflowVulnerability
+
+
+def analyzeCall(instruction, function):
+
+    global vulnerabilities
 
     print("call", instruction["args"]["fnname"])
 
     dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
 
     if instruction["args"]["fnname"] in dangerousFunctions:
-        #handler para var overflow
-        #handler para ebp overflow
-        #handler para return overflow
-        #detectRETOVERFLOW(instruction["args"]["fnname"])
-        return #retirar return para testar
+        vulnerabilities = vulnerabilities + detectRBPOverflow(instruction, function)
 
+        vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
+
+        vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
 
 def runFunction(program, function):
     
@@ -297,13 +441,21 @@ def runFunction(program, function):
             continue
         
         elif instr['op'] == "call":
-            analyzeCall(instr)
+            analyzeCall(instr, function)
+
+        elif instr['op'] == "ret":
+            print("ret")
+            return
 
         runInstruction(instr)
 
         print(memory)
         print(register, "\n")
-            
+
+def writeJson(progName, vulnerabilities):
+    f = open("%s.output.json" % progName, 'w+')
+    f.write(json.dumps(vulnerabilities, indent=4, separators=(',', ': ')))
+    f.close()
     
 def readJson(file):
     f = open(file, 'r')
@@ -317,8 +469,11 @@ def usage(progName):
     sys.exit()
 
 if __name__ == '__main__':
+    
     if len(sys.argv) < 2:
         usage(sys.argv[0])
     
     program = readJson(sys.argv[1])
     runFunction(program, "main")
+    writeJson(sys.argv[1], vulnerabilities)
+    print ("vulnerabilities", vulnerabilities)
