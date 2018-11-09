@@ -381,7 +381,6 @@ def detectRETOverflow(instruction, function):
 		print("RETOV", function)
 
 		dangerousFunc = instruction["args"]["fnname"]
-		print("func", dangerousFunc)
 
 		RETOverflowVulnerability = []
 		
@@ -413,7 +412,6 @@ def detectRETOverflow(instruction, function):
 			RETOverflowVulnerability.append(vulnerabilityObj)
 	
 		return RETOverflowVulnerability
-
 
 def analyzeCall(instruction, function):
 
