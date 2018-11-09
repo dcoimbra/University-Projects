@@ -51,7 +51,7 @@ def detectStrcpyVuln(instruction, function):
     destSize = memory[dest]["bytes"]
     srcSize = memory[src]["value"]
 
-     if destSize <= srcSize 
+    if destSize <= srcSize:
         memory[dest]["value"] = srcSize
         
     else:
