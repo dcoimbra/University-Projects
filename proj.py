@@ -30,11 +30,13 @@ def detectFgetsVuln(instruction, function):
 
     bufferAddress = register["rdi"]
     size = register["rsi"]
+    
 
     if bufferAddress in memory.keys():
         bufferSize = memory[bufferAddress]["bytes"]
-
-    return size > bufferSize
+        memory[bufferAddress]["value"] = size
+        
+        return size > bufferSize
 
 def addVarOver(instruction, function, offset, buffer, fnname):
     
@@ -81,17 +83,15 @@ def identifyWrittenVariables(instruction, function):
     address = buffer[3:]
     intOffset = int(address,16)
     
-    size = str(register["rsi"])
-    intSize = int(size,16)
+    size = register["rsi"]
     
-    comparator = intOffset + intSize
+    comparator = intOffset + size
     
     for off in memory:
         offset = str(off)
         if "0x" in offset:
             if offset[3:] != address:
                 if int(offset[3:],16) <= comparator:
-                    print("AQUIIIIIIIIIII")
                     found = found + addVarOver(instruction, function, offset, buffer, "fgets")
                     print(found)
     return found
@@ -109,7 +109,7 @@ def detectVariableOverflow(instruction, function):
            
         
         
-        
+    
     return result
 
 def addRegisterToRegister(dest, val):
@@ -473,5 +473,5 @@ if __name__ == '__main__':
     
     program = readJson(sys.argv[1])
     runFunction(program, "main")
-    writeJson(sys.argv[1], vulnerabilities)
+    #writeJson(sys.argv[1], vulnerabilities)
     print ("vulnerabilities", vulnerabilities)
