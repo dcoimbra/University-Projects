@@ -26,6 +26,18 @@ memory = {}
 
 vulnerabilities = []
 
+def isVulnerable(destBufferSize,valueToInsert):
+    
+    destAddr = register["rdi"]
+    dest = memory[destAddr]["value"]
+    
+    memory[destAddr]["value"] = dest + valueToInsert
+    
+    if valueToInsert > destBufferSize:
+        return True
+    
+    return False
+
 def detectFgetsVuln(instruction, function):
 
     bufferAddress = register["rdi"]
@@ -71,15 +83,30 @@ def detectStrcatVuln(instruction, function):
     destBufferSize = memory[destAddr]["bytes"]
  
     #Bytes written in destination buffer minus \0 plus
-    #Bytes written in source buffer minus \0 plus \0 to end the string
+    #Bytes written in source buffer minus \0 plus
+    #\0 to end the string
     resultingBytes = (dest-1) + (src-1) + 1
     
-    if resultingBytes > destBufferSize:
-        memory[destAddr]["value"] = destBufferSize
-        return True
+    return isVulnerable(destBufferSize,resultingBytes)
+
+
+
+def detectStrncatVulnVuln(instruction, function):
     
-    memory[destAddr]["value"] = dest + resultingBytes
-    return False
+    destAddr = register["rdi"]
+    #srcAddr = register["rsi"]
+    size = register["rdx"]
+    
+    dest = memory[destAddr]["value"]
+    destBufferSize = memory[destAddr]["bytes"]
+    
+    #Bytes written in destination buffer minus \0 plus
+    #Bytes in source buffer that are going to be concatenated plus
+    #\0 to end the string
+    resultingBytes = (dest - 1) + size + 1
+    
+    return isVulnerable(destBufferSize,resultingBytes)
+    
 
 def addVarOver(instruction, function, offset, buffer, fnname):
     
