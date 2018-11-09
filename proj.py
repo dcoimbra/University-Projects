@@ -38,6 +38,21 @@ def detectFgetsVuln(instruction, function):
         
         return size > bufferSize
 
+def detectStrcpyVuln(instruction, function):
+
+    dest = register["rdi"]
+    src = register["rsi"]
+
+    destSize = memory[dest]["bytes"]
+    srcSize = memory[src]["bytes"]
+
+    memory[dest]["value"] = srcSize
+
+    return destSize < srcSize
+
+
+
+
 def addVarOver(instruction, function, offset, buffer, fnname):
     
     print("instruction", instruction)
@@ -108,8 +123,6 @@ def detectVariableOverflow(instruction, function):
            result = result + identifyWrittenVariables(instruction, function)
            
         
-        
-    
     return result
 
 def addRegisterToRegister(dest, val):
