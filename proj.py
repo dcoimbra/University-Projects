@@ -51,7 +51,26 @@ def detectStrcpyVuln(instruction, function):
     return destSize < srcSize
 
 
-
+def detectStrcatVuln(instruction, function):
+    
+    destAddr = register["rdi"]
+    srcAddr = register["rsi"]
+    
+    dest = memory[destAddr]["value"]
+    src = memory[srcAddr]["value"]
+    
+    destBufferSize = memory[destAddr]["bytes"]
+ 
+    #Bytes written in destination buffer minus \0 plus
+    #Bytes written in source buffer minus \0 plus \0 to end the string
+    resultingBytes = (dest-1) + (src-1) + 1
+    
+    if resultingBytes > destBufferSize:
+        memory[destAddr]["value"] = destBufferSize
+        return True
+    
+    memory[destAddr]["value"] = dest + resultingBytes
+    return False
 
 def addVarOver(instruction, function, offset, buffer, fnname):
     
