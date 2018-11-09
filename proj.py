@@ -51,7 +51,7 @@ def addVarOver(instruction, function, offset, buffer, fnname):
 
 
 def identifyAllVariables(instruction, function):
-    
+    rbp
     found = []
     
     buffer = str(register["rdi"])
@@ -376,6 +376,15 @@ def detectRBPOverflow(instruction, function):
 def analyzeStrcpy():
 	return
 
+def analyzeFgets(result, instruction, function):
+
+		#RBP+0x8
+		rbpAddress = 8
+		bufferAddress = str(register["rdi"])
+		copiedSize = register["rsi"]
+
+		return detectFgetsVuln(instruction, function) and int(bufferAddress[3:], 16) + copiedSize >= rbpAddress
+
 def detectRETOverflow(instruction, function):
 
 		print("RETOV", function)
@@ -393,11 +402,17 @@ def detectRETOverflow(instruction, function):
 		if dangerousFunc == "<strcpy@plt>":
 			analyzeStrcpy()
 
-		elif dangerousFunc == "<strcat@plt>":
+		if dangerousFunc == "<strcat@plt>":
 			return
 
 		elif dangerousFunc == "<fgets@plt>":
-			return
+
+			if analyzeFgets(vulnerabilityObj, instruction, function):
+
+				vulnerabilityObj["fnname"] = "fgets"
+				vulnerabilityObj["overflow_var"] = memory[register["rdi"]]["name"]
+
+				RETOverflowVulnerability.append(vulnerabilityObj)
 
 		elif dangerousFunc == "<strncpy@plt>":
 			return
@@ -405,7 +420,7 @@ def detectRETOverflow(instruction, function):
 		elif dangerousFunc == "<strncat@plt>":
 			return
 
-		else:
+		elif dangerousFunc == "<gets@plt>":
 			vulnerabilityObj["fnname"] = "gets"
 			vulnerabilityObj["overflow_var"] = str(register["rdi"])
 
@@ -422,11 +437,12 @@ def analyzeCall(instruction, function):
     dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
 
     if instruction["args"]["fnname"] in dangerousFunctions:
+        vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
+        
         vulnerabilities = vulnerabilities + detectRBPOverflow(instruction, function)
 
         vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
 
-        vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
 
 def runFunction(program, function):
     
