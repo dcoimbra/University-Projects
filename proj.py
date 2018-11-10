@@ -80,7 +80,6 @@ def detectStrcatVuln(instruction, function):
 def detectStrncatVuln(instruction, function):
     
     destAddr = register["rdi"]
-    #srcAddr = register["rsi"]
     size = register["rdx"]
     
     dest = memory[destAddr]["value"]
@@ -324,6 +323,20 @@ def detectRBPOverflow(instruction, function):
 
             if isRBPOverflow(int(destBuffer[3:], 16), resultingBytes):
                 vuln = addRBPOverflow(instruction, function, destBuffer, "strcat")
+                rbpVulnerability = rbpVulnerability + vuln
+
+    elif dangerousFunc == "<strncat@plt>":
+
+        if detectStrncatVuln(instruction, function):
+
+            nBytesToCopy = register["rdx"]
+    
+            destSize = memory[destBuffer]["value"]
+            
+            resultingBytes = (destSize - 1) + nBytesToCopy
+            
+            if isRBPOverflow(int(destBuffer[3:], 16), resultingBytes):
+                vuln = addRBPOverflow(instruction, function, destBuffer, "strncat")
                 rbpVulnerability = rbpVulnerability + vuln
 
     return rbpVulnerability
@@ -629,11 +642,11 @@ def analyzeCall(instruction, function):
     dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
 
     if instruction["args"]["fnname"] in dangerousFunctions:
-        #vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
+        vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
         
         vulnerabilities = vulnerabilities + detectRBPOverflow(instruction, function)
 
-        #vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
+        vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
 
 
 def runFunction(program, function):
@@ -686,4 +699,4 @@ if __name__ == '__main__':
     program = readJson(sys.argv[1])
     runFunction(program, "main")
     #writeJson(sys.argv[1], vulnerabilities)
-    print ("vulnerabilities", vulnerabilities)
+    print("vulnerabilities", vulnerabilities)
