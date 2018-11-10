@@ -59,6 +59,16 @@ def detectStrcpyVuln(instruction, function):
     return destSize < srcSize
 
 
+def detectStrncpyVuln(instruction, function):
+
+		destAddr = register["rdi"]
+		sizeToCpy = register["rdx"]
+
+		destSize = memory[destAddr]["bytes"]
+
+		return sizeToCpy > destSize
+
+
 def detectStrcatVuln(instruction, function):
     
     destAddr = register["rdi"]
