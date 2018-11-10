@@ -91,7 +91,7 @@ def detectStrcatVuln(instruction, function):
 
 
 
-def detectStrncatVulnVuln(instruction, function):
+def detectStrncatVuln(instruction, function):
     
     destAddr = register["rdi"]
     #srcAddr = register["rsi"]
@@ -103,6 +103,9 @@ def detectStrncatVulnVuln(instruction, function):
     #Bytes written in destination buffer minus \0 plus
     #Bytes in source buffer that are going to be concatenated plus
     #\0 to end the string
+    
+    print("SIZE", size)
+    print("DEST", dest)
     resultingBytes = (dest - 1) + size + 1
     
     return isVulnerable(destBufferSize,resultingBytes)
@@ -122,7 +125,7 @@ def addVarOver(instruction, function, offset, buffer, fnname):
             }]
 
 
-def identifyAllVariables(instruction, function):
+def identifyGetsWrittenVariables(instruction, function):
 
     found = []
     
@@ -134,7 +137,7 @@ def identifyAllVariables(instruction, function):
     for off in memory:
         offset = str(off)
         if "0x" in offset:
-            #offsets nao negativos, por isso pode-se ignorar sinal
+            #offsets sao negativos, por isso pode-se ignorar sinal
             auxIntOffset = int(offset[4:],16) 
             print("auxIntOffer", auxIntOffset)
             print("intOffset", intOffset)
@@ -145,7 +148,25 @@ def identifyAllVariables(instruction, function):
     
     return found
  
-def identifyWrittenVariables(instruction, function):
+    
+
+def findVariables(instruction, function, comparator, fnname):
+
+    aux = []
+    
+    buffer = str(register["rdi"])
+    
+    for off in memory:
+        offset = str(off)
+        if "0x" in offset:
+            if offset[3:] != buffer[3:]: #to avoid the same offset (same buffer)
+                if (int(offset[3:],16) <= comparator) and (int(offset[3:],16) > int(buffer[3:],16)): #if it's smaller than the buffer, then it's above it and safe 
+                    aux = aux + addVarOver(instruction, function, offset, buffer, fnname)
+
+    return aux
+
+
+def identifyFgetsWrittenVariables(instruction, function):
     
     found = []
     
@@ -157,26 +178,103 @@ def identifyWrittenVariables(instruction, function):
     
     comparator = intOffset + size
     
-    for off in memory:
-        offset = str(off)
-        if "0x" in offset:
-            if offset[3:] != address:
-                if int(offset[3:],16) <= comparator:
-                    found = found + addVarOver(instruction, function, offset, buffer, "fgets")
-                    print(found)
+    found = findVariables(instruction, function, comparator, "fgets")
+    
     return found
+
+
+
+def identifyStrcpyWrittenVariables(instruction, function):
+    
+    found = []
+    
+    dstBuffer = str(register["rdi"])
+    dstAddress = dstBuffer[3:]
+    dstIntOffset = int(dstAddress,16)
+    
+    srcBuffer = str(register["rsi"])
+    srcFill = memory[srcBuffer]["value"]
+    
+    comparator = dstIntOffset + srcFill
+    
+    found = findVariables(instruction, function, comparator, "strcpy")
+
+    return found
+
+
+def identifyStrcatWrittenVariables(instruction, function):
+    
+    found = []
+    
+    dstBuffer = str(register["rdi"])
+    dstAddress = dstBuffer[3:]
+    dstIntOffset = int(dstAddress,16)
+    dstBufferContent = memory[dstBuffer]["value"]
+    
+    srcBuffer = str(register["rsi"])
+    srcBufferContent = memory[srcBuffer]["value"]
+    
+    
+    #Bytes written in destination buffer minus \0 plus
+    #Bytes written in source buffer minus \0 plus
+    #\0 to end the string
+    totalContent = (dstBufferContent-1) + (srcBufferContent-1) + 1
+    
+    comparator = dstIntOffset + totalContent
+    
+    found = findVariables(instruction, function, comparator, "strcat")
+    
+    return found
+
+
+def identifyStrncatWrittenVariables(instruction, function):
+    
+    found = []
+    
+    
+    destAddr = register["rdi"]
+    destBufferContent = memory[destAddr]["value"]
+    destBufferSize = memory[destAddr]["bytes"]
+    #srcAddr = register["rsi"]
+    size = register["rdx"]
+    
+    #Bytes written in destination buffer minus \0 plus
+    #Bytes in source buffer that are going to be concatenated plus
+    #\0 to end the string
+    totalContent = (destBufferContent - 1) + size + 1
+    
+    comparator = destBufferSize + totalContent
+    
+    found = findVariables(instruction, function, comparator, "strncat")
+    
+    return found
+
 
 def detectVariableOverflow(instruction, function):
     
     result = []
     
     if instruction["args"]["fnname"] == "<gets@plt>":
-        result = result + identifyAllVariables(instruction, function)
+        result = result + identifyGetsWrittenVariables(instruction, function)
         
-    if instruction["args"]["fnname"] == "<fgets@plt>":
-        if(detectFgetsVuln(instruction, function)):
-           result = result + identifyWrittenVariables(instruction, function)
+    elif instruction["args"]["fnname"] == "<fgets@plt>":
+        if detectFgetsVuln(instruction, function):
+           result = result + identifyFgetsWrittenVariables(instruction, function)
            
+    elif instruction["args"]["fnname"] == "<strcpy@plt>":
+        if detectStrcpyVuln(instruction, function):
+            result = result + identifyStrcpyWrittenVariables(instruction, function)
+    
+    elif instruction["args"]["fnname"] == "<strncpy@plt>":
+        pass
+    
+    elif instruction["args"]["fnname"] == "<strcat@plt>":
+        if detectStrcatVuln(instruction, function):
+            result = result + identifyStrcatWrittenVariables(instruction, function)
+    
+    elif instruction["args"]["fnname"] == "<strncat@plt>":
+        if detectStrncatVuln(instruction, function):
+            result = result + identifyStrncatWrittenVariables(instruction, function)
         
     return result
 
@@ -255,7 +353,10 @@ def mov(destination, value):
 
     if destination == "eax":
         destination = "rax" #eax = rax
-            
+    
+    if destination == "edx":
+        destination = "rdx" #edx = rdx
+        
     if (destination in register.keys()) and (value in register.keys()):
         
         movRegisterToRegister(destination,value)
@@ -285,6 +386,9 @@ def add(destination, value):
 
     if destination == "eax":
         destination = "rax" #eax = rax
+        
+    if destination == "edx":
+        destination = "rdx" #edx = rdx
             
     if (destination in register.keys()) and (value in register.keys()):
         
@@ -316,6 +420,9 @@ def sub(destination, value):
     if destination == "eax":
         destination = "rax" #eax = rax
             
+    if destination == "edx":
+        destination = "rdx" #edx = rdx
+
     if (destination in register.keys()) and (value in register.keys()):
         
         subRegisterToRegister(destination,value)
