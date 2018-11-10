@@ -90,8 +90,6 @@ def detectStrncatVuln(instruction, function):
     #Bytes in source buffer that are going to be concatenated plus
     #\0 to end the string
     
-    print("SIZE", size)
-    print("DEST", dest)
     resultingBytes = (dest - 1) + size + 1
     
     return isVulnerable(destBufferSize,resultingBytes)
@@ -110,6 +108,7 @@ def addVarOver(instruction, function, offset, buffer, fnname):
             "address": instruction["address"]
             }]
 
+
 def addRBPOverflow(instruction, function, buffer, fnname):
     
     return [{
@@ -119,6 +118,23 @@ def addRBPOverflow(instruction, function, buffer, fnname):
             "overflow_var": memory[buffer]["name"],
             "address": instruction["address"]
             }]
+ 
+    
+def findVariables(instruction, function, comparator, fnname):
+
+    aux = []
+    
+    buffer = str(register["rdi"])
+    
+    for off in memory:
+        offset = str(off)
+        if "0x" in offset:
+            if offset[3:] != buffer[3:]: #to avoid the same offset (same buffer)
+                if (int(offset[3:],16) <= comparator) and (int(offset[3:],16) > int(buffer[3:],16)): #if it's smaller than the buffer, then it's above it and safe 
+                    aux = aux + addVarOver(instruction, function, offset, buffer, fnname)
+
+    return aux
+
 
 def identifyGetsWrittenVariables(instruction, function):
 
@@ -142,23 +158,6 @@ def identifyGetsWrittenVariables(instruction, function):
         #if 0x in offset -> take and see if offset is lower than this one
     
     return found
- 
-    
-
-def findVariables(instruction, function, comparator, fnname):
-
-    aux = []
-    
-    buffer = str(register["rdi"])
-    
-    for off in memory:
-        offset = str(off)
-        if "0x" in offset:
-            if offset[3:] != buffer[3:]: #to avoid the same offset (same buffer)
-                if (int(offset[3:],16) <= comparator) and (int(offset[3:],16) > int(buffer[3:],16)): #if it's smaller than the buffer, then it's above it and safe 
-                    aux = aux + addVarOver(instruction, function, offset, buffer, fnname)
-
-    return aux
 
 
 def identifyFgetsWrittenVariables(instruction, function):
@@ -176,7 +175,6 @@ def identifyFgetsWrittenVariables(instruction, function):
     found = findVariables(instruction, function, comparator, "fgets")
     
     return found
-
 
 
 def identifyStrcpyWrittenVariables(instruction, function):
@@ -226,7 +224,6 @@ def identifyStrncatWrittenVariables(instruction, function):
     
     found = []
     
-    
     destAddr = register["rdi"]
     destBufferContent = memory[destAddr]["value"]
     destBufferSize = memory[destAddr]["bytes"]
@@ -273,234 +270,8 @@ def detectVariableOverflow(instruction, function):
         
     return result
 
-def addRegisterToRegister(dest, val):
-    register[dest] = register[dest] + register[val]
-    
-def addRegisterToPointer(dest, val):
-    memory[val[11:-1]]['value'] = memory[val[11:-1]]['value'] + register[val]  
-    
-def addPointerToRegister(dest, val):
-    if "rip" in val:
-        register[dest] = "stdin"
-        return
-    
-    register[dest] = register[dest] + memory[val[11:-1]]['value']
-    
-def addNumToPointer(dest, val):
-    memory[dest[11:-1]]['value'] = memory[dest[11:-1]]['value'] + int(val,16)
-    
-def addNumToRegister(dest, val):   
-    register[dest] = register[dest] + int(val,16)
 
-def subNumToRegister(dest, val):   
-    register[dest] = register[dest] - int(val,16)
-
-def subRegisterToRegister(dest, val):
-    register[dest] = register[dest] - register[val]
-    
-def subRegisterToPointer(dest, val):
-    memory[val[11:-1]]['value'] = memory[val[11:-1]]['value'] - register[val]  
-    
-def subPointerToRegister(dest, val):
-    if "rip" in val:
-        register[dest] = "stdin"
-        return
-    
-    register[dest] = register[dest] - memory[val[11:-1]]['value']
-    
-def subNumToPointer(dest, val):
-    memory[dest[11:-1]]['value'] = memory[dest[11:-1]]['value'] - int(val,16)
-    
-
-def movRegisterToRegister(dest, val):
-    register[dest] = register[val]
-    
-def movRegisterToPointer(dest, val):
-    memory[val[11:-1]]['value'] = register[val]  
-    
-def movPointerToRegister(dest, val):
-    if "rip" in val:
-        register[dest] = "stdin"
-        return
-    
-    register[dest] = memory[val[11:-1]]['value']
-    
-def movNumToPointer(dest, val):
-    memory[dest[11:-1]]['value'] = int(val,16)
-    
-def movNumToRegister(dest, val):   
-    register[dest] = int(val,16)
-
-def isNumber(val):
-    return all(c in string.hexdigits for c in val[2:])
-
-def initializeLocalVariables(program, function):
-
-    for var in program[function]["variables"]: 
-        memory[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"] }
-
-def mov(destination, value):
-
-    print("mov", destination, value)
-    
-    if destination == "esi":
-        destination = "rsi" #esi = rsi
-
-    if destination == "eax":
-        destination = "rax" #eax = rax
-    
-    if destination == "edx":
-        destination = "rdx" #edx = rdx
-        
-    if (destination in register.keys()) and (value in register.keys()):
-        
-        movRegisterToRegister(destination,value)
-                
-    elif (destination in register.keys()) and (isNumber(value)):
-        
-        movNumToRegister(destination,value)
-    
-    elif (destination in register.keys()) and ("PTR" in value):
-        
-        movPointerToRegister(destination,value)
-    
-    elif ("PTR" in destination) and (value in register.keys()):
-        
-        movRegisterToPointer(destination,value)
-        
-    elif ("PTR" in destination) and (isNumber(value)):
-        
-        movNumToPointer(destination,value)
-
-def add(destination, value):
-    
-    print("add", destination, value)
-
-    if destination == "esi":
-        destination = "rsi" #esi = rsi
-
-    if destination == "eax":
-        destination = "rax" #eax = rax
-        
-    if destination == "edx":
-        destination = "rdx" #edx = rdx
-            
-    if (destination in register.keys()) and (value in register.keys()):
-        
-        addRegisterToRegister(destination,value)
-                
-    elif (destination in register.keys()) and (isNumber(value)):
-        
-        addNumToRegister(destination,value)
-    
-    elif (destination in register.keys()) and ("PTR" in value):
-        
-        addPointerToRegister(destination,value)
-    
-    elif ("PTR" in destination) and (value in register.keys()):
-        
-        addRegisterToPointer(destination,value)
-        
-    elif ("PTR" in destination) and (isNumber(value)):
-        
-        addNumToPointer(destination,value)
-
-def sub(destination, value):
-
-    print("sub", destination, value)
-    
-    if destination == "esi":
-        destination = "rsi" #esi = rsi
-
-    if destination == "eax":
-        destination = "rax" #eax = rax
-            
-    if destination == "edx":
-        destination = "rdx" #edx = rdx
-
-    if (destination in register.keys()) and (value in register.keys()):
-        
-        subRegisterToRegister(destination,value)
-                
-    elif (destination in register.keys()) and (isNumber(value)):
-        
-        subNumToRegister(destination,value)
-    
-    elif (destination in register.keys()) and ("PTR" in value):
-        
-        subPointerToRegister(destination,value)
-    
-    elif ("PTR" in destination) and (value in register.keys()):
-        
-        subRegisterToPointer(destination,value)
-        
-    elif ("PTR" in destination) and (isNumber(value)):
-        
-        subNumToPointer(destination,value)
-
-def lea(destination, value):
-
-    print("lea", destination, value)
-
-    register[destination] = value[1:-1]
-
-def push(value):
-
-    print("push", value)
-
-    subNumToRegister("rsp", "0x8")
-
-    memory[register["rsp"]] = { "value": register[value] }
-
-def leave():
-
-    print("leave")
-
-    movRegisterToRegister("rsp", "rbp")
-    
-    register["rbp"] = memory[register["rsp"]]["value"]
-    memory.pop(register["rsp"], None)
-
-def runInstruction(instr):
-        
-    if instr['op'] == "mov":
-        
-        destination = instr['args']['dest']
-        value = instr['args']['value']
-        
-        mov(destination, value)
-    
-    elif instr['op'] == "add":
-        
-        destination = instr['args']['dest']
-        value = instr['args']['value']
-        
-        add(destination, value)
-
-    elif instr['op'] == "sub":
-        
-        destination = instr['args']['dest']
-        value = instr['args']['value']
-        
-        sub(destination, value)
-
-    elif instr['op'] == "lea":
-        
-        destination = instr['args']['dest']
-        value = instr['args']['value']
-
-        lea(destination, value)
-
-    elif instr['op'] == "push":
-        
-        value = instr["args"]["value"]
-        push(value)
-
-    elif instr["op"] == "leave":
-        leave()
-        
 def isRBPOverflow(bufferOffsetToRBP, bytesToInsert):
-
     return (bufferOffsetToRBP + bytesToInsert >= 0)
 
     
@@ -513,9 +284,9 @@ def detectRBPOverflow(instruction, function):
     dangerousFunc = instruction["args"]["fnname"]
 
     if dangerousFunc == "<gets@plt>":
-
-       vuln = addRBPOverflow(instruction, function, destBuffer, dangerousFunc)
-       rbpVulnerability.append(vuln)
+        
+        vuln = addRBPOverflow(instruction, function, destBuffer, "gets")
+        rbpVulnerability = rbpVulnerability + vuln
 
     elif dangerousFunc == "<fgets@plt>":
 
@@ -525,8 +296,8 @@ def detectRBPOverflow(instruction, function):
             
             if isRBPOverflow(int(destBuffer[3:], 16), bytesToCopy):
                 
-                vuln = addRBPOverflow(instruction, function, destBuffer, dangerousFunc)
-                rbpVulnerability.append(vuln)
+                vuln = addRBPOverflow(instruction, function, destBuffer, "fgets")
+                rbpVulnerability = rbpVulnerability + vuln
 
     elif dangerousFunc == "<strcpy@plt>":
 
@@ -537,13 +308,30 @@ def detectRBPOverflow(instruction, function):
 
             if isRBPOverflow(int(destBuffer[3:], 16), srcSize):
                 
-                vuln = addRBPOverflow(instruction, function, destBuffer, dangerousFunc)
-                rbpVulnerability.append(vuln)
+                vuln = addRBPOverflow(instruction, function, destBuffer, "strcpy")
+                rbpVulnerability = rbpVulnerability + vuln
+
+    elif dangerousFunc == "<strcat@plt>":
+
+        if detectStrcatVuln(instruction, function):
+
+            destSize = memory[destBuffer]["value"]
+
+            src = str(register["rsi"])
+            srcSize = memory[src]["value"]
+
+            resultingBytes = (destSize - 1) + srcSize + 1
+
+            if isRBPOverflow(int(destBuffer[3:], 16), resultingBytes):
+                vuln = addRBPOverflow(instruction, function, destBuffer, "strcat")
+                rbpVulnerability = rbpVulnerability + vuln
 
     return rbpVulnerability
 
+
 def analyzeStrcpy():
 	return
+
 
 def analyzeFgets(result, instruction, function):
 
@@ -597,6 +385,241 @@ def detectRETOverflow(instruction, function):
 	
 		return RETOverflowVulnerability
 
+
+def addRegisterToRegister(dest, val):
+    register[dest] = register[dest] + register[val]
+
+
+def addRegisterToPointer(dest, val):
+    memory[val[11:-1]]['value'] = memory[val[11:-1]]['value'] + register[val]  
+
+
+def addPointerToRegister(dest, val):
+    if "rip" in val:
+        register[dest] = "stdin"
+        return
+    
+    register[dest] = register[dest] + memory[val[11:-1]]['value']
+
+
+def addNumToPointer(dest, val):
+    memory[dest[11:-1]]['value'] = memory[dest[11:-1]]['value'] + int(val,16)
+
+
+def addNumToRegister(dest, val):   
+    register[dest] = register[dest] + int(val,16)
+
+
+def subNumToRegister(dest, val):   
+    register[dest] = register[dest] - int(val,16)
+
+
+def subRegisterToRegister(dest, val):
+    register[dest] = register[dest] - register[val]
+
+
+def subRegisterToPointer(dest, val):
+    memory[val[11:-1]]['value'] = memory[val[11:-1]]['value'] - register[val]  
+
+
+def subPointerToRegister(dest, val):
+    if "rip" in val:
+        register[dest] = "stdin"
+        return
+    
+    register[dest] = register[dest] - memory[val[11:-1]]['value']
+
+
+def subNumToPointer(dest, val):
+    memory[dest[11:-1]]['value'] = memory[dest[11:-1]]['value'] - int(val,16)
+    
+
+def movRegisterToRegister(dest, val):
+    register[dest] = register[val]
+
+
+def movRegisterToPointer(dest, val):
+    memory[val[11:-1]]['value'] = register[val]  
+
+
+def movPointerToRegister(dest, val):
+    if "rip" in val:
+        register[dest] = "stdin"
+        return
+    
+    register[dest] = memory[val[11:-1]]['value']
+
+
+def movNumToPointer(dest, val):
+    memory[dest[11:-1]]['value'] = int(val,16)
+ 
+   
+def movNumToRegister(dest, val):   
+    register[dest] = int(val,16)
+
+
+def isNumber(val):
+    return all(c in string.hexdigits for c in val[2:])
+
+
+def initializeLocalVariables(program, function):
+
+    for var in program[function]["variables"]: 
+        memory[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"] }
+
+
+def mov(destination, value):
+
+    print("mov", destination, value)
+    
+    if destination == "esi":
+        destination = "rsi" #esi = rsi
+
+    if destination == "eax":
+        destination = "rax" #eax = rax
+    
+    if destination == "edx":
+        destination = "rdx" #edx = rdx
+        
+    if (destination in register.keys()) and (value in register.keys()):
+        movRegisterToRegister(destination,value)
+                
+    elif (destination in register.keys()) and (isNumber(value)):
+        movNumToRegister(destination,value)
+    
+    elif (destination in register.keys()) and ("PTR" in value):
+        movPointerToRegister(destination,value)
+    
+    elif ("PTR" in destination) and (value in register.keys()):
+        movRegisterToPointer(destination,value)
+        
+    elif ("PTR" in destination) and (isNumber(value)):
+        movNumToPointer(destination,value)
+
+
+def add(destination, value):
+    
+    print("add", destination, value)
+
+    if destination == "esi":
+        destination = "rsi" #esi = rsi
+
+    if destination == "eax":
+        destination = "rax" #eax = rax
+        
+    if destination == "edx":
+        destination = "rdx" #edx = rdx
+            
+    if (destination in register.keys()) and (value in register.keys()):
+        addRegisterToRegister(destination,value)
+                
+    elif (destination in register.keys()) and (isNumber(value)):
+        addNumToRegister(destination,value)
+    
+    elif (destination in register.keys()) and ("PTR" in value):
+        addPointerToRegister(destination,value)
+    
+    elif ("PTR" in destination) and (value in register.keys()):
+        addRegisterToPointer(destination,value)
+        
+    elif ("PTR" in destination) and (isNumber(value)):
+        addNumToPointer(destination,value)
+
+
+def sub(destination, value):
+
+    print("sub", destination, value)
+    
+    if destination == "esi":
+        destination = "rsi" #esi = rsi
+
+    if destination == "eax":
+        destination = "rax" #eax = rax
+            
+    if destination == "edx":
+        destination = "rdx" #edx = rdx
+
+    if (destination in register.keys()) and (value in register.keys()):
+        subRegisterToRegister(destination,value)
+                
+    elif (destination in register.keys()) and (isNumber(value)):
+        subNumToRegister(destination,value)
+    
+    elif (destination in register.keys()) and ("PTR" in value):
+        subPointerToRegister(destination,value)
+    
+    elif ("PTR" in destination) and (value in register.keys()):
+        subRegisterToPointer(destination,value)
+        
+    elif ("PTR" in destination) and (isNumber(value)):
+        subNumToPointer(destination,value)
+
+
+def lea(destination, value):
+
+    print("lea", destination, value)
+
+    register[destination] = value[1:-1]
+
+
+def push(value):
+
+    print("push", value)
+
+    subNumToRegister("rsp", "0x8")
+
+    memory[register["rsp"]] = { "value": register[value] }
+
+
+def leave():
+
+    print("leave")
+
+    movRegisterToRegister("rsp", "rbp")
+    
+    register["rbp"] = memory[register["rsp"]]["value"]
+    memory.pop(register["rsp"], None)
+
+
+def runInstruction(instr):
+        
+    if instr['op'] == "mov":
+        
+        destination = instr['args']['dest']
+        value = instr['args']['value']
+        
+        mov(destination, value)
+    
+    elif instr['op'] == "add":
+        
+        destination = instr['args']['dest']
+        value = instr['args']['value']
+        
+        add(destination, value)
+
+    elif instr['op'] == "sub":
+        
+        destination = instr['args']['dest']
+        value = instr['args']['value']
+        
+        sub(destination, value)
+
+    elif instr['op'] == "lea":
+        
+        destination = instr['args']['dest']
+        value = instr['args']['value']
+
+        lea(destination, value)
+
+    elif instr['op'] == "push":
+        
+        value = instr["args"]["value"]
+        push(value)
+
+    elif instr["op"] == "leave":
+        leave()
+
+
 def analyzeCall(instruction, function):
 
     global vulnerabilities
@@ -606,11 +629,11 @@ def analyzeCall(instruction, function):
     dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
 
     if instruction["args"]["fnname"] in dangerousFunctions:
-        vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
+        #vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
         
         vulnerabilities = vulnerabilities + detectRBPOverflow(instruction, function)
 
-        vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
+        #vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
 
 
 def runFunction(program, function):
@@ -635,21 +658,25 @@ def runFunction(program, function):
         print(memory)
         print(register, "\n")
 
+
 def writeJson(progName, vulnerabilities):
     f = open("%s.output.json" % progName, 'w+')
     f.write(json.dumps(vulnerabilities, indent=4, separators=(',', ': ')))
     f.close()
-    
+
+
 def readJson(file):
     f = open(file, 'r')
     file_contents = f.read()
     f.close()
     return json.loads(file_contents)
 
+
 def usage(progName):
     print('Usage:')
     print(' python %s <program>.json' % progName)
     sys.exit()
+
 
 if __name__ == '__main__':
     
