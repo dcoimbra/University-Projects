@@ -342,26 +342,21 @@ def detectRBPOverflow(instruction, function):
     return rbpVulnerability
 
 
-def analyzeStrcpy():
-	return
-
-
 def analyzeFgets(result, instruction, function):
 
 		#RBP+0x8
-		rbpAddress = 8
+		retAddress = 8
 		bufferAddress = str(register["rdi"])
 		copiedSize = register["rsi"]
 
-		return detectFgetsVuln(instruction, function) and int(bufferAddress[3:], 16) + copiedSize >= rbpAddress
+		return detectFgetsVuln(instruction, function) and int(bufferAddress[3:], 16) + copiedSize >= retAddress
+
 
 def detectRETOverflow(instruction, function):
 
-		print("RETOV", function)
+		RETOverflowVulnerability = []
 
 		dangerousFunc = instruction["args"]["fnname"]
-
-		RETOverflowVulnerability = []
 		
 		vulnerabilityObj = {
 				"vulnerability": "RETOVERFLOW",
@@ -370,10 +365,10 @@ def detectRETOverflow(instruction, function):
 		}
 
 		if dangerousFunc == "<strcpy@plt>":
-			analyzeStrcpy()
+			pass
 
 		if dangerousFunc == "<strcat@plt>":
-			return
+			pass
 
 		elif dangerousFunc == "<fgets@plt>":
 
@@ -385,12 +380,12 @@ def detectRETOverflow(instruction, function):
 				RETOverflowVulnerability.append(vulnerabilityObj)
 
 		elif dangerousFunc == "<strncpy@plt>":
-			return
+			pass
 
 		elif dangerousFunc == "<strncat@plt>":
-			return
+			pass
 
-		elif dangerousFunc == "<gets@plt>":
+		else:
 			vulnerabilityObj["fnname"] = "gets"
 			vulnerabilityObj["overflow_var"] = str(register["rdi"])
 
