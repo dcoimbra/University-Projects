@@ -33,27 +33,18 @@ def isVulnerable(destBufferSize,valueToInsert):
     
     memory[destAddr]["value"] = dest + valueToInsert
     
-    if valueToInsert > destBufferSize:
-        return True
-    
-    return False
+    return valueToInsert > destBufferSize
 
 def detectFgetsVuln(instruction, function):
 
     bufferAddress = register["rdi"]
-    size = register["rsi"]
+    bytesToGet = register["rsi"]
     
-
-    if bufferAddress in memory.keys():
-        bufferSize = memory[bufferAddress]["bytes"]
-
-        if size <= bufferSize:
-            memory[bufferAddress]["value"] = size
+    bufferSize = memory[bufferAddress]["bytes"]
         
-        else:
-            memory[bufferAddress]["value"] = bufferSize
+    memory[bufferAddress]["value"] = bytesToGet
         
-        return size > bufferSize
+    return bytesToGet > bufferSize
 
 def detectStrcpyVuln(instruction, function):
 
@@ -62,13 +53,9 @@ def detectStrcpyVuln(instruction, function):
 
     destSize = memory[dest]["bytes"]
     srcSize = memory[src]["value"]
-
-    if destSize <= srcSize:
-        memory[dest]["value"] = srcSize
+    
+    memory[dest]["value"] = srcSize
         
-    else:
-        memory[dest]["value"] = destSize
-
     return destSize < srcSize
 
 
@@ -88,7 +75,6 @@ def detectStrcatVuln(instruction, function):
     resultingBytes = (dest-1) + (src-1) + 1
     
     return isVulnerable(destBufferSize,resultingBytes)
-
 
 
 def detectStrncatVuln(instruction, function):
@@ -124,6 +110,15 @@ def addVarOver(instruction, function, offset, buffer, fnname):
             "address": instruction["address"]
             }]
 
+def addRBPOverflow(instruction, function, buffer, fnname):
+    
+    return [{
+            "fnname": fnname,
+            "vuln_function": function,
+            "vulnerability": "RBPOVERFLOW",
+            "overflow_var": memory[buffer]["name"],
+            "address": instruction["address"]
+            }]
 
 def identifyGetsWrittenVariables(instruction, function):
 
@@ -504,46 +499,45 @@ def runInstruction(instr):
     elif instr["op"] == "leave":
         leave()
         
+def isRBPOverflow(bufferOffsetToRBP, bytesToInsert):
+
+    return (bufferOffsetToRBP + bytesToInsert >= 0)
+
     
 def detectRBPOverflow(instruction, function):
 
     rbpVulnerability = []
 
-    '''
-    genericVuln = {
-                "vulnerability": "RBPOVERFLOW",
-                "vuln_function": function,
-                "address": instruction["address"],
-                "fnname" : "gets",
-                "overflow_var" : memory[register["rdi"]]["name"]
-    }
-    '''
+    destBuffer = str(register["rdi"])
 
-    vuln = {
-        "vulnerability": "RBPOVERFLOW",
-        "vuln_function": function,
-        "address": instruction["address"]
-    }
+    dangerousFunc = instruction["args"]["fnname"]
 
-    if instruction["args"]["fnname"] == "<gets@plt>":
-        
-        vuln["fnname"] = "gets"
-        rbpVulnerability.append(vuln)
+    if dangerousFunc == "<gets@plt>":
 
-    elif instruction["args"]["fnname"] == "<fgets@plt>":
+       vuln = addRBPOverflow(instruction, function, destBuffer, dangerousFunc)
+       rbpVulnerability.append(vuln)
 
-        hasFgetsVuln = detectFgetsVuln(instruction, function)
+    elif dangerousFunc == "<fgets@plt>":
 
-        if hasFgetsVuln:
-            bufferAddress = str(register["rdi"])
-            bufferSize = register["rsi"]
-
-            rbpOffset = int(bufferAddress[3:], 16) + bufferSize
-
-            if rbpOffset >= 0:
+        if detectFgetsVuln(instruction, function):
+            
+            bytesToCopy = register["rsi"]
+            
+            if isRBPOverflow(int(destBuffer[3:], 16), bytesToCopy):
                 
-                vuln["fnname"] = "fgets"
-                vuln["overflow_var"] = memory[register["rdi"]]["name"]
+                vuln = addRBPOverflow(instruction, function, destBuffer, dangerousFunc)
+                rbpVulnerability.append(vuln)
+
+    elif dangerousFunc == "<strcpy@plt>":
+
+        if detectStrcpyVuln(instruction, function):
+            
+            src = str(register["rsi"])
+            srcSize = memory[src]["value"]
+
+            if isRBPOverflow(int(destBuffer[3:], 16), srcSize):
+                
+                vuln = addRBPOverflow(instruction, function, destBuffer, dangerousFunc)
                 rbpVulnerability.append(vuln)
 
     return rbpVulnerability
