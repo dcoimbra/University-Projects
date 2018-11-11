@@ -3,28 +3,28 @@
         "Ninstructions": 28,
         "variables": [
             {
-                "bytes": 4,
-                "type": "int",
-                "name": "control",
-                "address": "rbp-0x4"
-            },
-            {
                 "bytes": 64,
                 "type": "buffer",
                 "name": "buf1",
-                "address": "rbp-0xb0"
+                "address": "rbp-0xe0"
             },
             {
                 "bytes": 32,
                 "type": "buffer",
                 "name": "buf2",
-                "address": "rbp-0x70"
+                "address": "rbp-0xa0"
             },
             {
                 "bytes": 64,
                 "type": "buffer",
                 "name": "buf3",
-                "address": "rbp-0x50"
+                "address": "rbp-0x80"
+            },
+            {
+                "bytes": 64,
+                "type": "buffer",
+                "name": "buf4",
+                "address": "rbp-0x40"
             }
         ],
         "instructions": [
