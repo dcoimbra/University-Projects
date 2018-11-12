@@ -384,7 +384,7 @@ def detectRBPOverflow(instruction, function):
     return rbpVulnerability
 
 
-def analyzeStrcpy(instruction, function):
+def analyzeStrcpy():
 
 		#RBP+0x8
 		retAddress = 8
@@ -396,7 +396,18 @@ def analyzeStrcpy(instruction, function):
 		return int(dstAddress[3:], 16) + srcSize >= retAddress
 
 
-def analyzeStrcat(instruction, function):
+def analyzeStrncpy():
+
+		#RBP+0x8
+		retAddress = 8
+
+		dstAddress = str(register["rdi"])
+		sizeToCpy = register["rdx"]
+
+		return int(dstAddress[3:], 16) + sizeToCpy >= retAddress
+
+
+def analyzeStrcat():
 
 		#RBP+0x8
 		retAddress = 8
@@ -409,6 +420,17 @@ def analyzeStrcat(instruction, function):
 
 		return int(dstAddress[3:], 16) + dstSize + srcSize + 1 >= retAddress
 
+
+def analyzeStrncat():
+
+		#RBP+0x8
+		retAddress = 8
+
+		dstAddress = str(register["rdi"])
+		dstSize = memory[dstAddress]["value"] - 1
+		sizeToCpy = str(register["rdx"])
+
+		return int(dstAddress[3:], 16) + dstSize + sizeToCpy + 1 >= retAddress
 
 def analyzeFgets(instruction, function):
 
@@ -429,24 +451,24 @@ def detectRETOverflow(instruction, function):
 
 	  if dangerousFunc == "<strcpy@plt>":
 
-	    if detectStrcpyVuln(instruction, function) and analyzeStrcpy(instruction, function):
+	    if detectStrcpyVuln(instruction, function) and analyzeStrcpy():
 	    	RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcpy"))
 
-	  elif dangerousFunc == "<strncpy@plt>":
-	    pass
+	  elif dangerousFunc == "<strncpy@plt>" and detectStrncpyVuln(instruction, function) and analyzeStrncpy():
+	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strncpy"))
 
-	  elif dangerousFunc == "<strcat@plt>" and detectStrcatVuln(instruction, function) and analyzeStrcat(instruction, function):
+	  elif dangerousFunc == "<strcat@plt>" and detectStrcatVuln(instruction, function) and analyzeStrcat():
 	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcat"))
 
-	  elif dangerousFunc == "<strncat@plt>":
-	  	pass
+	  elif dangerousFunc == "<strncat@plt>" and detectStrncatVuln(instruction, function) and analyzeStrncat():
+	  	RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strncat"))
 
 	  elif dangerousFunc == "<fgets@plt>":
 
 	    if analyzeFgets(instruction, function):
 	      RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "fgets"))
 
-	  else:
+	  elif dangerousFunc == "<gets@plt>":
 	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "gets"))
 
 	  return RETOverflowVulnerability
