@@ -127,6 +127,17 @@ def addRBPOverflow(instruction, function, buffer, fnname):
             "overflow_var": memory[buffer]["name"],
             "address": instruction["address"]
             }]
+
+
+def addRETOverflowOutput(function, instruction, dangerousFunc):
+
+    return {
+            "vulnerability": "RETOVERFLOW",
+            "vuln_function": function,
+            "address": instruction["address"],
+            "fnname": dangerousFunc,
+            "overflow_var": memory[str(register["rdi"])]["name"]
+    }
  
     
 def findVariables(instruction, function, comparator, fnname):
@@ -364,44 +375,30 @@ def analyzeFgets(result, instruction, function):
 
 def detectRETOverflow(instruction, function):
 
-		RETOverflowVulnerability = []
+	  RETOverflowVulnerability = []
 
-		dangerousFunc = instruction["args"]["fnname"]
-		
-		vulnerabilityObj = {
-				"vulnerability": "RETOVERFLOW",
-	      "vuln_function": function,
-	      "address": instruction["address"],
-		}
+	  dangerousFunc = instruction["args"]["fnname"]
 
-		if dangerousFunc == "<strcpy@plt>":
-			pass
+	  if dangerousFunc == "<strcpy@plt>":
+	    pass
 
-		if dangerousFunc == "<strcat@plt>":
-			pass
+	  elif dangerousFunc == "<strncpy@plt>":
+	    pass
 
-		elif dangerousFunc == "<fgets@plt>":
+	  elif dangerousFunc == "<strcat@plt>":
+	    pass
 
-			if analyzeFgets(vulnerabilityObj, instruction, function):
+	  elif dangerousFunc == "<strncat@plt>":
+	  	pass
 
-				vulnerabilityObj["fnname"] = "fgets"
-				vulnerabilityObj["overflow_var"] = memory[register["rdi"]]["name"]
+	  elif dangerousFunc == "<fgets@plt>":
+	    if analyzeFgets(vulnerabilityObj, instruction, function):
+	      RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "fgets"))
 
-				RETOverflowVulnerability.append(vulnerabilityObj)
+	  else:
+	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "gets"))
 
-		elif dangerousFunc == "<strncpy@plt>":
-			pass
-
-		elif dangerousFunc == "<strncat@plt>":
-			pass
-
-		else:
-			vulnerabilityObj["fnname"] = "gets"
-			vulnerabilityObj["overflow_var"] = str(register["rdi"])
-
-			RETOverflowVulnerability.append(vulnerabilityObj)
-	
-		return RETOverflowVulnerability
+	  return RETOverflowVulnerability
 
 
 def addRegisterToRegister(dest, val):
