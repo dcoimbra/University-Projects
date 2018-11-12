@@ -123,11 +123,11 @@ def addVarOver(instruction, function, offset, buffer, fnname):
 def addRBPOverflow(instruction, function, buffer, fnname):
     
     return [{
-            "fnname": fnname,
-            "vuln_function": function,
             "vulnerability": "RBPOVERFLOW",
             "overflow_var": memory[buffer]["name"],
-            "address": instruction["address"]
+            "vuln_function": function,
+            "address": instruction["address"],
+            "fnname": fnname
             }]
 
 
@@ -372,13 +372,19 @@ def detectRBPOverflow(instruction, function):
         if detectStrncatVuln(instruction, function):
 
             nBytesToCopy = register["rdx"]
-    
-            destSize = memory[destBuffer]["value"]
-            
-            resultingBytes = (destSize - 1) + nBytesToCopy
             
             if isRBPOverflow(int(destBuffer[3:], 16), resultingBytes):
                 vuln = addRBPOverflow(instruction, function, destBuffer, "strncat")
+                rbpVulnerability = rbpVulnerability + vuln
+
+    elif dangerousFunc == "<strncpy@plt>":
+
+        if detectStrncpyVuln(instruction, function):
+
+            nBytesToCopy = register["rdx"]
+            
+            if isRBPOverflow(int(destBuffer[3:], 16), nBytesToCopy):
+                vuln = addRBPOverflow(instruction, function, destBuffer, "strncpy")
                 rbpVulnerability = rbpVulnerability + vuln
 
     return rbpVulnerability
@@ -762,7 +768,7 @@ def readJson(file):
 
 def usage(progName):
     print('Usage:')
-    print(' python %s <program>.json' % progName)
+    print('python3 %s <program>.json' % progName)
     sys.exit()
 
 
