@@ -396,6 +396,20 @@ def analyzeStrcpy(instruction, function):
 		return int(dstAddress[3:], 16) + srcSize >= retAddress
 
 
+def analyzeStrcat(instruction, function):
+
+		#RBP+0x8
+		retAddress = 8
+
+		dstAddress = str(register["rdi"])
+		srcAddress = str(register["rsi"])
+
+		dstSize = memory[dstAddress]["value"] - 1
+		srcSize = memory[srcAddress]["value"]
+
+		return int(dstAddress[3:], 16) + dstSize + srcSize + 1 >= retAddress
+
+
 def analyzeFgets(instruction, function):
 
 		#RBP+0x8
@@ -421,8 +435,8 @@ def detectRETOverflow(instruction, function):
 	  elif dangerousFunc == "<strncpy@plt>":
 	    pass
 
-	  elif dangerousFunc == "<strcat@plt>":
-	    pass
+	  elif dangerousFunc == "<strcat@plt>" and detectStrcatVuln(instruction, function) and analyzeStrcat(instruction, function):
+	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcat"))
 
 	  elif dangerousFunc == "<strncat@plt>":
 	  	pass
