@@ -61,16 +61,18 @@ def detectStrcpyVuln(instruction, function):
 
 def detectStrncpyVuln(instruction, function):
 
-		destAddr = register["rdi"]
-		sizeToCpy = register["rdx"]
-
-		destSize = memory[destAddr]["bytes"]
-
-		return sizeToCpy > destSize
-
-
-def detectStrcatVuln(instruction, function):
+    destAddr = register["rdi"]
+    sizeToCpy = register["rdx"]
     
+    destSize = memory[destAddr]["bytes"]
+       
+    memory[destAddr]["value"] = sizeToCpy
+    
+    return sizeToCpy > destSize
+
+    
+def detectStrcatVuln(instruction, function):
+        
     destAddr = register["rdi"]
     srcAddr = register["rsi"]
     
@@ -204,6 +206,23 @@ def identifyStrcpyWrittenVariables(instruction, function):
     return found
 
 
+def identifyStrncpyWrittenVariables(instruction, function):
+    
+    found = []
+    
+    dstBuffer = str(register["rdi"])
+    dstAddress = dstBuffer[3:]
+    dstIntOffset = int(dstAddress,16)
+    
+    sizeToCpy = register["rdx"]
+         
+    comparator = dstIntOffset + sizeToCpy
+    
+    found = findVariables(instruction, function, comparator, "strncpy")
+    
+    return found
+
+
 def identifyStrcatWrittenVariables(instruction, function):
     
     found = []
@@ -267,7 +286,9 @@ def detectVariableOverflow(instruction, function):
             result = result + identifyStrcpyWrittenVariables(instruction, function)
     
     elif instruction["args"]["fnname"] == "<strncpy@plt>":
-        pass
+        if detectStrncpyVuln(instruction, function):
+            result = result + identifyStrncpyWrittenVariables(instruction, function)
+        
     
     elif instruction["args"]["fnname"] == "<strcat@plt>":
         if detectStrcatVuln(instruction, function):
