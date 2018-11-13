@@ -722,10 +722,18 @@ def analyzeCall(instruction, function):
 
     dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
 
-    if instruction["args"]["fnname"] in dangerousFunctions:
+    if instruction["args"]["fnname"] in dangerousFunctions:        
+
+        destAddr = register["rdi"]
+        dest = memory[destAddr]["value"]
+
         vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
+
+        memory[destAddr]["value"] = dest
         
         vulnerabilities = vulnerabilities + detectRBPOverflow(instruction, function)
+
+        memory[destAddr]["value"] = dest
 
         vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
 
@@ -754,7 +762,7 @@ def runFunction(program, function):
 
 
 def writeJson(progName, vulnerabilities):
-    f = open("%s.output.json" % progName, 'w+')
+    f = open("%s.outputpersonal.json" % progName, 'w+')
     f.write(json.dumps(vulnerabilities, indent=4, separators=(',', ': ')))
     f.close()
 
@@ -779,5 +787,5 @@ if __name__ == '__main__':
     
     program = readJson(sys.argv[1])
     runFunction(program, "main")
-    #writeJson(sys.argv[1], vulnerabilities)
+    writeJson((sys.argv[1])[:-5], vulnerabilities)
     print("vulnerabilities", vulnerabilities)
