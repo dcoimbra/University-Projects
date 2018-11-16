@@ -92,9 +92,8 @@ def detectStrcatVuln(instruction, function):
     destBufferSize = memory[destAddr]["bytes"]
  
     #Bytes written in destination buffer minus \0 plus
-    #Bytes written in source buffer minus \0 plus
-    #\0 to end the string
-    resultingBytes = (dest-1) + (src-1) + 1
+    #Bytes written in source buffer. The \0 is inside the src buffer
+    resultingBytes = (dest-1) + src
     
     return isVulnerable(destBufferSize,resultingBytes)
 
@@ -151,6 +150,17 @@ def addRETOverflowOutput(function, instruction, dangerousFunc):
             "overflow_var": memory[str(register["rdi"])]["name"]
     }
  
+
+def addStackCorruption(instruction, function, dangerousFunc):
+    
+    return [{
+            "overflow_address": "rbp+0x10",
+            "vulnerability": "SCORRUPTION",
+            "vuln_function": function,
+            "address": instruction["address"],
+            "fnname": dangerousFunc,
+            "overflow_var": memory[str(register["rdi"])]["name"]       
+            }]
     
 def findVariables(instruction, function, comparator, fnname):
 
@@ -162,7 +172,7 @@ def findVariables(instruction, function, comparator, fnname):
         offset = str(off)
         if "0x" in offset:
             if offset[3:] != buffer[3:]: #to avoid the same offset (same buffer)
-                if (int(offset[3:],16) <= comparator) and (int(offset[3:],16) > int(buffer[3:],16)): #if it's smaller than the buffer, then it's above it and safe 
+                if (int(offset[3:],16) < comparator) and (int(offset[3:],16) > int(buffer[3:],16)): #if it's smaller than the buffer, then it's above it and safe 
                     aux = aux + addVarOver(instruction, function, offset, buffer, fnname)
 
     return aux
@@ -191,85 +201,90 @@ def identifyGetsWrittenVariables(instruction, function):
     
     return found
 
-
-def identifyFgetsWrittenVariables(instruction, function):
+def detectVariableOverflow(instruction, function):
     
-    found = []
-    
-    buffer = str(register["rdi"])
-    address = buffer[3:]
-    intOffset = int(address,16)
-    
-    size = register["rsi"]
-    
-    comparator = intOffset + size
-    
-    found = findVariables(instruction, function, comparator, "fgets")
-    
-    return found
-
-
-def identifyStrcpyWrittenVariables(instruction, function):
-    
-    found = []
+    result = []
     
     dstBuffer = str(register["rdi"])
     dstAddress = dstBuffer[3:]
-    dstIntOffset = int(dstAddress,16)
+    intOffset = int(dstAddress,16)
     
-    srcBuffer = str(register["rsi"])
-    srcFill = memory[srcBuffer]["value"]
+    if instruction["args"]["fnname"] == "<gets@plt>":
+        result = result + identifyGetsWrittenVariables(instruction, function)
+        
+    elif instruction["args"]["fnname"] == "<fgets@plt>":
+        if detectFgetsVuln(instruction, function):
+            
+            size = register["rsi"]
+            
+            comparator = intOffset + size
+            result = result + findVariables(instruction, function, comparator, "fgets")
+                       
+    elif instruction["args"]["fnname"] == "<strcpy@plt>":
+        if detectStrcpyVuln(instruction, function):
+            
+            srcBuffer = str(register["rsi"])
+            srcFill = memory[srcBuffer]["value"]
+            
+            comparator = intOffset + srcFill
+            
+            result = result + findVariables(instruction, function, comparator, "strcpy")
     
-    comparator = dstIntOffset + srcFill
+    elif instruction["args"]["fnname"] == "<strncpy@plt>":
+        if detectStrncpyVuln(instruction, function):
+                   
+            sizeToCpy = register["rdx"]
+                 
+            comparator = intOffset + sizeToCpy
+            
+            result = result + findVariables(instruction, function, comparator, "strncpy")
     
-    found = findVariables(instruction, function, comparator, "strcpy")
+    elif instruction["args"]["fnname"] == "<strcat@plt>":
+        if detectStrcatVuln(instruction, function):
+            
+            dstBufferContent = memory[dstBuffer]["value"]
+            
+            srcBuffer = str(register["rsi"])
+            srcBufferContent = memory[srcBuffer]["value"]
+            
+            totalContent = (dstBufferContent-1) + srcBufferContent
+            
+            comparator = intOffset + totalContent
+            
+            result = result + findVariables(instruction, function, comparator, "strcat")
+                
+    elif instruction["args"]["fnname"] == "<strncat@plt>":
+        if detectStrncatVuln(instruction, function):
+            
+            destBufferContent = memory[dstBuffer]["value"]
+            destBufferSize = memory[dstBuffer]["bytes"]
 
-    return found
+            size = register["rdx"]
+
+            totalContent = (destBufferContent - 1) + size + 1
+            
+            comparator = destBufferSize + totalContent
+            
+            result = result + findVariables(instruction, function, comparator, "strncat")
+        
+    return result
 
 
-def identifyStrncpyWrittenVariables(instruction, function):
+def isStackCorrupted(instruction, function, comparator, fnname):
     
-    found = []
+    #The offset that begins to be considered is rbp+0x10, if it's main or f1 
+    #which is 16, converted to int
+    outOfBounds = 16
     
-    dstBuffer = str(register["rdi"])
-    dstAddress = dstBuffer[3:]
-    dstIntOffset = int(dstAddress,16)
+    aux = []
     
-    sizeToCpy = register["rdx"]
-         
-    comparator = dstIntOffset + sizeToCpy
+    if (comparator > outOfBounds):
+        aux = aux + addStackCorruption(instruction, function, fnname) 
     
-    found = findVariables(instruction, function, comparator, "strncpy")
-    
-    return found
+    return aux
 
 
-def identifyStrcatWrittenVariables(instruction, function):
-    
-    found = []
-    
-    dstBuffer = str(register["rdi"])
-    dstAddress = dstBuffer[3:]
-    dstIntOffset = int(dstAddress,16)
-    dstBufferContent = memory[dstBuffer]["value"]
-    
-    srcBuffer = str(register["rsi"])
-    srcBufferContent = memory[srcBuffer]["value"]
-    
-    
-    #Bytes written in destination buffer minus \0 plus
-    #Bytes written in source buffer minus \0 plus
-    #\0 to end the string
-    totalContent = (dstBufferContent-1) + (srcBufferContent-1) + 1
-    
-    comparator = dstIntOffset + totalContent
-    
-    found = findVariables(instruction, function, comparator, "strcat")
-    
-    return found
-
-
-def identifyStrncatWrittenVariables(instruction, function):
+def identifyStrncatStackCorruption(instruction, function):
     
     found = []
     
@@ -286,40 +301,87 @@ def identifyStrncatWrittenVariables(instruction, function):
     
     comparator = destBufferSize + totalContent
     
-    found = findVariables(instruction, function, comparator, "strncat")
+    found = isStackCorrupted(instruction, function, comparator, "strncat")
     
     return found
 
-
-def detectVariableOverflow(instruction, function):
+def detectStackCorruption(instruction, function):
     
     result = []
     
+    
+    dstBuffer = str(register["rdi"])
+    dstAddress = dstBuffer[3:]
+    intOffset = int(dstAddress,16)
+    
+
     if instruction["args"]["fnname"] == "<gets@plt>":
-        result = result + identifyGetsWrittenVariables(instruction, function)
-        
+        result = result + addStackCorruption(instruction, function, "gets")
+    
+    
     elif instruction["args"]["fnname"] == "<fgets@plt>":
         if detectFgetsVuln(instruction, function):
-           result = result + identifyFgetsWrittenVariables(instruction, function)
-           
+            
+            size = register["rsi"]
+            comparator = intOffset + size
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "fgets")
+            
+            
     elif instruction["args"]["fnname"] == "<strcpy@plt>":
         if detectStrcpyVuln(instruction, function):
-            result = result + identifyStrcpyWrittenVariables(instruction, function)
+            
+            srcBuffer = str(register["rsi"])
+            srcFill = memory[srcBuffer]["value"]
+            
+            comparator = intOffset + srcFill
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "strcpy")       
+            
     
     elif instruction["args"]["fnname"] == "<strncpy@plt>":
         if detectStrncpyVuln(instruction, function):
-            result = result + identifyStrncpyWrittenVariables(instruction, function)
-        
+            
+            sizeToCpy = register["rdx"]
+                 
+            comparator = intOffset + sizeToCpy
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "strncpy")
+            
     
     elif instruction["args"]["fnname"] == "<strcat@plt>":
         if detectStrcatVuln(instruction, function):
-            result = result + identifyStrcatWrittenVariables(instruction, function)
+            
+            dstBufferContent = memory[dstBuffer]["value"]
+            
+            srcBuffer = str(register["rsi"])
+            srcBufferContent = memory[srcBuffer]["value"]
+            
+            totalContent = (dstBufferContent-1) + srcBufferContent
+            
+            comparator = intOffset + totalContent
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "strcat")
+            
     
     elif instruction["args"]["fnname"] == "<strncat@plt>":
         if detectStrncatVuln(instruction, function):
-            result = result + identifyStrncatWrittenVariables(instruction, function)
-        
+            
+            
+            destBufferContent = memory[dstBuffer]["value"]
+            destBufferSize = memory[dstBuffer]["bytes"]
+            
+            size = register["rdx"]
+            
+
+            totalContent = (destBufferContent - 1) + size + 1
+            
+            comparator = destBufferSize + totalContent
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "strncat")
+
     return result
+
 
 
 def isRBPOverflow(bufferOffsetToRBP, bytesToInsert):
@@ -746,7 +808,10 @@ def analyzeCall(instruction, function):
         memory[destAddr]["value"] = dest
 
         vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
-
+        
+        memory[destAddr]["value"] = dest
+        
+        vulnerabilities = vulnerabilities + detectStackCorruption(instruction, function)
 
 def runFunction(program, function):
     
@@ -797,5 +862,5 @@ if __name__ == '__main__':
     
     program = readJson(sys.argv[1])
     runFunction(program, "main")
-    writeJson((sys.argv[1])[:-5], vulnerabilities)
+    #writeJson((sys.argv[1])[:-5], vulnerabilities)
     print("vulnerabilities", vulnerabilities)
