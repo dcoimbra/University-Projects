@@ -159,7 +159,7 @@ def addINVALIDACCSOutput(function, instruction, dangerousFunc):
             "vuln_function": function,
             "address": instruction[address],
             "fnname": dangerousFunc,
-            "overflown_var": memory[str(register["rdi"])]["name"]
+            "overflow_var": memory[str(register["rdi"])]["name"]
     }
  
     
@@ -411,33 +411,32 @@ def detectRBPOverflow(instruction, function):
     return rbpVulnerability
 
 
-def analyzeStrcpy():
+def overflowsRET(destBufferOffset, sizeToCpy):
 
 		#RBP+0x8
 		retAddress = 8
+
+		return destBufferOffset + sizeToCpy > retAddress
+
+
+def strcpyOverflowsRET():
 
 		dstAddress = str(register["rdi"])
 		srcAddress = str(register["rsi"])
 		srcSize = memory[srcAddress]["value"]
 
-		return int(dstAddress[3:], 16) + srcSize >= retAddress
+		return overflowsRET(int(dstAddress[3:], 16), srcSize)
 
 
-def analyzeStrncpy():
-
-		#RBP+0x8
-		retAddress = 8
+def strncpyOverflowsRET():
 
 		dstAddress = str(register["rdi"])
 		sizeToCpy = register["rdx"]
 
-		return int(dstAddress[3:], 16) + sizeToCpy >= retAddress
+		return overflowsRET(int(dstAddress[3:], 16), sizeToCpy)
 
 
-def analyzeStrcat():
-
-		#RBP+0x8
-		retAddress = 8
+def strcatOverflowsRET():
 
 		dstAddress = str(register["rdi"])
 		srcAddress = str(register["rsi"])
@@ -445,29 +444,28 @@ def analyzeStrcat():
 		dstSize = memory[dstAddress]["value"] - 1
 		srcSize = memory[srcAddress]["value"]
 
-		return int(dstAddress[3:], 16) + dstSize + srcSize >= retAddress
+		sizeToCpy = dstSize + srcSize
+
+		return overflowsRET(int(dstAddress[3:], 16), sizeToCpy)
 
 
-def analyzeStrncat():
-
-		#RBP+0x8
-		retAddress = 8
+def strncatOverflowsRET():
 
 		dstAddress = str(register["rdi"])
 		dstSize = memory[dstAddress]["value"] - 1
 		sizeToCpy = str(register["rdx"])
 
-		return int(dstAddress[3:], 16) + dstSize + sizeToCpy + 1 >= retAddress
+		totalSizeToCpy = dstSize + sizeToCpy + 1
 
-def analyzeFgets(instruction, function):
+		return overflowsRET(int(dstAddress[3:], 16), totalSizeToCpy)
 
-		#RBP+0x8
-		retAddress = 8
+
+def fgetsOverflowsRET():
 
 		bufferAddress = str(register["rdi"])
 		srcSize = register["rsi"]
 
-		return detectFgetsVuln(instruction, function) and int(bufferAddress[3:], 16) + srcSize >= retAddress
+		return overflowsRET(int(bufferAddress[3:], 16), srcSize)
 
 
 def detectRETOverflow(instruction, function):
@@ -476,33 +474,25 @@ def detectRETOverflow(instruction, function):
 
 	  dangerousFunc = instruction["args"]["fnname"]
 
-	  if dangerousFunc == "<strcpy@plt>":
-
-	    if detectStrcpyVuln(instruction, function) and analyzeStrcpy():
+	  if dangerousFunc == "<strcpy@plt>" and detectStrcpyVuln(instruction, function) and strcpyOverflowsRET():
 	    	RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcpy"))
 
-	  elif dangerousFunc == "<strncpy@plt>" and detectStrncpyVuln(instruction, function) and analyzeStrncpy():
+	  elif dangerousFunc == "<strncpy@plt>" and detectStrncpyVuln(instruction, function) and strncpyOverflowsRET():
 	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strncpy"))
 
-	  elif dangerousFunc == "<strcat@plt>" and detectStrcatVuln(instruction, function) and analyzeStrcat():
+	  elif dangerousFunc == "<strcat@plt>" and detectStrcatVuln(instruction, function) and strcatOverflowsRET():
 	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcat"))
 
-	  elif dangerousFunc == "<strncat@plt>" and detectStrncatVuln(instruction, function) and analyzeStrncat():
+	  elif dangerousFunc == "<strncat@plt>" and detectStrncatVuln(instruction, function) and strncatOverflowsRET():
 	  	RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strncat"))
 
-	  elif dangerousFunc == "<fgets@plt>":
-
-	    if analyzeFgets(instruction, function):
+	  elif dangerousFunc == "<fgets@plt>" and detectFgetsVuln(instruction, function) and fgetsOverflowsRET(instruction, function):
 	      RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "fgets"))
 
 	  elif dangerousFunc == "<gets@plt>":
 	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "gets"))
 
 	  return RETOverflowVulnerability
-
-
-#def detectINVALIDACCS(instruction, function):
-
 
 
 def addRegisterToRegister(dest, val):
