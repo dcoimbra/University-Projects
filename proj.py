@@ -62,11 +62,21 @@ def detectStrcpyVuln(instruction, function):
 def detectStrncpyVuln(instruction, function):
 
     destAddr = register["rdi"]
+    srcAddr = register["rsi"]
     sizeToCpy = register["rdx"]
     
+    srcWritten = memory[srcAddr]["value"]
+    
     destSize = memory[destAddr]["bytes"]
-       
-    memory[destAddr]["value"] = sizeToCpy
+    
+    #If it's lower, it doesn't have \0, so, in the worst case, we'll
+    #assume the \0 is further away. The size written to the buffer being 1000 is symbolic.
+    if sizeToCpy < srcWritten:
+            memory[destAddr]["value"] = 1000 
+                                             
+    else:
+        memory[destAddr]["value"] = sizeToCpy
+    
     
     return sizeToCpy > destSize
 
