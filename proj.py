@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+
+# Group 2
+# 84708 - David Coimbra
+# 84750 - Nuno Bombico
+# 84842 - Jose Ferrao 
+
 import sys
 import json
 import string
@@ -28,84 +35,102 @@ vulnerabilities = []
 
 def isVulnerable(destBufferSize,valueToInsert):
     
-    destAddr = register["rdi"]
-    dest = memory[destAddr]["value"]
+    destAddr = register["rdi"]["value"]
+    context = register["rdi"]["context"]
     
-    memory[destAddr]["value"] = dest + valueToInsert
+    dest = memory[context][destAddr]["value"]
+    
+    memory[context][destAddr]["value"] = dest + valueToInsert
     
     return valueToInsert > destBufferSize
 
-def detectFgetsVuln(instruction, function):
+def detectFgetsVuln():
 
-    bufferAddress = register["rdi"]
+    bufferAddress = register["rdi"]["value"]
+    context = register["rdi"]["context"]
+
     bytesToGet = register["rsi"]
     
-    bufferSize = memory[bufferAddress]["bytes"]
+    bufferSize = memory[context][bufferAddress]["bytes"]
         
-    memory[bufferAddress]["value"] = bytesToGet
+    memory[context][bufferAddress]["value"] = bytesToGet
         
     return bytesToGet > bufferSize
 
-def detectStrcpyVuln(instruction, function):
+def detectStrcpyVuln():
 
-    dest = register["rdi"]
-    src = register["rsi"]
-
-    destSize = memory[dest]["bytes"]
-    srcSize = memory[src]["value"]
+    dest = register["rdi"]["value"]
+    destContext = register["rdi"]["context"]
     
-    memory[dest]["value"] = srcSize
+    src = register["rsi"]["value"]
+    srcContext = register["rsi"]["context"]
+
+    destSize = memory[destContext][dest]["bytes"]
+    srcSize = memory[srcContext][src]["value"]
+    
+    memory[destContext][dest]["value"] = srcSize
         
     return destSize < srcSize
 
 
-def detectStrncpyVuln(instruction, function):
+def detectStrncpyVuln():
 
-    destAddr = register["rdi"]
-    srcAddr = register["rsi"]
+    destAddr = register["rdi"]["value"]
+    destContext = register["rdi"]["context"]
+
+    srcAddr = register["rsi"]["value"]
+    srcContext = register["rsi"]["context"]
+
     sizeToCpy = register["rdx"]
+
+    srcWritten = memory[srcContext][srcAddr]["value"]
     
-    srcWritten = memory[srcAddr]["value"]
-    
-    destSize = memory[destAddr]["bytes"]
-    
+    destSize = memory[destContext][destAddr]["bytes"]
+
+    memory[destContext][destAddr]["value"] = sizeToCpy
+
+
     #If it's lower, it doesn't have \0, so, in the worst case, we'll
     #assume the \0 is further away. The size written to the buffer being 1000 is symbolic.
     if sizeToCpy < srcWritten:
-            memory[destAddr]["value"] = 1000 
+            memory[destContext][destAddr]["value"] = 1000 
                                              
     else:
-        memory[destAddr]["value"] = sizeToCpy
+        memory[destContext][destAddr]["value"] = sizeToCpy
     
     
     return sizeToCpy > destSize
 
     
-def detectStrcatVuln(instruction, function):
+def detectStrcatVuln():
         
-    destAddr = register["rdi"]
-    srcAddr = register["rsi"]
+    destAddr = register["rdi"]["value"]
+    destContext = register["rdi"]["context"]
+
+    srcAddr = register["rsi"]["value"]
+    srcContext = register["rsi"]["context"]
     
-    dest = memory[destAddr]["value"]
-    src = memory[srcAddr]["value"]
+    dest = memory[destContext][destAddr]["value"]
+    src = memory[srcContext][srcAddr]["value"]
     
-    destBufferSize = memory[destAddr]["bytes"]
+    destBufferSize = memory[destContext][destAddr]["bytes"]
  
     #Bytes written in destination buffer minus \0 plus
-    #Bytes written in source buffer minus \0 plus
-    #\0 to end the string
-    resultingBytes = (dest-1) + (src-1) + 1
+    #Bytes written in source buffer. The \0 is inside the src buffer
+    resultingBytes = (dest-1) + src
     
     return isVulnerable(destBufferSize,resultingBytes)
 
 
-def detectStrncatVuln(instruction, function):
+def detectStrncatVuln():
     
-    destAddr = register["rdi"]
+    destAddr = register["rdi"]["value"]
+    context = register["rdi"]["context"]
+
     size = register["rdx"]
     
-    dest = memory[destAddr]["value"]
-    destBufferSize = memory[destAddr]["bytes"]
+    dest = memory[context][destAddr]["value"]
+    destBufferSize = memory[context][destAddr]["bytes"]
     
     #Bytes written in destination buffer minus \0 plus
     #Bytes in source buffer that are going to be concatenated plus
@@ -117,24 +142,22 @@ def detectStrncatVuln(instruction, function):
     
 
 def addVarOver(instruction, function, offset, buffer, fnname):
-    
-    print("instruction", instruction)
-    
+        
     return [{
             "fnname": fnname,
             "vuln_function": function,
-            "overflown_var": memory[offset]["name"],
+            "overflown_var": memory[function][offset]["name"],
             "vulnerability": "VAROVERFLOW",
-            "overflow_var": memory[buffer]["name"],
+            "overflow_var": memory[function][buffer]["name"],
             "address": instruction["address"]
             }]
 
 
-def addRBPOverflow(instruction, function, buffer, fnname):
+def addRBPOverflow(instruction, function, buffer, context, fnname):
     
     return [{
             "vulnerability": "RBPOVERFLOW",
-            "overflow_var": memory[buffer]["name"],
+            "overflow_var": memory[context][buffer]["name"],
             "vuln_function": function,
             "address": instruction["address"],
             "fnname": fnname
@@ -148,7 +171,7 @@ def addRETOverflowOutput(function, instruction, dangerousFunc):
             "vuln_function": function,
             "address": instruction["address"],
             "fnname": dangerousFunc,
-            "overflow_var": memory[str(register["rdi"])]["name"]
+            "overflow_var": memory[register["rdi"]["context"]][str(register["rdi"]["value"])]["name"]
     }
 
 
@@ -157,23 +180,34 @@ def addINVALIDACCSOutput(function, instruction, dangerousFunc):
     return {
             "vulnerability": "INVALIDACCS",
             "vuln_function": function,
-            "address": instruction[address],
+            "address": instruction["address"],
             "fnname": dangerousFunc,
-            "overflow_var": memory[str(register["rdi"])]["name"]
+            "overflow_var": memory[register["rdi"]["context"]][str(register["rdi"]["value"])]["name"]
     }
  
+
+def addStackCorruption(instruction, function, dangerousFunc):
+    
+    return [{
+            "overflow_address": "rbp+0x10",
+            "vulnerability": "SCORRUPTION",
+            "vuln_function": function,
+            "address": instruction["address"],
+            "fnname": dangerousFunc,
+            "overflow_var": memory[register["rdi"]["context"]][str(register["rdi"]["value"])]["name"]      
+            }]
     
 def findVariables(instruction, function, comparator, fnname):
 
     aux = []
     
-    buffer = str(register["rdi"])
+    buffer = str(register["rdi"]["value"])
     
-    for off in memory:
+    for off in memory[function]:
         offset = str(off)
         if "0x" in offset:
             if offset[3:] != buffer[3:]: #to avoid the same offset (same buffer)
-                if (int(offset[3:],16) <= comparator) and (int(offset[3:],16) > int(buffer[3:],16)): #if it's smaller than the buffer, then it's above it and safe 
+                if (int(offset[3:],16) < comparator) and (int(offset[3:],16) > int(buffer[3:],16)): #if it's smaller than the buffer, then it's above it and safe 
                     aux = aux + addVarOver(instruction, function, offset, buffer, fnname)
 
     return aux
@@ -183,18 +217,16 @@ def identifyGetsWrittenVariables(instruction, function):
 
     found = []
     
-    buffer = str(register["rdi"])
+    buffer = str(register["rdi"]["value"])
     address = buffer[4:]
     intOffset = int(address,16)
-    print("buffer :",address)
     
-    for off in memory:
+    for off in memory[function]:
         offset = str(off)
         if "0x" in offset:
             #offsets sao negativos, por isso pode-se ignorar sinal
             auxIntOffset = int(offset[4:],16) 
-            print("auxIntOffer", auxIntOffset)
-            print("intOffset", intOffset)
+
             if(auxIntOffset < intOffset):
                 found = found + addVarOver(instruction, function, offset, buffer, "gets")
         
@@ -202,135 +234,173 @@ def identifyGetsWrittenVariables(instruction, function):
     
     return found
 
-
-def identifyFgetsWrittenVariables(instruction, function):
-    
-    found = []
-    
-    buffer = str(register["rdi"])
-    address = buffer[3:]
-    intOffset = int(address,16)
-    
-    size = register["rsi"]
-    
-    comparator = intOffset + size
-    
-    found = findVariables(instruction, function, comparator, "fgets")
-    
-    return found
-
-
-def identifyStrcpyWrittenVariables(instruction, function):
-    
-    found = []
-    
-    dstBuffer = str(register["rdi"])
-    dstAddress = dstBuffer[3:]
-    dstIntOffset = int(dstAddress,16)
-    
-    srcBuffer = str(register["rsi"])
-    srcFill = memory[srcBuffer]["value"]
-    
-    comparator = dstIntOffset + srcFill
-    
-    found = findVariables(instruction, function, comparator, "strcpy")
-
-    return found
-
-
-def identifyStrncpyWrittenVariables(instruction, function):
-    
-    found = []
-    
-    dstBuffer = str(register["rdi"])
-    dstAddress = dstBuffer[3:]
-    dstIntOffset = int(dstAddress,16)
-    
-    sizeToCpy = register["rdx"]
-         
-    comparator = dstIntOffset + sizeToCpy
-    
-    found = findVariables(instruction, function, comparator, "strncpy")
-    
-    return found
-
-
-def identifyStrcatWrittenVariables(instruction, function):
-    
-    found = []
-    
-    dstBuffer = str(register["rdi"])
-    dstAddress = dstBuffer[3:]
-    dstIntOffset = int(dstAddress,16)
-    dstBufferContent = memory[dstBuffer]["value"]
-    
-    srcBuffer = str(register["rsi"])
-    srcBufferContent = memory[srcBuffer]["value"]
-    
-    
-    #Bytes written in destination buffer minus \0 plus
-    #Bytes written in source buffer minus \0 plus
-    #\0 to end the string
-    totalContent = (dstBufferContent-1) + (srcBufferContent-1) + 1
-    
-    comparator = dstIntOffset + totalContent
-    
-    found = findVariables(instruction, function, comparator, "strcat")
-    
-    return found
-
-
-def identifyStrncatWrittenVariables(instruction, function):
-    
-    found = []
-    
-    destAddr = register["rdi"]
-    destBufferContent = memory[destAddr]["value"]
-    destBufferSize = memory[destAddr]["bytes"]
-    #srcAddr = register["rsi"]
-    size = register["rdx"]
-    
-    #Bytes written in destination buffer minus \0 plus
-    #Bytes in source buffer that are going to be concatenated plus
-    #\0 to end the string
-    totalContent = (destBufferContent - 1) + size + 1
-    
-    comparator = destBufferSize + totalContent
-    
-    found = findVariables(instruction, function, comparator, "strncat")
-    
-    return found
-
-
 def detectVariableOverflow(instruction, function):
     
     result = []
+    
+    dstBuffer = str(register["rdi"]["value"])
+    dstAddress = dstBuffer[3:]
+    intOffset = int(dstAddress,16)
     
     if instruction["args"]["fnname"] == "<gets@plt>":
         result = result + identifyGetsWrittenVariables(instruction, function)
         
     elif instruction["args"]["fnname"] == "<fgets@plt>":
-        if detectFgetsVuln(instruction, function):
-           result = result + identifyFgetsWrittenVariables(instruction, function)
-           
+        if detectFgetsVuln():
+            
+            size = register["rsi"]
+            
+            comparator = intOffset + size
+            result = result + findVariables(instruction, function, comparator, "fgets")
+                       
     elif instruction["args"]["fnname"] == "<strcpy@plt>":
-        if detectStrcpyVuln(instruction, function):
-            result = result + identifyStrcpyWrittenVariables(instruction, function)
+        if detectStrcpyVuln():
+            
+            srcBuffer = str(register["rsi"]["value"])
+            srcContext = register["rsi"]["context"]
+
+            srcFill = memory[srcContext][srcBuffer]["value"]
+            
+            comparator = intOffset + srcFill
+            
+            result = result + findVariables(instruction, function, comparator, "strcpy")
     
     elif instruction["args"]["fnname"] == "<strncpy@plt>":
-        if detectStrncpyVuln(instruction, function):
-            result = result + identifyStrncpyWrittenVariables(instruction, function)
-        
+        if detectStrncpyVuln():
+                   
+            sizeToCpy = register["rdx"]
+                 
+            comparator = intOffset + sizeToCpy
+            
+            result = result + findVariables(instruction, function, comparator, "strncpy")
     
     elif instruction["args"]["fnname"] == "<strcat@plt>":
-        if detectStrcatVuln(instruction, function):
-            result = result + identifyStrcatWrittenVariables(instruction, function)
-    
+        if detectStrcatVuln():
+            
+            dstBufferContent = memory[dstBuffer]["value"]
+            
+            srcBuffer = str(register["rsi"])
+            srcBufferContent = memory[srcBuffer]["value"]
+            
+            totalContent = (dstBufferContent-1) + srcBufferContent
+            
+            comparator = intOffset + totalContent
+            
+            result = result + findVariables(instruction, function, comparator, "strcat")
+                
     elif instruction["args"]["fnname"] == "<strncat@plt>":
-        if detectStrncatVuln(instruction, function):
-            result = result + identifyStrncatWrittenVariables(instruction, function)
+        if detectStrncatVuln():
+            
+            destBufferContent = memory[dstBuffer]["value"]
+            destBufferSize = memory[dstBuffer]["bytes"]
+
+            size = register["rdx"]
+
+            totalContent = (destBufferContent - 1) + size + 1
+            
+            comparator = destBufferSize + totalContent
+            
+            result = result + findVariables(instruction, function, comparator, "strncat")
         
     return result
+
+
+def isStackCorrupted(instruction, function, comparator, fnname):
+    
+    #The offset that begins to be considered is rbp+0x10, if it's main or f1 
+    #which is 16, converted to int
+    outOfBounds = 16
+    
+    aux = []
+    
+    if (comparator > outOfBounds):
+        aux = aux + addStackCorruption(instruction, function, fnname) 
+    
+    return aux
+
+
+def detectStackCorruption(instruction, function):
+    
+    result = []
+    
+    
+    dstBuffer = str(register["rdi"]["value"])
+    dstContext = register["rdi"]["context"]
+
+    dstAddress = dstBuffer[3:]
+    intOffset = int(dstAddress,16)
+    
+
+    if instruction["args"]["fnname"] == "<gets@plt>":
+        result = result + addStackCorruption(instruction, function, "gets")
+    
+    
+    elif instruction["args"]["fnname"] == "<fgets@plt>":
+        if detectFgetsVuln():
+            
+            size = register["rsi"]
+            comparator = intOffset + size
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "fgets")
+            
+            
+    elif instruction["args"]["fnname"] == "<strcpy@plt>":
+        if detectStrcpyVuln():
+            
+            srcBuffer = str(register["rsi"]["value"])
+            srcContext = register["rsi"]["context"]
+
+            srcFill = memory[srcContext][srcBuffer]["value"]
+            
+            comparator = intOffset + srcFill
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "strcpy")       
+            
+    
+    elif instruction["args"]["fnname"] == "<strncpy@plt>":
+        if detectStrncpyVuln():
+            
+            sizeToCpy = register["rdx"]
+                 
+            comparator = intOffset + sizeToCpy
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "strncpy")
+            
+    
+    elif instruction["args"]["fnname"] == "<strcat@plt>":
+        if detectStrcatVuln():
+            
+            dstBufferContent = memory[dstContext][dstBuffer]["value"]
+            
+            srcBuffer = str(register["rsi"]["value"])
+            srcContext = register["rsi"]["context"]
+
+            srcBufferContent = memory[srcContext][srcBuffer]["value"]
+            
+            totalContent = (dstBufferContent-1) + srcBufferContent
+            
+            comparator = intOffset + totalContent
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "strcat")
+            
+    
+    elif instruction["args"]["fnname"] == "<strncat@plt>":
+        if detectStrncatVuln():
+            
+            destBufferContent = memory[dstContext][dstBuffer]["value"]
+            destBufferSize = memory[dstContext][dstBuffer]["bytes"]
+            
+            size = register["rdx"]
+            
+
+            totalContent = (destBufferContent - 1) + size + 1
+            
+            comparator = destBufferSize + totalContent
+            
+            result = result + isStackCorrupted(instruction, function, comparator, "strncat")
+
+    return result
+
 
 
 def isRBPOverflow(bufferOffsetToRBP, bytesToInsert):
@@ -341,178 +411,190 @@ def detectRBPOverflow(instruction, function):
 
     rbpVulnerability = []
 
-    destBuffer = str(register["rdi"])
+    destBuffer = str(register["rdi"]["value"])
+    destContext = register["rdi"]["context"]
 
     dangerousFunc = instruction["args"]["fnname"]
 
     if dangerousFunc == "<gets@plt>":
         
-        vuln = addRBPOverflow(instruction, function, destBuffer, "gets")
+        vuln = addRBPOverflow(instruction, function, destBuffer, destContext, "gets")
         rbpVulnerability = rbpVulnerability + vuln
 
     elif dangerousFunc == "<fgets@plt>":
 
-        if detectFgetsVuln(instruction, function):
+        if detectFgetsVuln():
             
             bytesToCopy = register["rsi"]
             
             if isRBPOverflow(int(destBuffer[3:], 16), bytesToCopy):
                 
-                vuln = addRBPOverflow(instruction, function, destBuffer, "fgets")
+                vuln = addRBPOverflow(instruction, function, destBuffer, destContext, "fgets")
                 rbpVulnerability = rbpVulnerability + vuln
 
     elif dangerousFunc == "<strcpy@plt>":
 
-        if detectStrcpyVuln(instruction, function):
+        if detectStrcpyVuln():
             
-            src = str(register["rsi"])
-            srcSize = memory[src]["value"]
+            src = str(register["rsi"]["value"])
+            srcContext = register["rsi"]["context"]
+            srcSize = memory[srcContext][src]["value"]
 
             if isRBPOverflow(int(destBuffer[3:], 16), srcSize):
                 
-                vuln = addRBPOverflow(instruction, function, destBuffer, "strcpy")
+                vuln = addRBPOverflow(instruction, function, destBuffer, destContext, "strcpy")
                 rbpVulnerability = rbpVulnerability + vuln
 
     elif dangerousFunc == "<strcat@plt>":
 
-        if detectStrcatVuln(instruction, function):
+        if detectStrcatVuln():
 
-            destSize = memory[destBuffer]["value"]
+            destSize = memory[function][destBuffer]["value"]
 
-            src = str(register["rsi"])
-            srcSize = memory[src]["value"]
+            src = str(register["rsi"]["value"])
+            srcContext = register["rsi"]["context"]
+
+            srcSize = memory[srcContext][src]["value"]
 
             resultingBytes = (destSize - 1) + srcSize + 1
 
             if isRBPOverflow(int(destBuffer[3:], 16), resultingBytes):
-                vuln = addRBPOverflow(instruction, function, destBuffer, "strcat")
+                vuln = addRBPOverflow(instruction, function, destBuffer, destContext, "strcat")
                 rbpVulnerability = rbpVulnerability + vuln
 
     elif dangerousFunc == "<strncat@plt>":
 
-        if detectStrncatVuln(instruction, function):
+        if detectStrncatVuln():
 
             nBytesToCopy = register["rdx"]
             
             if isRBPOverflow(int(destBuffer[3:], 16), resultingBytes):
-                vuln = addRBPOverflow(instruction, function, destBuffer, "strncat")
+                vuln = addRBPOverflow(instruction, function, destBuffer, destContext, "strncat")
                 rbpVulnerability = rbpVulnerability + vuln
 
     elif dangerousFunc == "<strncpy@plt>":
 
-        if detectStrncpyVuln(instruction, function):
+        if detectStrncpyVuln():
 
             nBytesToCopy = register["rdx"]
             
             if isRBPOverflow(int(destBuffer[3:], 16), nBytesToCopy):
-                vuln = addRBPOverflow(instruction, function, destBuffer, "strncpy")
+                vuln = addRBPOverflow(instruction, function, destBuffer, destContext, "strncpy")
                 rbpVulnerability = rbpVulnerability + vuln
 
     return rbpVulnerability
 
 
 def overflowsRET(destBufferOffset, sizeToCpy):
+    
+    #RBP+0x8
+    retAddress = 8
 
-		#RBP+0x8
-		retAddress = 8
-
-		return destBufferOffset + sizeToCpy > retAddress
+    return destBufferOffset + sizeToCpy > retAddress
 
 
 def strcpyOverflowsRET():
 
-		dstAddress = str(register["rdi"])
-		srcAddress = str(register["rsi"])
-		srcSize = memory[srcAddress]["value"]
+    dstAddress = str(register["rdi"]["value"])
+    srcAddress = str(register["rsi"]["value"])
 
-		return overflowsRET(int(dstAddress[3:], 16), srcSize)
+    srcContext = register["rsi"]["context"]
+    srcSize = memory[srcContext][srcAddress]["value"]
+
+    return overflowsRET(int(dstAddress[3:], 16), srcSize)
 
 
 def strncpyOverflowsRET():
 
-		dstAddress = str(register["rdi"])
-		sizeToCpy = register["rdx"]
+    dstAddress = str(register["rdi"]["value"])
+    sizeToCpy = register["rdx"]
 
-		return overflowsRET(int(dstAddress[3:], 16), sizeToCpy)
+    return overflowsRET(int(dstAddress[3:], 16), sizeToCpy)
 
 
 def strcatOverflowsRET():
 
-		dstAddress = str(register["rdi"])
-		srcAddress = str(register["rsi"])
+    dstAddress = str(register["rdi"]["value"])
+    dstContext = register["rdi"]["context"]
 
-		dstSize = memory[dstAddress]["value"] - 1
-		srcSize = memory[srcAddress]["value"]
+    srcAddress = str(register["rsi"]["value"])
+    srcContext = register["rsi"]["context"]
 
-		sizeToCpy = dstSize + srcSize
+    dstSize = memory[dstContext][dstAddress]["value"] - 1
+    srcSize = memory[srcContext][srcAddress]["value"]
 
-		return overflowsRET(int(dstAddress[3:], 16), sizeToCpy)
+    sizeToCpy = dstSize + srcSize
+
+    return overflowsRET(int(dstAddress[3:], 16), sizeToCpy)
 
 
 def strncatOverflowsRET():
 
-		dstAddress = str(register["rdi"])
-		dstSize = memory[dstAddress]["value"] - 1
-		sizeToCpy = str(register["rdx"])
+    dstAddress = str(register["rdi"]["value"])
+    dstContext = register["rdi"]["context"]
 
-		totalSizeToCpy = dstSize + sizeToCpy + 1
+    dstSize = memory[dstContext][dstAddress]["value"] - 1
+    sizeToCpy = str(register["rdx"])
 
-		return overflowsRET(int(dstAddress[3:], 16), totalSizeToCpy)
+    totalSizeToCpy = dstSize + sizeToCpy + 1
+
+    return overflowsRET(int(dstAddress[3:], 16), totalSizeToCpy)
 
 
 def fgetsOverflowsRET():
 
-		bufferAddress = str(register["rdi"])
-		srcSize = register["rsi"]
+    bufferAddress = str(register["rdi"]["value"])
 
-		return overflowsRET(int(bufferAddress[3:], 16), srcSize)
+    srcSize = register["rsi"]
+
+    return overflowsRET(int(bufferAddress[3:], 16), srcSize)
 
 
 def detectRETOverflow(instruction, function):
 
-	  RETOverflowVulnerability = []
+    RETOverflowVulnerability = []
 
-	  dangerousFunc = instruction["args"]["fnname"]
+    dangerousFunc = instruction["args"]["fnname"]
 
-	  if dangerousFunc == "<strcpy@plt>" and detectStrcpyVuln(instruction, function) and strcpyOverflowsRET():
-	    	RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcpy"))
+    if dangerousFunc == "<strcpy@plt>" and detectStrcpyVuln() and strcpyOverflowsRET():
+    		RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcpy"))
 
-	  elif dangerousFunc == "<strncpy@plt>" and detectStrncpyVuln(instruction, function) and strncpyOverflowsRET():
-	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strncpy"))
+    elif dangerousFunc == "<strncpy@plt>" and detectStrncpyVuln() and strncpyOverflowsRET():
+    		RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strncpy"))
 
-	  elif dangerousFunc == "<strcat@plt>" and detectStrcatVuln(instruction, function) and strcatOverflowsRET():
-	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcat"))
+    elif dangerousFunc == "<strcat@plt>" and detectStrcatVuln() and strcatOverflowsRET():
+    		RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strcat"))
 
-	  elif dangerousFunc == "<strncat@plt>" and detectStrncatVuln(instruction, function) and strncatOverflowsRET():
-	  	RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strncat"))
+    elif dangerousFunc == "<strncat@plt>" and detectStrncatVuln() and strncatOverflowsRET():
+    		RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "strncat"))
 
-	  elif dangerousFunc == "<fgets@plt>" and detectFgetsVuln(instruction, function) and fgetsOverflowsRET(instruction, function):
-	      RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "fgets"))
+    elif dangerousFunc == "<fgets@plt>" and detectFgetsVuln() and fgetsOverflowsRET():
+    		RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "fgets"))
 
-	  elif dangerousFunc == "<gets@plt>":
-	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "gets"))
+    elif dangerousFunc == "<gets@plt>":
+        RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "gets"))
 
-	  return RETOverflowVulnerability
+    return RETOverflowVulnerability
 
 
 def addRegisterToRegister(dest, val):
     register[dest] = register[dest] + register[val]
 
 
-def addRegisterToPointer(dest, val):
-    memory[val[11:-1]]['value'] = memory[val[11:-1]]['value'] + register[val]  
+def addRegisterToPointer(dest, val, function):
+    memory[function][val[11:-1]]['value'] = memory[function][val[11:-1]]['value'] + register[val]  
 
 
-def addPointerToRegister(dest, val):
+def addPointerToRegister(dest, val, function):
     if "rip" in val:
         register[dest] = "stdin"
         return
     
-    register[dest] = register[dest] + memory[val[11:-1]]['value']
+    register[dest] = register[dest] + memory[function][val[11:-1]]['value']
 
 
-def addNumToPointer(dest, val):
-    memory[dest[11:-1]]['value'] = memory[dest[11:-1]]['value'] + int(val,16)
+def addNumToPointer(dest, val, function):
+    memory[function][dest[11:-1]]['value'] = memory[function][dest[11:-1]]['value'] + int(val,16)
 
 
 def addNumToRegister(dest, val):   
@@ -527,43 +609,53 @@ def subRegisterToRegister(dest, val):
     register[dest] = register[dest] - register[val]
 
 
-def subRegisterToPointer(dest, val):
-    memory[val[11:-1]]['value'] = memory[val[11:-1]]['value'] - register[val]  
+def subRegisterToPointer(dest, val, function):
+    memory[function][val[11:-1]]['value'] = memory[function][val[11:-1]]['value'] - register[val]  
 
 
-def subPointerToRegister(dest, val):
+def subPointerToRegister(dest, val, function):
     if "rip" in val:
         register[dest] = "stdin"
         return
     
-    register[dest] = register[dest] - memory[val[11:-1]]['value']
+    register[dest] = register[dest] - memory[function][val[11:-1]]['value']
 
 
-def subNumToPointer(dest, val):
-    memory[dest[11:-1]]['value'] = memory[dest[11:-1]]['value'] - int(val,16)
+def subNumToPointer(dest, val, function):
+    memory[function][dest[11:-1]]['value'] = memory[function][dest[11:-1]]['value'] - int(val,16)
     
 
 def movRegisterToRegister(dest, val):
     register[dest] = register[val]
 
 
-def movRegisterToPointer(dest, val):
-    memory[val[11:-1]]['value'] = register[val]  
+def movRegisterToPointer(dest, val, function):
+
+    if dest[11:-1] not in memory[function]:
+        
+        var = { dest[11:-1]: { "value": register[val]["value"], "context": register[val]["context"] } }
+
+        memory[function].update(var)
+    else:
+        memory[function][dest[11:-1]]['value'] = register[val]  
 
 
-def movPointerToRegister(dest, val):
+def movPointerToRegister(dest, val, function):
     if "rip" in val:
         register[dest] = "stdin"
         return
+
+    var = { "context": memory[function][val[11:-1]]['context'], "value": memory[function][val[11:-1]]['value'] }
     
-    register[dest] = memory[val[11:-1]]['value']
+    register[dest] = var
 
 
-def movNumToPointer(dest, val):
-    memory[dest[11:-1]]['value'] = int(val,16)
+def movNumToPointer(dest, val, function):
+    memory[function][dest[11:-1]]['value'] = int(val,16)
  
    
-def movNumToRegister(dest, val):   
+def movNumToRegister(dest, val): 
+
     register[dest] = int(val,16)
 
 
@@ -573,13 +665,16 @@ def isNumber(val):
 
 def initializeLocalVariables(program, function):
 
-    for var in program[function]["variables"]: 
-        memory[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"] }
+    aux = {}
+
+    for var in program[function]["variables"]:
+
+        aux[var["address"]] = {"name": var["name"], "value": 0, "type": var["type"], "bytes": var["bytes"] }
+
+    memory[function] = aux
 
 
-def mov(destination, value):
-
-    print("mov", destination, value)
+def mov(destination, value, function):
     
     if destination == "esi":
         destination = "rsi" #esi = rsi
@@ -591,25 +686,23 @@ def mov(destination, value):
         destination = "rdx" #edx = rdx
         
     if (destination in register.keys()) and (value in register.keys()):
-        movRegisterToRegister(destination,value)
+        movRegisterToRegister(destination, value)
                 
     elif (destination in register.keys()) and (isNumber(value)):
-        movNumToRegister(destination,value)
+        movNumToRegister(destination, value)
     
     elif (destination in register.keys()) and ("PTR" in value):
-        movPointerToRegister(destination,value)
+        movPointerToRegister(destination,value,function)
     
     elif ("PTR" in destination) and (value in register.keys()):
-        movRegisterToPointer(destination,value)
+        movRegisterToPointer(destination,value,function)
         
     elif ("PTR" in destination) and (isNumber(value)):
-        movNumToPointer(destination,value)
+        movNumToPointer(destination,value, function)
 
 
-def add(destination, value):
+def add(destination, value, function):
     
-    print("add", destination, value)
-
     if destination == "esi":
         destination = "rsi" #esi = rsi
 
@@ -626,18 +719,16 @@ def add(destination, value):
         addNumToRegister(destination,value)
     
     elif (destination in register.keys()) and ("PTR" in value):
-        addPointerToRegister(destination,value)
+        addPointerToRegister(destination,value,function)
     
     elif ("PTR" in destination) and (value in register.keys()):
-        addRegisterToPointer(destination,value)
+        addRegisterToPointer(destination,value,function)
         
     elif ("PTR" in destination) and (isNumber(value)):
-        addNumToPointer(destination,value)
+        addNumToPointer(destination,value,function)
 
 
-def sub(destination, value):
-
-    print("sub", destination, value)
+def sub(destination, value, function):
     
     if destination == "esi":
         destination = "rsi" #esi = rsi
@@ -655,102 +746,104 @@ def sub(destination, value):
         subNumToRegister(destination,value)
     
     elif (destination in register.keys()) and ("PTR" in value):
-        subPointerToRegister(destination,value)
+        subPointerToRegister(destination,value,function)
     
     elif ("PTR" in destination) and (value in register.keys()):
-        subRegisterToPointer(destination,value)
+        subRegisterToPointer(destination,value,function)
         
     elif ("PTR" in destination) and (isNumber(value)):
-        subNumToPointer(destination,value)
+        subNumToPointer(destination,value,function)
 
 
-def lea(destination, value):
+def lea(destination, value, function):
 
-    print("lea", destination, value)
-
-    register[destination] = value[1:-1]
+    register[destination] = { "context": function, "value": value[1:-1] }
 
 
-def push(value):
-
-    print("push", value)
+def push(value, function):
 
     subNumToRegister("rsp", "0x8")
 
-    memory[register["rsp"]] = { "value": register[value] }
+    memory[function][register["rsp"]] = { "value": register[value] }
 
 
-def leave():
-
-    print("leave")
+def leave(function):
 
     movRegisterToRegister("rsp", "rbp")
     
-    register["rbp"] = memory[register["rsp"]]["value"]
-    memory.pop(register["rsp"], None)
+    register["rbp"] = memory[function][register["rsp"]]["value"]
+    memory[function].pop(register["rsp"], None)
 
 
-def runInstruction(instr):
+def runInstruction(instr, function):
         
     if instr['op'] == "mov":
         
         destination = instr['args']['dest']
         value = instr['args']['value']
         
-        mov(destination, value)
+        mov(destination, value, function)
     
     elif instr['op'] == "add":
         
         destination = instr['args']['dest']
         value = instr['args']['value']
         
-        add(destination, value)
+        add(destination, value, function)
 
     elif instr['op'] == "sub":
         
         destination = instr['args']['dest']
         value = instr['args']['value']
         
-        sub(destination, value)
+        sub(destination, value, function)
 
     elif instr['op'] == "lea":
         
         destination = instr['args']['dest']
         value = instr['args']['value']
 
-        lea(destination, value)
+        lea(destination, value, function)
 
     elif instr['op'] == "push":
         
         value = instr["args"]["value"]
-        push(value)
+        push(value, function)
 
     elif instr["op"] == "leave":
-        leave()
+        leave(function)
 
 
-def analyzeCall(instruction, function):
+def analyzeCall(program, instruction, function):
 
     global vulnerabilities
-
-    print("call", instruction["args"]["fnname"])
 
     dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
 
     if instruction["args"]["fnname"] in dangerousFunctions:        
 
-        destAddr = register["rdi"]
-        dest = memory[destAddr]["value"]
+        destAddr = register["rdi"]["value"]
+        context = register["rdi"]["context"]
+
+        dest = memory[context][destAddr]["value"]
 
         vulnerabilities = vulnerabilities + detectRETOverflow(instruction, function)
 
-        memory[destAddr]["value"] = dest
+        memory[context][destAddr]["value"] = dest
         
         vulnerabilities = vulnerabilities + detectRBPOverflow(instruction, function)
 
-        memory[destAddr]["value"] = dest
+        memory[context][destAddr]["value"] = dest
 
         vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
+        
+        memory[context][destAddr]["value"]
+        
+        vulnerabilities = vulnerabilities + detectStackCorruption(instruction, function)
+
+    else:
+        runFunction(program, (instruction["args"]["fnname"])[1:-1])
+    
 
 
 def runFunction(program, function):
@@ -760,24 +853,19 @@ def runFunction(program, function):
     for instr in program[function]["instructions"]:
 
         if instr['op'] == "nop":
-            print("nop")
             continue
         
         elif instr['op'] == "call":
-            analyzeCall(instr, function)
+            analyzeCall(program, instr, function)
 
         elif instr['op'] == "ret":
-            print("ret")
             return
 
-        runInstruction(instr)
-
-        print(memory)
-        print(register, "\n")
+        runInstruction(instr, function)
 
 
 def writeJson(progName, vulnerabilities):
-    f = open("%s.outputpersonal.json" % progName, 'w+')
+    f = open("%s.output.json" % progName, 'w+')
     f.write(json.dumps(vulnerabilities, indent=4, separators=(',', ': ')))
     f.close()
 
@@ -802,5 +890,6 @@ if __name__ == '__main__':
     
     program = readJson(sys.argv[1])
     runFunction(program, "main")
-    writeJson((sys.argv[1])[:-5], vulnerabilities)
-    print("vulnerabilities", vulnerabilities)
+    #writeJson((sys.argv[1])[:-5], vulnerabilities)
+
+    print(vulnerabilities)
