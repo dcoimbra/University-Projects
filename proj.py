@@ -847,7 +847,7 @@ def analyzeCall(program, instruction, function):
 
         vulnerabilities = vulnerabilities + detectVariableOverflow(instruction, function)
         
-        memory[context][destAddr]["value"]
+        memory[context][destAddr]["value"] = dest
         
         vulnerabilities = vulnerabilities + detectStackCorruption(instruction, function)
 
