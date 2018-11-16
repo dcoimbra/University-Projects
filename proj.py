@@ -890,6 +890,4 @@ if __name__ == '__main__':
     
     program = readJson(sys.argv[1])
     runFunction(program, "main")
-    #writeJson((sys.argv[1])[:-5], vulnerabilities)
-
-    print(vulnerabilities)
+    writeJson((sys.argv[1])[:-5], vulnerabilities)
