@@ -150,6 +150,17 @@ def addRETOverflowOutput(function, instruction, dangerousFunc):
             "fnname": dangerousFunc,
             "overflow_var": memory[str(register["rdi"])]["name"]
     }
+
+
+def addINVALIDACCSOutput(function, instruction, dangerousFunc):
+
+    return {
+            "vulnerability": "INVALIDACCS",
+            "vuln_function": function,
+            "address": instruction[address],
+            "fnname": dangerousFunc,
+            "overflown_var": memory[str(register["rdi"])]["name"]
+    }
  
     
 def findVariables(instruction, function, comparator, fnname):
@@ -434,7 +445,7 @@ def analyzeStrcat():
 		dstSize = memory[dstAddress]["value"] - 1
 		srcSize = memory[srcAddress]["value"]
 
-		return int(dstAddress[3:], 16) + dstSize + srcSize + 1 >= retAddress
+		return int(dstAddress[3:], 16) + dstSize + srcSize >= retAddress
 
 
 def analyzeStrncat():
@@ -488,6 +499,10 @@ def detectRETOverflow(instruction, function):
 	    RETOverflowVulnerability.append(addRETOverflowOutput(function, instruction, "gets"))
 
 	  return RETOverflowVulnerability
+
+
+#def detectINVALIDACCS(instruction, function):
+
 
 
 def addRegisterToRegister(dest, val):
