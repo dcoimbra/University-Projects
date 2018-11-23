@@ -9,6 +9,7 @@ import sys
 import json
 import string
 
+# Estrutura que representa os registos
 register = {
     "rdi": 0,
     "rsi": 0,
@@ -29,10 +30,18 @@ register = {
     "rip": 0
 }
 
-memory = {}
+
+# Structure that represents memory at a certain point in time
+# Each variable has a context (a function) and the following fields 
+# bytes: total allocated size
+# value: bytes effectively written in memory for a buffer, or the actual value for a variable
+# name: variable name
+memory = {}  
 
 vulnerabilities = []
 
+# Determines if the value inserted in a buffer overflows its limit
+# Implicitly updates the "value" field of the buffer with its new size
 def isVulnerable(destBufferSize,valueToInsert):
     
     destAddr = register["rdi"]["value"]
@@ -44,6 +53,8 @@ def isVulnerable(destBufferSize,valueToInsert):
     
     return valueToInsert > destBufferSize
 
+# Determines if a call to fgets results in a potential vulnerability
+# Implicitly updates structures as if fgets were executed
 def detectFgetsVuln():
 
     bufferAddress = register["rdi"]["value"]
@@ -57,6 +68,8 @@ def detectFgetsVuln():
         
     return bytesToGet > bufferSize
 
+# Determines if a call to strcpy results in a potential vulnerability
+# Implicitly updates structures as if strcpy were executed
 def detectStrcpyVuln():
 
     dest = register["rdi"]["value"]
@@ -72,7 +85,8 @@ def detectStrcpyVuln():
         
     return destSize < srcSize
 
-
+# Determines if a call to strncpy results in a potential vulnerability
+# Implicitly updates structures as if strncpy were executed
 def detectStrncpyVuln():
 
     destAddr = register["rdi"]["value"]
@@ -101,7 +115,8 @@ def detectStrncpyVuln():
     
     return sizeToCpy > destSize
 
-    
+# Determines if a call to strcat results in a potential vulnerability
+# Implicitly updates structures as if strcat were executed
 def detectStrcatVuln():
         
     destAddr = register["rdi"]["value"]
@@ -121,7 +136,8 @@ def detectStrcatVuln():
     
     return isVulnerable(destBufferSize,resultingBytes)
 
-
+# Determines if a call to strncat results in a potential vulnerability
+# Implicitly updates structures as if strcat were executed
 def detectStrncatVuln():
     
     destAddr = register["rdi"]["value"]
@@ -140,7 +156,7 @@ def detectStrncatVuln():
     
     return isVulnerable(destBufferSize,resultingBytes)
     
-
+# Outputs a variable overflow vulnerability to the overall vulnerabilities list
 def addVarOver(instruction, function, offset, buffer, fnname):
         
     return [{
@@ -152,7 +168,7 @@ def addVarOver(instruction, function, offset, buffer, fnname):
             "address": instruction["address"]
             }]
 
-
+# Outputs a RBP overflow vulnerability to the overall vulnerabilities list
 def addRBPOverflow(instruction, function, buffer, context, fnname):
     
     return [{
@@ -163,7 +179,7 @@ def addRBPOverflow(instruction, function, buffer, context, fnname):
             "fnname": fnname
             }]
 
-
+# Outputs a RET overflow vulnerability to the overall vulnerabilities list
 def addRETOverflowOutput(function, instruction, dangerousFunc):
 
     return {
@@ -174,18 +190,7 @@ def addRETOverflowOutput(function, instruction, dangerousFunc):
             "overflow_var": memory[register["rdi"]["context"]][str(register["rdi"]["value"])]["name"]
     }
 
-
-def addINVALIDACCSOutput(function, instruction, dangerousFunc):
-
-    return {
-            "vulnerability": "INVALIDACCS",
-            "vuln_function": function,
-            "address": instruction["address"],
-            "fnname": dangerousFunc,
-            "overflow_var": memory[register["rdi"]["context"]][str(register["rdi"]["value"])]["name"]
-    }
- 
-
+# Outputs a SCORRUPTION vulnerability to the overall vulnerabilities list
 def addStackCorruption(instruction, function, dangerousFunc):
     
     return [{
@@ -196,7 +201,8 @@ def addStackCorruption(instruction, function, dangerousFunc):
             "fnname": dangerousFunc,
             "overflow_var": memory[register["rdi"]["context"]][str(register["rdi"]["value"])]["name"]      
             }]
-    
+
+# determines which local variables are affected by a buffer overflow    
 def findVariables(instruction, function, comparator, fnname):
 
     aux = []
@@ -212,7 +218,7 @@ def findVariables(instruction, function, comparator, fnname):
 
     return aux
 
-
+# a call to "gets" affects all variables, so this function rounds them all up
 def identifyGetsWrittenVariables(instruction, function):
 
     found = []
@@ -224,7 +230,7 @@ def identifyGetsWrittenVariables(instruction, function):
     for off in memory[function]:
         offset = str(off)
         if "0x" in offset:
-            #offsets sao negativos, por isso pode-se ignorar sinal
+            # negative offsets, so ignore sign
             auxIntOffset = int(offset[4:],16) 
 
             if(auxIntOffset < intOffset):
@@ -234,6 +240,7 @@ def identifyGetsWrittenVariables(instruction, function):
     
     return found
 
+# for each call to a dangerous function, determine if there is a variable overflow
 def detectVariableOverflow(instruction, function):
     
     result = []
@@ -304,7 +311,7 @@ def detectVariableOverflow(instruction, function):
         
     return result
 
-
+# determines if a buffer overflow reaches offset rbp+0x10, corrupting another stack frame
 def isStackCorrupted(instruction, function, comparator, fnname):
     
     #The offset that begins to be considered is rbp+0x10, if it's main or f1 
@@ -318,7 +325,7 @@ def isStackCorrupted(instruction, function, comparator, fnname):
     
     return aux
 
-
+# for each call to a dangerous function, determine if the stack is corrupted
 def detectStackCorruption(instruction, function):
     
     result = []
@@ -402,11 +409,12 @@ def detectStackCorruption(instruction, function):
     return result
 
 
-
+# determines if the value inserted to a buffer overwrites the saved RBP in the same frame
 def isRBPOverflow(bufferOffsetToRBP, bytesToInsert):
     return (bufferOffsetToRBP + bytesToInsert >= 0)
 
-    
+
+# for each call to a dangerous function, determine if there is a RBP overflow
 def detectRBPOverflow(instruction, function):
 
     rbpVulnerability = []
@@ -484,7 +492,7 @@ def detectRBPOverflow(instruction, function):
 
     return rbpVulnerability
 
-
+# determines if the value inserted to a buffer overwrites the saved return address in the same frame
 def overflowsRET(destBufferOffset, sizeToCpy):
     
     #RBP+0x8
@@ -492,7 +500,7 @@ def overflowsRET(destBufferOffset, sizeToCpy):
 
     return destBufferOffset + sizeToCpy > retAddress
 
-
+# determines if a call to strcpy results in a potential overflow of the saved return address
 def strcpyOverflowsRET():
 
     dstAddress = str(register["rdi"]["value"])
@@ -503,7 +511,7 @@ def strcpyOverflowsRET():
 
     return overflowsRET(int(dstAddress[3:], 16), srcSize)
 
-
+# determines if a call to strncpy results in a potential overflow of the saved return address
 def strncpyOverflowsRET():
 
     dstAddress = str(register["rdi"]["value"])
@@ -511,7 +519,7 @@ def strncpyOverflowsRET():
 
     return overflowsRET(int(dstAddress[3:], 16), sizeToCpy)
 
-
+# determines if a call to strcat results in a potential overflow of the saved return address
 def strcatOverflowsRET():
 
     dstAddress = str(register["rdi"]["value"])
@@ -527,7 +535,7 @@ def strcatOverflowsRET():
 
     return overflowsRET(int(dstAddress[3:], 16), sizeToCpy)
 
-
+# determines if a call to strncat results in a potential overflow of the saved return address
 def strncatOverflowsRET():
 
     dstAddress = str(register["rdi"]["value"])
@@ -541,6 +549,7 @@ def strncatOverflowsRET():
     return overflowsRET(int(dstAddress[3:], 16), totalSizeToCpy)
 
 
+# determines if a call to fgets results in a potential overflow of the saved return address
 def fgetsOverflowsRET():
 
     bufferAddress = str(register["rdi"]["value"])
@@ -549,7 +558,7 @@ def fgetsOverflowsRET():
 
     return overflowsRET(int(bufferAddress[3:], 16), srcSize)
 
-
+# for each call to a dangerous function, determine if there is a RET oveflow
 def detectRETOverflow(instruction, function):
 
     RETOverflowVulnerability = []
@@ -576,62 +585,63 @@ def detectRETOverflow(instruction, function):
 
     return RETOverflowVulnerability
 
-
+# executes the assembly "add" instruction from a register to a register
 def addRegisterToRegister(dest, val):
     register[dest] = register[dest] + register[val]
 
-
+# executes the assembly "add" instruction from a register to a memory address
 def addRegisterToPointer(dest, val, function):
     memory[function][val[11:-1]]['value'] = memory[function][val[11:-1]]['value'] + register[val]  
 
 
+# executes the assembly "add" instruction from a memory address to a pointer
 def addPointerToRegister(dest, val, function):
-    if "rip" in val:
-        register[dest] = "stdin"
+    if "rip" in val:  
+        register[dest] = "stdin" #in the context of this project, when the memory address is a fixed value (not relative to rbp), it's always reading from standard input.
         return
     
     register[dest] = register[dest] + memory[function][val[11:-1]]['value']
 
-
+# executes the assembly "add" instruction from an integer value to a memory address
 def addNumToPointer(dest, val, function):
     memory[function][dest[11:-1]]['value'] = memory[function][dest[11:-1]]['value'] + int(val,16)
 
-
+# executes the assembly "add" instruction from an integer value to a register
 def addNumToRegister(dest, val):   
     register[dest] = register[dest] + int(val,16)
 
-
+# executes the assembly "add" instruction from an integer value to a register
 def subNumToRegister(dest, val):   
     register[dest] = register[dest] - int(val,16)
 
-
+# executes the assembly "sub" instruction from a register to a register
 def subRegisterToRegister(dest, val):
     register[dest] = register[dest] - register[val]
 
-
+# executes the assembly "sub" instruction from a register to a memory address
 def subRegisterToPointer(dest, val, function):
     memory[function][val[11:-1]]['value'] = memory[function][val[11:-1]]['value'] - register[val]  
 
-
+# executes the assembly "sub" instruction from a memory address to a register
 def subPointerToRegister(dest, val, function):
     if "rip" in val:
-        register[dest] = "stdin"
+        register[dest] = "stdin" #in the context of this project, when the memory address is a fixed value (not relative to rbp), it's always reading from standard input.
         return
     
     register[dest] = register[dest] - memory[function][val[11:-1]]['value']
 
-
+# executes the assembly "sub" instruction from an integer value to a memory address
 def subNumToPointer(dest, val, function):
     memory[function][dest[11:-1]]['value'] = memory[function][dest[11:-1]]['value'] - int(val,16)
     
-
+# executes the assembly "mov" instruction from a register to a register
 def movRegisterToRegister(dest, val):
     register[dest] = register[val]
 
-
+# executes the assembly "mov" instruction from a register to a memory address
 def movRegisterToPointer(dest, val, function):
 
-    if dest[11:-1] not in memory[function]:
+    if dest[11:-1] not in memory[function]: # if the variable doesn't exist, create it
         
         var = { dest[11:-1]: { "value": register[val]["value"], "context": register[val]["context"] } }
 
@@ -639,30 +649,31 @@ def movRegisterToPointer(dest, val, function):
     else:
         memory[function][dest[11:-1]]['value'] = register[val]  
 
-
+# executes the assembly "mov" instruction from a memory address to a register
 def movPointerToRegister(dest, val, function):
     if "rip" in val:
         register[dest] = "stdin"
         return
 
+    # register variable value and function context
     var = { "context": memory[function][val[11:-1]]['context'], "value": memory[function][val[11:-1]]['value'] }
     
     register[dest] = var
 
-
+# executes the assembly "mov" instruction from an integer value to a memory address
 def movNumToPointer(dest, val, function):
     memory[function][dest[11:-1]]['value'] = int(val,16)
  
-   
+# executes the assembly "mov" instruction from an integer value to a register
 def movNumToRegister(dest, val): 
 
     register[dest] = int(val,16)
 
-
+# determines if a string corresponds to a hexadecimal integer
 def isNumber(val):
     return all(c in string.hexdigits for c in val[2:])
 
-
+# adds to memory the local variables initialized at the start of a function
 def initializeLocalVariables(program, function):
 
     aux = {}
@@ -673,7 +684,7 @@ def initializeLocalVariables(program, function):
 
     memory[function] = aux
 
-
+# executes the "mov" instruction
 def mov(destination, value, function):
     
     if destination == "esi":
@@ -700,7 +711,7 @@ def mov(destination, value, function):
     elif ("PTR" in destination) and (isNumber(value)):
         movNumToPointer(destination,value, function)
 
-
+# executes the "add" instruction
 def add(destination, value, function):
     
     if destination == "esi":
@@ -727,7 +738,7 @@ def add(destination, value, function):
     elif ("PTR" in destination) and (isNumber(value)):
         addNumToPointer(destination,value,function)
 
-
+# executes the "sub" instruction
 def sub(destination, value, function):
     
     if destination == "esi":
@@ -755,26 +766,30 @@ def sub(destination, value, function):
         subNumToPointer(destination,value,function)
 
 
+# executes the "lea" instruction
 def lea(destination, value, function):
 
     register[destination] = { "context": function, "value": value[1:-1] }
 
 
+# executes the "push" instruction
 def push(value, function):
 
-    subNumToRegister("rsp", "0x8")
+    subNumToRegister("rsp", "0x8") #allocate space in the stack
 
-    memory[function][register["rsp"]] = { "value": register[value] }
+    memory[function][register["rsp"]] = { "value": register[value] } #push to stack
 
-
+# executes the "leave" instruction
 def leave(function):
 
-    movRegisterToRegister("rsp", "rbp")
+    movRegisterToRegister("rsp", "rbp") #restore stack pointer
     
+    #pop the stack
     register["rbp"] = memory[function][register["rsp"]]["value"]
     memory[function].pop(register["rsp"], None)
 
 
+# executes a certain assembly instruction that is not "nop", "call" or "ret"
 def runInstruction(instr, function):
         
     if instr['op'] == "mov":
@@ -813,13 +828,14 @@ def runInstruction(instr, function):
     elif instr["op"] == "leave":
         leave(function)
 
-
+# determines if a call is dangerous
 def analyzeCall(program, instruction, function):
 
     global vulnerabilities
 
     dangerousFunctions = ["<gets@plt>", "<strcpy@plt>", "<strcat@plt>", "<fgets@plt>", "<strncpy@plt>", "<strncat@plt>"]
 
+    #if a call is dangerous, analyze for vulnerabilities, then continue execution
     if instruction["args"]["fnname"] in dangerousFunctions:        
 
         destAddr = register["rdi"]["value"]
@@ -841,35 +857,36 @@ def analyzeCall(program, instruction, function):
         
         vulnerabilities = vulnerabilities + detectStackCorruption(instruction, function)
 
+    # else, call the function
     else:
         runFunction(program, (instruction["args"]["fnname"])[1:-1])
     
 
-
+# runs all of the instructions in a function
 def runFunction(program, function):
     
     initializeLocalVariables(program, function)
     
     for instr in program[function]["instructions"]:
 
-        if instr['op'] == "nop":
+        if instr['op'] == "nop": # nop has no effect
             continue
         
         elif instr['op'] == "call":
             analyzeCall(program, instr, function)
 
-        elif instr['op'] == "ret":
+        elif instr['op'] == "ret": # exit function, return to calling context
             return
 
         runInstruction(instr, function)
 
-
+# writes analyzed vulnerabilities to a file in JSON format
 def writeJson(progName, vulnerabilities):
     f = open("%s.output.json" % progName, 'w+')
     f.write(json.dumps(vulnerabilities, indent=4, separators=(',', ': ')))
     f.close()
 
-
+# reads a file in JSON format and converts it into a dictionary for easy traversal
 def readJson(file):
     f = open(file, 'r')
     file_contents = f.read()
