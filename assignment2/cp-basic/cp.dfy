@@ -13,6 +13,12 @@ method ArrayFromSeq<A>(s: seq<A>) returns (a: array<A>)
   a := new A[|s|] ( i requires 0 <= i < |s| => s[i] );
 }
 
+predicate equals(a: seq, b: seq)
+  requires |a| == |b|
+  {
+    forall i :: 0 <= i < |a| ==> a[i] == b[i]
+  } 
+
 method {:main} Main(ghost env: HostEnvironment?)
   requires env != null && env.Valid() && env.ok.ok();
   requires |env.constants.CommandLineArgs()| == 3
@@ -22,13 +28,17 @@ method {:main} Main(ghost env: HostEnvironment?)
   modifies env.ok
   modifies env.files
 
-  //ensures env.constants.CommandLineArgs()[2] in env.files.state()
+  ensures env.ok.ok() ==> env.constants.CommandLineArgs()[1] in env.files.state() && env.constants.CommandLineArgs()[2] in env.files.state()
+  ensures env.ok.ok() ==> var src := env.files.state()[env.constants.CommandLineArgs()[1]];
+                          var dest := env.files.state()[env.constants.CommandLineArgs()[2]];
+                          |src| == |dest| 
+  
+  ensures env.ok.ok() ==> equals(env.files.state()[env.constants.CommandLineArgs()[1]], env.files.state()[env.constants.CommandLineArgs()[2]])
 {
   var srcName := HostConstants.GetCommandLineArg(1, env);
   var destName := HostConstants.GetCommandLineArg(2, env);
 
   var srcExists := FileStream.FileExists(srcName, env);
-  var destExists := FileStream.FileExists(destName, env);
 
   if srcExists {
 
@@ -39,11 +49,12 @@ method {:main} Main(ghost env: HostEnvironment?)
       var lengthSuccess, srcLength := FileStream.FileLength(srcName, env);
 
       if lengthSuccess && srcLength >= 0 {
+        
         var buffer: array<byte> := new byte[srcLength];
 
         var readSuccess := srcStream.Read(0, buffer, 0, srcLength);
 
-        if readSuccess && !destExists {
+        if readSuccess {
 
           var destOpenSuccess, destStream := FileStream.Open(destName, env);
 
