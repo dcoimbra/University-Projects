@@ -15,11 +15,46 @@ method ArrayFromSeq<A>(s: seq<A>) returns (a: array<A>)
 
 method {:main} Main(ghost env: HostEnvironment?)
   requires env != null && env.Valid() && env.ok.ok();
+  requires |env.constants.CommandLineArgs()| == 3
+  requires env.constants.CommandLineArgs()[1] in env.files.state()
+  requires !(env.constants.CommandLineArgs()[2] in env.files.state())
+
   modifies env.ok
   modifies env.files
+
+  //ensures env.constants.CommandLineArgs()[2] in env.files.state()
 {
+  var srcName := HostConstants.GetCommandLineArg(1, env);
+  var destName := HostConstants.GetCommandLineArg(2, env);
 
+  var srcExists := FileStream.FileExists(srcName, env);
+  var destExists := FileStream.FileExists(destName, env);
 
+  if srcExists {
 
-    print "done!\n";
+    var srcOpenSuccess, srcStream := FileStream.Open(srcName, env);
+
+    if srcOpenSuccess {
+
+      var lengthSuccess, srcLength := FileStream.FileLength(srcName, env);
+
+      if lengthSuccess && srcLength >= 0 {
+        var buffer: array<byte> := new byte[srcLength];
+
+        var readSuccess := srcStream.Read(0, buffer, 0, srcLength);
+
+        if readSuccess && !destExists {
+
+          var destOpenSuccess, destStream := FileStream.Open(destName, env);
+
+          if destOpenSuccess {
+
+            var writeSuccess := destStream.Write(0, buffer, 0, srcLength);
+          }
+        }
+      }
+    }
+  }
+  
+  print "done!\n";
 }
