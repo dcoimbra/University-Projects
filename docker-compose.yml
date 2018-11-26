@@ -18,19 +18,8 @@ services:
       - easyappointments-data:db
 
   ids:
-    build:
-      context: ./Snort
-      dockerfile: Dockerfile
-
-  bot1:
-    build: 
-      context: ./DDoSBotnet/DDoSBot
-      dockerfile: Dockerfile
-
-  controller:
-    build:
-      context: ./DDoSBotnet/DDoSController
-      dockerfile: Dockerfile
+    image: linton/docker-snort
+    command: bash -c "snort -dev -c /etc/snort/etc/snort.conf"
 
   
     
