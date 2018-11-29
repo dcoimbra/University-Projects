@@ -17,13 +17,6 @@ services:
     links:
       - easyappointments-data:db
 
-  ids:
-    image: linton/docker-snort
-    command: bash -c "snort -i eth0 -c /etc/snort/etc/snort.conf -A console"
-    volumes: 
-      - ./Snort/snort.conf:/etc/snort/etc/snort/snort.conf
-      - ./Snort/local.rules:/etc/snort/rules/local.rules
-
   bot: 
     image: tutum/curl
     volumes: 
