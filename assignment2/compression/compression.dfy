@@ -119,29 +119,107 @@ method compress_impl(bytes:array?<byte>) returns (compressed_bytes:array?<byte>)
   compressed_bytes := ArrayFromSeq<byte>(runs + counts);
 }
 
-method decompress_impl(compressed_bytes:array?<byte>) returns (bytes:array?<byte>)
-  requires compressed_bytes != null;
-  ensures  bytes != null;
-  ensures  bytes[..] == decompress(compressed_bytes[..]);
+
+
+method redo_original(sequence:seq<byte>, counters:seq<byte>) returns (original_bytes:array?<byte>)
+requires |sequence| > 0
+requires |counters| > 0
+requires |sequence| == |counters|
+ensures original_bytes != null
+
 {
-  bytes := compressed_bytes;
+
+  //Initialized with first element, gonna be subtracted to the counter later
+  var original_aux : seq<byte> := [sequence[0]];
+
+  var pos := 0;
+  var len := |sequence|;
+
+  while pos < len
+  invariant 0 <= pos <= len;
+  decreases len-pos
+  {
+    var byte := sequence[pos];
+    var counter := counters[pos] as int;
+
+    //The first element was used to initialize the sequence
+    if pos == 0 {
+      counter := counter - 1;
+    }
+
+    while counter > 0
+    decreases counter
+    { 
+      original_aux := original_aux + [byte];
+      counter := counter - 1;
+    }
+    
+    pos := pos + 1;
+  }
+
+  original_bytes := ArrayFromSeq<byte>(original_aux);
+}
+
+
+
+method find_separator_index(bytes:array?<byte>) returns (index:int)
+requires bytes != null
+{
+  index := bytes.Length - 1;
+  
+  while index >= 0
+  decreases index
+  {
+    if bytes[index] == 0 {
+      return;
+    }
+
+    else {
+      index := index - 1;
+    }
+  }
+
+  index := -1; //file doesn't have 0, so can't be decompressed
+}
+
+method decompress_impl(compressed_bytes:array?<byte>) returns (decompressed_bytes:array?<byte>)
+  requires compressed_bytes != null
+  ensures  decompressed_bytes != null;
+  //ensures  decompressed_bytes[..] == decompress(compressed_bytes[..]);
+{
+
+  var idx := find_separator_index(compressed_bytes);
+
+  if idx < compressed_bytes.Length && idx >= 0 {
+    var sequence := compressed_bytes[..idx];
+    var counters := compressed_bytes[(idx+1)..];
+
+    if |sequence| > 0 && |counters| > 0 && |sequence| == |counters| { 
+      decompressed_bytes := redo_original(sequence, counters);
+      return;
+    }
+  }
+
+  //If it didn't find the separator index, means that the file can't be decompressed
+  decompressed_bytes := compressed_bytes;
 }
 
 method {:main} Main(ghost env:HostEnvironment?)
   requires env != null && env.Valid() && env.ok.ok();
-  requires |env.constants.CommandLineArgs()| == 3
-  requires env.constants.CommandLineArgs()[1] in env.files.state()
-  requires !(env.constants.CommandLineArgs()[2] in env.files.state())
+  requires |env.constants.CommandLineArgs()| == 4
+  requires env.constants.CommandLineArgs()[2] in env.files.state()
+  requires !(env.constants.CommandLineArgs()[3] in env.files.state())
+
+  requires env.constants.CommandLineArgs()[1] == "0" || env.constants.CommandLineArgs()[1] == "1"
 
   modifies env.ok
   modifies env.files
 
-  ensures env.ok.ok() ==> env.constants.CommandLineArgs()[1] in env.files.state() && env.constants.CommandLineArgs()[2] in env.files.state()
+  ensures env.ok.ok() ==> env.constants.CommandLineArgs()[2] in env.files.state() && env.constants.CommandLineArgs()[3] in env.files.state()
 {
-  print "Compress me!\n";
 
-   var srcName := HostConstants.GetCommandLineArg(1, env);
-   var destName := HostConstants.GetCommandLineArg(2, env);
+   var srcName := HostConstants.GetCommandLineArg(2, env);
+   var destName := HostConstants.GetCommandLineArg(3, env);
 
   var srcExists := FileStream.FileExists(srcName, env);
 
@@ -159,7 +237,21 @@ method {:main} Main(ghost env:HostEnvironment?)
 
         var readSuccess := srcStream.Read(0, buffer, 0, srcLength);
 
-        var compressed := compress_impl(buffer);
+        var compOrDecomp := HostConstants.GetCommandLineArg(1, env);
+
+        var result: array?<byte> := new byte[1];
+        result[0] := 0;
+
+        if compOrDecomp[0] == '1' {
+          print "Compress me!\n";
+          result := compress_impl(buffer);
+        }
+
+        else {
+          print "Decompress me!\n";
+          result := decompress_impl(buffer);
+        }
+
 
         if readSuccess {
 
@@ -167,9 +259,9 @@ method {:main} Main(ghost env:HostEnvironment?)
 
           if destOpenSuccess {
 
-            if -0x80000000 <= compressed.Length < 0x80000000 {
+            if -0x80000000 <= result.Length < 0x80000000 {
 
-              var writeSuccess := destStream.Write(0, compressed, 0, compressed.Length as int32);
+              var writeSuccess := destStream.Write(0, result, 0, result.Length as int32);
             }
           }
         }
