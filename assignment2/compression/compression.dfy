@@ -270,7 +270,6 @@ method {:main} Main(ghost env:HostEnvironment?)
           result := decompress_impl(buffer);
         }
 
-
         if readSuccess {
 
           var destOpenSuccess, destStream := FileStream.Open(destName, env);
@@ -280,6 +279,10 @@ method {:main} Main(ghost env:HostEnvironment?)
             if -0x80000000 <= result.Length < 0x80000000 {
 
               var writeSuccess := destStream.Write(0, result, 0, result.Length as int32);
+
+              if writeSuccess {
+                return;
+              }
             }
           }
         }
