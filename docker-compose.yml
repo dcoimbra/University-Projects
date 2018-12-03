@@ -12,8 +12,8 @@ services:
       DB_NAME: easyappointments
       DB_PASSWORD: hellodocker
       BASE_URL: http://localhost:8888
-    expose:
-      - "8888"
+    ports:
+      - 8888:8888
     links:
       - easyappointments-data:db
 

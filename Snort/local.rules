@@ -5,7 +5,9 @@
 # DDOS RULES
 #-----------
 
-alert icmp any any -> any any (msg:"Pinging...";sid:1000004;)
+# alert icmp any any -> any any (msg:"Pinging...";sid:1000004;)
+
+alert tcp any any -> any any (msg:"shit poopy butt fart";sid:999; detection_filter: track by_src, count 50, seconds 1;)
 
 alert icmp $EXTERNAL_NET any -> $HOME_NET any (msg:"DDOS TFN Probe"; icmp_id:678; itype:8; content:"1234"; reference:arachnids,443; classtype:attempted-recon; sid:221; rev:4;)
 alert icmp $EXTERNAL_NET any -> $HOME_NET any (msg:"DDOS tfn2k icmp possible communication"; icmp_id:0; itype:0; content:"AAAAAAAAAA"; reference:arachnids,425; classtype:attempted-dos; sid:222; rev:2;)
