@@ -204,11 +204,10 @@ method decompress_impl(compressed_bytes:array?<byte>) returns (decompressed_byte
   requires compressed_bytes != null
   ensures  decompressed_bytes != null;
   //ensures  decompressed_bytes[..] == decompress(compressed_bytes[..]);
-{
+{  
+  var idx := (compressed_bytes.Length - 1) / 2;
 
-  var idx := find_separator_index(compressed_bytes);
-
-  if idx < compressed_bytes.Length && idx >= 0 {
+  if idx < compressed_bytes.Length && idx >= 0 && compressed_bytes[idx] == 0 {
     var sequence := compressed_bytes[..idx];
     var counters := compressed_bytes[(idx+1)..];
 
