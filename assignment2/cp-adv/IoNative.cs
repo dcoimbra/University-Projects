@@ -121,6 +121,53 @@ namespace @__default {
                 ok = false;
             }
         }
+
+        public static void UserInput(out bool result)
+        {
+
+            try {
+
+                result = false;
+                
+                Console.WriteLine("The file you want to copy into already exists");
+                Console.WriteLine("Do you want to overwrite it?");
+                Console.WriteLine("y: yes / n: no");
+
+                char a = Convert.ToChar(Console.ReadLine());
+
+                if (a == 'y') {
+                    Console.WriteLine("debugger userinput");
+                    result = true;
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Console.Error.WriteLine(e);
+                result = false;
+            }
+        }
+
+        public void CleanFile(out bool ok)
+        {
+            try 
+            {
+                Console.WriteLine("debugger cleanfile");
+
+                fstream.SetLength(0);
+
+                ok = true;
+
+                Console.WriteLine("debugger cleanfile2");
+            }
+            catch (Exception e) 
+            {
+                System.Console.Error.WriteLine(e);
+                ok = false;
+            }
+        }
+
     }
 
 }
+

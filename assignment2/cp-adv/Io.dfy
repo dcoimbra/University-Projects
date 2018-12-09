@@ -76,6 +76,7 @@ class FileSystemState
     constructor{ :axiom} () requires false;
     function {:axiom} state() : map<seq<char>,seq<byte>>   // File system maps file names (sequences of characters) to their contents
         reads this;
+
 }
 
 class FileStream
@@ -85,11 +86,11 @@ class FileStream
     function {:axiom} IsOpen():bool reads this;
     constructor {:axiom} () requires false;
 
-    static method {:extern} FileExists(name:array<char>, ghost env:HostEnvironment?) returns(result:bool)
+    static method {:extern} FileExists(name:array<char>, ghost env:HostEnvironment?) returns(ok:bool)
         requires env != null && env.Valid();
         requires env.ok.ok();
-        ensures  result <==> old(name[..]) in env.files.state();        
-
+        ensures  ok <==> old(name[..]) in env.files.state();
+           
     static method {:extern} FileLength(name:array<char>, ghost env:HostEnvironment) returns(success:bool, len:int32)
         requires env.Valid();
         requires env.ok.ok();
@@ -158,6 +159,29 @@ class FileStream
                                                                       + buffer[start..start as int + num_bytes as int] 
                                                                       + if file_offset as int + num_bytes as int > |old_file| then [] 
                                                                         else old_file[file_offset as int + num_bytes as int..]];
+    
+    static method {:extern} UserInput(ghost env:HostEnvironment?) returns (ok:bool)
+        requires env != null && env.Valid();
+        requires env.ok.ok();
+        modifies env.ok;
+        ensures env.ok.ok() == ok; 
 
+
+    method {:extern} CleanFile() returns (ok:bool)
+        requires env.Valid();
+        requires env.ok.ok();
+        requires IsOpen();
+        requires Name() in env.files.state();
+        modifies this;
+        modifies env.ok;
+        modifies env.files;
+        ensures  env == old(env);
+        ensures  env.ok.ok() == ok;
+        ensures  Name() == old(Name());
+        ensures  ok ==> IsOpen();                 
+        ensures  ok ==> env.files.state() == old(env.files.state())[Name() := []];
+    
+        
+        
 }
 
