@@ -37,7 +37,6 @@ decreases |bytes| - pos
   else build_same_bytes(bytes, pos + 1, counter + 1)
 }
 
-
 function count_bytes (bytes:seq<byte>, pos: int, counter: byte) : seq<byte>
 requires |bytes| > 0
 requires 0 <= pos < |bytes|
@@ -54,20 +53,43 @@ decreases |bytes| - pos
   else count_bytes(bytes, pos + 1, counter + 1)
 }
 
-/*function compress(bytes:seq<byte>) : seq<byte>
+function compress(bytes:seq<byte>) : seq<byte>
 {
   if |bytes| <= 0 then []
   else build_same_bytes(bytes, 0, 0) + [0] + count_bytes(bytes, 0, 0)
 }
-*/
+
+function restore(b: byte, count: byte) : seq<byte>
+requires count >= 0
+decreases count
+{
+  if count == 0 then []
+  else [b] + restore(b, count - 1)
+}
+
+function get_original(runs:seq<byte>, counts:seq<byte>) : seq<byte>
+requires |runs| == |counts|
+requires |runs| >= 1
+decreases |runs|, |counts|
+{
+  if |runs| == 1 then restore(runs[0], counts[0])
+  else restore(runs[0], counts[0]) + get_original(runs[1..], counts[1..])
+} 
+
 function decompress(bytes:seq<byte>) : seq<byte>
 {
-  bytes
+  var idx := (|bytes| - 1) / 2;
+  if 0 < idx < |bytes| && bytes[idx] == 0 && |bytes[..idx]| == |bytes[(idx+1)..]| then get_original(bytes[..idx], bytes[(idx+1)..])
+  else bytes
 }
 
 lemma lossless(bytes:seq<byte>)
- // ensures decompress(compress(bytes)) == bytes;
+ //ensures decompress(compress(bytes)) == bytes;
 {
+  var compressed := compress(bytes);
+  var decompressed := decompress(compressed);
+
+  //assert decompressed == bytes;
 }
 
 
@@ -93,7 +115,7 @@ ensures bytes[|bytes|-1] != next || ctr == 255 ==> build_same_bytes(bytes + [nex
 method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
   requires bytes != null
   ensures bytes.Length > 0 ==> |runs| == |counts|
-  ensures bytes.Length > 0 ==> runs == build_same_bytes(bytes[..], 0, 0)
+  //ensures bytes.Length > 0 ==> runs == build_same_bytes(bytes[..], 0, 0)
   //ensures bytes.Length > 0 ==> counts == count_bytes(bytes[..], 0, 0)
   {
   
@@ -119,10 +141,10 @@ method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
     invariant count >= 0
     invariant 0 <= run_idx < |runs|
     invariant |runs| == |counts|
-    invariant runs == build_same_bytes(bytes[..pos], 0, 0)
+    //invariant runs == build_same_bytes(bytes[..pos], 0, 0)
     decreases bytes.Length - pos 
   {
-
+    /*
     if bytes[pos] != bytes[pos-1] || count == 255
     {
       calc == {
@@ -144,6 +166,7 @@ method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
             build_same_bytes(bytes[..pos+1], 0, 0);
       }
     }
+    */
 
     if current_byte == bytes[pos] {
 
@@ -177,7 +200,7 @@ method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
 
   }
 
-  assert runs == build_same_bytes(bytes[..(bytes.Length)],0,0);
+ // assert runs == build_same_bytes(bytes[..(bytes.Length)],0,0);
 
   assert bytes[..] == bytes[..bytes.Length];
 }
@@ -201,6 +224,7 @@ requires |sequence| > 0
 requires |counters| > 0
 requires |sequence| == |counters|
 ensures original_bytes != null
+//ensures original_bytes[..] == get_original(sequence, counters)
 
 {
 
@@ -264,7 +288,7 @@ method decompress_impl(compressed_bytes:array?<byte>) returns (decompressed_byte
 {  
   var idx := (compressed_bytes.Length - 1) / 2;
 
-  if idx < compressed_bytes.Length && idx >= 0 && compressed_bytes[idx] == 0 {
+  if idx < compressed_bytes.Length && idx > 0 && compressed_bytes[idx] == 0 {
     var sequence := compressed_bytes[..idx];
     var counters := compressed_bytes[(idx+1)..];
 
