@@ -19,8 +19,6 @@ services:
 
   openvas:
     image: atomicorp/openvas
-    environment:
-      OV_PASSWORD: admin
     ports:
       - 443:443
 
