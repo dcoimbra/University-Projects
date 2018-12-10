@@ -17,6 +17,13 @@ services:
     links:
       - easyappointments-data:db
 
+  openvas:
+    image: atomicorp/openvas
+    environment:
+      OV_PASSWORD: admin
+    ports:
+      - 443:443
+
   bot: 
     image: tutum/curl
     volumes: 
