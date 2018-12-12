@@ -8,7 +8,6 @@
 
 include "Io.dfy"
 
-// Useful to convert Dafny strings into arrays of characters.
 method ArrayFromSeq<A>(s: seq<A>) returns (a: array<A>)
   ensures a[..] == s
 {
@@ -19,6 +18,7 @@ predicate same_bytes(b1: byte, b2: byte)
 {
   b1 == b2
 }
+
 
 function build_same_bytes (bytes:seq<byte>, pos: int, counter: byte) : seq<byte>
 requires |bytes| > 0
@@ -38,6 +38,7 @@ decreases |bytes| - pos
   else build_same_bytes(bytes, pos + 1, counter + 1)
 }
 
+// count_bytes builds a sequence, where each position corresponds to the number of ocurrences of a certain byte
 function count_bytes (bytes:seq<byte>, pos: int, counter: byte) : seq<byte>
 requires |bytes| > 0
 requires 0 <= pos < |bytes|
@@ -70,11 +71,12 @@ decreases count
 
 function get_original(runs:seq<byte>, counts:seq<byte>) : seq<byte>
 requires |runs| == |counts|
-requires |runs| >= 1
-requires |counts| >= 1
+requires |runs| >= 0
+requires |counts| >= 0
 decreases |runs|, |counts|
 {
-  if |runs| == 1 then restore(runs[0], counts[0])
+  if |runs| == 0 then []
+  else if |runs| == 1 then restore(runs[0], counts[0])
   else restore(runs[0], counts[0]) + get_original(runs[1..], counts[1..])
 } 
 
@@ -90,10 +92,10 @@ lemma {:axiom true} lossless(bytes:seq<byte>)
 
 
 
-lemma {:axiom true} eq_result(bytes: seq<byte>)
-requires |bytes| > 1
-requires bytes[|bytes|-1] == bytes[|bytes|-2]
-ensures build_same_bytes(bytes, 0, 0) == build_same_bytes(bytes[..|bytes|-1], 0, 0) 
+lemma {:axiom true} eq_result(bytes: seq<byte>, byteNext:byte)
+requires |bytes| >= 1
+requires bytes[|bytes|-1] == byteNext
+ensures build_same_bytes(bytes + [byteNext], 0, 0) == build_same_bytes(bytes, 0, 0) 
 
 
 
@@ -156,16 +158,13 @@ method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
         calc == {
             runs;
           == build_same_bytes(bytes[0..pos],0,0);
-          == { eq_result(bytes[0..pos] + [bytes[pos]]); }
+          == { eq_result(bytes[0..pos],bytes[pos]); }
            build_same_bytes(bytes[0..pos] + [bytes[pos]],0,0);
           == { assert bytes[0..pos+1] == bytes[0..pos] + [bytes[pos]]; }
             build_same_bytes(bytes[0..pos+1], 0, 0);
       }
-    }
+    } */
 
-    if bytes[pos] != bytes[pos-1] || count == 255 {
-      ghost var auc := counts[..];
-    }*/
     
 
 
@@ -215,14 +214,22 @@ method compress_impl(bytes:array?<byte>) returns (compressed_bytes:array?<byte>)
   compressed_bytes := ArrayFromSeq<byte>(runs + counts);
 }
 
-predicate alu(a:int, b:int)
+predicate sumInBytes(a:int, b:int)
 {
   (a+b) <= 255
 }
 
+
+lemma {:axiom true} same_rebuild(a:seq<byte>, b:seq<byte>, c:seq<byte>, d:seq<byte>)
+  requires |a| >=0 && |b| >= 0 && |c| >= 0 && |d| >= 0
+  requires |a| == |b|
+  requires |c| == |d|
+  ensures get_original(a+c, b+d) == get_original(a,b) + get_original(c,d)
+
 lemma {:axiom true} append(a:byte, b:int, c:int)
-requires 0<=b<=255 && 0<=c<=255 && alu(b,c)
+requires 0<=b<=255 && 0<=c<=255 && sumInBytes(b,c)
 ensures restore(a,(b+c) as byte) == restore(a,b as byte) + restore(a,c as byte)
+
 
 method redo_original(sequence:seq<byte>, counters:seq<byte>) returns (original_bytes:array?<byte>)
 requires |sequence| >= 1 
@@ -230,34 +237,39 @@ requires |counters| >= 1
 requires |sequence| == |counters|
 requires forall k:: 0 <= k < |counters| ==> counters[k] >= 1
 ensures original_bytes != null
-//ensures original_bytes[..] == get_original(sequence, counters)
+// ensures original_bytes[..] == get_original(sequence, counters)
 
 {
 
-  //Initialized with first element, gonna be subtracted to the counter later
-  var original_aux : seq<byte> := [sequence[0]];
+  var original_aux : seq<byte> := [];
 
   var pos := 0;
   var len := |sequence|;
 
+
   while pos < len
-  invariant 0 <= pos <= len;
-  //invariant 
+  invariant 0 <= pos <= len
+  // invariant original_aux == get_original(sequence[..pos], counters[..pos])
   decreases len-pos
   {
 
+
     var byte := sequence[pos];
     var counter := counters[pos] as int;
-
+    
     ghost var tester := [];
-
-    //The first element was used to initialize the sequence
-    if pos == 0 {
-      counter := counter - 1;
-      
-      tester := tester + [byte];
+  
+   /* calc == {
+      original_aux + restore(byte,counters[pos] as byte);
+      == get_original(sequence[..pos], counters[..pos]) + restore(byte,counters[pos] as byte);
+      == {same_rebuild(sequence[..pos], counters[..pos], [byte], [counters[pos] as byte]); }
+      get_original((sequence[..pos] + [sequence[pos]]), (counters[..pos] + [counters[pos]]));
+      == { assert (sequence[..pos+1] == sequence[..pos] + [sequence[pos]])
+        && (counters[..pos+1] == counters[..pos] + [counters[pos]]);}
+      get_original(sequence[..pos+1], counters[..pos+1]);
     }
-
+*/
+    
     while counter > 0
     invariant 0 <= counter <= 255
     invariant tester == restore(byte,counters[pos]-counter as byte)
@@ -279,10 +291,13 @@ ensures original_bytes != null
       counter := counter - 1;
     }
 
-    pos := pos + 1;
+    pos := pos + 1;  
+
   }
 
   original_bytes := ArrayFromSeq<byte>(original_aux);
+
+  assert original_aux == original_bytes[..];
 
   assert sequence == sequence[..|sequence|];
   assert counters == counters[..|counters|];
@@ -315,6 +330,10 @@ method decompress_impl(compressed_bytes:array?<byte>) returns (decompressed_byte
 
   //If it didn't find the separator index, means that the file can't be decompressed
   decompressed_bytes := compressed_bytes;
+
+
+  lossless(compressed_bytes[..]);
+  assert decompressed_bytes[..] == decompress(compress(compressed_bytes[..]));
 }
 
 method {:main} Main(ghost env:HostEnvironment?)
@@ -336,50 +355,70 @@ method {:main} Main(ghost env:HostEnvironment?)
 
   var srcExists := FileStream.FileExists(srcName, env);
 
-  if srcExists {
-
-    var srcOpenSuccess, srcStream := FileStream.Open(srcName, env);
- 
-    if srcOpenSuccess {
-
-      var srcLengthSuccess, srcLength := FileStream.FileLength(srcName, env);
-
-      if srcLengthSuccess && srcLength >= 0 {
-        
-        var buffer: array<byte> := new byte[srcLength];
-
-        var readSuccess := srcStream.Read(0, buffer, 0, srcLength);
-
-        var compOrDecomp := HostConstants.GetCommandLineArg(1, env);
-
-        var result: array?<byte> := new byte[1];
-        result[0] := 0;
-
-        if compOrDecomp[0] == '1' {
-          print "Compress me!\n";
-          result := compress_impl(buffer);
-        }
-
-        else {
-          print "Decompress me!\n";
-          result := decompress_impl(buffer);
-        }
-
-
-        if readSuccess {
-
-          var destOpenSuccess, destStream := FileStream.Open(destName, env);
-
-          if destOpenSuccess {
-
-            if -0x80000000 <= result.Length < 0x80000000 {
-
-              var writeSuccess := destStream.Write(0, result, 0, result.Length as int32);
-            }
-          }
-        }
-      }
-    }
+  if !srcExists {
+    return;
   }
+
+  var srcOpenSuccess, srcStream := FileStream.Open(srcName, env);
+ 
+  if !srcOpenSuccess {
+    return;
+  }
+  
+  var srcLengthSuccess, srcLength := FileStream.FileLength(srcName, env);
+
+  if !(srcLengthSuccess && srcLength >= 0) {
+    return;
+  }
+
+  var buffer: array<byte> := new byte[srcLength];
+
+  var readSuccess := srcStream.Read(0, buffer, 0, srcLength);
+
+  var compOrDecomp := HostConstants.GetCommandLineArg(1, env);
+
+  var result: array?<byte> := new byte[1];
+  
+  result[0] := 0;
+
+  if compOrDecomp[0] == '1' {
+    print "Compressing!\n";
+    result := compress_impl(buffer);
+  }
+
+  else {
+    print "Decompressing!\n";
+    result := decompress_impl(buffer);
+  }
+
+  if !readSuccess {
+    return;
+  }
+
+  var destOpenSuccess, destStream := FileStream.Open(destName, env);
+
+          
+  if !destOpenSuccess {
+    return;
+  }
+   
+  if !(-0x80000000 <= result.Length < 0x80000000) {
+    return;
+  }
+  
+  var writeSuccess := destStream.Write(0, result, 0, result.Length as int32);
+  
+  if !writeSuccess {
+    return;
+  }
+
+  var srcCloseSuccess := srcStream.Close();
+
+  if !srcCloseSuccess {
+    return;
+  }
+
+  var dstCloseSuccess := destStream.Close();
+
   print "done!\n";
 }
