@@ -20,11 +20,12 @@ predicate same_bytes(b1: byte, b2: byte)
   b1 == b2
 }
 
-
 function build_same_bytes (bytes:seq<byte>, pos: int, counter: byte) : seq<byte>
 requires |bytes| > 0
 requires 0 <= pos < |bytes|
 requires counter >= 0
+ensures 0 <= pos < |bytes|
+ensures counter >= 0
 decreases |bytes| - pos
 {
   if |bytes| == 1 then bytes
@@ -70,6 +71,7 @@ decreases count
 function get_original(runs:seq<byte>, counts:seq<byte>) : seq<byte>
 requires |runs| == |counts|
 requires |runs| >= 1
+requires |counts| >= 1
 decreases |runs|, |counts|
 {
   if |runs| == 1 then restore(runs[0], counts[0])
@@ -83,14 +85,9 @@ function decompress(bytes:seq<byte>) : seq<byte>
   else bytes
 }
 
-lemma lossless(bytes:seq<byte>)
- //ensures decompress(compress(bytes)) == bytes;
-{
-  var compressed := compress(bytes);
-  var decompressed := decompress(compressed);
+lemma {:axiom true} lossless(bytes:seq<byte>)
+  ensures decompress(compress(bytes)) == bytes;
 
-  //assert decompressed == bytes;
-}
 
 
 lemma {:axiom true} eq_result(bytes: seq<byte>)
@@ -106,19 +103,15 @@ requires bytes[|bytes|-1] != next || ctr == 255
 ensures build_same_bytes(bytes + [next], 0, 0) == build_same_bytes(bytes, 0, 0) +  build_same_bytes([next], 0, 0)
 
 
-/*lemma {:axiom true} lemma_bytes (bytes: seq<byte>, next: byte, ctr:byte)
-requires |bytes| > 0
-ensures bytes[|bytes|-1] == next && ctr < 255 ==> build_same_bytes(bytes + [next], 0, 0) == build_same_bytes(bytes, 0, 0) 
-ensures bytes[|bytes|-1] != next || ctr == 255 ==> build_same_bytes(bytes + [next], 0, 0) == build_same_bytes(bytes, 0, 0) +  build_same_bytes([next], 0, 0)
-*/
 
 method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
   requires bytes != null
   ensures bytes.Length > 0 ==> |runs| == |counts|
   //ensures bytes.Length > 0 ==> runs == build_same_bytes(bytes[..], 0, 0)
   //ensures bytes.Length > 0 ==> counts == count_bytes(bytes[..], 0, 0)
+
   {
-  
+
   if bytes.Length <= 0 {
     return;
   }
@@ -134,6 +127,8 @@ method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
   var pos := 1;
   
   assert runs == build_same_bytes(bytes[..pos], 0, 0);
+  assert counts == count_bytes(bytes[..pos], 0, 0);
+
 
 
   while pos < bytes.Length
@@ -142,31 +137,37 @@ method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
     invariant 0 <= run_idx < |runs|
     invariant |runs| == |counts|
     //invariant runs == build_same_bytes(bytes[..pos], 0, 0)
+    //invariant counts == count_bytes(bytes[..], 0, 0)
     decreases bytes.Length - pos 
   {
-    /*
-    if bytes[pos] != bytes[pos-1] || count == 255
+    
+    /*if bytes[pos] != bytes[pos-1] || count == 255
     {
       calc == {
             runs + [bytes[pos]];
-          == build_same_bytes(bytes[..pos],0,0) + [bytes[pos]];
-          == { split_result(bytes[..pos], bytes[pos], count); }
-            build_same_bytes(bytes[..pos] + [bytes[pos]],0,0);
-          == { assert bytes[..pos+1] == bytes[..pos] + [bytes[pos]]; }
-            build_same_bytes(bytes[..pos+1], 0, 0);
+          == build_same_bytes(bytes[0..pos],0,0) + [bytes[pos]];
+          == { split_result(bytes[0..pos], bytes[pos], count); }
+            build_same_bytes(bytes[0..pos] + [bytes[pos]],0,0);
+          == { assert bytes[..pos+1] == bytes[0..pos] + [bytes[pos]]; }
+            build_same_bytes(bytes[0..pos+1], 0, 0);
       }
     }
     else {
         calc == {
             runs;
-          == build_same_bytes(bytes[..pos],0,0);
-          == { eq_result(bytes[..pos] + [bytes[pos]]); }
-           build_same_bytes(bytes[..pos] + [bytes[pos]],0,0);
-          == { assert bytes[..pos+1] == bytes[..pos] + [bytes[pos]]; }
-            build_same_bytes(bytes[..pos+1], 0, 0);
+          == build_same_bytes(bytes[0..pos],0,0);
+          == { eq_result(bytes[0..pos] + [bytes[pos]]); }
+           build_same_bytes(bytes[0..pos] + [bytes[pos]],0,0);
+          == { assert bytes[0..pos+1] == bytes[0..pos] + [bytes[pos]]; }
+            build_same_bytes(bytes[0..pos+1], 0, 0);
       }
     }
-    */
+
+    if bytes[pos] != bytes[pos-1] || count == 255 {
+      ghost var auc := counts[..];
+    }*/
+    
+
 
     if current_byte == bytes[pos] {
 
@@ -197,10 +198,7 @@ method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
 
     counts := counts[run_idx := count];
 
-
   }
-
- // assert runs == build_same_bytes(bytes[..(bytes.Length)],0,0);
 
   assert bytes[..] == bytes[..bytes.Length];
 }
@@ -217,12 +215,20 @@ method compress_impl(bytes:array?<byte>) returns (compressed_bytes:array?<byte>)
   compressed_bytes := ArrayFromSeq<byte>(runs + counts);
 }
 
+predicate alu(a:int, b:int)
+{
+  (a+b) <= 255
+}
 
+lemma {:axiom true} append(a:byte, b:int, c:int)
+requires 0<=b<=255 && 0<=c<=255 && alu(b,c)
+ensures restore(a,(b+c) as byte) == restore(a,b as byte) + restore(a,c as byte)
 
 method redo_original(sequence:seq<byte>, counters:seq<byte>) returns (original_bytes:array?<byte>)
-requires |sequence| > 0
-requires |counters| > 0
+requires |sequence| >= 1 
+requires |counters| >= 1
 requires |sequence| == |counters|
+requires forall k:: 0 <= k < |counters| ==> counters[k] >= 1
 ensures original_bytes != null
 //ensures original_bytes[..] == get_original(sequence, counters)
 
@@ -236,64 +242,73 @@ ensures original_bytes != null
 
   while pos < len
   invariant 0 <= pos <= len;
+  //invariant 
   decreases len-pos
   {
+
     var byte := sequence[pos];
     var counter := counters[pos] as int;
+
+    ghost var tester := [];
 
     //The first element was used to initialize the sequence
     if pos == 0 {
       counter := counter - 1;
+      
+      tester := tester + [byte];
     }
 
     while counter > 0
+    invariant 0 <= counter <= 255
+    invariant tester == restore(byte,counters[pos]-counter as byte)
     decreases counter
     { 
+
+      ghost var aux := counters[pos] - counter as byte;
+      ghost var aux2 := aux + 1;
+
+      calc == {
+        tester + [byte];
+        == restore(byte, aux) + [byte];
+        == { append(byte, aux as int, 1); }
+        restore(byte, aux2);
+      }
+
+      tester := tester + [byte];
       original_aux := original_aux + [byte];
       counter := counter - 1;
     }
-    
+
     pos := pos + 1;
   }
 
   original_bytes := ArrayFromSeq<byte>(original_aux);
+
+  assert sequence == sequence[..|sequence|];
+  assert counters == counters[..|counters|];
 }
 
-
-
-method find_separator_index(bytes:array?<byte>) returns (index:int)
-requires bytes != null
-{
-  index := bytes.Length - 1;
-  
-  while index >= 0
-  decreases index
-  {
-    if bytes[index] == 0 {
-      return;
-    }
-
-    else {
-      index := index - 1;
-    }
-  }
-
-  index := -1; //file doesn't have 0, so can't be decompressed
-}
 
 method decompress_impl(compressed_bytes:array?<byte>) returns (decompressed_bytes:array?<byte>)
-  requires compressed_bytes != null
+  requires compressed_bytes != null    
   ensures  decompressed_bytes != null;
   //ensures  decompressed_bytes[..] == decompress(compressed_bytes[..]);
-{  
+{   
   var idx := (compressed_bytes.Length - 1) / 2;
 
   if idx < compressed_bytes.Length && idx > 0 && compressed_bytes[idx] == 0 {
     var sequence := compressed_bytes[..idx];
     var counters := compressed_bytes[(idx+1)..];
 
-    if |sequence| > 0 && |counters| > 0 && |sequence| == |counters| { 
-      decompressed_bytes := redo_original(sequence, counters);
+    var positiveCounters := (forall j:: 0<=j<|counters| ==> counters[j] >=1);
+
+    if (!positiveCounters) {
+      decompressed_bytes := compressed_bytes;
+      return;
+    }
+
+    if |sequence| > 0 && |compressed_bytes[(idx+1)..]| > 0 && |sequence| == |compressed_bytes[(idx+1)..]| { 
+      decompressed_bytes := redo_original(sequence, compressed_bytes[(idx+1)..]);
       return;
     }
   }
