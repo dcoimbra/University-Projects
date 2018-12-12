@@ -6,12 +6,6 @@
 
 include "Io.dfy"
 
-// Useful to convert Dafny strings into arrays of characters.
-method ArrayFromSeq<A>(s: seq<A>) returns (a: array<A>)
-  ensures a[..] == s
-{
-  a := new A[|s|] ( i requires 0 <= i < |s| => s[i] );
-}
 
 method {:main} Main(ghost env: HostEnvironment?)
   requires env != null && env.Valid() && env.ok.ok();
@@ -90,6 +84,18 @@ method {:main} Main(ghost env: HostEnvironment?)
   }
 
   var writeSuccess := destStream.Write(0, buffer, 0, srcLength);
+
+  if !writeSuccess {
+    return;
+  }
+
+  var closeSuccessSrc := srcStream.Close();
+
+  if !closeSuccessSrc{
+    return;
+  }
+
+  var closeSuccessDst := destStream.Close();
 
   
   print "done!\n";

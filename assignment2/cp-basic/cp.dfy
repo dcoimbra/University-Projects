@@ -6,13 +6,6 @@
 
 include "Io.dfy"
 
-// Useful to convert Dafny strings into arrays of characters.
-method ArrayFromSeq<A>(s: seq<A>) returns (a: array<A>)
-  ensures a[..] == s
-{
-  a := new A[|s|] ( i requires 0 <= i < |s| => s[i] );
-}
-
 predicate equals(a: seq, b: seq)
   requires |a| == |b|
   {
@@ -40,32 +33,49 @@ method {:main} Main(ghost env: HostEnvironment?)
 
   var srcExists := FileStream.FileExists(srcName, env);
 
-  if srcExists {
-
-    var srcOpenSuccess, srcStream := FileStream.Open(srcName, env);
-
-    if srcOpenSuccess {
-
-      var lengthSuccess, srcLength := FileStream.FileLength(srcName, env);
-
-      if lengthSuccess && srcLength >= 0 {
-        
-        var buffer: array<byte> := new byte[srcLength];
-
-        var readSuccess := srcStream.Read(0, buffer, 0, srcLength);
-
-        if readSuccess {
-
-          var destOpenSuccess, destStream := FileStream.Open(destName, env);
-
-          if destOpenSuccess {
-
-            var writeSuccess := destStream.Write(0, buffer, 0, srcLength);
-          }
-        }
-      }
-    }
+  if !srcExists {
+    return;
   }
+  
+  var srcOpenSuccess, srcStream := FileStream.Open(srcName, env);
+
+  if !srcOpenSuccess {
+    return;
+  }
+
+  var lengthSuccess, srcLength := FileStream.FileLength(srcName, env);
+
+  if !(lengthSuccess && srcLength >= 0) {
+    return;
+  }
+
+  var buffer: array<byte> := new byte[srcLength];
+
+  var readSuccess := srcStream.Read(0, buffer, 0, srcLength);
+
+  if !readSuccess {
+    return;
+  }
+
+  var destOpenSuccess, destStream := FileStream.Open(destName, env);
+
+  if !destOpenSuccess {
+    return;
+  }
+
+  var writeSuccess := destStream.Write(0, buffer, 0, srcLength);
+
+  if !writeSuccess {
+    return;
+  }
+              
+  var closeSuccessSrc := srcStream.Close();
+
+  if !closeSuccessSrc{
+    return;
+  }
+  
+  var closeSuccessDst := destStream.Close();
   
   print "done!\n";
 }
