@@ -14,12 +14,13 @@ method ArrayFromSeq<A>(s: seq<A>) returns (a: array<A>)
   a := new A[|s|] ( i requires 0 <= i < |s| => s[i] );
 }
 
+// simply checks if two bytes are equal
 predicate same_bytes(b1: byte, b2: byte)
 {
   b1 == b2
 }
 
-
+// build_same_bytes builds a sequence where every "run" of adjacent identical bytes is replaced by one instance of that byte
 function build_same_bytes (bytes:seq<byte>, pos: int, counter: byte) : seq<byte>
 requires |bytes| > 0
 requires 0 <= pos < |bytes|
@@ -55,12 +56,16 @@ decreases |bytes| - pos
   else count_bytes(bytes, pos + 1, counter + 1)
 }
 
+// compress defines a specification for the compression operation
+// In RLE, a compression operation substitutes a "run" of adjacent, identical bytes
+// with one instance of that byte and a counter. A 0 is added to separate bytes from their counters.
 function compress(bytes:seq<byte>) : seq<byte>
 {
   if |bytes| <= 0 then []
   else build_same_bytes(bytes, 0, 0) + [0] + count_bytes(bytes, 0, 0)
 }
 
+// restore takes a byte and a counter for that byte, and returns the given byte repeated by the given counter.
 function restore(b: byte, count: byte) : seq<byte>
 requires count >= 0
 decreases count
@@ -69,6 +74,8 @@ decreases count
   else [b] + restore(b, count - 1)
 }
 
+// get_original restores all the compressed runs in a file compressed with RLE.
+// it also serves as a specification for redo_original which does the same thing
 function get_original(runs:seq<byte>, counts:seq<byte>) : seq<byte>
 requires |runs| == |counts|
 requires |runs| >= 0
@@ -80,6 +87,9 @@ decreases |runs|, |counts|
   else restore(runs[0], counts[0]) + get_original(runs[1..], counts[1..])
 } 
 
+// decompress defines a specification for the decompress operation,
+// In RLE, decompress finds (byte, counter) pairs and restores each byte run according to their counter.
+// if it's not possible to decompress the sequence, the result is the given sequence.
 function decompress(bytes:seq<byte>) : seq<byte>
 {
   var idx := (|bytes| - 1) / 2;
@@ -87,31 +97,35 @@ function decompress(bytes:seq<byte>) : seq<byte>
   else bytes
 }
 
+// lossless: If this lemma is true, then compress and decompress are the same as the identity function.
 lemma {:axiom true} lossless(bytes:seq<byte>)
   ensures decompress(compress(bytes)) == bytes;
 
 
-
+// eq_result: If the last element of bytes is the same as byteNext, then computing
+// build_same_bytes with the concatenation of bytes and byteNext is the same as doing that
+// with only bytes as it's part of the same run.
 lemma {:axiom true} eq_result(bytes: seq<byte>, byteNext:byte)
 requires |bytes| >= 1
 requires bytes[|bytes|-1] == byteNext
 ensures build_same_bytes(bytes + [byteNext], 0, 0) == build_same_bytes(bytes, 0, 0) 
 
 
-
+// split result: if the last element of bytes is different than next,
+// then computing build_same_bytes with their concatenation is the same
+// as doing it separately (build_same_bytes is distributive in this case)
 lemma {:axiom true} split_result(bytes: seq<byte>, next: byte, ctr: byte)
 requires |bytes| > 0
 requires bytes[|bytes|-1] != next || ctr == 255
 ensures build_same_bytes(bytes + [next], 0, 0) == build_same_bytes(bytes, 0, 0) +  build_same_bytes([next], 0, 0)
 
 
-
+// takes an array of bytes and returns their runs and a counter for each run
 method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
   requires bytes != null
   ensures bytes.Length > 0 ==> |runs| == |counts|
   //ensures bytes.Length > 0 ==> runs == build_same_bytes(bytes[..], 0, 0)
   //ensures bytes.Length > 0 ==> counts == count_bytes(bytes[..], 0, 0)
-
   {
 
   if bytes.Length <= 0 {
@@ -202,6 +216,8 @@ method get_runs(bytes:array?<byte>) returns (runs:seq<byte>, counts:seq<byte>)
   assert bytes[..] == bytes[..bytes.Length];
 }
 
+// implements RLE compression. takes an array of bytes and compresses them,
+// separating bytes from their counters with a 0. 
 method compress_impl(bytes:array?<byte>) returns (compressed_bytes:array?<byte>)
   requires bytes != null;
   ensures  compressed_bytes != null;
@@ -214,23 +230,20 @@ method compress_impl(bytes:array?<byte>) returns (compressed_bytes:array?<byte>)
   compressed_bytes := ArrayFromSeq<byte>(runs + counts);
 }
 
-predicate sumInBytes(a:int, b:int)
-{
-  (a+b) <= 255
-}
-
-
+// same_rebuild: get_original is distributive over addition.
 lemma {:axiom true} same_rebuild(a:seq<byte>, b:seq<byte>, c:seq<byte>, d:seq<byte>)
   requires |a| >=0 && |b| >= 0 && |c| >= 0 && |d| >= 0
   requires |a| == |b|
   requires |c| == |d|
   ensures get_original(a+c, b+d) == get_original(a,b) + get_original(c,d)
 
+
+// append: addition on counters in restore is distributive.
 lemma {:axiom true} append(a:byte, b:int, c:int)
-requires 0<=b<=255 && 0<=c<=255 && sumInBytes(b,c)
+requires 0<=b<=255 && 0<=c<=255 && b+c<=255
 ensures restore(a,(b+c) as byte) == restore(a,b as byte) + restore(a,c as byte)
 
-
+// takes a sequence of bytes and a counter for each byte and restores the original sequence.
 method redo_original(sequence:seq<byte>, counters:seq<byte>) returns (original_bytes:array?<byte>)
 requires |sequence| >= 1 
 requires |counters| >= 1
@@ -303,7 +316,8 @@ ensures original_bytes != null
   assert counters == counters[..|counters|];
 }
 
-
+// implements RLE decompression. takes an array obtained by RLE compression and returns the original array.
+//if it's not possible to decompress the array, the result is the given array.
 method decompress_impl(compressed_bytes:array?<byte>) returns (decompressed_bytes:array?<byte>)
   requires compressed_bytes != null    
   ensures  decompressed_bytes != null;
