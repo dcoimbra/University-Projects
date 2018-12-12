@@ -35,6 +35,7 @@ For example, one could write to a file, changing the previous state, and then re
 ## Question 3
 
 > Semantically, what does it mean if you add preconditions (requires) to the `Main` method?
+
 Adding preconditions to `Main` defines a baseline/scope for what the program may verify down the line.
 In a verification sense, it restricts what kind of input is allowed to be verified by the program, and it also 
 places restrictions on environment variables in order to fully define the kind of environment the program works in.
@@ -83,4 +84,3 @@ a recursive function that describes what the tool is supposed to do. This is don
 
 A proof for the lossless property is attempted by writing a lemma that checks whether the result on calling decompress on compress is
 indeed identical to the identity function.
-
