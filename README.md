@@ -49,7 +49,7 @@ And run it with `./proj1`
 
 ## Built With
 
-* [Boost Graph Library](https://www.boost.org/doc/libs/1_66_0/libs/graph/doc/index.html) - Used to implement an adjacency-list-based graph for the airport network.
+* [Boost Graph Library](https://www.boost.org/doc/libs/1_66_0/libs/graph/doc/index.html) - Used to implement an adjacency-list-based graph for the airport network (C++ version).
 
 ## Authors
 
