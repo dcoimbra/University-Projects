@@ -43,9 +43,7 @@ To build the C++ version, you need the Boost Graph Library installed in your sys
 
 C version: `gcc proj1.c -o proj1`
 
-C++ version:
-
-`make`
+C++ version: `make`
 
 And run it with `./proj1`
 
