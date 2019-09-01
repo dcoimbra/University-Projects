@@ -93,7 +93,3 @@ def max_mandatos(votacoes):
         return "Empate tecnico"
 
     return PARTIDOS[idx][1] + "\t" + PARTIDOS[idx][0]
-
-
-def imported():
-    return "Import successful"
