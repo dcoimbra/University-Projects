@@ -3,11 +3,11 @@
 Python script for applying the Dhondt method given a set of electoral circles, parties, and election results. 
 
 
-Implemented for the Portuguese electoral system.
+Implemented for the Portuguese electoral system (with a lot of unrealistic assumptions).
 
 
 Made for a Foundations of Programming course and remade years later using NumPy.
-Check out the original project description (in Portuguese) for more information and usage details.
+Check out the [original project description (in Portuguese)](https://github.com/HiveMindize/dhondt/blob/master/dhondt.pdf) for more information and usage details.
 
 I attempted to create a frontend for it in Django but I'm really bad at it. Might get back to it in the future
 
