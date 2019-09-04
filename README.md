@@ -1,9 +1,15 @@
 # dhondt
 
-Python script for applying the Dhondt method given a set of electoral circles, parties, and election results.
-Made for a Foundations of Programming course and remade years later using NumPy.
+Python script for applying the Dhondt method given a set of electoral circles, parties, and election results. 
 
-I attempted to create a frontend for it in Django but I'm really bad at it. Might get back to it in the future.
+
+Implemented for the Portuguese electoral system.
+
+
+Made for a Foundations of Programming course and remade years later using NumPy.
+Check out the original project description (in Portuguese) for more information and usage details.
+
+I attempted to create a frontend for it in Django but I'm really bad at it. Might get back to it in the future
 
 ### Prerequisites
 
@@ -14,7 +20,7 @@ Python 3, NumPy, and Django.
 Install Python 3 and Django by visiting the website and downloading the latest version. Follow the instructions for your platform.
 
 To install Django:
-```
+```bash
 pip install django
 ```
 
