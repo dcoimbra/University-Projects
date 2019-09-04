@@ -1,4 +1,4 @@
-# airport-graph
+# airport-manager
 
 Simple graph implementation for an airport management system. 
 Written in C for an Introduction to Algorithms and Data Structures class. Rewritten in C++ years later. 
