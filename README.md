@@ -17,16 +17,16 @@ Python 3, NumPy, and Django.
 
 ### Installing
 
-Install Python 3 and Django by visiting the website and downloading the latest version. Follow the instructions for your platform.
-
-To install Django:
-```bash
-pip install django
-```
+Install Python 3 by visiting the website and downloading the latest version. Follow the instructions for your platform.
 
 To install NumPy:
 ```bash
 pip install numpy
+```
+
+To install Django:
+```bash
+pip install django
 ```
 
 To start the development server:
@@ -39,7 +39,7 @@ python manage.py runserver
 ## Built With
 
 * [Django](https://www.djangoproject.com/) - The web framework used
-* [NumPy](https://numpy.org/) - Used to generate RSS Feeds
+* [NumPy](https://numpy.org/) - Used for mathematical operations and array manipulation
 
 
 ## Authors
