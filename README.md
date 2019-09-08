@@ -15,4 +15,4 @@ Python 3 and NumPy.
 
 ## Authors
 
-* **David Coimbra** - *Initial work and attempt at a Django web implementation* - [dcoimbra](https://github.com/dcoimbra)
+* **David Coimbra** - [dcoimbra](https://github.com/dcoimbra)
