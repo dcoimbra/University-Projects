@@ -1,11 +1,11 @@
 # pepe-trains
 
-A train track simulator written in Assembly for the PEPE processor, a 16-bit miroprocessorprocessor used in an Introduction to Computer Architecture course for the purpose of teaching basic assembly programming.
+A train track simulator written in Assembly for the PEPE processor, a 16-bit miroprocessor used in an Introduction to Computer Architecture course for the purpose of teaching basic assembly programming.
 Developed as a project for said course.
 
 Features two trains, train stops, and pretty green/red lights.
 
-See the original project description (in Portuguese) for details and usage.
+See the [original project description (in Portuguese)](https://github.com/dcoimbra/pepe-trains/blob/master/projeto-comboios-2015.pdf) for details and usage.
 
 ## Authors
 
