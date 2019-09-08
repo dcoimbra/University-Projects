@@ -9,7 +9,7 @@ See the original project description (in Portuguese) for details and usage.
 
 ## Authors
 
-# IAC Group 23 - 2015/2016
+### IAC Group 23 - 2015/2016
 
 * **David Coimbra** - *Original group member* - [dcoimbra](https://github.com/dcoimbra)
 * **Fábio Pimenta** - *Original group member*
