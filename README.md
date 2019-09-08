@@ -2,7 +2,7 @@
 
 Play Picross with Python! **Not complete. Check TODO.**
 
-Originally developed for a Foundations to Programming class. This is my attempt at rewriting it using an object-oriented approach.
+Originally developed for a Foundations of Programming class. This is my attempt at rewriting it using an object-oriented approach.
 
 Maybe I'll even try to implement a frontend for it using Django.
 
