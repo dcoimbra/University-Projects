@@ -1,6 +1,6 @@
 # pycross
 
-Play Pycross with Python! **Not complete. Check TODO.**
+Play Picross with Python! **Not complete. Check TODO.**
 
 Originally developed for a Foundations to Programming class. This is my attempt at rewriting it using an object-oriented approach.
 
