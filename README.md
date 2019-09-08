@@ -44,4 +44,4 @@ python manage.py runserver
 
 ## Authors
 
-* **David Coimbra** - *Initial work and attempt at a Django web implementation* - [HiveMindize](https://github.com/HiveMindize)
+* **David Coimbra** - *Initial work and attempt at a Django web implementation* - [dcoimbra](https://github.com/dcoimbra)
