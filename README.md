@@ -5,12 +5,12 @@ Developed as a project for said course.
 
 Features two trains, train stops, and pretty green/red lights.
 
-See the original project description for details and usage.
-
-## Prerequisites
-
-(PEPE simulator)[https://fenix.tecnico.ulisboa.pt/downloadFile/282093452010009/simulador.jar].
+See the original project description (in Portuguese) for details and usage.
 
 ## Authors
 
-* **David Coimbra** - *Original project* - [PurpleBooth](https://github.com/PurpleBooth)
+# IAC Group 23 - 2015/2016
+
+* **David Coimbra** - *Original group member* - [dcoimbra](https://github.com/dcoimbra)
+* **Fábio Pimenta** - *Original group member*
+* **Alexandre Caldeira** - *Original group member* - [AlexCaldeira](https://github.com/AlexCaldeira)
