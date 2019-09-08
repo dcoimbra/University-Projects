@@ -55,5 +55,5 @@ And run it with `./proj1`
 
 ### IAED 2015/2016 Group 25
 
-* **David Coimbra** - *Original project group member and C++ rewrite* - [HiveMindize](https://github.com/HiveMindize)
+* **David Coimbra** - *Original project group member and C++ rewrite* - [dcoimbra](https://github.com/dcoimbra)
 * **Filipa Marques** - *Original project group member* - [filipaBit](https://github.com/filipaBit)
