@@ -24,7 +24,7 @@ void addHashtags(HashtagSet& set, std::string message) {
 
 std::pair<std::size_t, int> countHashtags(HashtagSet& set) {
     
-    int ntotal{0};
+    auto ntotal{0};
 
     for (auto hashtag = set.begin(); hashtag != set.end(); ++hashtag) {
         ntotal += hashtag->get_count();
@@ -59,9 +59,10 @@ std::vector<std::string> processMessage(std::string message) {
 
     size_t beg, pos = 0;
     std::string token{};
-    while ((beg = message.find_first_not_of(delims, pos)) != std::string::npos) {
+    while ((beg = message.find_first_not_of(delims, pos)) != std::string::npos) { 
         pos = message.find_first_of(delims, beg + 1);
         token = message.substr(beg, pos - beg);
+        
         if (token.at(0) == '#' && token.length() > 1) {
             lowercase(token);
             hashtags.push_back(token);
@@ -74,7 +75,7 @@ std::vector<std::string> processMessage(std::string message) {
 void lowercase(std::string& string) {
     
     int length = string.length();
-    for (int i = 0; i < length; ++i) {
+    for (auto i = 0; i < length; ++i) {
         string[i] = std::tolower(string[i]);
     }
 }
