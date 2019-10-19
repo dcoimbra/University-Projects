@@ -1,0 +1,54 @@
+version: "3"
+services:
+  easyappointments-data:
+    image: mariadb:latest
+    environment:
+      MYSQL_DATABASE: easyappointments
+      MYSQL_ROOT_PASSWORD: hellodocker
+
+  easyappointments1:
+    image: jamrizzi/easyappointments:latest
+    environment:
+      DB_NAME: easyappointments
+      DB_PASSWORD: hellodocker
+      #BASE_URL: http://localhost:8888
+    #ports:
+     # - 8888:8880
+    links:
+      - easyappointments-data:db
+  
+  easyappointments2:
+    image: jamrizzi/easyappointments:latest
+    environment:
+      DB_NAME: easyappointments
+      DB_PASSWORD: hellodocker
+      #BASE_URL: http://localhost:8
+    #ports:
+    #  - 8888:8881
+    links:
+      - easyappointments-data:db
+
+  loadbalancer:
+    build: ./load-balancer
+    tty: true
+    links:
+      - easyappointments1
+      - easyappointments2
+    ports:
+      - '8888:8888'
+
+  openvas:
+    image: atomicorp/openvas
+    ports:
+      - 443:443
+
+  bot: 
+    image: tutum/curl
+    volumes: 
+      - ./DDoSBotnet/DDoSBot/curlAttack.sh:/usr/bin/curlAttack.sh
+    command: bash -c "./usr/bin/curlAttack.sh"
+
+volumes:
+  snortconf:
+  localrules:
+  curlattack:
