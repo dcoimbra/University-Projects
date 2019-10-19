@@ -18,7 +18,7 @@ Built with Python 3.
 ## Authors
 
 * **David Coimbra** - *Initial project group member and OOP rewrite* - [dcoimbra](https://github.com/dcoimbra)
-* **Filipa Marques** - *Initial project group  member* -[filipaBit](https://github.com/filipaBit)
+* **Filipa Marques** - *Initial project group  member* - [filipaBit](https://github.com/filipaBit)
 
 ## Acknowledgements
 Used some bits of the official solution for the original project.
