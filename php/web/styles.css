@@ -1,0 +1,52 @@
+/*Style of our PHP app*/
+
+/*Products table*/
+table, tr, th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+
+}
+
+td, th{
+    padding-right: 20px;
+}
+/*-----------------------------------------------------------------------------------------------------------------*/
+/*Tabela das categorias*/
+
+table#super_cat{
+    top: 55;
+    left: 400;
+    position: fixed;
+}
+/*----------------------------------------------------------------------------------------------------------------*/
+
+/*Main*/
+
+.button{
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    width: 100px;
+    height: 30px;
+    text-decoration: none;
+    color: initial;
+    text-align: center;
+    padding-top: 14px;
+}
+
+/*------------------------------------------------------------------------------------------------------------*/
+.home{
+    color: black;
+    -webkit-appearance: button;
+    text-decoration: none;
+    text-align: center;
+    width: 100px;
+
+}
+
+.Back{
+    -webkit-appearance: button;
+    text-decoration: none;
+    color: black;
+    width: 50px;
+    text-align: center;s
+}
