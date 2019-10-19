@@ -4,8 +4,6 @@ Play Picross with Python! **Not complete. Check TODO.**
 
 Originally developed for a Foundations of Programming class. This is my attempt at rewriting it using an object-oriented approach.
 
-Maybe I'll even try to implement a frontend for it using Django.
-
 See the original [project description (in Portuguese)](https://github.com/dcoimbra/pycross/blob/master/proj2.pdf) for more information and usage details.
 
 Built with Python 3.
