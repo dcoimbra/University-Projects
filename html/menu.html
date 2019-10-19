@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="../css/style.css" />
+        <script src="../js/functions.js" type="text/javascript"></script>
+        <!-- Bootstrap -->
+        <link href="./login_files/bootstrap.min.css" rel="stylesheet" />
+        <!-- jQuery -->
+        <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <!-- Bootstrap javascript -->
+        <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+
+        <title>Menu Principal</title>
+
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <script src="../js/functions.js" type="text/javascript"></script>
+    </head>
+
+    <body onload="checklogin()">
+
+        <a href="login.html" id="loginlink">
+            <img src="../images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" onclick="savelastpage()"/>
+        </a>
+
+        <div id="menu" align="center">
+            <header class="menuHeader">Menu</header>
+            <button type="button" class="menuItem" onclick="adicionaPedido('amineral')">Bebidas</button>
+            <button type="button" class="menuItem" onclick="window.location='entradas.html'">Entradas</button>
+            <button type="button" class="menuItem" onclick="window.location='pratos.html'">Pratos do Dia</button>
+            <button type="button" class="menuItem" onclick="window.location='sobremesas.html'">Sobremesas</button>
+        </div>
+
+        <div id="order">
+        	<div id="ordertitle">O meu pedido:</div>
+        	<div id="test"></div>
+        	<div id="bottomlabel">
+        		<p id="totaltext">Total:</p>
+        		<p id="orderprice">€</p>
+        		<button type="button" id="mod">Modificar Pedido</button>
+        	</div>
+        </div>
+
+        <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
+
+    </body>
+</html>
