@@ -1,0 +1,12 @@
+<archimate:ServingRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    id="a6a703ea-fd43-4486-ac80-ed5524e4015e"
+    documentation="verifica se cliente tem o montante suficiente disponivel para a reserva inicial">
+  <source
+      xsi:type="archimate:ApplicationService"
+      href="ApplicationService_0ecd65dc-5bd0-4475-a40c-2e8eb8699c03.xml#0ecd65dc-5bd0-4475-a40c-2e8eb8699c03"/>
+  <target
+      xsi:type="archimate:BusinessProcess"
+      href="BusinessProcess_ca3f0937-484c-47f8-a0fb-ec3063f78732.xml#ca3f0937-484c-47f8-a0fb-ec3063f78732"/>
+</archimate:ServingRelationship>

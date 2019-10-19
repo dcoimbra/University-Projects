@@ -1,0 +1,12 @@
+<archimate:ServingRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Acesso seguro"
+    id="cff523dd-1e07-4466-90ad-19945ccd8e94">
+  <source
+      xsi:type="archimate:ApplicationInterface"
+      href="ApplicationInterface_d664bbf2-c26e-4b08-8bc5-11e2bdaf4c06.xml#d664bbf2-c26e-4b08-8bc5-11e2bdaf4c06"/>
+  <target
+      xsi:type="archimate:ApplicationComponent"
+      href="ApplicationComponent_547840f2-959d-4c50-b4e5-1c79deeb02df.xml#547840f2-959d-4c50-b4e5-1c79deeb02df"/>
+</archimate:ServingRelationship>

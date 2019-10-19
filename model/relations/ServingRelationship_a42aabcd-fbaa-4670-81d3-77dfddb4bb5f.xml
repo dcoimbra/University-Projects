@@ -1,0 +1,12 @@
+<archimate:ServingRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    id="a42aabcd-fbaa-4670-81d3-77dfddb4bb5f"
+    documentation="desbloquei feito remotamente mediante possibilidade de pagamento por parte do cliente (verificado em ERP)">
+  <source
+      xsi:type="archimate:ApplicationService"
+      href="ApplicationService_d7f84cb4-42d8-42cc-a82e-fadf710dd5a9.xml#d7f84cb4-42d8-42cc-a82e-fadf710dd5a9"/>
+  <target
+      xsi:type="archimate:BusinessProcess"
+      href="BusinessProcess_ca3f0937-484c-47f8-a0fb-ec3063f78732.xml#ca3f0937-484c-47f8-a0fb-ec3063f78732"/>
+</archimate:ServingRelationship>
