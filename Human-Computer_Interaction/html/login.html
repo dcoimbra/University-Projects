@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+  <html lang="pt">
+
+    <head>
+
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+      <title>Acesso à área de cliente</title>
+
+      <link href="../css/style.css" rel="stylesheet" />
+
+      <!-- Bootstrap core CSS -->
+      <link href="./login_files/bootstrap.min.css" rel="stylesheet" />
+
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <link href="./login_files/ie10-viewport-bug-workaround.css" rel="stylesheet" />
+
+      <!-- Custom styles for this template -->
+      <link href="./login_files/signin.css" rel="stylesheet" />
+
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <script src="./login_files/ie10-viewport-bug-workaround.js.transferir"></script>
+
+      <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+      <!-- Bootstrap javascript -->
+      <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+
+      <script src="./login_files/ie-emulation-modes-warning.js.transferir"></script>
+      <script src="../js/functions.js" type="text/javascript"></script>
+
+      <style type="text/css">
+
+        :root #carbonads-container,
+        :root #content > #right > .dose > .dosesingle,
+        :root #content > #center > .dose > .dosesingle,
+        :root .carbonad {
+
+          display: none !important;
+        }
+      </style>
+
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+      <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    </head>
+
+      <body onload="makeBarInvisible();$('.backbutton').show()">
+
+        <img src="../images/waiter.png" id="waiterbutton" class="imgbutton" />
+
+        <h1 class="centerheader">Acesso à área pessoal</h1>
+        <br />
+        <div class="container">
+
+          <form id="signin" class="form-signin" action="pessoal.html" method="post">
+
+            <label for="inputUsername" class="sr-only">Username</label>
+            <input name="inputUsername" type="text" id="inputUsername" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Username" />
+            <br />
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input name="inputPassword" lang="pt" type="password" id="inputPassword" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Password" />
+
+            <br />
+
+            <button onclick="storeUsername('inputUsername')" type="submit" class="btn-lg" id="loginconfirm"><span class="buttontext">LOGIN</span></button>
+          </form>
+
+          <img onclick="window.location='facescan.html';clearUsername()" src="../images/login/face.png" id="facebutton" class="imgbutton loginbutton" alt="Reconhecimento facial" />
+          <img onclick="window.location='nfcscan.html';clearUsername()" src="../images/login/nfcbutton.png" id="nfcbutton" class="imgbutton loginbutton" alt="NFC" />
+          <img onclick="showBar();clearUsername()" src="../images/login/fingerprinticon.png" id="fingerprintbutton" class="imgbutton loginbutton" alt="Impressão digital" />
+        </div> <!-- /container -->
+
+        <div class="popup" id="myProgress">
+            <div class="popup" id="myBar"></div>
+        </div>
+
+
+        <button onclick="goBack()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+
+      </body>
+  </html>

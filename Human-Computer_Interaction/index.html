@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <!-- jQuery -->
+    <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+
+    <title>Com.ISTo</title>
+</head>
+
+<body onload="waiter();ordercheck();showhelp()">
+
+    <img src="images/login_21.png" id="loginbutton" class="imgbutton" alt="LOGIN" />
+
+    <button type="button" id="waitbutton">Enquanto Espera</button>
+
+    <!--------------------------------- ECRA INICIAL ---------------------------------->
+    <div id="ecrainicial">
+        <img src="images/ecra_inicial/comecar.svg" id="comecarbutton" alt="começar" onclick="$('#ecrainicial').hide();$('#menupage').show();$('#order').show();$('#finishmeal').show();savedivname('#menupage')" />
+    </div>
+
+    <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - -  -->
+    <div id="menupage">
+        <header class="cabecalhos">Menu</header>
+        <div id="menuPrincipal" align="center">
+
+            <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#bebidas').show();$('.backbutton').show();savedivname('#bebidas')">Bebidas</button>
+            <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#entradas').show();$('.backbutton').show();savedivname('#entradas')">Entradas</button>
+            <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#pratos').show();$('.backbutton').show();savedivname('#pratos')">Pratos do Dia</button>
+            <button type="button" class="menuItem" onclick="$('#menupage').hide();$('#sobremesas').show();$('.backbutton').show();savedivname('#sobremesas')">Sobremesas</button>
+        </div>
+
+    </div>
+
+    <!-- - - - - - - - - - - - - - - - - - - BEBIDAS - - - - - - - - - - - - - - - - - -->
+    <div id="bebidas">
+        <header class="cabecalhos">Bebidas</header>
+        <div id="menuPrincipal" align="center">
+
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Água com Gás', 1.00, 'orderPreview', 1)">Água com Gás</button>
+                <div class="dot"></div>
+                <p class="price">1,00€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Água Mineral', 1.00, 'orderPreview', 1)">Água Mineral</button>
+                <div class="dot"></div>
+                <p class="price">1,00€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Coca Cola', 1.80, 'orderPreview', 1)">Coca Cola</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Coca Cola Zero', 1.80, 'orderPreview', 1)">Coca Cola Zero</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Fanta Laranja', 1.80, 'orderPreview', 1)">Fanta Laranja</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Frutos Exóticos', 1.80, 'orderPreview', 1)">Ice Tea de Frutos Exóticos</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Limão', 1.80, 'orderPreview', 1)">Ice Tea de Limão</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Ice Tea de Pêssego', 1.80, 'orderPreview', 1)">Ice Tea de Pêssego</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Sumo de Laranja', 1.50, 'orderPreview', 1)">Sumo de Laranja</button>
+                <div class="dot"></div>
+                <p class="price">1,50€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Sumol de Laranja', 1.80, 'orderPreview', 1)">Sumol de Laranja</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Sumol de Ananás', 1.80, 'orderPreview', 1)">Sumol de Ananás</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('7up', 1.80, 'orderPreview', 1)">7up</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+            <div class="bebida" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('7up Light', 1.80, 'orderPreview', 1)">7up Light</button>
+                <div class="dot"></div>
+                <p class="price">1,80€</p>
+            </div>
+        </div>
+
+        <button onclick="$(divname).hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+
+    </div>
+
+    <!-- - - - - - - - - - - - - - - - - - -ENTRADAS - - - - - - - - - - - - - - - - - -->
+    <div id="entradas">
+        <header class="cabecalhos">Entradas</header>
+        <div id="menuPrincipal" align="center">
+
+            <div class="entrada" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Couvert', 1.50, 'orderPreview', 5)">Couvert</button>
+                <div class="dot"></div>
+                <p class="price">1,50€</p>
+            </div>
+            <div class="entrada" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Sopa de Legumes', 2.00, 'orderPreview', 8)">Sopa de Legumes</button>
+                <div class="dot"></div>
+                <p class="price">2,00€</p>
+            </div>
+        </div>
+
+        <button onclick="$('#entradas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+
+    </div>
+
+    <!-- - - - - - - - - - - - - - - - - - -PRATOS - - - - - - - - - - - - - - - - - - -->
+    <div id="pratos">
+        <header class="cabecalhos">Pratos do Dia</header>
+        <div id="menuPrincipal" align="center">
+
+            <header class="menusubHeader">Carne</header>
+            <div class="camadas">
+                <div class="prato" align="left">
+                    <button type="button" class="menuscomida" id="esparguete" data-placement="right" data-trigger="focus">Esparguete à Bolonhesa</button>
+                    <div class="dot"></div>
+                    <p class="price">4,50€</p>
+                </div>
+            </div>
+            <header class="menusubHeader">Peixe</header>
+            <div class="camadas">
+                <div class="prato" align="left">
+                    <button type="button" class="menuscomida" id="bacalhau" data-placement='right' data-trigger="focus">Bacalhau com Natas</button>
+                    <div class="dot"></div>
+                    <p class="price">4,00€</p>
+                </div>
+            </div>
+
+
+            <!-- TODO: Adicionar informação relativa a alergias + Acompanhamentos -->
+            <div id="popoverbacalhau" style="display: none">
+                <img class="foodimage" src="images/bacalhau.jpg" alt="Bacalhau com Natas" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)">
+                <p>Prato tipicamente português. Gratinado no forno, consiste em camadas de bacalhau, batatas e natas.</p><button type="button" onclick="adicionaPedido('Bacalhau com Natas', 4.00, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button></div>
+
+            <div id="popoveresparguete" style="display: none">
+                <img class="foodimage" src="images/esparguete.jpg" alt="Esparguete à Bolonhesa" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)">
+                <p>Original da cidade italiana de Bolonha, é uma das pastas italianas mais apreciadas em todo o mundo.</p><button type="button" onclick="adicionaPedido('Esparguete à Bolonhesa', 4.50, 'orderPreview', 30)" class="add">Adicionar ao Pedido</button>
+            </div>
+
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#bacalhau').popover({
+                        html: true,
+                        content: function() {
+                            return $('#popoverbacalhau').html();
+                        }
+                    });
+                });
+
+                $(document).ready(function() {
+                    $('#esparguete').popover({
+                        html: true,
+                        content: function() {
+                            return $('#popoveresparguete').html();
+                        }
+                    });
+                });
+
+            </script>
+
+            <button onclick="$('#pratos').hide();$('#menupage').show();savedivname('#menupage');$('#esparguete').popover('hide');$('#bacalhau').popover('hide')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+
+        </div>
+
+    </div>
+
+    <!-- TODO: alinhar imagens popups -->
+    <!-- TODO: MODIFICAR ACOMPANHAMENTOS -->
+
+    <!-- - - - - - - - - - - - - - - - - - -SOBREMESAS - - - - - - - - - - - - - - - - -->
+    <div id="sobremesas">
+        <header class="cabecalhos">Sobremesas</header>
+        <div id="menuPrincipal" align="center">
+
+            <div class="sobremesa" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Salada de Fruta', 1.00, 'orderPreview', 3)">Salada de Fruta</button>
+                <div class="dot"></div>
+                <p class="price">1,00€</p>
+            </div>
+            <div class="sobremesa" align="left">
+                <button type="button" class="menuscomida" onclick="adicionaPedido('Mousse de Chocolate', 1.00, 'orderPreview', 3)">Mousse de Chocolate</button>
+                <div class="dot"></div>
+                <p class="price">1,00€</p>
+            </div>
+        </div>
+
+        <button onclick="$('#sobremesas').hide();$('#menupage').show();savedivname('#menupage')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+
+    </div>
+
+    <!-- - - - - - - - - - - - - - - - - - - PEDIDO - - - - - - - - - - - - - - - - -  -->
+    <div id="order">
+        <div id="ordertitle">O meu pedido:</div>
+        <div id="middlelabel">
+            <table id="orderPreview" class="ordertable" style="">
+                <th id="addMore">
+                </th>
+                <th id="quantity">
+                </th>
+                <th id="ordername">
+                </th>
+                <th id="orderprice">
+                </th>
+            </table>
+            <table id="orderQueue" class="ordertable" style="background-color: mistyrose;">
+                <th id="quantity">
+                </th>
+                <th id="ordername">
+                </th>
+                <th id="orderprice">
+                </th>
+            </table>
+            <table id="orderCooking" class="ordertable" style="background-color: lightgoldenrodyellow;">
+                <th id="quantity">
+                </th>
+                <th id="ordername">
+                </th>
+                <th id="orderprice">
+                </th>
+            </table>
+            <table id="orderReady" class="ordertable" style="background-color: lightgreen;">
+                <th id="quantity">
+                </th>
+                <th id="ordername">
+                </th>
+                <th id="orderprice">
+                </th>
+            </table>
+        </div>
+        <div id="bottomlabel">
+            <table id="totaltable">
+                <th id="totaltext">Total: </th>
+                <th id="totalprice" style="text-align: right;"> €</th>
+            </table>
+        </div>
+    </div>
+
+    <button type="button" id="sendorder" class="bottomrightbutton btn-lg btn-success">Enviar pedido para a cozinha</button>
+
+    <button type="button" id="finishmeal" class="bottomrightbutton btn-lg">Terminar refeição</button>
+
+    <div class="modal fade" id="ordermodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">Após enviado para a cozinha o pedido não pode ser alterado.</div>
+                <div class="modal-body">O seu pedido está correto?</div>
+                <div class="modal-footer">
+                    <button type="button" id="checkorder" class="btn btn-success modalbutton" onclick="$(divname).hide();$(divloginname).hide();$('#apospedido').show();$('#sendorder').hide();savedivname('#apospedido');leavePreviewState();$('#sendorder').hide();$('#waitbutton').hide()" data-dismiss="modal">Sim</button>
+                    <button type="button" id="denyorder" class="btn btn-danger modalbutton" data-dismiss="modal">Não</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="readymodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">O seu pedido está pronto.</div>
+                <div class="modal-body">Bom apetite!</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success modalbutton" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TODO: MODIFICAR PEDIDO -->
+
+
+    <!-- - - - - - - - - - - - - - - - - - - APÓS PEDIDO - - - - - - - - - - - - - - - -->
+
+    <div id="apospedido">
+        <header class="cabecalhos">O seu pedido está a cozinhar!</header>
+        <div id="menuPrincipal" align="center">
+            <button onclick="$('#apospedido').hide();$('#entretenimento').show();$('.backbutton').show()" type="button" class="menuItem">Entretenimento</button>
+            <button onclick="$('#apospedido').hide();$('#menupage').show();savedivname('#menupage');$('#waitbutton').show()" type="button" class="menuItem">Fazer novo pedido</button>
+        </div>
+    </div>
+
+    <div id="entretenimento">
+        <header class="cabecalhos">Entretenha-se enquanto espera!</header>
+        <div id="menuPrincipal" align="center">
+            <button onclick="$('#entretenimento').hide();$('#jogos').show();$('.backbutton').show();savedivname('#jogos')" type="button" class="menuItem">Jogos</button>
+            <button onclick="$('#entretenimento').hide();$('#passatempos').show();$('.backbutton').show();savedivname('#passatempos')" type="button" class="menuItem">Passatempos</button>
+        </div>
+
+        <button onclick="$('#entretenimento').hide();$('#apospedido').show();savedivname('#apospedido')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+
+    </div>
+
+    <div id="jogos">
+        <header class="cabecalhos">Jogos</header>
+        <div id="menuPrincipal" align="center">
+            <button onclick="$('#jogos').hide();$('#pong').show();$('.backbutton').show();savedivname('#pong')" type="button" class="menuItem">Pong</button>
+        </div>
+
+        <button onclick="$('#jogos').hide();$('#entretenimento').show();savedivname('#entretenimento')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+
+    </div>
+
+    <div id="passatempos">
+        <header class="cabecalhos">Passatempos</header>
+        <div id="menuPrincipal" align="center">
+            <button onclick="$('#passatempos').hide();$('#sudoku').show();$('.backbutton').show();savedivname('#sudoku')" type="button" class="menuItem">Sudoku</button>
+        </div>
+
+        <button onclick="$('#passatempos').hide();$('#entretenimento').show();savedivname('#entretenimento')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+
+    </div>
+
+    <div id="pong">
+        <img id="pongif" src="images/pong.gif" />
+        <button onclick="$('#pong').hide();$('#jogos').show();savedivname('#jogos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <div id="sudoku">
+        <img id="sudokugif" src="images/sudoku.gif" />
+        <button onclick="$('#sudoku').hide();$('#passatempos').show();savedivname('#passatempos')" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+    </div>
+
+
+    <!---------------------------------------TERMINAR REFEIÇÃO---------------------------->
+    <div id="terminar">
+
+        <header class="cabecalhos">Terminar refeição e pagar</header>
+
+
+        <div id="menuPrincipal" aling="center" style="display: inline-table; margin-top: 10vh;">
+            <div id="metodospagamento">
+                <h3 id="headermetodospagamento">Métodos de pagamento</h3>
+                <img src="images/202365-200.png" id="pDinheiro" class="imagempagamento imgbutton" onclick="changePayMethod(0)" style="box-shadow: 0px 0px 50px transparent;" />
+                <img src="images/2000px-Multibanco.svg_.png" id="pMultibanco" class="imagempagamento imgbutton" onclick="changePayMethod(1)" />
+                
+            </div>
+            
+            <div id="nifdiv" align="center">
+                <input type="text" pattern="\d*" id="nifinput" class="form-control input-lg" maxlength="9" placeholder="NIF" align="center">
+
+            <table id="numtable" align="center" >
+                <tr>
+                    <td class="num btn-default" onClick="writeNumber('1')">1</td>
+                    <td class="num btn-default" onClick="writeNumber('2')">2</td>
+                    <td class="num btn-default" onClick="writeNumber('3')">3</td>
+                </tr>
+                <tr>
+                    <td class="num btn-default" onClick="writeNumber('4')">4</td>
+                    <td class="num btn-default" onClick="writeNumber('5')">5</td>
+                    <td class="num btn-default" onClick="writeNumber('6')">6</td>
+                </tr>
+                <tr>
+                    <td class="num btn-default" onClick="writeNumber('7')">7</td>
+                    <td class="num btn-default" onClick="writeNumber('8')">8</td>
+                    <td class="num btn-default" onClick="writeNumber('9')">9</td>
+                </tr>
+                <tr>
+                    <td class="num btn-success" onclick="checkpayment()">OK</td>
+                    <td class="num btn-default" onClick="writeNumber('0')">0</td>
+                    <td class="num btn-info" onClick="eraseNumber()">C</td>
+                </tr>
+            </table>
+
+            </div>
+            
+            <button type="button" id="paybutton" class="btn-success" onclick="checkpayment()" align="center">Concluir pagamento</button>
+            
+        </div>
+
+        <button onclick="$('#terminar').hide();$(lastdiv).show();$('#finishmeal').show();choosesavediv(lastdiv)" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+
+    </div>
+
+    <div id="fim">
+        <div align="center">
+            <header id="endtext">Obrigado e até breve!<br/>Volte sempre! :)</header>
+            <br />
+            <h2 id="endtext2">Ajude-nos respondendo a um pequeno questionário sobre a sua experiência com a nossa interface!</h2>
+            <button type="button" class="btn-success endbutton" onclick="window.open('https://goo.gl/forms/GHbBYnnFBQ9n70hy2')">Sim!</button>
+            <button type="button" class="btn-danger endbutton" onclick="location.reload()">Não.</button>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="paymentmodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">Método de pagamento não selecionado!</div>
+                <div class="modal-body">Por favor, selecione um método de pagamento.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success modalbutton" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- - - - - - - - - - - - - - - - - - - LOGIN - - - - - - - - - - - - - - - - - - -->
+    <div id="loginpage">
+        <!-- Custom styles for this template -->
+        <link href="css/signin.css" rel="stylesheet" />
+
+        <style type="text/css">
+             :root #carbonads-container,
+             :root #content>#right>.dose>.dosesingle,
+             :root #content>#center>.dose>.dosesingle,
+             :root .carbonad {
+                display: none !important;
+            }
+
+        </style>
+
+        <header class="cabecalhos">Acesso à área pessoal</header>
+
+        <div class="container" id="menuPrincipal" style="height: 62vh; overflow-y: hidden;">
+
+            <form id="signin" class="form-signin" action="pessoal.html" method="post">
+                <label for="inputUsername" class="sr-only">Username</label>
+                <input name="inputUsername" type="text" id="inputUsername" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Username" />
+                <br />
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input name="inputPassword" lang="pt" type="password" id="inputPassword" class="form-control" required="" oninvalid="setCustomValidity('Preencha este campo.')" oninput="setCustomValidity('')" placeholder="Password" />
+                <br />
+                <button onclick="storeUsername('inputUsername');setUsername();$('#loginpage').hide();login();$('#pessoal').show();$('#loginbutton').show()" type="button" class="btn-lg" id="loginconfirm"><span class="buttontext">LOGIN</span></button>
+            </form>
+
+            <div id="loginOptionsDiv">
+                <img onclick="$('#loginpage').hide();$('#facescan').show();$('.backbutton').show();showBar('face', 'barface');saveldivname('#facescan');clearUsername()" src="images/login/face.png" id="loginOptions" class="imgbutton loginbutton" alt="Reconhecimento facial" />
+                <img onclick="$('#loginpage').hide();$('#nfcscan').show();$('.backbutton').show();showBar('nfc', 'barnfc');saveldivname('#nfcscan');clearUsername()" src="images/login/nfcbutton.png" id="loginOptions" class="imgbutton loginbutton" alt="NFC" />
+                <img onclick="showBar('finger', 'barfinger');clearUsername()" src="images/login/fingerprinticon.png" id="loginOptions" class="imgbutton loginbutton" alt="Impressão digital" />
+            </div>
+        </div>
+
+        <div class="popup finger" id="myProgress">
+            <div class="myBar popup finger" id="barfinger"></div>
+        </div>
+
+        <button onclick="$('#loginpage').hide();$(divname).show();$('#loginbutton').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <div id="facescan">
+
+        <div class="instructions">Centre o seu<br />rosto na moldura</div>
+
+        <img src="images/scan/placeface.png" class="placehere" alt="Put your face here" />
+
+        <div class="popup face" id="myProgress">
+            <div class="popup face myBar" id="barface"></div>
+        </div>
+        <button onclick="$('#facescan').hide();$('#loginpage').show()" class="btn-lg backbutton"><span class="backtext buttontext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <div id="nfcscan">
+        <div class="instructions">Coloque o seu<br />smartphone no espaço abaixo</div>
+
+        <img src="images/scan/nfcscan.png" class="placehere" alt="Put your phone here" />
+
+        <div class="popup nfc" id="myProgress">
+            <div class="myBar popup nfc" id="barnfc"></div>
+        </div>
+
+        <button onclick="$('#nfcscan').hide();$('#loginpage').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <!------------------------------AREA PESSOAL------------------------------------->
+
+    <div id="pessoal">
+        <div class="headercontainer">
+            <header class="cabecalhos" id="header1">Olá, utilizador!</header>
+            <h2 class="centerheader" id="header2">Área Pessoal</h2>
+        </div>
+        <br />
+        <div id="menuPrincipal" align="center">
+            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#promocoes').show();$('.backbutton').show();saveldivname('#promocoes')">Promoções</button>
+            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#sugestoes').show();$('.backbutton').show();saveldivname('#sugestoes')">Sugestões do Chef</button>
+            <button type="button" class="menuItem" onclick="$('#pessoal').hide();$('#dadospessoais').show();$('.backbutton').show();saveldivname('#dadospessoais')">Dados Pessoais</button>
+        </div>
+
+        <button onclick="$('#pessoal').hide();$(divname).show();$('.backbutton').show();exit()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <div id="promocoes">
+
+        <header class="cabecalhos">Promoções</header>
+
+        <div id="menuPrincipal" align="center">
+            <h2><br />De momento não tem promoções disponíveis.<br /> :(</h2>
+        </div>
+
+        <button onclick="$('#promocoes').hide();$('#pessoal').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <div id="sugestoes">
+
+        <header class="cabecalhos">Sugestões do Chef</header>
+
+        <div id="menuPrincipal" align="center">
+
+            <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show();exit();savedivname('#pratos');$('#bacalhau').popover('show');$('#order').show();$('#finishmeal').show()">Bacalhau com Natas</button>
+
+            <button type="button" class="menuItem" onclick="$('#sugestoes').hide();$('#pratos').show();exit();savedivname('#pratos');$('#esparguete').popover('show');$('#order').show();$('#finishmeal').show()">Esparguete à Bolonhesa</button>
+        </div>
+
+        <button onclick="$('#sugestoes').hide();$('#pessoal').show()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <div id="dadospessoais">
+
+        <header class="cabecalhos" id="dadosheader">Dados Pessoais</header>
+
+        <div id="menuPrincipal" align="center">
+
+            <form id="modifyform">
+
+                <input type="text" id="modifyname" class="form-control input-lg" placeholder="Modificar Nome" onclick="showKeyboard()">
+                <input type="text" id="modifynif" class="form-control input-lg" maxlength="9" placeholder="Modificar NIF" onclick="showKeyboard()">
+
+                <button type="button" class="btn-lg" id="modifyconfirm" onclick="checkchange('modifyname', 'modifynif'); hideKeyboard()"><span class="buttontext">OK</span></button>
+            </form>
+
+            <button type="button" class="menuItem" onclick="$(divloginname).hide();$('#alergias').show();saveldivname('#alergias')">Alergias</button>
+            <button type="button" class="menuItem">Configurar métodos de Login</button>
+        </div>
+
+        <button onclick="$('#dadospessoais').hide();$('#pessoal').show();setUsername()" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <div id="alergias">
+        <header class="cabecalhos">Alergias</header>
+        <div id="menuPrincipal" align="center">
+            <h2><br />Não existem alergias. Seja feliz!</h2>
+            <button type="button" class="menuItem" style="display: none;">Modificar</button>
+        </div>
+
+        <button onclick="$(divloginname).hide();$('#dadospessoais').show();saveldivname('#dadospessoais')" class="btn-lg backbutton"><span class="buttontext backtext">Voltar ao menu anterior</span></button>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">Logout
+                </div>
+                <div class="modal-body">
+                    <p>Tem a certeza que deseja fazer logout?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-footer btn-success modalbutton" data-dismiss="modal" onclick="logout()">Confirmar</button>
+                    <button type="button" class="btn btn-footer btn-danger modalbutton" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dadosmodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">Dados pessoais alterados com sucesso!</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success modalbutton" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <img src="images/keyboard.png" id="keyboardImage" class="imgbutton" alt="teclado" align="center" />
+
+    <!-- - - - - - - - - - - - - - - - - - - HELP - - - - - - - - - - - - - - - - - - - -->
+    <img src="images/help.png" id="helpbutton" alt="ajuda" />
+    
+    <div class="modal fade" id="helpmodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <span id="helptext"><b>Área Pessoal</b>
+                    <br />
+                    <p>Para aceder à sua área pessoal, toque no botão de <b>Login</b> no canto superior esquerdo.
+                    Pode fazer o login através do seu nome de utilizador e password, ou usando o reconhecimento facial, NFC ou por impressão digital.</p>
+                    <br />
+                        
+                    <b>Pedidos</b>
+                    <br />
+                    
+                    <p>Os seus pedidos são apresentados na janela à direita do ecrã e classificados através de um código de cores.</p>
+                        
+                    <p>Os pedidos apresentados com fundo branco ainda não foram enviados para a cozinha; se houver destes pedidos na lista, é ainda possível alterá-los ou removê-los.</p>
+                        
+                    <p>Os pedidos apresentados com <span style="background-color: mistyrose;">fundo vermelho</span> foram enviados para a cozinha e estão em fila de espera; neste estado e nos seguintes pode explorar as várias opções de entretenimento disponíveis para si.</p>
+                    
+                    <p>Os pedidos com <span style="background-color: lightgoldenrodyellow;">fundo amarelo</span> estão a ser confecionados;</p>
+                        
+                    <p>Os pedidos com <span style="background-color: lightgreen;">fundo verde</span> estão prontos, e chegarão à sua mesa dentro de momentos.</p>
+                    
+                    <p>Se precisar de mais esclarecimentos, pode chamar um <b>empregado</b> através do botão no canto inferior esquerdo.</p>    
+                    </span></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-footer btn-success modalbutton" data-dismiss="modal">Entendi</button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- - - - - - - - - - - - - - - - - - - WAITER - - - - - - - - - - - - - - - - - - -->
+
+    <img src="images/waiter.png" id="waiterbutton" class="imgbutton" alt="chamar empregado" />
+
+    <div class="modal fade" id="waitermodal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">O empregado chegará dentro de momentos.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-footer btn-success modalbutton" onclick="changeglow()" data-dismiss="modal">OK</button>
+                    <button type="button" class="btn btn-footer btn-danger modalbutton" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<!-- Bootstrap javascript -->
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
+<script src="js/functions.js" type="text/javascript"></script>
+
+</html>
