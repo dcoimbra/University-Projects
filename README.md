@@ -30,5 +30,5 @@ You only need a compatible C compiler. This project was tested in GCC.
 
 ### SO 2016/2017 Group 19
 
-* **David Coimbra** - *Original project group member and C++ rewrite* - [dcoimbra](https://github.com/dcoimbra)
+* **David Coimbra** - *Original project group member* - [dcoimbra](https://github.com/dcoimbra)
 * **Filipa Marques** - *Original project group member* - [filipaBit](https://github.com/filipaBit)
