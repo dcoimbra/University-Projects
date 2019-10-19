@@ -1,0 +1,7 @@
+simular 0
+creditar 1 1000
+debitar 1 300
+simular 0
+lerSaldo 1
+transferir 1 2 300
+sair agora
