@@ -1,5 +1,5 @@
 CC=g++
-BOOST=/usr/local/boost_1_68_0
+BOOST=/usr/local/boost_1_68_0 # change this based on your Boost installation
 CFLAGS= -g -I $(BOOST) -std=c++17 -o proj1 -pedantic -Wall -Wextra -Werror
 
 
