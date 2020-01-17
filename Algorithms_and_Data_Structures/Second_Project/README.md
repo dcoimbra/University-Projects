@@ -2,7 +2,7 @@
 
 Simple implementation of a hashtag management system. Written in C for an Introduction to Algorithms and Data Structures class. Rewritten in C++ years later. Tested on Unix-like systems only.
 
-See the [project description (in Portuguese)](https://github.com/dcoimbra/hashtag-manager/blob/master/iaed_2016_16-2s-p2.pdf) for details and usage instructions.
+See the [project description (in Portuguese)](https://github.com/dcoimbra/University-Projects/blob/master/Algorithms_and_Data_Structures/Second_Project/iaed_2016_16-2s-p2.pdf) for details and usage instructions.
 
 Supports the following operations:
 
