@@ -4,7 +4,7 @@ Simple graph implementation for an airport management system.
 Written in C for an Introduction to Algorithms and Data Structures class. Rewritten in C++ years later. 
 Tested on Unix-like systems only.
 
-See the [project description (in Portuguese)](https://github.com/HiveMindize/airport-graph/blob/master/P1-v1.3.pdf) for details and usage instructions.
+See the [project description (in Portuguese)](https://github.com/dcoimbra/University-Projects/blob/master/Algorithms_and_Data_Structures/First_Project/P1-v1.3.pdf) for details and usage instructions.
 
 The original implementation of this project received the maximum grade for its course.
 
