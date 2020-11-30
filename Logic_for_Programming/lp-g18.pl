@@ -1,193 +1,193 @@
 /**********************************************/
-/*                  Grupo 18                  */
+/*                  Group 18                  */
 /* 57842 Filipa Marques - 84708 David Coimbra */
 /**********************************************/
 
 /**********************/
-/* Programa principal */
+/* Main program */
 /**********************/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% movs_possiveis/4((Lab, Pos_actual, Movs, Poss):                                  % 
-% dados um labirinto Lab, uma posicao Pos_atual e os movimentos ja efetuados Movs, %
-% os movimentos possiveis sao Poss, apresentados pela ordem (c, b, e, d).          %
+% movs_possiveis/4(Lab, Pos_current, Movs, Poss):                                   % 
+% given a labyrinth Lab, a position Pos_atual and the movements already done Movs, %
+% possible movements are Poss, printed in the order (up, down, left, right).       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-movs_possiveis(Lab, Pos_actual, Movs, Poss) :- 
-	adjacentes(Pos_actual, Adj), celula_labirinto(Lab, Pos_actual, Paredes), 
-	seleciona_se_sem_paredes(Paredes, Adj, PossAux),
-	seleciona_se_nao_pertence(PossAux, Movs, Poss).
+movs_possiveis(Lab, Pos_curr, Movs, Poss) :- 
+	adjacent(Pos_curr, Adj), cell_labyrinth(Lab, Pos_curr, Walls), 
+	selects_if_no_walls(Walls, Adj, PossAux),
+	selects_if_not_included(PossAux, Movs, Poss).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% distancia/3:((L1,C1), (L2,C2), Dist):                  %
-% calcula Dist como a distancia entre (L1,C1) e (L2,C2). %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% distancia/3:((L1,C1), (L2,C2), Dist):                       %
+% calculates Dist as the distance between (L1,C1) and (L2,C2). %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 distancia((L1,C1), (L2,C2), Dist) :- 
 	Dist is (abs(L1 - L2) + abs(C1 - C2)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ordena_poss/4(Poss, Poss_ord, Pos_inicial, Pos_final):                %
-% Poss_ord e' o resultado de ordenar os movimentos possiveis Poss,      %
-% por ordem crescente de distancia a Pos_final e, em caso de igualdade, %
-% por ordem decrescente de distancia a Pos_inicial.                     %
+% ordena_poss/4(Poss, Poss_srt, Pos_beg, Pos_end):                        %
+% Poss_srt is the result of sorting the possible movements Poss,        %
+% by ascending order of distance to Pos_end and, if equal,              %
+% by descending order of distance to Pos_beg.                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ordena_poss([], [],_,_).
-ordena_poss([PossH|PossT], Poss_ord, Pos_inicial, Pos_final) :-
-	ordena_poss(PossT, Poss_ordAux, Pos_inicial, Pos_final),
-	insere_em_lista_ordenada(Poss_ordAux, PossH, Poss_ord, Pos_inicial, Pos_final).
+ordena_poss([PossH|PossT], Poss_srt, Pos_beg, Pos_end) :-
+	ordena_poss(PossT, Poss_srtAux, Pos_beg, Pos_end),
+	inserts_in_sorted_list(Poss_srtAux, PossH, Poss_srt, Pos_beg, Pos_end).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
-% resolve1/4(Lab, Pos_inicial, Pos_final, Movs):             %
-% Movs e' a sequencia de movimentos correspondente a solucao %
-% do labirinto Lab desde a posicao inicial Pos_inicial a     %
-% posicao final Pos_final, nunca passando mais que uma vez   %
-% pela mesma celula e seguindo a ordem (c, b, e, d).         %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-resolve1(Lab, (Xi,Yi), Pos_final, Movs) :- 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+% resolve1/4(Lab, Pos_beg, Pos_end, Movs):                        %
+% Movs is the sequence of movements correspondent to the solution %
+% of the labyrinth Lab from the starting position Pos_beg to the  %
+% final position Pos_end, never repeating                         %
+% a cell and following the order (up, down, left, right).         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+resolve1(Lab, (Xi,Yi), Pos_end, Movs) :- 
 	movs_possiveis(Lab, (Xi,Yi), [(i,Xi,Yi)], Poss),
-	resolve1(Lab, Poss, Pos_final, [(i,Xi,Yi)], Movs). /* Avalia o resto do labirinto */
+	resolve1(Lab, Poss, Pos_end, [(i,Xi,Yi)], Movs). /* evaluates the rest of the labyrinth */
 	
-	/* caso de paragem: quando a posicao atual for igual a Pos_final. */
-resolve1(_, [(D, Xf, Yf)|_], (Xf, Yf), Movs_atuais, Movs) :-
-	append(Movs_atuais, [(D,Xf,Yf)], Movs). 
+	/* base case: when the current position is equal to Pos_end. */
+resolve1(_, [(D, Xf, Yf)|_], (Xf, Yf), Movs_curr, Movs) :-
+	append(Movs_curr, [(D,Xf,Yf)], Movs). 
 
-resolve1(Lab, [(D_prox_pos, X_prox_pos, Y_prox_pos)|Outras_poss], Pos_final, Movs_atuais, Movs):-
-	(	/* Adiciona o primeiro movimento a Movs e 
-		   avalia o resto do labirinto a partir dai. */
-		append(Movs_atuais, [(D_prox_pos, X_prox_pos, Y_prox_pos)], Movs_mais_actuais),
-		movs_possiveis(Lab, (X_prox_pos, Y_prox_pos), Movs_mais_actuais, Movs1),
-		resolve1(Lab, Movs1, Pos_final, Movs_mais_actuais, Movs_res),
+resolve1(Lab, [(D_next_pos, X_next_pos, Y_next_pos)|Other_poss], Pos_end, Movs_curr, Movs):-
+	(	/* Adds the first movement to Movs and 
+		   evaluates the rest of the labyrinth from there. */
+		append(Movs_curr, [(D_next_pos, X_next_pos, Y_next_pos)], Movs_most_recent),
+		movs_possiveis(Lab, (X_next_pos, Y_next_pos), Movs_most_recent, Movs1),
+		resolve1(Lab, Movs1, Pos_end, Movs_most_recent, Movs_res),
 			Movs = Movs_res
 	);
-		/* caso o primeiro movimento nao resultar numa solucao, entao avalia os movimentos possiveis seguintes.*/
-	resolve1(Lab, Outras_poss, Pos_final, Movs_atuais, Movs).
+		/* if the first movement does not result in a solution, evaluate the remaining possible movements.*/
+	resolve1(Lab, Other_poss, Pos_end, Movs_curr, Movs).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% resolve2/4(Lab, Pos_inicial, Pos_final, Movs):                          %
-% Movs e' a sequencia de movimentos correspondente a solucao              %
-% do labirinto Lab desde a posicao inicial Pos_inicial a                  %
-% posicao final Pos_final, pelos criterios de resolve1/4 e ordena_poss/4. %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-resolve2(Lab, (Xi, Yi), Pos_final, Movs) :- 
-	movs_possiveis(Lab, (Xi,Yi), [(i,Xi,Yi)], Poss),   /* Comeca por avaliar os movimentos possiveis a partir da posicao inicial */
-	ordena_poss(Poss, Poss_ord, (Xi,Yi), Pos_final),
-	resolve2(Lab, Poss_ord, (Xi,Yi), Pos_final, [(i,Xi,Yi)], Movs).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% resolve2/4(Lab, Pos_beg, Pos_end, Movs):                                        %
+% Movs is the sequence of movements corresponding to the solution                 %
+% of the labyrinth Lab from the initial position Pos_inicial to the               %
+% final position Pos_end, by the criteria of resolve1/4 and ordena_poss/4.          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+resolve2(Lab, (Xi, Yi), Pos_end, Movs) :- 
+	movs_possiveis(Lab, (Xi,Yi), [(i,Xi,Yi)], Poss),   /* Begins by evaluating the possible movements from the initial position */
+	ordena_poss(Poss, Poss_srt, (Xi,Yi), Pos_end),
+	resolve2(Lab, Poss_srt, (Xi,Yi), Pos_end, [(i,Xi,Yi)], Movs).
 	
-	/* caso de paragem: quando a posicao atual for igual a Pos_final. */
-resolve2(_, [(D,Xf,Yf)|_],_, (Xf,Yf), Movs_atuais, Movs) :-
-	append(Movs_atuais, [(D,Xf,Yf)], Movs). /* Nesse caso, os Movs serao todos os ja determinados, mais o correspondente a posicao final.*/
+	/* base case: when the current position is equal to Pos_end. */
+resolve2(_, [(D,Xf,Yf)|_],_, (Xf,Yf), Movs_curr, Movs) :-
+	append(Movs_curr, [(D,Xf,Yf)], Movs). /* In this case, Movs will be all movements already determined, plus the correspondent to the final position.*/
 
-resolve2(Lab, [(D_prox_pos, X_prox_pos, Y_prox_pos)|Outras_poss], Pos_inicial, Pos_final, Movs_atuais, Movs) :-
-	(	/* Adiciona o primeiro movimento a Movs e 
-		   avalia o resto do labirinto a partir dai. */
-		append(Movs_atuais, [(D_prox_pos, X_prox_pos, Y_prox_pos)], Movs_mais_actuais),
-		movs_possiveis(Lab, (X_prox_pos, Y_prox_pos), Movs_mais_actuais, Movs1),
-		ordena_poss(Movs1, Poss_ord1, Pos_inicial, Pos_final),
-		resolve2(Lab, Poss_ord1, Pos_inicial, Pos_final, Movs_mais_actuais, Movs_res),
+resolve2(Lab, [(D_next_pos, X_next_pos, Y_next_pos)|Other_poss], Pos_beg, Pos_end, Movs_curr, Movs) :-
+	(	/* Adds the first movement to Movs and 
+		   evaluates the rest of the labyrinth from there. */
+		append(Movs_curr, [(D_next_pos, X_next_pos, Y_next_pos)], Movs_most_recent),
+		movs_possiveis(Lab, (X_next_pos, Y_next_pos), Movs_most_recent, Movs1),
+		ordena_poss(Movs1, Poss_srt1, Pos_beg, Pos_end),
+		resolve2(Lab, Poss_srt1, Pos_beg, Pos_end, Movs_most_recent, Movs_res),
 			Movs = Movs_res
 	);
-		/* caso o primeiro movimento nao resultar numa solucao, entao avalia os movimentos possiveis seguintes.*/
-	resolve2(Lab, Outras_poss, Pos_inicial, Pos_final, Movs_atuais, Movs).
+		/* if the first movement does not result in a solution, evaluate the remaining possible movements.*/
+	resolve2(Lab, Other_poss, Pos_beg, Pos_end, Movs_curr, Movs).
 
 /*************************/
-/* Predicados auxiliares */
+/*  Auxilliary predicates */
 /*************************/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% adjacentes/2((L, C), Adj):                      							    %
-% verdadeiro se a lista Adj for uma lista de pontos adjacentes ao ponto (L, C). %
+% adjacent/2((L, C), Adj):                      							    %
+% true if the list Adj is a list of adjacent cells to the cell (L, C)           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-adjacentes((L, C), Adj) :- 
-	Lcima is L-1, Lbaixo is L+1, Cesq is C-1, Cdir is C+1,
-	Adj = [(c, Lcima, C), (b, Lbaixo, C), (e, L, Cesq), (d, L, Cdir)].
+adjacent((L, C), Adj) :- 
+	Lup is L-1, Ldown is L+1, Cleft is C-1, Cright is C+1,
+	Adj = [(c, Lup, C), (b, Ldown, C), (e, L, Cleft), (d, L, Cright)].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% seleciona_se_nao_pertence/3(Adj, Movs, Res):         %
-% verdadeiro se Res corresponder a todos os movimentos %
-% de Adj cujas posicoes nao pertencem a Movs.          %
+% selects_if_not_included/3(Adj, Movs, Res):           %
+% true if Res corresponds to all movements             %
+% in Adj that are not included in Movs.                %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-seleciona_se_nao_pertence([AdjH|AdjT], Movs, Res) :- 
-	seleciona_se_nao_pertence([AdjH|AdjT], Movs, Res, []).
+selects_if_not_included([AdjH|AdjT], Movs, Res) :- 
+	selects_if_not_included([AdjH|AdjT], Movs, Res, []).
 
-seleciona_se_nao_pertence([],_, Acc, Acc):- !.
+selects_if_not_included([],_, Acc, Acc):- !.
 
-seleciona_se_nao_pertence([(AdjD, AdjX, AdjY)|AdjT], Movs, Res, Acc) :- 
+selects_if_not_included([(AdjD, AdjX, AdjY)|AdjT], Movs, Res, Acc) :- 
   ( \+(memberchk((_, AdjX, AdjY), Movs)), append(Acc, [(AdjD, AdjX, AdjY)], Acc1),
-	seleciona_se_nao_pertence(AdjT, Movs, Res, Acc1), ! );
-  % ou:
-	seleciona_se_nao_pertence(AdjT, Movs, Res, Acc).
+	selects_if_not_included(AdjT, Movs, Res, Acc1), ! );
+  % or:
+	selects_if_not_included(AdjT, Movs, Res, Acc).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% celula_labirinto/3(Lab, (L, C), Celula):              %
-% Celula corresponde a posicao (L, C) do labirinto Lab. %
+% cell_labyrinth/3(Lab, (L, C), Cell):                  %
+% Cell corresponds to position (L, C) of labyrinth Lab. %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-celula_labirinto(Lab, (L,C), Celula) :- 
-	nth1(L, Lab, Linha,_), nth1(C, Linha, Celula,_).
+cell_labyrinth(Lab, (L,C), Cell) :- 
+	nth1(L, Lab, Line,_), nth1(C, Line, Cell,_).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-% sem_paredes/2(Mov, Cel):  										 %
-% verdadeiro se nao existir uma parede na direcao do movimento dado. %
+% no_walls/2(Mov, Cel):  										     %
+% true if there is no wall in the direction of the given movement.   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sem_paredes(_, []).
+no_walls(_, []).
 
-sem_paredes((D,_,_), [CelH|CelT]) :- 
-	CelH \== D, sem_paredes((D,_,_), CelT).
+no_walls((D,_,_), [CelH|CelT]) :- 
+	CelH \== D, no_walls((D,_,_), CelT).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% seleciona_se_sem_paredes/3(Paredes, MovsPoss, Res):                  %
-% verdadeiro se Res corresponder a todos os         				   %
-% movimentos de MovsPoss cuja direcao nao esta bloqueada por paredes.  %
+% selects_if_no_walls/3(Walls, MovsPoss, Res):                         %
+% true if Res corresponds to all          				               %
+% moviments of MovsPoss that are not blocked by walls.                 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-seleciona_se_sem_paredes(Paredes, MovsPoss, Res) :- 
-	seleciona_se_sem_paredes(Paredes, MovsPoss, Res, []).
+selects_if_no_walls(Walls, MovsPoss, Res) :- 
+	selects_if_no_walls(Walls, MovsPoss, Res, []).
 
-seleciona_se_sem_paredes(_, [], Acc, Acc):- !.
+selects_if_no_walls(_, [], Acc, Acc):- !.
 
-seleciona_se_sem_paredes(Paredes, [MovsPossH|MovsPossT], Res, Acc) :- 
-	(sem_paredes(MovsPossH, Paredes),
+selects_if_no_walls(Walls, [MovsPossH|MovsPossT], Res, Acc) :- 
+	(no_walls(MovsPossH, Walls),
 	append(Acc, [MovsPossH], Acc1),
-	seleciona_se_sem_paredes(Paredes, MovsPossT, Res, Acc1), !);
-  % ou:
-	(\+(sem_paredes(MovsPossH, Paredes)),
-	seleciona_se_sem_paredes(Paredes, MovsPossT, Res, Acc)).
+	selects_if_no_walls(Walls, MovsPossT, Res, Acc1), !);
+  % or:
+	(\+(no_walls(MovsPossH, Walls)),
+	selects_if_no_walls(Walls, MovsPossT, Res, Acc)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% dist2pontos/4((L, C), (_, L1, C1), (_, L2, C2), Dist): %
-% calcula a diferenca entre as distancias                %
-% de dois movimentos relativamente a uma posicao.		 %
+% dist2cells/4((L, C), (_, L1, C1), (_, L2, C2), Dist):  %
+% calculates the difference between the distances        %
+% of two movements relatively to a cell.		         % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dist2pontos((L,C), (_, L1,C1), (_, L2,C2), Dist) :-
+dist2cells((L,C), (_, L1,C1), (_, L2,C2), Dist) :-
 	distancia((L1,C1), (L,C), Dist1),
 	distancia((L2, C2), (L, C), Dist2),
 	Dist is (Dist1 - Dist2).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% avalia_letra/3((D1,L1,C1), (D2,L2,C2), Letras):                               %
-% verdadeiro se o movimento (D2,L2,C2) for prioritario ao movimento (D2,L2,C2), %
-% relativamente a direcao do movimento.                                         %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-avalia_letra((D1,L1,C1), (D2,L2,C2), [LetrasH|LetrasT]) :-
-	(D1  == LetrasH, !);
-	(D2 \== LetrasH, avalia_letra((D1,L1,C1),(D2,L2,C2), LetrasT)).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% eval_letter/3((D1,L1,C1), (D2,L2,C2), Letters):                                   %
+% true if the movement (D2,L2,C2) has priority relative to the movement (D2,L2,C2), %
+% with respect to the direction of the movement.                                    %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+eval_letter((D1,L1,C1), (D2,L2,C2), [LettersH|LettersT]) :-
+	(D1  == LettersH, !);
+	(D2 \== LettersH, eval_letter((D1,L1,C1),(D2,L2,C2), LettersT)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% e_prioritario/4(M1, M2, Pos_inicial, Pos_final): %
-% verdadeiro se se M1 for prioriario a M2.         %
+% has_priority/4(M1, M2, Pos_beg, Pos_end):        % 
+% true if M1 has priority relative to M2.          %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-e_prioritario(M1, M2, Pos_inicial, Pos_final) :-
-	dist2pontos(Pos_final, M1, M2, Dist_fin),
-   ( (Dist_fin <  0, !);
+has_priority(M1, M2, Pos_beg, Pos_end) :-
+	dist2cells(Pos_end, M1, M2, Dist_end),
+   ( (Dist_end <  0, !);
 	
-   ( (Dist_fin == 0, dist2pontos(Pos_inicial, M1, M2, Dist_ini)),
-   (  Dist_ini >  0;
-	( Dist_ini == 0, avalia_letra(M1, M2, [c,b,e,d]))
+   ( (Dist_end == 0, dist2cells(Pos_beg, M1, M2, Dist_beg)),
+   (  Dist_beg >  0;
+	( Dist_beg == 0, eval_letter(M1, M2, [c,b,e,d]))
 	) ) ).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
-% insere_em_lista_ordenada/5([H|T], Elem, Res, Pos_inicial, Pos_final):          %
-% dadas uma Lista [H|T], um elemento Elem e um predicado de prioridades,         %
-% Res e' o resultado da insercao do elemento Elem na lista, na posicao correcta. %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-insere_em_lista_ordenada([], Elem, [Elem],_,_).
-insere_em_lista_ordenada([H|T], Elem, Res, Pos_inicial, Pos_final):-
-	(e_prioritario(Elem, H, Pos_inicial, Pos_final), Res = [Elem|[H|T]], !);
-	(insere_em_lista_ordenada(T, Elem, Res1, Pos_inicial, Pos_final), Res = [H|Res1] ).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+% inserts_in_sorted_list/5([H|T], Elem, Res, Pos_beg, Pos_end):                       %
+% given a list [H|T], an element Elem and a predicate of priorities,                  %
+% Res is the resultat of inserting element Elem in the list, in the correct position. %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+inserts_in_sorted_list([], Elem, [Elem],_,_).
+inserts_in_sorted_list([H|T], Elem, Res, Pos_beg, Pos_end):-
+	(has_priority(Elem, H, Pos_beg, Pos_end), Res = [Elem|[H|T]], !);
+	(inserts_in_sorted_list(T, Elem, Res1, Pos_beg, Pos_end), Res = [H|Res1] ).
